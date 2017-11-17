@@ -1,0 +1,86 @@
+// variables
+@import "variables";
+// layout
+#app {
+  display: flex;
+  min-height: 100vh;
+  >section {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+  .app-index {
+    .md-icon {
+      top: 7px;
+    }
+  }
+  @at-root {
+    .app-index {
+      justify-content: center;
+      align-items: center;
+    }
+    .redstone {
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+        padding: 0 5px 0 0;
+        position: relative;
+        border-top: 1px solid color(default);
+        border-bottom: 1px solid color(default);
+      }
+      .container {
+        display: flex;
+        height: calc(100vh - 50px);
+        overflow: hidden;
+      }
+      aside {
+        display: flex;
+        width: 45px;
+        position: relative;
+        @include transition(all, 0.3s);
+        &.active {
+          width: 350px;
+        }
+      }
+      .group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: color(group);
+        overflow: hidden;
+        .wrap {
+          width: 305px;
+          position: relative;
+        }
+      }
+      .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 0 10px gray inset;
+        overflow-y: auto;
+        >article {
+          width: 100%;
+          min-width: 800px;
+          max-width: 1600px;
+          padding: 25px 30px;
+        }
+      }
+      .page-title {
+        display: inline-block;
+        padding: 3px 5px;
+        font-size: 16px;
+        border-bottom: 2px solid color(highlight-color)
+      }
+    }
+  }
+}
+
+// common
+@import "common";
+// element
+@import "reset.element";
+// material
+@import "reset.material"

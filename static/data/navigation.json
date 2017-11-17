@@ -1,0 +1,91 @@
+[{
+    "title": "대시보드",
+    "name": "Dashboard",
+    "icon": "dashboard",
+    "page": [{
+      "title": "기본정보",
+      "path": "Dashboard"
+    }, {
+      "title": "시스템정보",
+      "path": "Dashboard-systems"
+    }]
+  },
+  {
+    "title": "진단",
+    "name": "Diagnosis",
+    "icon": "loop",
+    "page": [{
+      "title": "위협정보기반",
+      "path": "Diagnosis-info"
+    }, {
+      "title": "위협 PC 기반",
+      "path": "Diagnosis-pc"
+    }]
+  },
+  {
+    "title": "검색",
+    "name": "Search",
+    "icon": "search",
+    "page": [{
+      "title": "파일 검색",
+      "path": "Search-files"
+    }, {
+      "title": "프로세스 검색",
+      "path": "Search-process"
+    }, {
+      "title": "네트워크 검색",
+      "path": "Search-network"
+    }, {
+      "title": "상세분석",
+      "path": "Search-analysis"
+    }]
+  },
+  {
+    "title": "보안정보",
+    "name": "Security",
+    "icon": "security",
+    "page": [{
+      "title": "매체접근",
+      "path": "Security-mediaaccess"
+    }, {
+      "title": "사용자계정",
+      "path": "Security-useraccount"
+    }]
+  },
+  {
+    "title": "자산정보",
+    "name": "Property",
+    "icon": "cast_connected",
+    "page": [{
+      "title": "SW 정보",
+      "path": "Property-sw"
+    }, {
+      "title": "HW 정보",
+      "path": "Property-hw"
+    }, {
+      "title": "센서 정보",
+      "path": "Property-sensor"
+    }]
+  },
+  {
+    "title": "시스템",
+    "name": "System",
+    "icon": "settings_applications",
+    "page": [{
+      "title": "관리자설정",
+      "path": "System-admin"
+    }, {
+      "title": "센서설정",
+      "path": "System-sensor"
+    }, {
+      "title": "환경설정",
+      "path": "System-enviroment"
+    }, {
+      "title": "시스템로그",
+      "path": "System-log"
+    }, {
+      "title": "대응",
+      "path": "System-response"
+    }]
+  }
+]

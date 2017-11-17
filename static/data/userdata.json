@@ -1,0 +1,13 @@
+[{
+    "id": "suwon",
+    "pass": "admin"
+  },
+  {
+    "id": "redstone",
+    "pass": "redsoft"
+  },
+  {
+    "id": "testuser",
+    "pass": "testadmin"
+  }
+]

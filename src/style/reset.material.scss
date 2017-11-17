@@ -1,0 +1,11 @@
+.md-theme-default a:not(.md-button) {
+  color: inherit
+}
+
+a:not(.md-button):not(.md-bottom-bar-item):hover {
+  text-decoration: none;
+}
+
+ul:not(.md-list)>li+li {
+  margin: 0;
+}

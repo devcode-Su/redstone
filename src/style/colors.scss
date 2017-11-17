@@ -1,0 +1,39 @@
+$colors: (
+  alpha:#BEF781,
+  border:#ccc,
+  border-dark:#aaa,
+  border-inner:#E0E0E0,
+  bravo:#F3F781,
+  button:#3265A4,
+  charile:#F7BE81,
+  delta:#FA5858,
+  default:#212E3E,
+  default2:#a3a3a3,
+  dot-all:#3a49d8,
+  dot-now:#0072ff,
+  dot-not:#5d5d5d,
+  group:#f5f7fa,
+  icon-color:#93979E,
+  input:#f5f7fa,
+  text-color:#333,
+  tooltip:rgba(0, 0, 0, 0.55),
+  white:#fff,
+  highlight-color:rgb(204, 55, 65),
+  highlight-active:#409eff,
+  background-primary: #F2F2F2
+  //background-secondary: color(fjord),
+);
+
+@function color($name) {
+  @if map-has-key(getColors(), $name) {
+    @return map-get(getColors(), $name);
+  }
+  @else {
+    @warn "Color not found: #{$name}";
+    @return #000;
+  }
+}
+
+@function getColors() {
+  @return $colors;
+}
