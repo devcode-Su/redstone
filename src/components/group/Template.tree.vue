@@ -71,7 +71,6 @@ export default {
       }
     },
     enter(el, done) {
-      console.log("enter");
       Velocity(
         el,
         "slideDown",
@@ -83,7 +82,6 @@ export default {
       );
     },
     leave(el, done) {
-      console.log("leave");
       Velocity(
         el,
         "slideUp",
@@ -95,7 +93,6 @@ export default {
       );
     },
     renameTo(model) {
-      console.log(model)
       this.rename = false;
       this.edited = model;
       setTimeout(() => {

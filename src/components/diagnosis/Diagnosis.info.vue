@@ -3,12 +3,11 @@
     <h1 class="page-title">
       위협정보기반
     </h1>
-    <div style="height:2000px">
-      content
-    </div>
+    <template-searchpannel></template-searchpannel>
   </article>
 </template>
 <script>
+import TemplateSearchpannel from "../template/Template.searchpannel";
 export default {
   name: "Diagnosisinfo",
   extends: {},
@@ -16,12 +15,27 @@ export default {
     //알파벳 순으로 정렬할 것.
   },
   data() {
-    return {};
+    return {
+      form: {
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      }
+    };
   },
   computed: {},
-  components: {},
+  components: {
+    TemplateSearchpannel
+  },
   watch: {},
-  methods: {},
+  methods: {
+    onSubmit() {
+      console.log("submit!");
+    }
+  },
   beforeCreate() {},
   created() {},
   beforeMounted() {},

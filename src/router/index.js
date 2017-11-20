@@ -90,11 +90,11 @@ export default new Router({
           component: Propertysw
         },
         {
-          path: 'Property-sw',
+          path: 'Property-hw',
           component: Propertyhw
         },
         {
-          path: 'Property-hw',
+          path: 'Property-sensor',
           component: Propertysensor
         },
         {

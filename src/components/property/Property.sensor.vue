@@ -1,7 +1,7 @@
 <template>
   <article>
     <h1 class="page-title">
-센서 정보
+      센서 정보
     </h1>
     <div style="height:2000px">
       content

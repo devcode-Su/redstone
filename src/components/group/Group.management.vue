@@ -52,14 +52,14 @@ export default {
   watch: {},
   methods: {
     changeSec() {
-      console.log(this.selected);
+      //console.log(this.selected);
       this.selected = !this.selected;
     }
   },
   beforeCreate() {},
   created() {
     this.membersData = JSON.parse(localStorage.getItem("member-data"));
-    console.log(this.membersData);
+    //console.log(this.membersData);
     this.defaultStorage;
   },
   beforeMounted() {},

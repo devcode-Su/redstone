@@ -28,7 +28,7 @@
     "icon": "search",
     "page": [{
       "title": "파일 검색",
-      "path": "Search-files"
+      "path": "Search-file"
     }, {
       "title": "프로세스 검색",
       "path": "Search-process"
@@ -46,10 +46,10 @@
     "icon": "security",
     "page": [{
       "title": "매체접근",
-      "path": "Security-mediaaccess"
+      "path": "Security-media"
     }, {
       "title": "사용자계정",
-      "path": "Security-useraccount"
+      "path": "Security-account"
     }]
   },
   {

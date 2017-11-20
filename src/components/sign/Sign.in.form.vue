@@ -14,15 +14,12 @@
         </md-input-container>
       </div>
       <div class="btn-area">
-        <md-checkbox id="remember-me" name="remember-me" v-model="rememberMe" class="md-primary">Remmeber Me</md-checkbox>
-        <div>
-          <md-button :disabled="submitBtn" type="submit" class="md-raised md-primary">
-            <span v-if="isLoading">Loading...</span>
-            <span v-else>sign</span>
-          </md-button>
-        </div>
+        <md-button :disabled="submitBtn" type="submit" class="md-raised md-primary">
+          <span v-if="isLoading">Loading...</span>
+          <span v-else>sign</span>
+        </md-button>
+        <span class="sign-failed-msg" v-if="signFailedMsg">{{signFailedMsg}}</span>
       </div>
-      <span class="sign-failed-msg" v-if="signFailedMsg">{{signFailedMsg}}</span>
     </form>
   </div>
 </template>
@@ -64,11 +61,8 @@ export default {
   components: {},
   methods: {
     signCheck() {
-      console.log(this.signFailedMsg)
-      console.log(this.isLoading)
       let username = this.userName;
       let password = this.passWord;
-
 
       // 'key=value; expires=current dateTime in UTC; path=/'
       if (this.rememberMe) {
@@ -91,8 +85,8 @@ export default {
       this.submitBtn = true;
 
       this.$emit("signCrendentials", {
-        username: username,
-        password: password
+        id: username,
+        passwd: password
       });
 
       this.checkInputEmpty(username, password);
@@ -139,7 +133,7 @@ export default {
 .sign-form {
   width: 320px;
   padding: 5px;
-  position:relative;
+  position: relative;
   .md-input-invalid {
     &:after {
       background-color: color(highlight-color);
@@ -152,14 +146,15 @@ export default {
   .btn-area {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
+    posiiton:relative;
   }
-  .sign-failed-msg{
-    position:absolute;
-    bottom:50px;
-    font-size:16px;
-    font-weight:bold;
-    color:color(highlight-color)
+  .sign-failed-msg {
+    position: absolute;
+    left:0;
+    font-size: 16px;
+    font-weight: bold;
+    color: color(highlight-color);
   }
 }
 </style>

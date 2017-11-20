@@ -1,19 +1,21 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import router from './router'
+import Vue from 'vue';
+import router from './router';
 import axios from 'axios';
-import ElementUI from 'element-ui'
-import VueMaterial from 'vue-material'
+import ElementUI from 'element-ui';
+import elementLocale from 'element-ui/lib/locale/lang/en';
+import VueMaterial from 'vue-material';
 import materialIcons from 'material-design-icons-iconfont/dist/material-design-icons.css';
 
 import 'babel-polyfill';
 import 'es6-promise/auto';
 import 'element-ui/lib/theme-chalk/index.css'
 import 'vue-material/dist/vue-material.css';
-import 'font-awesome/css/font-awesome.css'
+import 'font-awesome/css/font-awesome.css';
 
-import App from './App'
+//import MyPlugin from "./my-vue-plugin";
+import App from './App';
 
 Vue.config.productionTip = false
 
@@ -43,7 +45,9 @@ Vue.material.registerTheme({
 Vue.material.setCurrentTheme('default');
 
 Vue.use(materialIcons);
-Vue.use(ElementUI);
+Vue.use(ElementUI, { locale: elementLocale });
+
+// Vue.use(MyPlugin);
 
 /* eslint-disable no-new */
 new Vue({

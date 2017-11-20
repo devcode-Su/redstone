@@ -46,6 +46,8 @@ export default {
       }
     },
     signOut() {
+      //const apiURL = "/api/admin/login";
+      //this.$http.get(apiURL);
       this.$router.replace("/");
       //this.$router.go(this.$router.currentRoute);
     }
@@ -87,7 +89,7 @@ header {
   .group-toggle {
     width: 45px;
     height: 48px;
-    position:absolute;
+    position: absolute;
     top: 0;
     left: 0;
     background-color: color(default);

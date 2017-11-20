@@ -8,7 +8,7 @@
     </red-header>
     <section class="container">
       <aside :class="{'active' : selected }">
-        <red-navigation></red-navigation>
+        <red-navigation @selectedBoolean="selectedBoolean"></red-navigation>
         <red-group>
           <button class="group-toggle icon-btn icon-btn-nav" :class="{ on : selected}" @click="btnToggle">
             <i class="el-icon-close default" aria-hidden="true"></i>
@@ -56,10 +56,10 @@ export default {
   },
   methods: {
     btnToggle() {
-      // this.locationCheck() !== undefined
-      //   ? (this.selected = this.locationCheck())
-      //   : (this.selected = !this.selected);
-      this.selected = !this.selected;
+      this.locationCheck() !== undefined
+        ? (this.selected = this.locationCheck())
+        : (this.selected = !this.selected);
+      //this.selected = !this.selected;
     },
     selectedBoolean(check) {
       check === undefined
@@ -67,8 +67,7 @@ export default {
         : (this.selected = check);
     }
   },
-  created() {
-  },
+  created() {},
   mounted() {
     //console.log(this.selectedDisabled)
   },

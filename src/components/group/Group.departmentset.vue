@@ -66,7 +66,7 @@ export default {
   beforeCreate() {},
   created() {
     this.membersData = JSON.parse(localStorage.getItem("members-data" || "[]"))
-    console.log(this.membersData);
+    //console.log(this.membersData);
   },
   beforeMounted() {},
   mounted() {},

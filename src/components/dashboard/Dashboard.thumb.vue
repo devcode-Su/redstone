@@ -17,6 +17,7 @@
           현재 표시된 정보
         </h2>
         <dashboardthumbset class="user-set-list" v-model="dashboardView" :moveTo="dashboardNone" :icon="true" :option="true" @moveitem="moveItem"></dashboardthumbset>
+
       </div>
     </div>
     <div class="user-set-btn">

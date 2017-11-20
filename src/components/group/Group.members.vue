@@ -15,10 +15,10 @@
       <div class="table-body-wrap">
         <table>
           <tbody>
-            <tr v-for="(member, index) in orderedItems" :key="member.id" class="edit-wrap" :class="{'editing' : member === edited}">
+            <tr v-for="member in orderedItems" :key="member.id" class="edit-wrap" :class="{'editing' : member === edited}">
               <td class="col-id">{{member.id}}</td>
               <td class="col-name">
-                <span class="view" @dblclick.stop="renameTo(member, index)">{{member.name}}</span>
+                <span class="view" @dblclick.stop="renameTo(member)">{{member.name}}</span>
                 <input class="edit" type="text" v-model="member.name" @blur="doneEdit(member)" @keyup.enter="doneEdit(member)" @keyup.esc="cancelEdit(member)" ref="name">
               </td>
               <td v-if="colview" class="col-end">
@@ -97,13 +97,13 @@ export default {
   components: {},
   watch: {},
   methods: {
-    renameTo(model, index) {
-      console.log(index);
+    renameTo(model) {
+      //console.log(index);
       this.edited = model;
-      setTimeout(() => {
-        console.log(this.$refs.name);
-        this.$refs.name[index].focus();
-      });
+      // setTimeout(() => {
+      //   console.log(this.$refs.name);
+      //   this.$refs.name[index].focus();
+      // });
     },
     doneEdit(model) {
       if (!this.edited) return;
@@ -126,7 +126,6 @@ export default {
       }
     },
     moveItem(from, to, element) {
-      console.log("Aaa")
       this.$emit("moveitem", {
         from: from,
         to: to,
