@@ -1,14 +1,20 @@
 <template>
   <article>
     <h1 class="page-title">
-대응
+      대응
     </h1>
-    <div style="height:2000px">
-      content
-    </div>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="파일 차단 리스트" name="file">
+        <response-template :addList="true"></response-template>
+      </el-tab-pane>
+      <el-tab-pane label="네트워크 차단 리스트" name="network">
+        <response-template></response-template>
+      </el-tab-pane>
+    </el-tabs>
   </article>
 </template>
 <script>
+import ResponseTemplate from "./System.response.template";
 export default {
   name: "Systemrespones",
   extends: {},
@@ -16,10 +22,14 @@ export default {
     //알파벳 순으로 정렬할 것.
   },
   data() {
-    return {};
+    return {
+      activeName: "file"
+    };
   },
   computed: {},
-  components: {},
+  components: {
+    ResponseTemplate
+  },
   watch: {},
   methods: {},
   beforeCreate() {},

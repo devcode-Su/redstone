@@ -4,14 +4,18 @@
       관리자 설정
     </h1>
     <div>
-      content
+      comming soon
     </div>
-    <el-button type="text" @click="showModal = true">click to open the Dialog</el-button>
-    <templatemodal v-if="showModal" @close="showModal = false"></templatemodal>
+    <el-button class="detail-set icon-btn tooltip-wrap" type="text" @click="showModal = true">
+      <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
+      <span class="tooltip-detaile-set">관리자 추가</span>
+    </el-button>
+    <templatemodal v-if="showModal" @close="showModal = false" :target="'user-custom'" :compSelect="'systemadminadd'" :title="'관리자 추가 등록'"></templatemodal>
   </article>
 </template>
 <script>
 import Templatemodal from "../template/Template.modal";
+
 export default {
   name: "Systemadmin",
   extends: {},

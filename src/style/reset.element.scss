@@ -55,5 +55,11 @@
 // picker
 .el-date-editor .el-range-separator {
   min-width: 40px;
-  
+}
+
+// form
+.el-form-item.none-label {
+  .el-form-item__content {
+    margin-left: 0 !important;
+  }
 }

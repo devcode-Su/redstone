@@ -11,8 +11,10 @@
   </transition>
 </template>
 <script>
-import DashboardThumbset from "../dashboard/Dashboard.thumb";
+import DashboardThumb from "../dashboard/Dashboard.thumb";
 import GroupManagement from "../group/Group.management";
+import Systemadminadd from "../system/System.adminadd";
+import Systemresponsecutoff from "../system/System.response.cutoff";
 export default {
   name: "Templatemodal",
   extends: {},
@@ -33,8 +35,10 @@ export default {
   },
   computed: {},
   components: {
-    DashboardThumbset,
-    GroupManagement
+    DashboardThumb,
+    GroupManagement,
+    Systemadminadd,
+    Systemresponsecutoff
   },
   watch: {},
   methods: {},

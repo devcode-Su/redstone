@@ -4,7 +4,7 @@
       Dashboard
     </h1>
     <button type="button" @click="showModal = true">설정</button>
-    <templatemodal v-if="showModal" :target="'user-custom'" @close="showModal = false" :title="'대시보드 설정'" :compSelect="'dashboard-thumbset'">
+    <templatemodal v-if="showModal" :target="'user-custom'" @close="showModal = false" :title="'대시보드 설정'" :compSelect="'dashboard-thumb'">
     </templatemodal>
     <div>
       content
@@ -13,7 +13,6 @@
 </template>
 <script>
 import Templatemodal from "../template/Template.modal";
-//import Dashboardthumb from "./Dashboard.thumb";
 export default {
   name: "Dashboard",
   extends: {},

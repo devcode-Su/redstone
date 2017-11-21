@@ -1,11 +1,16 @@
 <template>
   <article>
     <h1 class="page-title">
-시스템로그
+      시스템로그
     </h1>
-    <div style="height:2000px">
-      content
-    </div>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="센서 로그" name="sensor">
+        센서로그
+      </el-tab-pane>
+      <el-tab-pane label="관리자 로그" name="admin">
+        관리자 로그
+      </el-tab-pane>
+    </el-tabs>
   </article>
 </template>
 <script>
@@ -16,7 +21,9 @@ export default {
     //알파벳 순으로 정렬할 것.
   },
   data() {
-    return {};
+    return {
+      activeName: "sensor"
+    };
   },
   computed: {},
   components: {},
