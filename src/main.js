@@ -27,6 +27,22 @@ Vue.filter('snippet', value => {
   return value.slice(0, 100) + '...';
 });
 
+// ip validate
+Vue.prototype.$ipValid = str => {
+  return (
+    str.split(".").filter(function (v) {
+      return v === Number(v).toString() && Number(v) < 256;
+    }).length === 4
+  );
+}
+
+// spliceArr
+Vue.prototype.$spliceHome = (home, stranger, loop) => {
+  for (var i = 0; i < loop; i++) {
+    home.splice(home.indexOf(stranger[i]), 1);
+  }
+}
+
 // vue use
 Vue.use(VueMaterial);
 

@@ -3,6 +3,23 @@
   color: color(default)
 }
 
+.el-table {
+  font-size: 12px;
+  th,
+  td {
+    padding: 2px 0;
+  }
+}
+
+.el-button--mini,
+.el-button--mini.is-round {
+  padding: 3px 7px;
+}
+
+.el-button+.el-button {
+  margin-left: 3px;
+}
+
 // target
 .group {
   // input
@@ -58,8 +75,18 @@
 }
 
 // form
-.el-form-item.none-label {
+.el-form-item {
+  &.none-label {
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
+  }
   .el-form-item__content {
-    margin-left: 0 !important;
+    display: flex;
+  }
+  &.multiline {
+    .el-form-item__content {
+      flex-direction: column;
+    }
   }
 }

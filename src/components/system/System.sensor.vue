@@ -3,8 +3,8 @@
     <h1 class="page-title">
       센서설정
     </h1>
-    <div class="internal-container system-container">
-      <el-form :model="form" status-icon ref="form" :label-position="'left'" label-width="160px" class="demo-form">
+    <div class="internal-container template-container">
+      <el-form :model="form" ref="form" :label-position="'left'" label-width="160px">
         <fieldset>
           <legend>센서 DB 사이즈 설정</legend>
           <el-form-item label="센서 DB 사이즈" prop="dbSize">

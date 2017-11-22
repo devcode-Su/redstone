@@ -80,14 +80,16 @@
         width: 980px;
         margin: 0 auto;
       }
-      .system-container {
-        position:relative;
+      .template-container {
+        position: relative;
         fieldset,
         .view-table {
-          margin-top: 80px;
-          padding: 35px 35px 12px;
+          margin-top: 65px;
           position: relative;
           border: 1px solid color(border);
+        }
+        fieldset {
+          padding: 35px 35px 12px;
         }
         .view-table {
           padding: 35px 35px;
@@ -95,9 +97,17 @@
         legend,
         .view-title {
           position: absolute;
+          font-size: 18px;
+        }
+        legend {
           top: -40px;
           left: 0;
-          font-size: 18px;
+          &.small{
+            font-size:12px;
+          }
+        }
+        .view-title {
+          top: 25px;
         }
         .indent-txt {
           display: inline-block;
@@ -110,10 +120,17 @@
             margin-right: 7px;
           }
         }
-        .btn-submit {
+        .view-btn {
           position: absolute;
-          top: -50px;
-          right: 0;
+          &.type-submit {
+            top: -45px;
+            right: 0;
+            &-outer {
+              top: 20px;
+              right: 20px;
+            }
+          }
+
         }
       }
     }

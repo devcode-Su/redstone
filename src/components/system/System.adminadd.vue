@@ -4,12 +4,12 @@
       {{title}}
     </h1>
     <div class="user-set-wrap">
-      <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" :label-position="'left'" label-width="100px">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" :label-position="'left'" label-width="100px">
         <el-form-item label="ID" prop="useId">
           <el-input v-model="ruleForm.useId"></el-input>
         </el-form-item>
         <el-form-item label="IP Address" prop="ipAddress">
-          <el-input type="textarea" v-model="ruleForm.ipAddress"></el-input>
+          <el-input type="text" v-model="ruleForm.ipAddress"></el-input>
         </el-form-item>
         <el-form-item label="Email" prop="email">
           <el-input v-model="ruleForm.email"></el-input>
@@ -39,6 +39,16 @@ export default {
     }
   },
   data() {
+    const validateIp = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("IP 주소를 입력하세요."));
+      } else {
+        if (!this.$ipValid(value)) {
+          callback(new Error("IP 주소를 확인하세요."));
+        }
+        callback();
+      }
+    };
     const validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("Please input the password"));
@@ -84,7 +94,7 @@ export default {
         ipAddress: [
           {
             required: true,
-            message: "Please input IP Address",
+            validator: validateIp,
             trigger: "blur"
           }
         ],
@@ -138,4 +148,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+.el-form {
+  width: 100%;
+}
 </style>

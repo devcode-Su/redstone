@@ -3,7 +3,17 @@
     <h1 class="page-title">
       위협정보기반
     </h1>
-    <template-searchpannel></template-searchpannel>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="악성 파일 검출" name="first">
+        <template-searchpannel :pannelType="pannelset"></template-searchpannel>
+      </el-tab-pane>
+      <el-tab-pane label="악성 URL/IP 검출" name="second">
+        <template-searchpannel :pannelType="pannelset"></template-searchpannel>
+      </el-tab-pane>
+      <el-tab-pane label="RSC 엔진 검출" name="third">
+        <template-searchpannel :pannelType="pannelset"></template-searchpannel>
+      </el-tab-pane>
+    </el-tabs>
   </article>
 </template>
 <script>
@@ -16,6 +26,10 @@ export default {
   },
   data() {
     return {
+      pannelset: {
+        dateset: true
+      },
+      activeName: "first",
       form: {
         date1: "",
         date2: "",

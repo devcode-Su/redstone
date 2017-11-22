@@ -1,7 +1,7 @@
 <template>
   <section>
-    <div class="input-view system-container">
-      <el-form :model="form" ref="form" :label-position="'left'" label-width="110px" @selection-change="handleSelectionChange">
+    <div class="input-view template-container">
+      <el-form :model="form" :rules="rules" ref="form" :label-position="'left'" label-width="110px" @selection-change="handleSelectionChange">
         <fieldset>
           <legend>{{inputTitle}}</legend>
           <el-form-item label="종류" prop="type">
@@ -10,8 +10,9 @@
               <el-option label="대역" value="대역"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="IP 주소" prop="ipAdress">
-            <el-input type="text" v-model="form.ipAddress" placeholder="0.0.0.0"></el-input>
+          <el-form-item label="IP 주소" prop="ipAddress">
+            <el-input type="text" v-model="form.ipAddress" placeholder="#.#.#.#"></el-input>
+            <!-- <el-input v-else type="text" v-model="form.ipAddress" placeholder="#.#.#.#,#.#.#.#"></el-input> -->
           </el-form-item>
           <el-form-item label="설명" prop="explain">
             <el-input type="text" v-model="form.explain"></el-input>
@@ -22,27 +23,28 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-button class="btn-submit" @click="submitForm('form')">저장</el-button>
+          <el-button size="small" class="view-btn type-submit" @click="submitForm('form')">저장</el-button>
         </fieldset>
       </el-form>
+      {{form.ipAddress}}
     </div>
-    <div class="result-view system-container">
-      <div class="view-table">
-        <p class="view-title">
-          {{viewTitle}}
-        </p>
-        <el-table ref="multipleTable" height="500" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55">
-          </el-table-column>
-          <el-table-column property="ipAddress" label="IP 대역">
-          </el-table-column>
-          <el-table-column property="notice" label="설명">
-          </el-table-column>
-          <el-table-column v-if="addList" property="group" label="탐지 적용 그룹" :show-overflow-tooltip="true">
-          </el-table-column>
-        </el-table>
-        <el-button class="btn-submit" @click="removeData()">삭제</el-button>
-      </div>
+    <div class="result-view template-container">
+      <p class="view-title">
+        {{viewTitle}}
+      </p>
+      <el-table class="view-table" ref="multipleTable" height="500" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+        <caption>{{viewTitle}}</caption>
+        <el-table-column type="selection" width="55">
+        </el-table-column>
+        <el-table-column property="ipAddress" label="IP 대역">
+        </el-table-column>
+        <el-table-column property="notice" label="설명">
+        </el-table-column>
+        <el-table-column v-if="addList" property="group" label="탐지 적용 그룹" :show-overflow-tooltip="true">
+        </el-table-column>
+      </el-table>
+      <el-button size="small" class="view-btn type-submit-outer" @click="removeData()">삭제</el-button>
+    </div>
     </div>
   </section>
 </template>
@@ -60,6 +62,16 @@ export default {
     }
   },
   data() {
+    const validateIp = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("IP 주소를 입력하세요."));
+      } else {
+        if (!this.$ipValid(value)) {
+          callback(new Error("IP 주소를 확인하세요."));
+        }
+        callback();
+      }
+    };
     return {
       options: [
         { value: "연구소", label: "연구소" },
@@ -74,9 +86,21 @@ export default {
       ],
       form: {
         type: "",
-        ipAdress: "",
+        ipAddress: "",
         explain: "",
         group: ""
+      },
+      rules: {
+        type: [
+          { required: true, message: "입력할 IP 종류를 선택하세요.", trigger: "change" }
+        ],
+        ipAddress: [{ required: true, validator: validateIp, trigger: "blur" }],
+        explain: [
+          { required: true, message: "IP 주소 설명을 입력하세요.", trigger: "blur" }
+        ],
+        group: [
+          { required: true, message: "탐지 적용할 그룹을 선택하세요.", trigger: "change" }
+        ]
       },
       tableData: [
         {
@@ -103,12 +127,23 @@ export default {
       multipleSelection: []
     };
   },
-  computed: {},
+  computed: {
+    ipSelected() {}
+  },
   components: {},
   watch: {},
   methods: {
     submitForm(formName) {
-      console.log(formName);
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          console.log(valid);
+          alert("submit!");
+        } else {
+          console.log(valid);
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     removeData() {
       let num = this.multipleSelection.length;

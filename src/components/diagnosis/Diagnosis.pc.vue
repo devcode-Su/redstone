@@ -3,12 +3,21 @@
     <h1 class="page-title">
       위협PC기반
     </h1>
-    <div style="height:2000px">
-      content
-    </div>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="악성 파일 검출" name="first">
+        <template-searchpannel></template-searchpannel>
+      </el-tab-pane>
+      <el-tab-pane label="악성 URL/IP 검출" name="second">
+        <template-searchpannel></template-searchpannel>
+      </el-tab-pane>
+      <el-tab-pane label="RSC 엔진 검출" name="third">
+        <template-searchpannel></template-searchpannel>
+      </el-tab-pane>
+    </el-tabs>
   </article>
 </template>
 <script>
+import TemplateSearchpannel from "../template/Template.searchpannel";
 export default {
   name: "Diagnosispc",
   extends: {},
@@ -16,10 +25,14 @@ export default {
     //알파벳 순으로 정렬할 것.
   },
   data() {
-    return {};
+    return {
+      activeName: "first"
+    };
   },
   computed: {},
-  components: {},
+  components: {
+    TemplateSearchpannel
+  },
   watch: {},
   methods: {},
   beforeCreate() {},

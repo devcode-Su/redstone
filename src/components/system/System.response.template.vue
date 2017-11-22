@@ -1,5 +1,5 @@
 <template>
-  <section CLASS="system-container">
+  <section class="template-container">
     <div class="view-table">
       <el-table ref="multipleTable" height="550" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55">
@@ -25,9 +25,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="btn-submit">
-        <el-button v-if="addList" @click="showModal = true">추가</el-button>
-        <el-button @click="removeData()">삭제</el-button>
+      <div class="view-btn type-submit">
+        <el-button size="small" v-if="addList" @click="showModal = true">추가</el-button>
+        <el-button size="small" @click="removeData()">삭제</el-button>
       </div>
       <templatemodal v-if="showModal" :target="'user-custom'" @close="showModal = false" :title="'차단 파일 추가'" :compSelect="'systemresponsecutoff'">
       </templatemodal>
