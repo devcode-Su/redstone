@@ -1,14 +1,26 @@
 <template>
   <div class="template-search-pannel template-container">
-    <el-form ref="form" :model="form" label-width="120px" :label-position="'left'">
+    <el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
       <fieldset>
         <legend class="small">전사
           <span>/</span> 에서 검색</legend>
         <div class="form-align-box">
           <div class="form-item-wrap">
-            <el-form-item v-if="pannelType.dateset" label="조사기간 설정" size="small">
-              <el-date-picker v-model="form.date" type="datetimerange" :picker-options="form.pickerOptions" range-separator="To" start-placeholder="Start date" end-placeholder="End date" align="right">
+            <el-form-item v-if="pannelType.datetime" label="조사기간 설정" size="small">
+              <el-date-picker v-model="form.datetime" type="datetimerange" :picker-options="datetimeOptions" range-separator="To" start-placeholder="Start date" end-placeholder="End date" align="right">
               </el-date-picker>
+            </el-form-item>
+            <el-form-item class="none-label" v-if="pannelType.datelast" size="small">
+              <el-checkbox v-model="form.checkedSearch" @change="handleCheckedEngineChange">
+                <span style="margin-right:20px;">비밀번호 미 변경자 조회</span>
+              </el-checkbox>
+              <el-date-picker v-model="form.datelast" type="datetimerange" :picker-options="datelastOptions" range-separator="To" start-placeholder="Start date" end-placeholder="End date" align="right">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item class="none-label" v-if="pannelType.check === 'oneline'" size="small">
+              <el-checkbox v-model="form.checkedSearch" @change="handleCheckedEngineChange">
+                <span style="margin-right:20px;">화면보호기 미 적용 PC</span>
+              </el-checkbox>
             </el-form-item>
             <el-form-item v-if="pannelType.check === 'single'" label="검색 항목" size="small">
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
@@ -39,8 +51,16 @@
                 </el-checkbox-group>
               </el-form-item>
             </el-form-item>
+            <el-form-item v-if="pannelType.check === 'double'" label="검색 항목" size="small">
+              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+                전체
+              </el-checkbox>
+              <el-checkbox-group v-model="form.checkedSearch" @change="handleCheckedEngineChange">
+                <el-checkbox v-for="search in labelArray" :label="search" :key="search">{{search}}</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
             <el-form-item v-if="pannelType.text" label="검색 조건" size="small">
-              <el-input type="text" :placeholder="pannelType.placeholder">
+              <el-input type="text" v-model="form.text" :placeholder="pannelType.placeholder">
               </el-input>
               <el-checkbox v-if="pannelType.agreement" class="agreement" v-model="form.agreement">
                 부분 일치
@@ -48,7 +68,7 @@
             </el-form-item>
           </div>
           <div class="btn-wrap">
-            <el-button v-if="true" size="small" @click="showDetail = true">상세검색
+            <el-button v-if="pannelType.detail" size="small" @click="showDetail = true">상세검색
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <templatesearchdetail v-if="showDetail" @close="detailColse" class="detail"></templatesearchdetail>
@@ -61,11 +81,21 @@
 </template>
 <script>
 import Templatesearchdetail from "./Template.searchpannl.detail";
-const searchOptions = ["이동식 디스크", "외장 디스크", "CD-ROM"];
-const searchOptions2 = {
+const single = ["이동식 디스크", "외장 디스크", "CD-ROM"];
+const double = [
+  "TI집단 이벤트",
+  "악성 URL/IP 접근 이벤트",
+  "RSC 엔진 진단 이벤트",
+  "프로세스",
+  "네트워크",
+  "파일",
+  "레지스트리"
+];
+const multi = {
   start: ["이동식 디스크", "외장 디스크", "CD-ROM"],
   end: ["이동식 디스크2", "외장 디스크2", "CD-ROM2"]
 };
+
 export default {
   name: "TemplateSearchpannel",
   extends: {},
@@ -74,6 +104,10 @@ export default {
     pannelType: {
       type: Array | Object,
       default: false
+    },
+    widthsize: {
+      type: Number,
+      default: 120
     }
   },
   data() {
@@ -85,48 +119,82 @@ export default {
       isIndeterminate: true,
       isIndeterstart: true,
       isIndeterend: true,
-      form: {
-        pickerOptions: {
-          shortcuts: [
-            {
-              text: "1 시간",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 1);
-                picker.$emit("pick", [start, end]);
-              }
-            },
-            {
-              text: "일일",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24);
-                picker.$emit("pick", [start, end]);
-              }
-            },
-            {
-              text: "주간",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                picker.$emit("pick", [start, end]);
-              }
-            },
-            {
-              text: "월간",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                picker.$emit("pick", [start, end]);
-              }
+      datetimeOptions: {
+        shortcuts: [
+          {
+            text: "1 시간",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 1);
+              picker.$emit("pick", [start, end]);
             }
-          ]
-        },
+          },
+          {
+            text: "일일",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "주간",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "월간",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      datelastOptions: {
+        shortcuts: [
+          {
+            text: "Last month",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "Last 3 months",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "Last 6 months",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 180);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      form: {
+        datetime: "",
+        datelast: "",
         checkedSearch: [],
+        text: "",
         agreement: false
       }
     };
@@ -134,10 +202,12 @@ export default {
   computed: {
     labelArray() {
       return this.pannelType.check === "single"
-        ? searchOptions
-        : this.pannelType.check !== "" && this.pannelType.check === "multi"
-          ? searchOptions2
-          : [];
+        ? single
+        : this.pannelType.check !== "" && this.pannelType.check === "double"
+          ? double
+          : this.pannelType.check !== "" && this.pannelType.check === "multi"
+            ? multi
+            : [];
     }
   },
   components: {
@@ -191,8 +261,8 @@ export default {
     onSubmit() {
       console.log("submit!");
     },
-    detailColse(){
-      this.showDetail = false
+    detailColse() {
+      this.showDetail = false;
     }
   },
   beforeCreate() {},
@@ -218,7 +288,7 @@ export default {
     align-items: flex-end;
   }
   .form-item-wrap {
-    margin-right: 50px;
+    margin-right: 30px;
   }
   .el-checkbox-group,
   .agreement {

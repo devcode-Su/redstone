@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       pannelset: {
-        dateset: true
+        datetime: true
       },
       activeName: "first",
       form: {

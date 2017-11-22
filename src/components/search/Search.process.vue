@@ -1,14 +1,13 @@
 <template>
   <article>
     <h1 class="page-title">
-프로세스 검색
+      프로세스 검색
     </h1>
-    <div style="height:2000px">
-      content
-    </div>
+    <template-searchpannel :pannelType="pannelset"></template-searchpannel>
   </article>
 </template>
 <script>
+import TemplateSearchpannel from "../template/Template.searchpannel";
 export default {
   name: "Searchprocess",
   extends: {},
@@ -16,10 +15,20 @@ export default {
     //알파벳 순으로 정렬할 것.
   },
   data() {
-    return {};
+    return {
+      pannelset: {
+        datetime: true,
+        check: "double",
+        text: true,
+        placeholder: "text input...",
+        agreement: true
+      }
+    };
   },
   computed: {},
-  components: {},
+  components: {
+    TemplateSearchpannel
+  },
   watch: {},
   methods: {},
   beforeCreate() {},

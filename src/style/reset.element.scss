@@ -74,6 +74,10 @@
   min-width: 40px;
 }
 
+.el-popper[x-placement^=bottom] {
+  left: 12% !important
+}
+
 // form
 .el-form-item {
   &.none-label {

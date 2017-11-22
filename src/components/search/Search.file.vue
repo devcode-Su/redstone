@@ -70,10 +70,10 @@ export default {
   data() {
     return {
       pannelset: {
-        dateset: true,
-        text : true,
-        placeholder:"text input...",
-        agreement:true
+        datetime: true,
+        text: true,
+        placeholder: "text input...",
+        agreement: true
       },
       paging: {
         total: 2,

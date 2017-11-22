@@ -5,15 +5,16 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="네트워크 기반 검색" name="network">
-        네트워크 기반 검색
+        <template-searchpannel :pannelType="pannelnet"></template-searchpannel>
       </el-tab-pane>
-      <el-tab-pane label="관리자 로그" name="admin">
-        PC 기반 검색
+      <el-tab-pane label="PC 기반 검색" name="admin">
+        <template-searchpannel :pannelType="pannelpc"></template-searchpannel>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
+import TemplateSearchpannel from "../template/Template.searchpannel";
 export default {
   name: "Searchnetwork",
   extends: {},
@@ -22,11 +23,26 @@ export default {
   },
   data() {
     return {
-      activeName: "network"
+      activeName: "network",
+      pannelnet: {
+        datetime: true,
+        check: "multi",
+        text: true,
+        placeholder: "URL/IP",
+        detail: true
+      },
+      pannelpc: {
+        datetime: true,
+        check: "multi",
+        text: true,
+        placeholder: "URL/IP"
+      }
     };
   },
   computed: {},
-  components: {},
+  components: {
+    TemplateSearchpannel
+  },
   watch: {},
   methods: {},
   beforeCreate() {},
