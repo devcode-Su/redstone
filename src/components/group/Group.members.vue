@@ -15,14 +15,14 @@
       <div class="table-body-wrap">
         <table>
           <tbody>
-            <tr v-for="member in orderedItems" :key="member.id" class="edit-wrap" :class="{'editing' : member === edited}">
-              <td class="col-id">{{member.id}}</td>
-              <td class="col-name">
-                <span class="view" @dblclick.stop="renameTo(member)">{{member.name}}</span>
-                <input class="edit" type="text" v-model="member.name" @blur="doneEdit(member)" @keyup.enter="doneEdit(member)" @keyup.esc="cancelEdit(member)" ref="name">
+            <tr v-for="member in orderedItems" :key="member.id" class="edit-wrap" :class="{'editing' : member === edited}" @click="selectRow(member)">
+              <td class="col-nodeid">{{member.nodeid}}</td>
+              <td class="col-username">
+                <span class="view" @dblclick.stop="renameTo(member)">{{member.username}}</span>
+                <input class="edit" type="text" v-model="member.username" @blur="doneEdit(member)" @keyup.enter="doneEdit(member)" @keyup.esc="cancelEdit(member)" ref="name">
               </td>
               <td v-if="colview" class="col-end">
-                {{member.part}}
+                {{member.dept.name}}
               </td>
               <td v-else class="col-end col-btn">
                 {{member.ip}}
@@ -40,6 +40,7 @@
 </template>
 <script>
 import _ from "lodash";
+import { EventBus } from "@/main";
 export default {
   name: "GroupMembers",
   extends: {},
@@ -74,7 +75,7 @@ export default {
       selected: 0,
       empty: "검색 된 내용이 없습니다.",
       fields: {
-        id: "센서ID",
+        nodeid: "센서ID",
         name: "이름",
         part: "부서명",
         ip: "아이피"
@@ -87,7 +88,7 @@ export default {
     },
     filteredMebers() {
       return this.members.filter(member => {
-        return member.name.match(this.filterText);
+        return member.username.match(this.filterText);
       });
     },
     fieldOmit() {
@@ -112,7 +113,7 @@ export default {
       if (!model.name) this.removeModel(model);
       this.rename = true;
     },
-    cancelEdit(todo) {
+    cancelEdit() {
       this.edited = null;
     },
     reOrder(select, index) {
@@ -131,10 +132,15 @@ export default {
         to: to,
         element: element
       });
+    },
+    selectRow(member){
+      console.log(member);
+      EventBus.$emit("searchNavi", member);
     }
   },
   beforeCreate() {},
-  created() {},
+  created() {
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
@@ -147,4 +153,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+  tr{
+    cursor:pointer
+  }
 </style>

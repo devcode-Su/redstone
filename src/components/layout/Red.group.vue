@@ -4,8 +4,7 @@
       <h1 class="group-title">
         그룹관리
       </h1>
-      <!-- <group-department></group-department> -->
-      <grouptree class="group-department" :position="false" :treeEdit="false"></grouptree>
+      <grouptree class="group-department" :position="false"></grouptree>
       <group-members :omitPath="'ip'" :members="membersData"></group-members>
       <ul class="group-notice">
         <li>
@@ -36,6 +35,7 @@ import GroupDepartment from "../group/Group.department";
 import Grouptree from "../group/Group.tree";
 import GroupMembers from "../group/Group.members";
 import Templatemodal from "../template/Template.modal";
+import { EventBus } from "@/main";
 export default {
   // 이름 적는 것을 잊지마세요
   name: "RedGroup",
@@ -46,17 +46,21 @@ export default {
     // selected: {
     //   type: Boolean
     // }, // 알파벳순으로 정렬합니다
-    foo: {},
-    fooBar: {}
   },
   // 컴포넌트 변수 그룹
   data() {
     return {
       showModal: false,
-      membersData: []
+      membersData: [],
+      total:"",
+
     };
   },
-  computed: {},
+  computed: {
+    defaultData(){
+      return this.membersData.length === 0 ? false : true
+    }
+  },
   // 컴포넌트가 다른 컴포넌트를 사용할 경우
   components: {
     GroupDepartment,
@@ -67,24 +71,15 @@ export default {
   // 컴포넌트 메서드 그룹
   watch: {},
   methods: {
-    memberSet() {
-      const apiUrl = "/static/data/members.json";
-      this.$http.get(apiUrl).then(result => {
-        localStorage.setItem("members-data", JSON.stringify(result.data));
-        this.membersData = JSON.parse(localStorage.getItem("members-data"));
-      });
-    },
-    groupSet() {
-      const apiUrl = "/static/data/group.json";
-      this.$http.get(apiUrl).then(result => {
-        localStorage.setItem("group-data", JSON.stringify(result.data));
-      });
-    }
   },
   // 컴포넌트 라이프사이클 메서드 그룹
   created() {
-    this.groupSet();
-    this.memberSet();
+    EventBus.$on("userview", data => {
+      const apiUrl = "/api/admin/group/recurse/"+data;
+      this.$http.get(apiUrl).then(result => {
+        this.membersData = result.data.data;
+      });
+    })
   },
   mounted() {
     //console.log(typeof this.items);

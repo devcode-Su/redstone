@@ -6,7 +6,7 @@
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           이동할 부서원 선택
         </h2>
-        <grouptree class="user-set-list group-members-tree"></grouptree>
+        <grouptree class="user-set-list group-members-tree" :type="'from'"></grouptree>
         <group-members class="user-set-list group-members-move" :omitPath="'part'" :members="departNow" :moveTo="departChange" :colview="false" @moveitem="moveItem"></group-members>
       </div>
       <div class="user-set-area">
@@ -14,7 +14,7 @@
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
           이동될 부서 선택
         </h2>
-        <grouptree class="user-set-list group-members-tree"></grouptree>
+        <grouptree class="user-set-list group-members-tree" :type="'to'"></grouptree>
         <group-members class="user-set-list group-members-move" :omitPath="'part'" :members="departChange" :moveTo="departNow" :colview="false" :icon="false" @moveitem="moveItem"></group-members>
       </div>
     </div>
@@ -31,6 +31,7 @@
 <script>
 import Grouptree from "./Group.tree";
 import GroupMembers from "./Group.members";
+import { EventBus } from "@/main";
 export default {
   name: "GroupMemberset",
   extends: {},
@@ -49,11 +50,6 @@ export default {
     };
   },
   computed: {
-    defaultViews() {
-      return this.departNow.length === 0
-        ? (this.departNow = JSON.parse(localStorage.getItem("members-data")))
-        : (this.departNow = JSON.parse(localStorage.getItem("members-now")));
-    }
   },
   components: {
     Grouptree,
@@ -61,26 +57,50 @@ export default {
   },
   watch: {},
   methods: {
+    setData(){
+
+    },
     moveItem(setItem) {
       setItem.to.push(setItem.element);
       setItem.from.splice(setItem.from.indexOf(setItem.element), 1);
     },
     saveStorage() {
-      localStorage.setItem("members-now", JSON.stringify(this.departNow));
-      localStorage.setItem("members-change", JSON.stringify(this.departChange));
+      console.log("save")
     },
     resetStorage() {
-      this.departNow = [];
-      this.departChange = JSON.parse(localStorage.getItem("members-data"));
-      localStorage.setItem("members-now", "[]");
-      localStorage.setItem("members-change", JSON.stringify(this.departChange));
+      console.log("reset");
+      EventBus.$on("userfrom", data => {
+        const apiUrl = "/api/admin/group/recurse/"+data;
+        this.$http.get(apiUrl).then(result => {
+          this.departNow = result.data.data;
+          console.log(result.data)
+        });
+      });
+      EventBus.$on("userto", data => {
+        const apiUrl = "/api/admin/group/recurse/"+data;
+        this.$http.get(apiUrl).then(result => {
+          this.departChange = result.data.data;
+          console.log(result.data)
+        });
+      });
     }
   },
   beforeCreate() {},
   created() {
-    this.departNow = JSON.parse(localStorage.getItem("members-now"));
-    this.departChange = JSON.parse(localStorage.getItem("members-change"));
-    this.defaultViews;
+    EventBus.$on("userfrom", data => {
+      const apiUrl = "/api/admin/group/recurse/"+data;
+      this.$http.get(apiUrl).then(result => {
+        this.departNow = result.data.data;
+        console.log(result.data)
+      });
+    });
+    EventBus.$on("userto", data => {
+      const apiUrl = "/api/admin/group/recurse/"+data;
+      this.$http.get(apiUrl).then(result => {
+        this.departChange = result.data.data;
+        console.log(result.data)
+      });
+    });
   },
   beforeMounted() {},
   mounted() {},

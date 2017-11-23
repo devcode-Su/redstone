@@ -2,8 +2,7 @@
   <div class="template-search-pannel template-container">
     <el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
       <fieldset>
-        <legend class="pannel small">전사
-          <span>/</span> 에서 검색</legend>
+        <legend class="pannel small">{{searchNavi}} 에서 검색 </legend>
         <div class="form-align-box">
           <div class="form-item-wrap">
             <el-form-item v-if="pannelType.datetime" label="조사기간 설정" size="small">
@@ -80,7 +79,7 @@
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <templatesearchdetail v-if="showDetail" @close="detailColse" class="detail"></templatesearchdetail>
-            <el-button size="small" type="primary" @click="onSubmit">검색</el-button>
+            <el-button size="small" type="primary" @click="onSubmit()">검색</el-button>
           </div>
         </div>
       </fieldset>
@@ -89,6 +88,7 @@
 </template>
 <script>
 import Templatesearchdetail from "./Template.searchpannl.detail";
+import { EventBus } from "@/main";
 const single = ["이동식 디스크", "외장 디스크", "CD-ROM"];
 const double = [
   "TI집단 이벤트",
@@ -120,6 +120,7 @@ export default {
   },
   data() {
     return {
+      searchNavi : "전사",
       showDetail: false,
       checkAll: false,
       checkStart: false,
@@ -199,6 +200,7 @@ export default {
         ]
       },
       form: {
+        data:"",
         datetime: "",
         datelast: "",
         version: "",
@@ -268,7 +270,7 @@ export default {
       this.isIndeterend = checkedCount > 0 && checkedCount < arrLength;
     },
     onSubmit() {
-      console.log("submit!");
+      this.$emit("searchData", this.form)
     },
     detailColse() {
       this.showDetail = false;
@@ -276,7 +278,10 @@ export default {
   },
   beforeCreate() {},
   created() {
-    console.log(this.pannelType);
+    EventBus.$on("searchNavi", data => {
+      this.form.data = data;
+      this.searchNavi = data.name || data.dept.name +" / "+ data.username;
+    })
   },
   beforeMounted() {},
   mounted() {},

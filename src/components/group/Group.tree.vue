@@ -1,12 +1,13 @@
 <template>
   <div class="tree-view" :class="{ on : position}">
     <ul class="tree-wrap">
-      <tree :model="company" @changeModel="overRide" :treeEdit="treeEdit"></tree>
+      <tree v-if="defaultData" :model="company[0]" @changeModel="overRide" :treeEdit="treeEdit" :type="type"></tree>
     </ul>
   </div>
 </template>
 <script>
 import tree from "./Template.tree";
+import { EventBus } from "@/main";
 export default {
   name: "Grouptree",
   extends: {},
@@ -14,93 +15,25 @@ export default {
     //알파벳 순으로 정렬할 것.
     position:{
       type:Boolean,
-      default:true
+      default:false
     },
     treeEdit:{
       type:Boolean,
-      default:true
-    }
+      default:false
+    },
+    type:String
   },
   data() {
     return {
       filterText: "",
-      company: {
-        name: "전사",
-        depart: [
-          {
-            name: "연구소",
-            depart: [
-              {
-                name: "연구소"
-              }
-            ]
-          },
-          {
-            name: "서울사무소",
-            depart: [
-              {
-                name: "서울 영업 팀"
-              },
-              {
-                name: "회계팀"
-              },
-              {
-                name: "서울 개발 팀"
-              },
-              {
-                name: "서울 총무팀"
-              },
-              {
-                name: "서울 지원팀"
-              },
-              {
-                name: "본사 관리팀"
-              },
-              {
-                name: "기술 지원팀"
-              }
-            ]
-          },
-          {
-            name: "부산사무소",
-            depart: [
-              {
-                name: "부산 영업 1팀"
-              },
-              {
-                name: "부산 영업 2팀"
-              },
-              {
-                name: "부산 지원 1팀"
-              },
-              {
-                name: "부산 개발 1팀"
-              },
-              {
-                name: "부산 개발 2팀"
-              },
-              {
-                name: "부산 총무팀"
-              },
-              {
-                name: "부산 지원 2팀"
-              },
-              {
-                name: "부산 지원 3팀"
-              },
-              {
-                name: "부산 개발 3팀"
-              },
-              {
-                name: "부산 영업 3팀"
-              }
-            ]
-          }
-        ]
-      }
+      company: []
     };
   },
-  computed: {},
+  computed: {
+    defaultData(){
+      return this.company.length === 0 ? false : true
+    }
+  },
   components: {
     tree
   },
@@ -111,11 +44,19 @@ export default {
     }
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    const apiUrl = "/api/admin/group/list";
+    this.$http.get(apiUrl).then(result => {
+      this.company = this.listToTree(result.data);
+      EventBus.$emit("searchNavi",this.company[0])
+    });
+    //EventBus.$emit()
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+  },
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

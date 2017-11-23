@@ -5,8 +5,8 @@
       <slot></slot>
     </div>
     <div class="header-nav-wrap">
-      <p>사용자</p>
-      <button class="icon-btn">
+      <p>{{username}}</p>
+      <button v-if="false" class="icon-btn">
         <i class="fa fa-question-circle default" aria-hidden="true"></i>
       </button>
       <button class="icon-btn" @click="fullScreen">
@@ -24,6 +24,7 @@ export default {
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
+    username:String
   },
   data() {
     return {};

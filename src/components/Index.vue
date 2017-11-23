@@ -22,12 +22,8 @@ export default {
   },
   methods: {
     signAttempt(input) {
-//      const userCheck = a => a.id === input.id;
-//      const userValid = this.posts.filter(userCheck);
       this.crendentialFail = "";
-       console.log(input);
        if (input.id !== "" && input.passwd.length !== "") {
-         console.log("ok?");
          const apiURL = "/api/admin/login";
          this.$http
            .post(apiURL, input)
@@ -37,28 +33,7 @@ export default {
            .catch(() => {
              this.errorNotice();
            });
-       } else {
-         console.log("???");
        }
-
-//      console.log(input)
-//
-//      if (userValid.length !== 0) {
-//        if (input.passwd === userValid[0].pass) {
-//          //userValid
-//          //console.log("login success");
-//          this.$router.push("Redstone");
-//        } else {
-//          //console.log("password error");
-//          if (input.passwd !== "") this.errorNotice();
-//        }
-//      } else {
-//        //console.log("who are you?");
-//        if (input.username !== "" && input.passwd !== "") {
-//          //console.log("둘다 글자가 있음");
-//          this.errorNotice();
-//        }
-//      }
     },
     errorNotice() {
       setTimeout(() => {

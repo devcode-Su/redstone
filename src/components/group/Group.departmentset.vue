@@ -6,7 +6,7 @@
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           부서 수정
         </h2>
-        <grouptree class="user-set-list"></grouptree>
+        <grouptree class="user-set-list" :treeEdit="true"></grouptree>
       </div>
       <div class="user-set-area">
         <h2>
@@ -29,6 +29,7 @@
 <script>
 import Grouptree from "./Group.tree";
 import Groupmembers from "./Group.members";
+import { EventBus } from "@/main";
 export default {
   name: "Grounpdetartmentset",
   extends: {},
@@ -65,8 +66,13 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.membersData = JSON.parse(localStorage.getItem("members-data" || "[]"))
-    //console.log(this.membersData);
+    EventBus.$on("userview", data => {
+      const apiUrl = "/api/admin/group/recurse/"+data;
+      this.$http.get(apiUrl).then(result => {
+        this.membersData = result.data.data;
+        console.log(result.data)
+      });
+    })
   },
   beforeMounted() {},
   mounted() {},

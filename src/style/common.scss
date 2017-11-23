@@ -407,10 +407,10 @@
     }
   }
   tr {
-    .col-id {
+    .col-nodeid {
       width: 65px;
     }
-    .col-name {
+    .col-username {
       width: 100px;
     }
   }
@@ -421,7 +421,7 @@
     padding: 0 7px;
   }
   td {
-    &.col-id {
+    &.col-nodeid {
       padding-left: 20px;
     }
     &.col-btn {
