@@ -62,7 +62,7 @@ export default {
       .get(apiURL)
       .then((result) => {
         this.userdata = result.data;
-        console.log(this.userdata)
+        //console.log(this.userdata)
       })
   },
   mounted() {

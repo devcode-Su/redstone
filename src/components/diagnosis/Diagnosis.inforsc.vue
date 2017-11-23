@@ -5,7 +5,7 @@
 
       </template>
     </el-table-column>
-    <el-table-column :label="Date" prop="date">
+    <el-table-column label="Date" prop="date">
     </el-table-column>
     <el-table-column label="Name" prop="name">
     </el-table-column>

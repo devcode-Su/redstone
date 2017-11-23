@@ -375,8 +375,9 @@
 }
 
 // group-members table
-.group-members {
-  border-bottom: 1px solid #d8dce5;
+.group-members,
+.template-table
+{
   overflow: hidden;
   &-table {
     background-color: #fff;
@@ -406,27 +407,74 @@
       }
     }
   }
-  tr {
-    .col-nodeid {
-      width: 65px;
-    }
-    .col-username {
-      width: 100px;
-    }
-  }
   th,
   td {
     height: 32px;
     line-height: 32px;
-    padding: 0 7px;
   }
   td {
-    &.col-nodeid {
-      padding-left: 20px;
-    }
-    &.col-btn {
+    &.col-btn,
+    &.col-end{
       display: flex;
       justify-content: space-between;
     }
   }
+  @at-root {
+    .group-members{
+      border-bottom: 1px solid #d8dce5;
+      tr {
+        .col-nodeid {
+          width: 65px;
+        }
+        .col-username {
+          width: 100px;
+        }
+      }
+      th,
+      td {
+        padding: 0 7px;
+      }
+      td {
+        &.col-nodeid {
+          padding-left: 20px;
+        }
+      }
+    }
+    .dynamic-row{
+      margin-top:30px;
+      border: 1px solid #d8dce5;
+      tr{
+        &:last-child{
+          border-bottom:0 none;
+        }
+      }
+      th,td{
+        padding: 0 15px;
+      }
+    }
+    .diagosis-info-table{
+      th,td{
+        &.col0{
+          width:40%
+        }
+        &.col1{
+          width:10%;
+        }
+        &.col2{
+          width:20%;
+        }
+      }
+    }
+    .security-media-table{
+      th,td{
+        &.col0{
+          width:20px;
+        }
+        &.col14{
+          width:15%
+        }
+      }
+    }
+  }
 }
+

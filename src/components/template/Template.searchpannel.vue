@@ -296,7 +296,7 @@ export default {
 <style lang='scss' scoped>
 @import "~styles/variables";
 .template-search-pannel {
-  margin-top: 50px;
+  margin-top: 65px;
   padding-left: 110px;
   background: url(../../assets/search-box.jpg) no-repeat 30px center;
   border: 1px solid color(border);

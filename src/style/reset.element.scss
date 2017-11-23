@@ -78,6 +78,10 @@
   left: 12% !important
 }
 
+.el-date-editor--datetimerange.el-input, .el-date-editor--datetimerange.el-input__inner{
+  width:420px;
+}
+
 // form
 .el-form-item {
   &.none-label {
@@ -93,4 +97,9 @@
       flex-direction: column;
     }
   }
+}
+
+// tabs
+.el-tabs__content{
+  overflow:visible;
 }
