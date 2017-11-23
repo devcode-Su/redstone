@@ -102,8 +102,11 @@
         legend {
           top: -40px;
           left: 0;
-          &.small{
-            font-size:12px;
+          &.small {
+            font-size: 12px;
+          }
+          &.pannel {
+            top: -30px
           }
         }
         .view-title {
@@ -130,7 +133,6 @@
               right: 20px;
             }
           }
-
         }
       }
     }

@@ -2,7 +2,7 @@
   <div class="template-search-pannel template-container">
     <el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
       <fieldset>
-        <legend class="small">전사
+        <legend class="pannel small">전사
           <span>/</span> 에서 검색</legend>
         <div class="form-align-box">
           <div class="form-item-wrap">
@@ -20,6 +20,14 @@
             <el-form-item class="none-label" v-if="pannelType.check === 'oneline'" size="small">
               <el-checkbox v-model="form.checkedSearch" @change="handleCheckedEngineChange">
                 <span style="margin-right:20px;">화면보호기 미 적용 PC</span>
+              </el-checkbox>
+            </el-form-item>
+            <el-form-item class="none-label" v-if="pannelType.version" size="small">
+              <el-input style="width:500px;" type="text" v-model="form.version" :placeholder="pannelType.placeholder">
+              </el-input>
+            </el-form-item>
+            <el-form-item class="none-label" v-if="pannelType.check === 'sensor'" size="small">
+              <el-checkbox v-model="form.checkedSearch" @change="handleCheckedEngineChange">일주일 이상 미로그인 센서
               </el-checkbox>
             </el-form-item>
             <el-form-item v-if="pannelType.check === 'single'" label="검색 항목" size="small">
@@ -193,6 +201,7 @@ export default {
       form: {
         datetime: "",
         datelast: "",
+        version: "",
         checkedSearch: [],
         text: "",
         agreement: false
@@ -282,6 +291,18 @@ export default {
 <style lang='scss' scoped>
 @import "~styles/variables";
 .template-search-pannel {
+  margin-top: 50px;
+  padding-left: 110px;
+  background: url(../../assets/search-box.jpg) no-repeat 30px center;
+  border: 1px solid color(border);
+  form {
+    border-left: 1px solid color(border);
+  }
+  fieldset {
+    margin-top: 0;
+    position:static;
+    border: 0 none;
+  }
   .form-align-box {
     display: flex;
     justify-content: flex-start;

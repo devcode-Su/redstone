@@ -6,6 +6,7 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
         <template-searchpannel :pannelType="pannelset"></template-searchpannel>
+        <templatetableinsert></templatetableinsert>
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
         <template-searchpannel :pannelType="pannelset"></template-searchpannel>
@@ -18,6 +19,7 @@
 </template>
 <script>
 import TemplateSearchpannel from "../template/Template.searchpannel";
+import Templatetableinsert from "../template/Template.tableinsert";
 export default {
   name: "Diagnosisinfo",
   extends: {},
@@ -42,7 +44,8 @@ export default {
   },
   computed: {},
   components: {
-    TemplateSearchpannel
+    TemplateSearchpannel,
+    Templatetableinsert,
   },
   watch: {},
   methods: {

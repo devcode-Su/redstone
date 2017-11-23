@@ -1,32 +1,18 @@
 <template>
-  <article>
-    <h1 class="page-title">
-      센서 정보
-    </h1>
-    <template-searchpannel :pannelType="pannelset"></template-searchpannel>
-  </article>
+
 </template>
 <script>
-import TemplateSearchpannel from "../template/Template.searchpannel";
 export default {
-  name: "Propertysensor",
+  name: "이름 꼭 적기",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
   },
   data() {
-    return {
-      pannelset: {
-        version: true,
-        placeholder: "버전 번호",
-        check: "sensor"
-      }
-    };
+    return {};
   },
   computed: {},
-  components: {
-    TemplateSearchpannel
-  },
+  components: {},
   watch: {},
   methods: {},
   beforeCreate() {},
