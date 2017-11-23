@@ -17,6 +17,9 @@ import 'font-awesome/css/font-awesome.css';
 import MyPlugin from "./my-vue-plugin";
 import App from './App';
 
+// event bus
+export const EventBus = new Vue();
+
 Vue.config.productionTip = false
 
 // axios
@@ -26,7 +29,6 @@ Vue.prototype.$http = axios;
 Vue.filter('snippet', value => {
   return value.slice(0, 100) + '...';
 });
-
 
 // spliceArr
 // Vue.prototype.$spliceHome = (home, stranger, loop) => {
