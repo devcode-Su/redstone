@@ -43,7 +43,7 @@ export default {
       if (value === "") {
         callback(new Error("IP 주소를 입력하세요."));
       } else {
-        if (!this.$ipValid(value)) {
+        if (!this.isIpValid(value)) {
           callback(new Error("IP 주소를 확인하세요."));
         }
         callback();
