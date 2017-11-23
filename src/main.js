@@ -36,6 +36,30 @@ Vue.prototype.$ipValid = str => {
   );
 }
 
+// data binding
+Vue.prototype.$_plunk = item => {
+  if (item.hasOwnProperty('info') && Array.isArray(item.info)) {
+    item.info = item.info.reduce((p, c) => {
+      p[c.name] = c.value();
+      return p;
+    }, {});
+  }
+  else {
+    for (let k in item) {
+      if (item.hasOwnProperty(k)) {
+        if (typeof item[k] === 'object') {
+          this._plunk(item[k]);
+        }
+      }
+    }
+  }
+  return item;
+}
+Vue.prototype.$plunk = options => {
+  options = options.map(this.$_plunk);
+  return options;
+}
+
 // spliceArr
 Vue.prototype.$spliceHome = (home, stranger, loop) => {
   for (var i = 0; i < loop; i++) {
