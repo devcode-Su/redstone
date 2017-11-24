@@ -3,18 +3,13 @@
     <h1 class="page-title">
       네트워크 검색
     </h1>
-    <el-tabs v-model="activeName">
-      <el-tab-pane label="네트워크 기반 검색" name="network">
-        <template-searchpannel :pannelType="pannelnet"></template-searchpannel>
-      </el-tab-pane>
-      <el-tab-pane label="PC 기반 검색" name="admin">
-        <template-searchpannel :pannelType="pannelpc"></template-searchpannel>
-      </el-tab-pane>
-    </el-tabs>
+    <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
+    <templatetablerouter :propData="search"></templatetablerouter>
   </article>
 </template>
 <script>
 import TemplateSearchpannel from "../template/Template.searchpannel";
+import Templatetablerouter from "../template/Template.tablerouter.vue";
 export default {
   name: "Searchnetwork",
   extends: {},
@@ -24,27 +19,58 @@ export default {
   data() {
     return {
       activeName: "network",
-      pannelnet: {
+      pannelset: {
         datetime: true,
         check: "multi",
         text: true,
         placeholder: "URL/IP",
         detail: true
       },
-      pannelpc: {
-        datetime: true,
-        check: "multi",
-        text: true,
-        placeholder: "URL/IP"
+      search:{
+        field:[
+          "","센서 ID", "사용자명", "부서명", "PC 명", "방향","PC IP 주소", "원격 IP 주소", "포트","프로토콜","검출 시간"
+        ],
+        data: [],
+        search:[],
+        url:""
       }
     };
   },
   computed: {},
   components: {
-    TemplateSearchpannel
+    TemplateSearchpannel,
+    Templatetablerouter
   },
   watch: {},
-  methods: {},
+  methods: {
+    receiveData(form) {
+      console.log("file")
+      const url = "/api/admin/search/network";
+      if (form.datetime === "" || form.text === "") {
+        this.$notify.error({
+          title: "Error",
+          message: "검색 조건을 입력하세요."
+        });
+        console.log("aaa")
+      } else {
+        const data = {
+          page: 1,
+          length: 50,
+          startDate: form.datetime[0].getTime(),
+          endDate: form.datetime[1].getTime(),
+          dept_code: form.data.dept_code || "",
+          node_id: form.data.node_id || "",
+          order: "insertTime",
+          direction: 1
+        };
+        this.$http.get(url, data).then(result => {
+          this.file.data = result.data.data;
+        });
+        this.file.search = data;
+        this.file.url = url;
+      }
+    }
+  },
   beforeCreate() {},
   created() {},
   beforeMounted() {},

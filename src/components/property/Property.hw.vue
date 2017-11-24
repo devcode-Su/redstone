@@ -3,12 +3,28 @@
     <h1 class="page-title">
       HW 정보
     </h1>
-    <div style="height:2000px">
-      content
-    </div>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="CPU" name="first">
+        CPU content
+      </el-tab-pane>
+      <el-tab-pane label="Memory" name="second">
+        Memory content
+      </el-tab-pane>
+      <el-tab-pane label="HDD" name="third">
+        HDD content
+      </el-tab-pane>
+      <el-tab-pane label="Display" name="four">
+        Display content
+      </el-tab-pane>
+      <el-tab-pane label="Bios" name="five">
+        Bios content
+      </el-tab-pane>
+    </el-tabs>
   </article>
 </template>
 <script>
+  import TemplateSearchpannel from "../template/Template.searchpannel";
+  import Templatetablerouter from "../template/Template.tablerouter.vue";
 export default {
   name: "Propertyhw",
   extends: {},
@@ -16,10 +32,15 @@ export default {
     //알파벳 순으로 정렬할 것.
   },
   data() {
-    return {};
+    return {
+      activeName: 'first'
+    };
   },
   computed: {},
-  components: {},
+  components: {
+    TemplateSearchpannel,
+    Templatetablerouter
+  },
   watch: {},
   methods: {},
   beforeCreate() {},

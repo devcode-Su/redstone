@@ -74,8 +74,8 @@
   min-width: 40px;
 }
 
-.el-popper[x-placement^=bottom] {
-  left: 12% !important
+.el-picker-panel.el-popper[x-placement^=bottom] {
+  left: 13% !important
 }
 
 .el-date-editor--datetimerange.el-input, .el-date-editor--datetimerange.el-input__inner{
@@ -89,17 +89,28 @@
       margin-left: 0 !important;
     }
   }
-  .el-form-item__content {
-    display: flex;
-  }
   &.multiline {
     .el-form-item__content {
       flex-direction: column;
     }
   }
 }
+.form-item-wrap{
+  .el-form-item__content {
+    display: flex;
+  }
+}
 
 // tabs
 .el-tabs__content{
   overflow:visible;
+}
+
+// table - resultview
+.result-view{
+  .el-table__header,
+  .el-table__body{
+    width:100% !important;
+    table-layout:auto;
+  }
 }

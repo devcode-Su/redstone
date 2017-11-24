@@ -5,26 +5,23 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
-        <template-searchpannel :pannelType="pannelset" @searchData="searchFile"></template-searchpannel>
-        <templatetableinsert class="diagosis-info-table" :field="infofile.field" :tableData="fileData"></templatetableinsert>
+        <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
+        <templatetableinsert class="diagosis-info-table" :propData="infofile" @reorder="reorder"></templatetableinsert>
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
-        <template-searchpannel :pannelType="pannelset" @searchData="searchUrl"></template-searchpannel>
-        <templatetableinsert  class="diagosis-info-table" :field="infourl.field" :tableData="urlData"></templatetableinsert>
+        <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
+        <templatetableinsert class="diagosis-info-table" :propData="infoip" @reorder="reorder"></templatetableinsert>
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
-        <template-searchpannel :pannelType="pannelset" @searchData="searchRsc"></template-searchpannel>
-        <templatetableinsert  class="diagosis-info-table" :field="inforsc.field" :tableData="rscData"></templatetableinsert>
+        <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
+        <templatetableinsert class="diagosis-info-table" :propData="inforsc" @reorder="reorder"></templatetableinsert>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
 import TemplateSearchpannel from "../template/Template.searchpannel";
-import Templatetableinsert from "../template/Template.tableinsert.vue"
-import Datatableinfofile from "./Diagnosis.infofile";
-import Datatableinfourl from "./Diagnosis.infourl";
-import Datatableinfosrc from "./Diagnosis.inforsc";
+import Templatetableinsert from "../template/Template.tableinsert.vue";
 export default {
   name: "Diagnosisinfo",
   extends: {},
@@ -39,107 +36,119 @@ export default {
       activeName: "first",
       infofile:{
         field:[
-          "악성 파일", "진단 건수", "첫 유입일", "마지막 유입일"
-        ]
+          "악성 파일", "진단 건수", "첫 유입일", "마지막 유입일",""
+        ],
+        innerField:[
+          "날짜", "센서 ID", "사용자명", "부서명","PC 명", "IP 주소", "실행 파일명", "실행 경로"
+        ],
+        orderOption:[
+          { value:"count", label:"진단건수"},
+          { value:"FileHash", label:"위험도"},
+          { value:"firstSeenTime", label:"첫 유입일"},
+          { value:"lastSeenTime", label:"마지막 유입일"}
+        ],
+        search:[],
+        url:"",
+        data:[],
+        order:"count",
       },
-      infourl:{
+      infoip:{
         field:[
-          "URL/IP 주소", "진단 건수", "첫 유입일", "마지막 유입일"
-        ]
+          "URL/IP 주소", "진단 건수", "첫 유입일", "마지막 유입일",""
+        ],
+        innerField:[
+          "날짜", "센서 ID", "사용자명", "부서명","PC 명", "IP 주소", "실행 파일명", "실행 경로"
+        ],
+        orderOption:[
+          { value:"count", label:"진단건수"},
+          { value:"FileHash", label:"위험도"},
+          { value:"firstSeenTime", label:"첫 유입일"},
+          { value:"lastSeenTime", label:"마지막 유입일"}
+        ],
+        search:[],
+        url:"",
+        data:[],
+        order:"count",
       },
       inforsc:{
         field:[
-          "RSC 엔진 명", "진단 건수", "첫 유입일", "마지막 유입일"
-        ]
+          "RSC 엔진 명", "진단 건수", "첫 유입일", "마지막 유입일",""
+        ],
+        innerField:[
+          "날짜", "센서 ID", "사용자명", "부서명","PC 명", "PC IP 주소", "실행 경로", "연관 파일"
+        ],
+        orderOption:[
+          { value:"count", label:"진단건수"},
+          { value:"FileHash", label:"위험도"},
+          { value:"firstSeenTime", label:"첫 유입일"},
+          { value:"lastSeenTime", label:"마지막 유입일"}
+        ],
+        search:[],
+        url:"",
+        data:[],
+        order:"count",
       },
-      fileData:[],
-      urlData:[],
-      rscData:[]
     };
   },
   computed: {
-    tableDefault(){
-      return this.tableData.length === 0 ? false : true
-    }
   },
   components: {
     TemplateSearchpannel,
-    Templatetableinsert,
-    Datatableinfofile,
-    Datatableinfourl,
-    Datatableinfosrc
+    Templatetableinsert
   },
   watch: {},
   methods: {
-    searchFile(form) {
-      console.log(this.activeName);
-      const url = "/api/admin/search/detect/summary/file";
+    receiveData(form) {
       if (form.datetime === "") {
         this.$notify.error({
           title: "Error",
           message: "검색 조건을 입력하세요."
         });
       } else {
-        const data = {
-          page: 1,
-          length: 50,
-          startDate: form.datetime[0].getTime(),
-          endDate: form.datetime[1].getTime(),
-          dept_code: form.data.dept_code || "",
-          node_id: form.data.node_id || "",
-          order: "count",
-          direction: 1
-        };
-        this.$http.get(url, data).then(result => {
-          this.fileData = result.data.data;
-        });
+        if(this.activeName === "first"){
+          this.mixData(this.infofile, form, 'file');
+        }else if(this.activeName === "second"){
+          this.mixData(this.infoip, form, 'ip');
+        }else if(this.activeName === "third"){
+          this.mixData(this.inforsc, form, 'rsc');
+        }
       }
     },
-    searchUrl(form) {
-      console.log(this.activeName);
-      const url = "/api/admin/search/detect/summary/ip";
-      if (form.datetime === "") {
-        this.$notify.error({
-          title: "Error",
-          message: "검색 조건을 입력하세요."
-        });
-      } else {
-        const data = {
-          page: 1,
-          length: 50,
-          startDate: form.datetime[0].getTime(),
-          endDate: form.datetime[1].getTime(),
-          dept_code: form.data.dept_code || "",
-          node_id: form.data.node_id || "",
-          order: "count",
-          direction: 1
-        };
-        this.$http.get(url, data).then(result => {
-          this.urlData = result.data.data;
-        });
-      }
+    mixData(local, receive, apiurl){
+      const url = "/api/admin/search/detect/summary/"+apiurl;
+      let data = {
+        page: 1,
+        length: 50,
+        startDate: receive.datetime[0].getTime(),
+        endDate: receive.datetime[1].getTime(),
+        dept_code: receive.data.dept_code || "",
+        node_id: receive.data.node_id || "",
+        order: local.order,
+        direction: 1
+      };
+      this.$http.get(url, data).then(result => {
+        local.data = result.data.data;
+      });
+      local.search = data;
+      local.url = url;
     },
-    searchRsc(form) {
-      console.log(this.activeName);
-      const url = "/api/admin/search/detect/summary/rsc";
-      if (form.datetime === "") {
-        this.$notify.error({
-          title: "Error",
-          message: "검색 조건을 입력하세요."
+    reorder(val){
+      console.log(this.activeName)
+      if(this.activeName === "first"){
+        val.form.order = val.order;
+        this.$http.get(val.url, val.form).then(result => {
+          console.log(result.data.data)
+          this.infofile.data = result.data.data;
         });
-      } else {
-        const data = {
-          page: 1,
-          length: 50,
-          startDate: form.datetime[0].getTime(),
-          endDate: form.datetime[1].getTime(),
-          dept_code: form.data.dept_code || "",
-          node_id: form.data.node_id || "",
-          order: "count",
-          direction: 1
-        };
-        this.$http.get(url, data).then(result => {
-          this.rscData = result.data.data;
+      }else if(this.activeName === "second"){
+        val.form.order = val.order;
+        this.$http.get(val.url, val.form).then(result => {
+          this.infoip.data = result.data.data;
+        });
+      }else if(this.activeName === "third"){
+        val.form.order = val.order;
+        this.$http.get(val.url, val.form).then(result => {
+          this.inforsc.data = result.data.data;
         });
       }
     }

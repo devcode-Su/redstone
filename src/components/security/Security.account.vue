@@ -6,14 +6,13 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="계정비밀번호" name="first">
         <template-searchpannel :pannelType="pannelaccount" @searchData="searchPass"></template-searchpannel>
-        <templatetablerouter :field="pass.field" :tableData="pass.data"></templatetablerouter>
+        <templatetablerouter :propData="pass"></templatetablerouter>
       </el-tab-pane>
       <el-tab-pane label="화면보호기" name="second">
         <template-searchpannel :pannelType="pannelmonitor"  @searchData="searchMonitor"></template-searchpannel>
-        <templatetablerouter :field="monitor.field":tableData="monitor.data"></templatetablerouter>
+        <templatetablerouter :propData="monitor"></templatetablerouter>
       </el-tab-pane>
     </el-tabs>
-
   </article>
 </template>
 <script>
@@ -38,13 +37,19 @@
           field:[
             "","센서 ID", "부서명", "사용자명","IP 주소","윈도우 계정","최종 변경일시"
           ],
-          data:[]
+          search:[],
+          url:"",
+          data:[],
+          order:"count",
         },
         monitor:{
           field:[
             "", "센서 ID", "부서명","사용자명", "IP 주소","윈도우 계정","종류","최근 변경일시"
           ],
-          data:[]
+          search:[],
+          url:"",
+          data:[],
+          order:"count",
         },
       };
     },
@@ -55,54 +60,53 @@
     },
     watch: {},
     methods: {
-      searchPass(form) {
-        console.log(this.activeName);
-        const url = "/api/admin/search/detect/summary/pc/file";
+      receiveData(form) {
         if (form.datetime === "") {
           this.$notify.error({
             title: "Error",
             message: "검색 조건을 입력하세요."
           });
         } else {
-          const data = {
-            page: 1,
-            length: 50,
-            startDate: form.datetime[0].getTime(),
-            endDate: form.datetime[1].getTime(),
-            dept_code: form.data.dept_code || "",
-            node_id: form.data.node_id || "",
-            order: "count",
-            direction: 1
-          };
-          this.$http.get(url, data).then(result => {
-            this.pass.data = result.data.data;
-          });
+          if(this.activeName === "first"){
+            this.mixData(this.infofile, form, 'file');
+          }else {
+            this.mixData(this.infoip, form, 'ip');
+          }
         }
       },
-      searchMonitor(form) {
-        console.log(this.activeName);
-        const url = "/api/admin/search/detect/summary/pc/file";
-        if (form.datetime === "") {
-          this.$notify.error({
-            title: "Error",
-            message: "검색 조건을 입력하세요."
+      mixData(local, receive, apiurl){
+        const url = "/api/admin/account/password/expired/TYPE/CODE";
+        let data = {
+          page: 1,
+          length: 50,
+          startDate: receive.datetime[0].getTime(),
+          endDate: receive.datetime[1].getTime(),
+          dept_code: receive.data.dept_code || "",
+          node_id: receive.data.node_id || "",
+          order: local.order,
+          direction: 1
+        };
+        this.$http.get(url, data).then(result => {
+          local.data = result.data.data;
+        });
+        local.search = data;
+        local.url = url;
+      },
+      reorder(val){
+        console.log(this.activeName)
+        if(this.activeName === "first"){
+          val.form.order = val.order;
+          this.$http.get(val.url, val.form).then(result => {
+            console.log(result.data.data)
+            this.infofile.data = result.data.data;
           });
-        } else {
-          const data = {
-            page: 1,
-            length: 50,
-            startDate: form.datetime[0].getTime(),
-            endDate: form.datetime[1].getTime(),
-            dept_code: form.data.dept_code || "",
-            node_id: form.data.node_id || "",
-            order: "count",
-            direction: 1
-          };
-          this.$http.get(url, data).then(result => {
-            this.monitor.data = result.data.data;
+        }else {
+          val.form.order = val.order;
+          this.$http.get(val.url, val.form).then(result => {
+            this.infoip.data = result.data.data;
           });
         }
-      },
+      }
     },
     beforeCreate() {},
     created() {},

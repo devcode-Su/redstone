@@ -374,7 +374,7 @@
   }
 }
 
-// group-members table
+// data table
 .group-members,
 .template-table
 {
@@ -413,10 +413,13 @@
     line-height: 32px;
   }
   td {
-    &.col-btn,
     &.col-end{
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between
+    }
+    &.col-btn{
+      display: flex;
+      justify-content: flex-end;
     }
   }
   @at-root {
@@ -441,7 +444,6 @@
       }
     }
     .dynamic-row{
-      margin-top:30px;
       border: 1px solid #d8dce5;
       tr{
         &:last-child{
@@ -464,17 +466,68 @@
           width:20%;
         }
       }
+      .inner-view{
+        margin-bottom:10px;
+        th,td{
+          &.col0{
+            width:auto
+          }
+          &.col1{
+            width:auto;
+          }
+          &.col2{
+            width:auto;
+          }
+        }
+      }
     }
     .security-media-table{
       th,td{
         &.col0{
           width:20px;
         }
-        &.col14{
-          width:15%
-        }
       }
     }
   }
 }
-
+.template-table-wrap{
+  margin-top:30px;
+  &.inner-view{
+    margin-top:0;
+  }
+  header{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    .btn-wrap{
+      @extend header;
+      >div{
+        margin-left:5px;
+      }
+    }
+    .el-select{
+      width:150px;
+    }
+    .el-checkbox-group{
+      position:absolute;
+      right:0;
+      z-index:1;
+      display:flex;
+      flex-direction: column;
+      margin-top:5px;
+      padding:10px;
+      background-color:#fff;
+      border:1px solid color(border);
+      border-radius:4px;
+      label{
+        margin-left:0;
+      }
+    }
+  }
+  .template-table{
+    margin-top:10px;
+  }
+  .fa{
+    margin-left:5px;
+  }
+}

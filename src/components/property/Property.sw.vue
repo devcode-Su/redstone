@@ -4,19 +4,20 @@
       SW 정보
     </h1>
     <el-tabs v-model="activeName">
-      <el-tab-pane label="운영체제" name="os">
+      <el-tab-pane label="운영체제" name="first">
         운영체제 content
       </el-tab-pane>
-      <el-tab-pane label="브라우저" name="browser">
+      <el-tab-pane label="브라우저" name="second">
         브라우저 content
       </el-tab-pane>
-      <el-tab-pane label="소프트웨어" name="sw">
+      <el-tab-pane label="소프트웨어" name="third">
         소프트웨어 content
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
+  import Templatetablerouter from "../template/Template.tablerouter.vue";
 export default {
   name: "Propertysw",
   extends: {},
@@ -25,11 +26,28 @@ export default {
   },
   data() {
     return {
-      activeName: "os"
+      activeName: "first",
+      infofile:{
+        field:[
+          "악성 파일", "진단 건수", "첫 유입일", "마지막 유입일",""
+        ],
+        orderOption:[
+          { value:"count", label:"진단건수"},
+          { value:"FileHash", label:"위험도"},
+          { value:"firstSeenTime", label:"첫 유입일"},
+          { value:"lastSeenTime", label:"마지막 유입일"}
+        ],
+        search:[],
+        url:"",
+        data:[],
+        order:"count",
+      },
     };
   },
   computed: {},
-  components: {},
+  components: {
+    Templatetablerouter
+  },
   watch: {},
   methods: {},
   beforeCreate() {},

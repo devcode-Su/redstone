@@ -20,7 +20,7 @@
       align-items: center;
     }
     .redstone {
-      header {
+      > header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -68,10 +68,14 @@
           max-width: 1600px;
           padding: 25px 30px;
           position: relative;
+          >.el-tabs{
+            margin-top:25px;
+          }
         }
       }
       .page-title {
         display: inline-block;
+        margin-bottom:0;
         padding: 3px 5px;
         font-size: 16px;
         border-bottom: 2px solid color(highlight-color)
@@ -144,4 +148,4 @@
 // element
 @import "reset.element";
 // material
-@import "reset.material"
+@import "reset.material";
