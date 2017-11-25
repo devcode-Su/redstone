@@ -17,7 +17,7 @@
   </article>
 </template>
 <script>
-  import Templatetablerouter from "../template/Template.tablerouter.vue";
+import Templatetablerouter from "../template/Template.tablerouter.vue";
 export default {
   name: "Propertysw",
   extends: {},
@@ -27,21 +27,19 @@ export default {
   data() {
     return {
       activeName: "first",
-      infofile:{
-        field:[
-          "악성 파일", "진단 건수", "첫 유입일", "마지막 유입일",""
+      infofile: {
+        field: ["악성 파일", "진단 건수", "첫 유입일", "마지막 유입일", ""],
+        orderOption: [
+          { value: "count", label: "진단건수" },
+          { value: "FileHash", label: "위험도" },
+          { value: "firstSeenTime", label: "첫 유입일" },
+          { value: "lastSeenTime", label: "마지막 유입일" }
         ],
-        orderOption:[
-          { value:"count", label:"진단건수"},
-          { value:"FileHash", label:"위험도"},
-          { value:"firstSeenTime", label:"첫 유입일"},
-          { value:"lastSeenTime", label:"마지막 유입일"}
-        ],
-        search:[],
-        url:"",
-        data:[],
-        order:"count",
-      },
+        search: [],
+        url: "",
+        data: [],
+        order: "count"
+      }
     };
   },
   computed: {},

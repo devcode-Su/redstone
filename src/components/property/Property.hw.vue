@@ -23,8 +23,8 @@
   </article>
 </template>
 <script>
-  import TemplateSearchpannel from "../template/Template.searchpannel";
-  import Templatetablerouter from "../template/Template.tablerouter.vue";
+import TemplateSearchpannel from "../template/Template.searchpannel";
+import Templatetablerouter from "../template/Template.tablerouter.vue";
 export default {
   name: "Propertyhw",
   extends: {},
@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      activeName: 'first'
+      activeName: "first"
     };
   },
   computed: {},

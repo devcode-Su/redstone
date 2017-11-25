@@ -9,7 +9,7 @@
 </template>
 <script>
 import TemplateSearchpannel from "../template/Template.searchpannel";
-import Templatetablerouter from "../template/Template.tablerouter.vue"
+import Templatetablerouter from "../template/Template.tablerouter.vue";
 export default {
   name: "Securitymedia",
   extends: {},
@@ -20,15 +20,30 @@ export default {
     return {
       pannelset: {
         datetime: true,
-        check:'single'
+        check: "single"
       },
-      search:{
-        field:[
-          "", "장착시간", "탈착시간","센서 ID", "사용자명","부서명", "PC IP 주소","종류","연결방식", "진단개수","종류","연결방식","경로","장치명","용량","발생이벤트"
+      search: {
+        field: [
+          "",
+          "장착시간",
+          "탈착시간",
+          "센서 ID",
+          "사용자명",
+          "부서명",
+          "PC IP 주소",
+          "종류",
+          "연결방식",
+          "진단개수",
+          "종류",
+          "연결방식",
+          "경로",
+          "장치명",
+          "용량",
+          "발생이벤트"
         ],
         data: [],
-        search:[],
-        url:""
+        search: [],
+        url: ""
       }
     };
   },
@@ -40,14 +55,14 @@ export default {
   watch: {},
   methods: {
     receiveData(form) {
-      console.log("file")
+      console.log("file");
       const url = "/api/admin/volume/TYPE/CODE";
       if (form.datetime === "" || form.text === "") {
         this.$notify.error({
           title: "Error",
           message: "검색 조건을 입력하세요."
         });
-        console.log("aaa")
+        console.log("aaa");
       } else {
         const data = {
           page: 1,

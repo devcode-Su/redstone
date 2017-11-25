@@ -3,7 +3,7 @@
     <h1 class="page-title">
       파일 검색
     </h1>
-    <template-searchpannel :pannelType="pannelset"  @searchData="receiveData">></template-searchpannel>
+    <template-searchpannel :pannelType="pannelset" @searchData="receiveData">></template-searchpannel>
     <templatetablerouter :propData="search"></templatetablerouter>
   </article>
 </template>
@@ -23,14 +23,23 @@ export default {
         text: true,
         placeholder: "text input...",
         agreement: true
-    },
-      search:{
-        field:[
-          "","센서 ID", "사용자명", "부서명", "PC 명", "IP", "파일명", "해시값","경로명","검출시간"
+      },
+      search: {
+        field: [
+          "",
+          "센서 ID",
+          "사용자명",
+          "부서명",
+          "PC 명",
+          "IP",
+          "파일명",
+          "해시값",
+          "경로명",
+          "검출시간"
         ],
         data: [],
-        search:[],
-        url:""
+        search: [],
+        url: ""
       }
     };
   },
@@ -42,14 +51,14 @@ export default {
   watch: {},
   methods: {
     receiveData(form) {
-      console.log("file")
+      console.log("file");
       const url = "/api/admin/search/file";
       if (form.datetime === "" || form.text === "") {
         this.$notify.error({
           title: "Error",
           message: "검색 조건을 입력하세요."
         });
-        console.log("aaa")
+        console.log("aaa");
       } else {
         const data = {
           page: 1,
@@ -67,11 +76,10 @@ export default {
         this.file.search = data;
         this.file.url = url;
       }
-    },
+    }
   },
   beforeCreate() {},
-  created() {
-  },
+  created() {},
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},

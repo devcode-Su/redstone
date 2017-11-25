@@ -34,7 +34,7 @@ export default {
     return {
       selected: false,
       selectedDisabled: true,
-      userdata:[]
+      userdata: []
     };
   },
   computed: {},
@@ -58,12 +58,10 @@ export default {
   },
   created() {
     const apiURL = "/api/admin/info";
-    this.$http
-      .get(apiURL)
-      .then((result) => {
-        this.userdata = result.data;
-        //console.log(this.userdata)
-      })
+    this.$http.get(apiURL).then(result => {
+      this.userdata = result.data;
+      //console.log(this.userdata)
+    });
   },
   mounted() {
     //console.log(this.selectedDisabled)
