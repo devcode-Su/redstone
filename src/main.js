@@ -8,6 +8,7 @@ import elementLocale from 'element-ui/lib/locale/lang/en';
 import VueMaterial from 'vue-material';
 import materialIcons from 'material-design-icons-iconfont/dist/material-design-icons.css';
 
+
 import 'babel-polyfill';
 import 'es6-promise/auto';
 import 'element-ui/lib/theme-chalk/index.css'
@@ -27,7 +28,7 @@ Vue.prototype.$http = axios;
 
 // Fillters
 Vue.filter('snippet', value => {
-  return value.slice(0, 100) + '...';
+  return value.length > 100 ? value.slice(0, 100) + '...' : value;
 });
 
 // spliceArr

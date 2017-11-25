@@ -39,13 +39,26 @@
       <div class="table-body-wrap">
         <table>
           <tbody>
-          <template v-for="row in propData.data.data" >
+          <template v-for="(row,i) in propData.data" >
             <tr :ref="'checkedRow'">
-              <td v-for="(col, key, idx) in row" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
-                {{col | snippet}}
+              <td class="col0">{{row.EventTime}}</td>
+              <td class="col1">{{row.ProcessName}}</td>
+              <td class="col2">{{row.username}}</td>
+              <td class="col3">{{row.userdept}}</td>
+              <td class="col4">{{row.nodeid}}</td>
+              <td class="col5">
+                <span>프로세스:{{row.AggProcess}}, </span>
+                <span>네트워크:{{row.AggNetwork}}, </span>
+                <span>파일:{{row.AggFile}}, </span>
+                <span>레지스트리:{{row.AggRegistry}}</span>
+              </td>
+              <td class="col6">
+                <span v-if="row.DetectFILE">TI 진단 이벤트 : {{row.DetectFILE}}</span>
+                <span v-if="row.DetectIP">악성 URL/IP 접근 이벤트 : {{row.DetectIP}}</span>
+                <span v-if="row.DetectRSC">RSC 엔진 진단 이벤트 : {{row.DetectRSC}}</span>
               </td>
               <td class="col-btn">
-                <button class="icon-btn icon-wrap" @click="moreRow(row, row.FileHash)" :class="{on : row === more}">
+                <button class="icon-btn icon-wrap" @click="moreRow(row, i)" :class="{on : row === more}">
                   <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
                 </button>
               </td>
@@ -53,7 +66,9 @@
             <transition name="fade" >
               <tr v-if="row === more" class="show-row">
                 <td :colspan="collength" :key="row.id">
-                  <templatetableinnertype :propData="innerData" class="inner-view-file"></templatetableinnertype>
+                  <processinnerview
+                    :propData="innerData"
+                  ></processinnerview>
                 </td>
               </tr>
             </transition>
@@ -74,9 +89,9 @@
   </section>
 </template>
 <script>
-  import Templatetableinnertype from "./Template.tableinnertype.vue"
+  import Processinnerview from "./Search.process.innerview.vue"
   export default {
-    name: "Templatetableinsert",
+    name: "Processdatatable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
@@ -93,15 +108,15 @@
         viewText:null,
         morebtn: false,
         innerData:{
-          field: this.propData.innerField,
-          data:[],
-          rowKey : this.propData.innerKey,
+          processData:[],
+          fileData:[],
+          checkData:[]
         }
       };
     },
     computed: {},
     components: {
-      Templatetableinnertype
+      Processinnerview
     },
     watch: {},
     methods: {
@@ -117,37 +132,36 @@
           this.view = [];
         }
       },
-      moreRow(row, key){
-        const url = "/api/admin/search/detect/list/file/"+key;
+      moreRow(row){
+        const prcessUrl = "/api/admin/search/process/info/"+row.ProcessGuid;
+        const fileUrl = "/api/admin/search/file/info/master/process_guid/"+row.ProcessGuid;
+        const cehckUrl = "/api/admin/search/process/detect/"+row.ProcessGuid;
         if(this.more === row){
           this.more = null
         }else{
           this.more = row;
-          console.log(url);
-          const data = {
-            page: 1,
-            length: 9007199254740991,
-            dept_code: this.propData.dept_code || "",
-            node_id: this.propData.node_id || "",
-            startDate: this.propData.startDate,
-            endDate: this.propData.endDate
-          };
-          this.$http.get(url, {
-            params:data
-          }).then(result => {
-            //this.innerData.data = result.data.data;
-            console.log(result.data.data);
-            //this.innerData.data  = this.getValueEx(result.data.data, this.propData.innerKey);
-            this.innerData.data = result.data.data
+          console.log(row);
+          this.$http.get(prcessUrl).then(result =>{
+            console.log(result.data)
+            this.innerData.processData = result.data.rows
           });
+          this.$http.get(fileUrl).then(result =>{
+            console.log(result.data)
+            this.innerData.fileData = result.data
+          });
+          this.$http.get(cehckUrl).then(result =>{
+            console.log(result.data)
+            this.innerData.checkData = result.data
+          });
+          //this.innerData.data = row
         }
-     },
+      },
       reorder(val){
         this.$emit('reorder', {
           "order":val,
           "form": this.propData.search,
           "url":this.propData.url}
-          );
+        );
       },
       handleSizeChange(val) {
         console.log(`${val} items per page`);
@@ -190,7 +204,7 @@
       display:none
     }
     .show-row:hover{
-        background-color:transparent
+      background-color:transparent
     }
     .el-pagination{
       margin-top:5px;

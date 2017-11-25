@@ -99,34 +99,29 @@
     watch: {},
     methods: {
       receiveData(form) {
-        if (form.datetime === "") {
-          this.$notify.error({
-            title: "Error",
-            message: "검색 조건을 입력하세요."
-          });
-        } else {
           if(this.activeName === "first"){
             this.mixData(this.pcfile, form, 'file');
           }else if(this.activeName === "second"){
             this.mixData(this.pcip, form, 'ip');
-          }else if(this.activeName === "third"){
+          }else if(this.activeName === "third") {
             this.mixData(this.pcrsc, form, 'rsc');
           }
-        }
       },
       mixData(local, receive, apiurl){
         const url = "/api/admin/search/detect/summary/pc/"+apiurl;
         let data = {
           page: 1,
           length: 50,
-          startDate: receive.datetime[0].getTime(),
-          endDate: receive.datetime[1].getTime(),
+          startDate: receive.datetime[0] ? receive.datetime[0].getTime() : null,
+          endDate: receive.datetime[1] ? receive.datetime[0].getTime() : null,
           dept_code: receive.data.dept_code || "",
           node_id: receive.data.node_id || "",
           order: local.order,
           direction: 1
         };
-        this.$http.get(url, data).then(result => {
+        this.$http.get(url, {
+          params : data
+        }).then(result => {
           local.data = result.data.data;
         });
         local.search = data;
@@ -136,18 +131,24 @@
         console.log(this.activeName)
         if(this.activeName === "first"){
           val.form.order = val.order;
-          this.$http.get(val.url, val.form).then(result => {
+          this.$http.get(val.url, {
+            params:val.form
+          }).then(result => {
             console.log(result.data.data)
             this.pcfile.data = result.data.data;
           });
         }else if(this.activeName === "second"){
           val.form.order = val.order;
-          this.$http.get(val.url, val.form).then(result => {
+          this.$http.get(val.url, {
+            params:val.form
+          }).then(result => {
             this.pcip.data = result.data.data;
           });
         }else if(this.activeName === "third"){
           val.form.order = val.order;
-          this.$http.get(val.url, val.form).then(result => {
+          this.$http.get(val.url, {
+            params:val.form
+          }).then(result => {
             this.pcrsc.data = result.data.data;
           });
         }

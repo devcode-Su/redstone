@@ -31,7 +31,7 @@
       <table>
         <thead>
         <tr>
-          <th v-for="(th, i) in propData.field" :key="th.id" :class="'col'+i" :ref="'checkedTh'">{{th}}</th>
+          <th v-for="(th, i) in propData.field" :key="th.id" :class="['col'+i,{ 'col-end' : propData.field.length-1 === i }]" :ref="'checkedTh'">{{th}}</th>
         </tr>
         </thead>
       </table>
@@ -67,10 +67,16 @@
     },
     data() {
       return {
-        more : null
+        more : null,
+        order:"",
+        morebtn: false,
       };
     },
-    computed: {},
+    computed: {
+      tableData(){
+        return this.getValueEx(this.propData.data, this.propData.rowKey)
+      }
+    },
     components: {},
     watch: {},
     methods: {
@@ -92,13 +98,13 @@
     },
     beforeCreate() {},
     created() {
-      console.log(this.propData)
+      //console.log(this.propData)
     },
     beforeMounted() {},
     mounted() {},
     beforeUpdate() {},
     updated() {
-      console.log(this.propData)
+      //console.log(this.propData)
     },
     actvated() {},
     deactivated() {},

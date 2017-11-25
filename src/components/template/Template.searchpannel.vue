@@ -116,6 +116,9 @@ export default {
     widthsize: {
       type: Number,
       default: 120
+    },
+    propForm :{
+      type: Array | Object,
     }
   },
   data() {
@@ -201,8 +204,8 @@ export default {
       },
       form: {
         data:"",
-        datetime: "",
-        datelast: "",
+        datetime:[],
+        datelast:"",
         version: "",
         checkedSearch: [],
         text: "",
@@ -279,14 +282,21 @@ export default {
   beforeCreate() {},
   created() {
     EventBus.$on("searchNavi", data => {
+      this.form.datetime = [data.EventTime , data.EventTime];
       this.form.data = data;
       this.searchNavi = data.name || data.dept.name +" / "+ data.username;
-    })
+    });
+    EventBus.$on("infofile", data => {
+      this.form.text = data.Md5Hash;
+      this.form.checkedSearch = data.Type;
+    });
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+    console.log(this.propForm)
+  },
   actvated() {},
   deactivated() {},
   beforeDestroy() {},
@@ -295,51 +305,5 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-.template-search-pannel {
-  margin-top: 65px;
-  padding-left: 110px;
-  background: url(../../assets/search-box.jpg) no-repeat 30px center;
-  border: 1px solid color(border);
-  form {
-    border-left: 1px solid color(border);
-  }
-  fieldset {
-    margin-top: 0;
-    position:static;
-    border: 0 none;
-  }
-  .form-align-box {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
-  }
-  .form-item-wrap {
-    margin-right: 30px;
-  }
-  .el-checkbox-group,
-  .agreement {
-    margin-left: 20px;
-  }
-  .multicheck {
-    display: flex;
-    min-width: 500px;
-    margin-left: 0;
-    label {
-      flex: 1;
-      margin-left: 0;
-    }
-  }
-  .btn-wrap {
-    margin-bottom: 18px;
-  }
-  .detail {
-    padding: 25px 30px;
-    position: absolute;
-    z-index: 3;
-    transform: translate(-235px, 10px);
-    background-color: #fff;
-    border: 1px solid color(border);
-    border-radius: 5px;
-  }
-}
+
 </style>

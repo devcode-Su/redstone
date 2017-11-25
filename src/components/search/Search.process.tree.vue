@@ -1,7 +1,7 @@
 <template>
   <section class="process-tree">
     <div class="process-tree-area">
-      <h1>프로세스 트리</h1>
+      <tree :data="tree" :node-text="name" layoutType="circular"></tree>
     </div>
     <div class="pc-info">
       <transition-group tag="ul" class="info-list-wrap" name="infolist">
@@ -22,6 +22,7 @@
   </section>
 </template>
 <script>
+  import {tree} from 'vued3tree'
 export default {
   name: "Processtree",
   extends: {},
@@ -29,6 +30,16 @@ export default {
   data() {
     return {
       selected: 0,
+      tree: {
+        name: "father",
+        children:[{
+          name: "son1",
+          children:[ {name: "grandson"}, {name: "grandson2"}]
+        },{
+          name: "son2",
+          children:[ {name: "grandson3"}, {name: "grandson4"}]
+        }]
+      },
       listSample: [
         {
           name: "PC 정보",
@@ -178,20 +189,10 @@ export default {
       ]
     };
   },
-  components: {},
+  components: {
+    tree
+  },
   methods: {
-    // onOpen() {
-    //   //console.log('Opened');
-    // },
-    // onClose(type) {
-    //   //console.log('Closed', type);
-    // },
-    // onOpen() {
-    //   console.log('Opened');
-    // },
-    // onClose(type) {
-    //   console.log('Closed', type);
-    // }
     infoList(num) {
       if (this.selecte !== num) this.selected = num;
     }
@@ -202,7 +203,7 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-@import "../../assets/styles/variables.scss";
+@import "~styles/variables.scss";
 
 .process-tree {
   display: flex;
