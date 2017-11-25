@@ -117,13 +117,13 @@ export default {
       type: Number,
       default: 120
     },
-    propForm :{
-      type: Array | Object,
+    propForm: {
+      type: Array | Object
     }
   },
   data() {
     return {
-      searchNavi : "전사",
+      searchNavi: "전사",
       showDetail: false,
       checkAll: false,
       checkStart: false,
@@ -203,9 +203,9 @@ export default {
         ]
       },
       form: {
-        data:"",
-        datetime:[],
-        datelast:"",
+        data: "",
+        datetime: [],
+        datelast: "",
         version: "",
         checkedSearch: [],
         text: "",
@@ -273,7 +273,7 @@ export default {
       this.isIndeterend = checkedCount > 0 && checkedCount < arrLength;
     },
     onSubmit() {
-      this.$emit("searchData", this.form)
+      this.$emit("searchData", this.form);
     },
     detailColse() {
       this.showDetail = false;
@@ -282,9 +282,9 @@ export default {
   beforeCreate() {},
   created() {
     EventBus.$on("searchNavi", data => {
-      this.form.datetime = [data.EventTime , data.EventTime];
+      this.form.datetime = [data.EventTime, data.EventTime];
       this.form.data = data;
-      this.searchNavi = data.name || data.dept.name +" / "+ data.username;
+      this.searchNavi = data.name || data.dept.name + " / " + data.username;
     });
     EventBus.$on("infofile", data => {
       this.form.text = data.Md5Hash;
@@ -295,7 +295,7 @@ export default {
   mounted() {},
   beforeUpdate() {},
   updated() {
-    console.log(this.propForm)
+    console.log(this.propForm);
   },
   actvated() {},
   deactivated() {},
@@ -305,5 +305,4 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-
 </style>

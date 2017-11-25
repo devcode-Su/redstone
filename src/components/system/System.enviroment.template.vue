@@ -163,7 +163,7 @@ export default {
   },
   beforeCreate() {},
   created() {
-    console.log(this)
+    console.log(this);
   },
   beforeMounted() {},
   mounted() {},

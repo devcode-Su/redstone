@@ -26,13 +26,23 @@ export default {
         placeholder: "URL/IP",
         detail: true
       },
-      search:{
-        field:[
-          "","센서 ID", "사용자명", "부서명", "PC 명", "방향","PC IP 주소", "원격 IP 주소", "포트","프로토콜","검출 시간"
+      search: {
+        field: [
+          "",
+          "센서 ID",
+          "사용자명",
+          "부서명",
+          "PC 명",
+          "방향",
+          "PC IP 주소",
+          "원격 IP 주소",
+          "포트",
+          "프로토콜",
+          "검출 시간"
         ],
         data: [],
-        search:[],
-        url:""
+        search: [],
+        url: ""
       }
     };
   },
@@ -44,14 +54,14 @@ export default {
   watch: {},
   methods: {
     receiveData(form) {
-      console.log("file")
+      console.log("file");
       const url = "/api/admin/search/network";
       if (form.datetime === "" || form.text === "") {
         this.$notify.error({
           title: "Error",
           message: "검색 조건을 입력하세요."
         });
-        console.log("aaa")
+        console.log("aaa");
       } else {
         const data = {
           page: 1,

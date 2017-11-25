@@ -22,7 +22,7 @@
                 </el-checkbox-group>
               </el-form-item>
               <el-form-item label="검색 조건" size="small">
-                <el-input type="text" v-model="form.text" >
+                <el-input type="text" v-model="form.text">
                 </el-input>
                 <el-checkbox class="agreement" v-model="form.agreement">
                   부분 일치
@@ -40,7 +40,7 @@
   </article>
 </template>
 <script>
-  import { EventBus } from "@/main";
+import { EventBus } from "@/main";
 import Processdatatable from "./Search.process.datatable.vue";
 
 export default {
@@ -51,10 +51,10 @@ export default {
   },
   data() {
     return {
-      checkAll : true,
-      searchNavi : "전사",
+      checkAll: true,
+      searchNavi: "전사",
       isIndeterminate: false,
-      checklist : [
+      checklist: [
         "TI진단 이벤트",
         "악성 URL/IP 접근 이벤트",
         "RSC 엔진 진단 이벤트",
@@ -104,9 +104,9 @@ export default {
         ]
       },
       form: {
-        data:"",
-        datetime:"",
-        datelast:"",
+        data: "",
+        datetime: "",
+        datelast: "",
         version: "",
         checkedSearch: [
           "TI진단 이벤트",
@@ -120,20 +120,23 @@ export default {
         text: "",
         agreement: false
       },
-      process:{
-        field:[
-          "프로세스 시작 시간", "프로세스 이름", "이름", "부서", "센서 ID", "검색된 이벤트 수", "위협 정보",""
+      process: {
+        field: [
+          "프로세스 시작 시간",
+          "프로세스 이름",
+          "이름",
+          "부서",
+          "센서 ID",
+          "검색된 이벤트 수",
+          "위협 정보",
+          ""
         ],
-        data: [
-          "123", "!231"
-        ],
-        search:[],
-        url:""
+        data: ["123", "!231"],
+        search: [],
+        url: ""
       },
       //form:"",
-      formKey:[
-        "EventTime", "Md5Hash", "Type"
-      ]
+      formKey: ["EventTime", "Md5Hash", "Type"]
     };
   },
   computed: {},
@@ -146,7 +149,7 @@ export default {
       console.log(val);
       this.form.checkedSearch = val ? this.checklist : [];
       this.isIndeterminate = false;
-      console.log(this.form.checkedSearch)
+      console.log(this.form.checkedSearch);
     },
     handleCheckedEngineChange(value) {
       console.log(value);
@@ -157,9 +160,9 @@ export default {
         checkedCount > 0 && checkedCount < this.checklist.length;
     },
     onSubmit(form) {
-      console.log("???? adb")
+      console.log("???? adb");
       const formData = this.$refs[form].model;
-      console.log(formData)
+      console.log(formData);
       console.log(
         this.$refs.check[0].isChecked,
         this.$refs.check[1].isChecked,
@@ -168,14 +171,14 @@ export default {
         this.$refs.check[4].isChecked,
         this.$refs.check[5].isChecked,
         this.$refs.check[6].isChecked
-      )
+      );
       const url = "/api/admin/search/event";
       if (formData.datetime === "") {
         this.$notify.error({
           title: "Error",
           message: "검색 조건을 입력하세요."
         });
-        console.log("aaa")
+        console.log("aaa");
       } else {
         const data = {
           page: 1,
@@ -186,24 +189,26 @@ export default {
           node_id: formData.data.node_id || "",
           order: "time",
           direction: 1,
-          q:"",
-          all:this.checkAll,
-          partial_match:true,
-          ti_event:this.$refs.check[0].isChecked,
-          url_ip_event:this.$refs.check[1].isChecked,
-          engine_event:this.$refs.check[2].isChecked,
-          process_event:this.$refs.check[3].isChecked,
-          network_event:this.$refs.check[4].isChecked,
-          file_event:this.$refs.check[5].isChecked,
-          registry_event:this.$refs.check[6].isChecked,
-        }
-        console.log(data)
-        this.$http.get(url, {
-          params:data
-        }).then(result => {
-          this.process.data = result.data.rows;
-          console.log(result.data)
-        });
+          q: "",
+          all: this.checkAll,
+          partial_match: true,
+          ti_event: this.$refs.check[0].isChecked,
+          url_ip_event: this.$refs.check[1].isChecked,
+          engine_event: this.$refs.check[2].isChecked,
+          process_event: this.$refs.check[3].isChecked,
+          network_event: this.$refs.check[4].isChecked,
+          file_event: this.$refs.check[5].isChecked,
+          registry_event: this.$refs.check[6].isChecked
+        };
+        console.log(data);
+        this.$http
+          .get(url, {
+            params: data
+          })
+          .then(result => {
+            this.process.data = result.data.rows;
+            console.log(result.data);
+          });
         this.process.search = data;
         this.process.url = url;
       }

@@ -22,7 +22,7 @@
   </section>
 </template>
 <script>
-  import {tree} from 'vued3tree'
+import { tree } from "vued3tree";
 export default {
   name: "Processtree",
   extends: {},
@@ -32,13 +32,16 @@ export default {
       selected: 0,
       tree: {
         name: "father",
-        children:[{
-          name: "son1",
-          children:[ {name: "grandson"}, {name: "grandson2"}]
-        },{
-          name: "son2",
-          children:[ {name: "grandson3"}, {name: "grandson4"}]
-        }]
+        children: [
+          {
+            name: "son1",
+            children: [{ name: "grandson" }, { name: "grandson2" }]
+          },
+          {
+            name: "son2",
+            children: [{ name: "grandson3" }, { name: "grandson4" }]
+          }
+        ]
       },
       listSample: [
         {

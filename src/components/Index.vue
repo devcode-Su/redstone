@@ -23,17 +23,17 @@ export default {
   methods: {
     signAttempt(input) {
       this.crendentialFail = "";
-       if (input.id !== "" && input.passwd.length !== "") {
-         const apiURL = "/api/admin/login";
-         this.$http
-           .post(apiURL, input)
-           .then(() => {
-             this.$router.push("Redstone");
-           })
-           .catch(() => {
-             this.errorNotice();
-           });
-       }
+      if (input.id !== "" && input.passwd.length !== "") {
+        const apiURL = "/api/admin/login";
+        this.$http
+          .post(apiURL, input)
+          .then(() => {
+            this.$router.push("Redstone");
+          })
+          .catch(() => {
+            this.errorNotice();
+          });
+      }
     },
     errorNotice() {
       setTimeout(() => {

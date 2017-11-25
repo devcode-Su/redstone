@@ -12,8 +12,8 @@
   </article>
 </template>
 <script>
-  import Propertypannel from "../template/Template.propertypannel.vue";
-  import Processtree from "./Search.process.tree.vue";
+import Propertypannel from "../template/Template.propertypannel.vue";
+import Processtree from "./Search.process.tree.vue";
 export default {
   name: "Searchanalysis",
   extends: {},
