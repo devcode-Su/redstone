@@ -131,7 +131,7 @@ export default {
           "위협 정보",
           ""
         ],
-        data: ["123", "!231"],
+        data: [],
         search: [],
         url: ""
       },
@@ -222,7 +222,10 @@ export default {
       //console.log(this.getValueEx(data, this.formKey));
       //this.form = this.getValueEx(data, this.formKey);
     });
-    //console.log(this.form);
+    EventBus.$on("searchNavi", data => {
+      //console.log(data)
+      this.searchNavi = data.name || data.dept.name + " / " + data.username;
+    });
   },
   beforeMounted() {},
   mounted() {},

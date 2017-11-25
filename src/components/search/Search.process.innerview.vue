@@ -41,12 +41,10 @@
             <dt>WindowText</dt>
             <dd>{{propData.processData[0].WindowTex}}</dd>
           </dl>
-
           <dl v-if="propData.processData[0].InteractiveFlag !== '0'">
             <dt>WindowClassName</dt>
             <dd>{{propData.processData[0].WindowClassName}}</dd>
           </dl>
-
           <dl>
             <dt>CommandLine</dt>
             <dd>{{propData.processData[0].CommandLine}}</dd>
@@ -86,7 +84,6 @@
             <dt>서명자</dt>
             <dd>{{propData.fileData.sign_publisher}}</dd>
           </dl>
-
           <dl>
             <dt>회사명</dt>
             <dd>{{propData.fileData.company_name}}</dd>
@@ -117,27 +114,73 @@
           </dl>
         </div>
       </div>
-      <div>
+      <div v-if="propData.checkData">
         <h2>진단 정보</h2>
         <div class="content-wrap">
-
-          <dl>
-            <dt>진단엔진</dt>
-            <dd>{{propData.checkData[0].build_date}}</dd>
-          </dl>
-          <dl>
-            <dt>위험도</dt>
-            <dd>{{propData.checkData[0].build_date}}</dd>
-          </dl>
-          <dl>
-            <dt>검출파일</dt>
-            <dd>{{propData.checkData[0].build_date}}</dd>
-          </dl>
-          <dl>
-            <dt>추가정보</dt>
-            <dd>{{propData.checkData[0].build_date}}</dd>
-          </dl>
-
+          <div v-for="detect in propData.checkData">
+            <div v-if="detect.Type === 'RSC'">
+              <dl>
+                <dt>진단엔진</dt>
+                <dd>{{detect.RuleId}}</dd>
+              </dl>
+              <dl>
+                <dt>위험도</dt>
+                <dd>{{detect.Score}}</dd>
+              </dl>
+              <dl>
+                <dt>검출파일</dt>
+                <dd>{{detect.PathInfo1}}</dd>
+              </dl>
+              <dl>
+                <dt>추가정보</dt>
+                <dd>{{detect.AdditionalInfo}}</dd>
+              </dl>
+            </div>
+            <div v-else-if="detect.Type === 'FILE'">
+              <dl>
+                <dt>진단엔진</dt>
+                <dd>TI 엔진</dd>
+              </dl>
+              <dl>
+                <dt>위험도</dt>
+                <dd>{{detect.Score}}</dd>
+              </dl>
+              <dl v-if="detect.malware">
+                <dt>TI 엔진 스코어</dt>
+                <dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
+              </dl>
+              <dl>
+                <dt>악성파일</dt>
+                <dd>{{detect.PathInfo1}}</dd>
+              </dl>
+              <dl v-if="detect.PathInfo2">
+                <dt>악성파일</dt>
+                <dd>{{detect.PathInfo2}}</dd>
+              </dl>
+            </div>
+            <div v-else>
+              <dl>
+                <dt>진단엔진</dt>
+                <dd>TI 엔진</dd>
+              </dl>
+              <dl>
+                <dt>위험도</dt>
+                <dd>{{detect.Score}}</dd>
+              </dl>
+              <dl v-if="detect.malware">
+                <dt>TI 엔진 스코어</dt>
+                <dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
+              </dl>
+              <dl>
+                <dt>악성 IP</dt>
+                <dd>{{detect.PathInfo1}}</dd>
+              </dl>
+              <dl v-if="detect.PathInfo2">
+                <dt>악성 도메인</dt>
+                <dd>{{detect.PathInfo2}}</dd>
+              </dl>
+            </div>
+          </div>
         </div>
       </div>
     </div>

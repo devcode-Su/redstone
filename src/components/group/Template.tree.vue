@@ -26,8 +26,8 @@
     </div>
     <transition @enter="enter" @leave="leave">
       <ul v-show="isOpen" v-if="model.children">
-        <tree v-for="(model, i) in model.children" :key="model.id" :model="model" :index="i" :treeEdit="treeEdit" :type="type">
-        </tree>
+        <grouptree v-for="(model, i) in model.children" :key="model.id" :model="model" :index="i" :treeEdit="treeEdit" :type="type">
+        </grouptree>
       </ul>
     </transition>
   </li>
@@ -36,7 +36,7 @@
 import Velocity from "velocity-animate";
 import { EventBus } from "@/main";
 export default {
-  name: "tree",
+  name: "Grouptree",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.

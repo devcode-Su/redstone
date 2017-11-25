@@ -5,11 +5,11 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="계정비밀번호" name="first">
-        <template-searchpannel :pannelType="pannelaccount" @searchData="searchPass"></template-searchpannel>
+        <template-searchpannel :pannelType="pannelaccount" @searchData="receiveData"></template-searchpannel>
         <templatetablerouter :propData="pass"></templatetablerouter>
       </el-tab-pane>
       <el-tab-pane label="화면보호기" name="second">
-        <template-searchpannel :pannelType="pannelmonitor" @searchData="searchMonitor"></template-searchpannel>
+        <template-searchpannel :pannelType="pannelmonitor" @searchData="receiveData"></template-searchpannel>
         <templatetablerouter :propData="monitor"></templatetablerouter>
       </el-tab-pane>
     </el-tabs>
@@ -92,13 +92,17 @@ export default {
       console.log(this.activeName);
       if (this.activeName === "first") {
         val.form.order = val.order;
-        this.$http.get(val.url, val.form).then(result => {
+        this.$http.get(val.url, {
+          params:val.form
+        }).then(result => {
           console.log(result.data.data);
           this.infofile.data = result.data.data;
         });
       } else {
         val.form.order = val.order;
-        this.$http.get(val.url, val.form).then(result => {
+        this.$http.get(val.url, {
+          params:val.form
+        }).then(result => {
           this.infoip.data = result.data.data;
         });
       }

@@ -282,6 +282,7 @@ export default {
   beforeCreate() {},
   created() {
     EventBus.$on("searchNavi", data => {
+      //console.log(data)
       this.form.datetime = [data.EventTime, data.EventTime];
       this.form.data = data;
       this.searchNavi = data.name || data.dept.name + " / " + data.username;
@@ -294,9 +295,7 @@ export default {
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {
-    console.log(this.propForm);
-  },
+  updated() {},
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

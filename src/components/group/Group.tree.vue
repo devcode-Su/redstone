@@ -1,12 +1,12 @@
 <template>
   <div class="tree-view" :class="{ on : position}">
     <ul class="tree-wrap">
-      <tree v-if="defaultData" :model="company[0]" @changeModel="overRide" :treeEdit="treeEdit" :type="type"></tree>
+      <grouptree v-if="defaultData" :model="company[0]" @changeModel="overRide" :treeEdit="treeEdit" :type="type"></grouptree>
     </ul>
   </div>
 </template>
 <script>
-import tree from "./Template.tree";
+import Grouptree from "./Template.tree";
 import { EventBus } from "@/main";
 export default {
   name: "Grouptree",
@@ -35,7 +35,7 @@ export default {
     }
   },
   components: {
-    tree
+    Grouptree
   },
   watch: {},
   methods: {
@@ -48,6 +48,7 @@ export default {
     const apiUrl = "/api/admin/group/list";
     this.$http.get(apiUrl).then(result => {
       this.company = this.listToTree(result.data);
+      //console.log(this.company);
       EventBus.$emit("searchNavi",this.company[0])
     });
     //EventBus.$emit()

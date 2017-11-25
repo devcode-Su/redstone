@@ -23,7 +23,7 @@
 <script>
 import { EventBus } from "@/main";
 export default {
-  name: "TemplateSearchpannel",
+  name: "TemplatePropertypannel",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
@@ -38,7 +38,33 @@ export default {
   },
   data() {
     return {
-      searchNavi: "전사"
+      searchNavi: "전사",
+      info: [
+        {
+          dt: "센서 ID",
+          dd: "22"
+        },
+        {
+          dt: "컴퓨터명",
+          dd: "USERPC"
+        },
+        {
+          dt: "IP",
+          dd: "192.168.100.14"
+        },
+        {
+          dt: "로그인 계정",
+          dd: "김수홍대표"
+        },
+        {
+          dt: "부서",
+          dd: "전사"
+        },
+        {
+          dt: "OS",
+          dd: "Microsoft Windows 10 Home 64비트"
+        }
+      ]
     };
   },
   computed: {},
@@ -47,7 +73,7 @@ export default {
   methods: {},
   created() {
     EventBus.$on("searchNavi", data => {
-      this.form.data = data;
+      //console.log(data)
       this.searchNavi = data.name || data.dept.name + " / " + data.username;
     });
   },

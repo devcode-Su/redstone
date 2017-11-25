@@ -162,7 +162,7 @@ export default {
   },
   beforeCreate() {},
   created() {
-    //console.log(this.propData)
+    console.log(this.propData.data)
   },
   beforeMounted() {},
   mounted() {},
