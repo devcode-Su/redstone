@@ -1,7 +1,7 @@
 <template>
   <section class="process-tree">
     <div class="process-tree-area">
-      <tree :data="tree" :node-text="name" layoutType="circular"></tree>
+      <tree ref="tree" :identifier="getId" :zoomable="treeData.zoomable" :data="treeData.data" :node-text="treeData.nodeText" :margin-x="treeData.Marginx" :margin-y="treeData.Marginy" :type="treeData.type" :layout-type="treeData.layoutType" :duration="treeData.duration" class="tree" @clicked="onClick" @expand="onExpand" @retract="onRetract" />
     </div>
     <div class="pc-info">
       <transition-group tag="ul" class="info-list-wrap" name="infolist">
@@ -19,10 +19,17 @@
         </li>
       </transition-group>
     </div>
+    <div v-for="event in treeData.events" :key="event.id">
+      <p>
+        <b>Name:</b> {{event.eventName}}
+        <b>Data:</b>{{event.data.text}}</p>
+    </div>
   </section>
 </template>
 <script>
 import { tree } from "vued3tree";
+import data from "../../../static/data/treeexample.json";
+
 export default {
   name: "Processtree",
   extends: {},
@@ -30,19 +37,32 @@ export default {
   data() {
     return {
       selected: 0,
-      tree: {
-        name: "father",
-        children: [
-          {
-            name: "son1",
-            children: [{ name: "grandson" }, { name: "grandson2" }]
-          },
-          {
-            name: "son2",
-            children: [{ name: "grandson3" }, { name: "grandson4" }]
-          }
-        ]
+      treeData: {
+        data: data.Graph.tree,
+        type: "tree",
+        layoutType: "euclidean",
+        duration: 750,
+        Marginx: 30,
+        Marginy: 30,
+        nodeText: "text",
+        currentNode: null,
+        zoomable: true,
+        isLoading: false,
+        events: []
       },
+      // treeBox: {
+      //   name: "father",
+      //   children: [
+      //     {
+      //       name: "son1",
+      //       children: [{ name: "grandson" }, { name: "grandson2" }]
+      //     },
+      //     {
+      //       name: "son2",
+      //       children: [{ name: "grandson3" }, { name: "grandson4" }]
+      //     }
+      //   ]
+      // },
       listSample: [
         {
           name: "PC 정보",
@@ -198,7 +218,53 @@ export default {
   methods: {
     infoList(num) {
       if (this.selecte !== num) this.selected = num;
+    },
+    do(action) {
+      if (this.currentNode) {
+        this.isLoading = true;
+        this.$refs["tree"][action](this.currentNode).then(() => {
+          this.isLoading = false;
+        });
+      }
+    },
+    getId(node) {
+      return node.id;
+    },
+    expandAll() {
+      this.do("expandAll");
+    },
+    collapseAll() {
+      this.do("collapseAll");
+    },
+    showOnly() {
+      this.do("showOnly");
+    },
+    show() {
+      this.do("show");
+    },
+    onClick(evt) {
+      this.currentNode = evt.element;
+      this.onEvent("onClick", evt);
+    },
+    onExpand(evt) {
+      this.onEvent("onExpand", evt);
+    },
+    onRetract(evt) {
+      this.onEvent("onRetract", evt);
+    },
+    onEvent(eventName, data) {
+      //this.treeData.events.push({ eventName, data: data.data });
+      console.log({ eventName, data: data });
+    },
+    resetZoom() {
+      this.isLoading = true;
+      this.$refs["tree"].resetZoom().then(() => {
+        this.isLoading = false;
+      });
     }
+  },
+  created() {
+    console.log(data);
   },
   mounted() {
     //console.log(this.$refs.infoMenu);
@@ -231,6 +297,9 @@ export default {
     flex: 1 0 auto;
     width: 830px;
     margin-right: 10px;
+    .tree {
+      height: 100%;
+    }
   }
   .pc-info {
     width: 360px;
