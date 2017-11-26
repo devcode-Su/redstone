@@ -27,7 +27,7 @@
         <table>
           <thead>
             <tr>
-              <th v-for="(th, i) in propData.field" :key="th.id" :class="['col'+i,{ 'col-end' : propData.field.length-1 === i }]" :ref="'checkedTh'">{{th}}</th>
+              <th v-for="(th, i) in propData.field" :key="th" :class="['col'+i,{ 'col-end' : propData.field.length-1 === i }]" :ref="'checkedTh'">{{th}}</th>
             </tr>
           </thead>
         </table>
@@ -36,8 +36,8 @@
         <table>
           <tbody>
             <template v-for="row in propData.data.data">
-              <tr :ref="'checkedRow'">
-                <td v-for="(col, key, idx) in row" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
+              <tr :ref="'checkedRow'" :key="row">
+                <td v-for="(col, key, idx) in row" :key="col.i" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
                   {{col | snippet}}
                 </td>
                 <td class="col-btn">
@@ -46,7 +46,7 @@
                   </button>
                 </td>
               </tr>
-              <transition name="fade">
+              <transition name="fade" :key="row">
                 <tr v-if="row === more" class="show-row">
                   <td :colspan="collength" :key="row.id">
                     <templatetableinnertype :propData="innerData" class="inner-view-file"></templatetableinnertype>

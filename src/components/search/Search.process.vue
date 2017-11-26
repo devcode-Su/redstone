@@ -10,8 +10,16 @@
           <div class="form-align-box">
             <div class="form-item-wrap">
               <el-form-item label="조사기간 설정" size="small">
-                <el-date-picker v-model="form.datetime" type="datetimerange" :picker-options="datetimeOptions" range-separator="To" start-placeholder="Start date" end-placeholder="End date" align="right">
+                <el-date-picker v-model="form.starttime" type="datetime" placeholder="Select Start date and time">
                 </el-date-picker>
+                <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+                <el-date-picker v-model="form.endtime" type="datetime" placeholder="Select End date and time">
+                </el-date-picker>
+                <div class="btn-date-wrap">
+                  <el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
+                    {{settime}}
+                  </el-button>
+                </div>
               </el-form-item>
               <el-form-item label="검색 항목" size="small">
                 <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
@@ -43,6 +51,7 @@
 import { EventBus } from "@/main";
 import Processdatatable from "./Search.process.datatable.vue";
 
+//const newDate = new Date();
 export default {
   name: "Searchprocess",
   extends: {},
@@ -51,6 +60,7 @@ export default {
   },
   data() {
     return {
+      datebtn: ["1시간", "일일", "주간", "월간"],
       checkAll: true,
       searchNavi: "전사",
       isIndeterminate: false,
@@ -63,50 +73,16 @@ export default {
         "파일",
         "레지스트리"
       ],
-      datetimeOptions: {
-        shortcuts: [
-          {
-            text: "1 시간",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 1);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "일일",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "주간",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "월간",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
-      },
+      datetimeOptions: [
+        new Date().setTime(new Date().getTime() - 3600 * 1000 * 1),
+        new Date().setTime(new Date().getTime() - 3600 * 1000 * 24),
+        new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 7),
+        new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 30)
+      ],
       form: {
         data: "",
-        datetime: "",
-        datelast: "",
+        starttime: "",
+        endtime: "",
         version: "",
         checkedSearch: [
           "TI진단 이벤트",
@@ -159,21 +135,15 @@ export default {
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.checklist.length;
     },
+    setDatetime(num) {
+      this.form.starttime = this.datetimeOptions[num];
+      this.form.endtime = new Date();
+    },
     onSubmit(form) {
       console.log("???? adb");
       const formData = this.$refs[form].model;
-      console.log(formData);
-      console.log(
-        this.$refs.check[0].isChecked,
-        this.$refs.check[1].isChecked,
-        this.$refs.check[2].isChecked,
-        this.$refs.check[3].isChecked,
-        this.$refs.check[4].isChecked,
-        this.$refs.check[5].isChecked,
-        this.$refs.check[6].isChecked
-      );
       const url = "/api/admin/search/event";
-      if (formData.datetime === "") {
+      if (formData.starttime === "" || formData.endtime === "") {
         this.$notify.error({
           title: "Error",
           message: "검색 조건을 입력하세요."
@@ -183,8 +153,8 @@ export default {
         const data = {
           page: 1,
           length: 50,
-          startDate: formData.datetime[0] ? formData.datetime[0] : null,
-          endDate: formData.datetime[1] ? formData.datetime[1] : null,
+          startDate: formData.starttime ? formData.starttime : null,
+          endDate: formData.starttime ? formData.starttime : null,
           dept_code: formData.data.dept_code || "",
           node_id: formData.data.node_id || "",
           order: "time",
@@ -200,7 +170,6 @@ export default {
           file_event: this.$refs.check[5].isChecked,
           registry_event: this.$refs.check[6].isChecked
         };
-        console.log(data);
         this.$http
           .get(url, {
             params: data
@@ -223,9 +192,12 @@ export default {
       //this.form = this.getValueEx(data, this.formKey);
     });
     EventBus.$on("searchNavi", data => {
-      //console.log(data)
       this.searchNavi = data.name || data.dept.name + " / " + data.username;
     });
+    (this.checkAll = false), (this.isIndeterminate = true);
+    this.form.text = "test";
+    this.form.checkedSearch = ["TI진단 이벤트"];
+    console.log(this.form);
   },
   beforeMounted() {},
   mounted() {},
@@ -241,4 +213,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+.btn-date-wrap {
+  margin-left: 5px;
+}
 </style>

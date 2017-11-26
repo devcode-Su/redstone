@@ -24,7 +24,7 @@ export default {
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
-    username:String
+    username: String
   },
   data() {
     return {};

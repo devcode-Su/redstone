@@ -353,11 +353,14 @@ export default {
     }
     dt {
       min-width: 130px;
-      padding-left: 15px;
+      padding-left: 10px;
       position: relative;
       .md-icon.dot {
+        width:14px;
+        min-width:14px;
         top: 20px;
         left: 0;
+        font-size: 10px;
         color: #1c5bbc;
       }
     }

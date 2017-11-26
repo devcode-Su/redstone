@@ -13,15 +13,15 @@ export default {
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
-    position:{
-      type:Boolean,
-      default:false
+    position: {
+      type: Boolean,
+      default: false
     },
-    treeEdit:{
-      type:Boolean,
-      default:false
+    treeEdit: {
+      type: Boolean,
+      default: false
     },
-    type:String
+    type: String
   },
   data() {
     return {
@@ -30,8 +30,8 @@ export default {
     };
   },
   computed: {
-    defaultData(){
-      return this.company.length === 0 ? false : true
+    defaultData() {
+      return this.company.length === 0 ? false : true;
     }
   },
   components: {
@@ -49,15 +49,14 @@ export default {
     this.$http.get(apiUrl).then(result => {
       this.company = this.listToTree(result.data);
       //console.log(this.company);
-      EventBus.$emit("searchNavi",this.company[0])
+      EventBus.$emit("searchNavi", this.company[0]);
     });
     //EventBus.$emit()
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {
-  },
+  updated() {},
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

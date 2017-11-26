@@ -147,11 +147,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    posiiton:relative;
+    posiiton: relative;
   }
   .sign-failed-msg {
     position: absolute;
-    left:0;
+    left: 0;
     font-size: 16px;
     font-weight: bold;
     color: color(highlight-color);

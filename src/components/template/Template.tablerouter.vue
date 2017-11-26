@@ -35,8 +35,8 @@
       <div class="table-body-wrap">
         <table>
           <tbody>
-            <tr v-for="row in propData.data" @click="moveRow" :ref="'checkedRow'">
-              <td v-for="(col, key, idx) in row" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
+            <tr v-for="row in propData.data" :key="row" @click="moveRow" :ref="'checkedRow'">
+              <td v-for="(col, key, idx) in row" :key="col" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
                 {{col}}
               </td>
             </tr>

@@ -52,13 +52,12 @@ export default {
     return {
       showModal: false,
       membersData: [],
-      total:"",
-
+      total: ""
     };
   },
   computed: {
-    defaultData(){
-      return this.membersData.length === 0 ? false : true
+    defaultData() {
+      return this.membersData.length === 0 ? false : true;
     }
   },
   // 컴포넌트가 다른 컴포넌트를 사용할 경우
@@ -70,16 +69,15 @@ export default {
   },
   // 컴포넌트 메서드 그룹
   watch: {},
-  methods: {
-  },
+  methods: {},
   // 컴포넌트 라이프사이클 메서드 그룹
   created() {
     EventBus.$on("userview", data => {
-      const apiUrl = "/api/admin/group/recurse/"+data;
+      const apiUrl = "/api/admin/group/recurse/" + data;
       this.$http.get(apiUrl).then(result => {
         this.membersData = result.data.data;
       });
-    })
+    });
   },
   mounted() {
     //console.log(typeof this.items);

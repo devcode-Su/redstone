@@ -133,14 +133,13 @@ export default {
         element: element
       });
     },
-    selectRow(member){
+    selectRow(member) {
       console.log(member);
       EventBus.$emit("searchNavi", member);
     }
   },
   beforeCreate() {},
-  created() {
-  },
+  created() {},
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
@@ -153,7 +152,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-  tr{
-    cursor:pointer
-  }
+tr {
+  cursor: pointer;
+}
 </style>

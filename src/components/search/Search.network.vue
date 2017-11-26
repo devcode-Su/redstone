@@ -3,7 +3,53 @@
     <h1 class="page-title">
       네트워크 검색
     </h1>
-    <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
+    <div class="template-search-pannel template-container">
+      <el-form ref="form" :model="form" :label-width="'180px'" :label-position="'left'">
+        <fieldset>
+          <legend class="pannel small">{{searchNavi}} 에서 검색 </legend>
+          <div class="form-align-box">
+            <div class="form-item-wrap">
+              <el-form-item label="조사기간 설정" size="small">
+                <el-date-picker v-model="form.starttime" type="datetime" placeholder="Select Start date and time">
+                </el-date-picker>
+                <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+                <el-date-picker v-model="form.endtime" type="datetime" placeholder="Select End date and time">
+                </el-date-picker>
+                <div class="btn-date-wrap">
+                  <el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
+                    {{settime}}
+                  </el-button>
+                </div>
+              </el-form-item>
+              <el-form-item class="multiline" label="검색 항목" size="small">
+                <el-checkbox v-model="checkAll" @change="radioAllDiasabled">
+                  전체
+                </el-checkbox>
+                <el-form-item label="목적지" label-width="70px">
+                  <el-radio-group v-model="form.radiolist.end">
+                    <el-radio v-for="(end,i) in radiolist.end" :key="end.id" :label="i+1" :disabled="radioDisabled">{{end}}</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="출발지" label-width="70px">
+                  <el-radio-group v-model="form.radiolist.start">
+                    <el-radio v-for="(start,i) in radiolist.start" :key="start.id" :label="i+1" :disabled="radioDisabled">{{start}}</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-form-item>
+              <el-form-item label="검색 조건" size="small">
+                <el-input type="text" v-model="form.text"></el-input>
+                <el-button class="detail-search" size="small" @click="showDetail = true">상세검색
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+              </el-form-item>
+            </div>
+            <div class="btn-wrap">
+              <el-button size="small" type="primary" @click="onSubmit('form')">검색</el-button>
+            </div>
+          </div>
+        </fieldset>
+      </el-form>
+    </div>
     <templatetablerouter :propData="search"></templatetablerouter>
   </article>
 </template>
@@ -18,13 +64,32 @@ export default {
   },
   data() {
     return {
-      activeName: "network",
-      pannelset: {
-        datetime: true,
-        check: "multi",
-        text: true,
-        placeholder: "URL/IP",
-        detail: true
+      datebtn: ["1시간", "일일", "주간", "월간"],
+      checkAll: true,
+      searchNavi: "전사",
+      radioDisabled: true,
+      showDetail: false,
+      start: ["전체", "이동식 디스크", "외장 디스크", "CD-ROM"],
+      radiolist: {
+        start: ["전체", "이동식 디스크", "외장 디스크", "CD-ROM"],
+        end: ["전체", "이동식 디스크2", "외장 디스크2", "CD-ROM2"]
+      },
+      datetimeOptions: [
+        new Date().setTime(new Date().getTime() - 3600 * 1000 * 1),
+        new Date().setTime(new Date().getTime() - 3600 * 1000 * 24),
+        new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 7),
+        new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 30)
+      ],
+      form: {
+        data: "",
+        starttime: "",
+        endtime: "",
+        version: "",
+        radiolist: {
+          start: "",
+          end: ""
+        },
+        text: ""
       },
       search: {
         field: [
@@ -53,7 +118,16 @@ export default {
   },
   watch: {},
   methods: {
-    receiveData(form) {
+    radioAllDiasabled(val) {
+      this.form.radiolist.end = "";
+      this.form.radiolist.start = "";
+      this.radioDisabled = val;
+    },
+    setDatetime(num) {
+      this.form.starttime = this.datetimeOptions[num];
+      this.form.endtime = new Date();
+    },
+    onSubmit(form) {
       console.log("file");
       const url = "/api/admin/search/network";
       if (form.datetime === "" || form.text === "") {
@@ -95,4 +169,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+.detail-search {
+  margin-left: 5px;
+}
 </style>

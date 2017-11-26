@@ -49,38 +49,35 @@ export default {
       departChange: []
     };
   },
-  computed: {
-  },
+  computed: {},
   components: {
     Grouptree,
     GroupMembers
   },
   watch: {},
   methods: {
-    setData(){
-
-    },
+    setData() {},
     moveItem(setItem) {
       setItem.to.push(setItem.element);
       setItem.from.splice(setItem.from.indexOf(setItem.element), 1);
     },
     saveStorage() {
-      console.log("save")
+      console.log("save");
     },
     resetStorage() {
       console.log("reset");
       EventBus.$on("userfrom", data => {
-        const apiUrl = "/api/admin/group/recurse/"+data;
+        const apiUrl = "/api/admin/group/recurse/" + data;
         this.$http.get(apiUrl).then(result => {
           this.departNow = result.data.data;
-          console.log(result.data)
+          console.log(result.data);
         });
       });
       EventBus.$on("userto", data => {
-        const apiUrl = "/api/admin/group/recurse/"+data;
+        const apiUrl = "/api/admin/group/recurse/" + data;
         this.$http.get(apiUrl).then(result => {
           this.departChange = result.data.data;
-          console.log(result.data)
+          console.log(result.data);
         });
       });
     }
@@ -88,17 +85,17 @@ export default {
   beforeCreate() {},
   created() {
     EventBus.$on("userfrom", data => {
-      const apiUrl = "/api/admin/group/recurse/"+data;
+      const apiUrl = "/api/admin/group/recurse/" + data;
       this.$http.get(apiUrl).then(result => {
         this.departNow = result.data.data;
-        console.log(result.data)
+        console.log(result.data);
       });
     });
     EventBus.$on("userto", data => {
-      const apiUrl = "/api/admin/group/recurse/"+data;
+      const apiUrl = "/api/admin/group/recurse/" + data;
       this.$http.get(apiUrl).then(result => {
         this.departChange = result.data.data;
-        console.log(result.data)
+        console.log(result.data);
       });
     });
   },

@@ -18,8 +18,7 @@ export default {
     return {};
   },
   computed: {},
-  components: {
-  },
+  components: {},
   watch: {},
   methods: {},
   beforeCreate() {},

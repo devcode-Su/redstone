@@ -13,8 +13,8 @@
       <div class="table-body-wrap">
         <table>
           <tbody>
-            <tr v-for="(row, i) in tableData" @click="moveRow(i)" :ref="'checkedRow'">
-              <td v-for="(col, key, idx) in row" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
+            <tr v-for="(row, i) in tableData" :key="row" @click="moveRow(i)" :ref="'checkedRow'">
+              <td v-for="(col, key, idx) in row" :key="col" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
                 {{col | snippet}}
               </td>
             </tr>

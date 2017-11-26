@@ -67,19 +67,17 @@ export default {
   beforeCreate() {},
   created() {
     EventBus.$on("userview", data => {
-      const apiUrl = "/api/admin/group/recurse/"+data;
+      const apiUrl = "/api/admin/group/recurse/" + data;
       this.$http.get(apiUrl).then(result => {
         this.membersData = result.data.data;
-        console.log(result.data)
+        console.log(result.data);
       });
-    })
+    });
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {
-
-  },
+  updated() {},
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

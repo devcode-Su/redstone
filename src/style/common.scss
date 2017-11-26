@@ -100,8 +100,8 @@
 // modal - user set page
 .user-set {
   width: 800px;
-  &.admin-add{
-    width:600px;
+  &.admin-add {
+    width: 600px;
   }
   &-wrap,
   &-btn {
@@ -376,8 +376,7 @@
 
 // data table
 .group-members,
-.template-table
-{
+.template-table {
   overflow: hidden;
   &-table {
     background-color: #fff;
@@ -413,17 +412,17 @@
     line-height: 32px;
   }
   td {
-    &.col-end{
+    &.col-end {
       display: flex;
       justify-content: space-between
     }
-    &.col-btn{
+    &.col-btn {
       display: flex;
       justify-content: flex-end;
     }
   }
   @at-root {
-    .group-members{
+    .group-members {
       border-bottom: 1px solid #d8dce5;
       tr {
         .col-nodeid {
@@ -443,109 +442,112 @@
         }
       }
     }
-    .dynamic-row{
+    .dynamic-row {
       border: 1px solid #d8dce5;
-      tr{
-        &:last-child{
-          border-bottom:0 none;
+      tr {
+        &:last-child {
+          border-bottom: 0 none;
         }
       }
-      th,td{
+      th,
+      td {
         padding: 0 15px;
       }
     }
-    .diagosis-info-table{
-      th,td{
-        &.col0{
-          width:40%
+    .diagosis-info-table {
+      th,
+      td {
+        &.col0 {
+          width: 40%
         }
-        &.col1{
-          width:10%;
+        &.col1 {
+          width: 10%;
         }
         &.col2,
-        &.col3{
-          width:20%;
+        &.col3 {
+          width: 20%;
         }
       }
-      .inner-view{
-        margin-bottom:10px;
-        &-file{
-          th,td{
-            &.col0{
-              width:170px;
+      .inner-view {
+        margin-bottom: 10px;
+        &-file {
+          th,
+          td {
+            &.col0 {
+              width: 170px;
             }
-            &.col1{
-              width:75px;
+            &.col1 {
+              width: 75px;
             }
             &.col2,
             &.col3,
-            &.col4{
+            &.col4 {
               width: 110px;
             }
             &.col5,
-            &.col6{
-              width:170px;
+            &.col6 {
+              width: 170px;
             }
-            &.col-end{
-
-            }
+            &.col-end {}
           }
         }
       }
     }
-    .security-media-table{
-      th,td{
-        &.col0{
-          width:20px;
+    .security-media-table {
+      th,
+      td {
+        &.col0 {
+          width: 20px;
         }
       }
     }
   }
 }
-.template-table-wrap{
-  margin-top:30px;
-  &.inner-view{
-    margin-top:0;
+
+.template-table-wrap {
+  margin-top: 30px;
+  &.inner-view {
+    margin-top: 0;
   }
-  header{
-    display:flex;
+  header {
+    display: flex;
     justify-content: space-between;
-    align-items:center;
-    .btn-wrap{
+    align-items: center;
+    .btn-wrap {
       @extend header;
-      >div{
-        margin-left:5px;
+      >div {
+        margin-left: 5px;
       }
     }
-    .el-select{
-      width:150px;
+    .el-select {
+      width: 150px;
     }
-    .el-checkbox-group{
-      position:absolute;
-      right:0;
-      z-index:1;
-      display:flex;
+    .el-checkbox-group {
+      position: absolute;
+      right: 0;
+      z-index: 1;
+      display: flex;
       flex-direction: column;
-      margin-top:5px;
-      padding:10px;
-      background-color:#fff;
-      border:1px solid color(border);
-      border-radius:4px;
-      label{
-        margin-left:0;
+      margin-top: 5px;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid color(border);
+      border-radius: 4px;
+      label {
+        margin-left: 0;
       }
     }
   }
-  .template-table{
-    margin-top:10px;
+  .template-table {
+    margin-top: 10px;
   }
-  .fa{
-    margin-left:5px;
+  .fa {
+    margin-left: 5px;
   }
 }
 
 .template-search-pannel {
-  margin-top: 65px;
+  margin-top: 55px;
   padding: 15px 15px 15px 110px;
   background: url(./assets/search-box.jpg) no-repeat 30px center;
   border: 1px solid color(border);
@@ -554,7 +556,7 @@
   }
   fieldset {
     margin-top: 0 !important;
-    position:static !important;
+    position: static !important;
     border: 0 none !important;
   }
   .form-align-box {

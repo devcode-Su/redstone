@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      showModal: false,
+      showModal: false
     };
   },
   computed: {
@@ -36,7 +36,7 @@ export default {
     }
   },
   components: {
-    Templatemodal,
+    Templatemodal
     //Dashboardthumb
   },
   watch: {},

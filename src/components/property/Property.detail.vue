@@ -22,6 +22,7 @@ export default {
   },
   computed: {},
   components: {
+    TemplateSearchpannel,
     Templatetablerouter
   },
   watch: {},

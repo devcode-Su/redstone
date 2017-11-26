@@ -44,9 +44,9 @@ export default {
     index: Number,
     treeEdit: {
       type: Boolean,
-      default:false
+      default: false
     },
-    type:String
+    type: String
   },
   data() {
     return {
@@ -71,11 +71,11 @@ export default {
       if (this.model.name !== "전사" && this.$children.length) {
         if (this.isOpen) this.$emit("is-open", this.$parent.$children);
       }
-      if(type === "from"){
+      if (type === "from") {
         EventBus.$emit("userfrom", this.model.dept_code);
-      }else if(type === "to"){
+      } else if (type === "to") {
         EventBus.$emit("userto", this.model.dept_code);
-      }else{
+      } else {
         EventBus.$emit("userview", this.model.dept_code);
         EventBus.$emit("searchNavi", this.model);
       }
@@ -135,11 +135,9 @@ export default {
     cancelEdit() {
       this.rename = true;
       this.edited = null;
-    },
+    }
   },
-  beforeCreate() {
-
-  },
+  beforeCreate() {},
   created() {
     this.$on("is-open", item => {
       //console.log("is-open event received");

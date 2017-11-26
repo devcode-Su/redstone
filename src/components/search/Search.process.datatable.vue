@@ -36,7 +36,7 @@
         <table>
           <tbody>
             <template v-for="(row,i) in propData.data">
-              <tr :ref="'checkedRow'">
+              <tr :ref="'checkedRow'" :key="row">
                 <td class="col0">{{row.EventTime}}</td>
                 <td class="col1">{{row.ProcessName}}</td>
                 <td class="col2">{{row.username}}</td>
@@ -59,7 +59,7 @@
                   </button>
                 </td>
               </tr>
-              <transition name="fade">
+              <transition name="fade" :key="row">
                 <tr v-if="row === more" class="show-row">
                   <td :colspan="collength" :key="row.id">
                     <processinnerview :propData="innerData"></processinnerview>
@@ -162,7 +162,7 @@ export default {
   },
   beforeCreate() {},
   created() {
-    console.log(this.propData.data)
+    //console.log(this.propData.data);
   },
   beforeMounted() {},
   mounted() {},
