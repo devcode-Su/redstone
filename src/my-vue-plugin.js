@@ -137,6 +137,26 @@ const MyPlugin = {
         ret.push(newItem);
       }
       return ret;
+    };
+
+    vue.prototype.getValueArr = (data, arr) => {
+      return data.data.map((m) => {
+        let ret = [];
+        if (m) {
+          for (let i = 0; i < arr.length; i++) {
+            ret.push(m.map((item) => {
+              if (item.hasOwnProperty(arr[i])) {
+                return item[arr[i]];
+              }
+              return null;
+            }));
+          }
+        }
+        else {
+          ret.push([]);
+        }
+        return ret;
+      });
     }
   }
 };

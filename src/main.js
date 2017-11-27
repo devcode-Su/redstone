@@ -47,6 +47,10 @@ Vue.filter('groupSnippet', value => {
   return value.length > 15 ? value.slice(0, 15) + '...' : value;
 });
 
+// dashboard thumb
+Vue.filter('thumbSnippet', value => {
+  return value.length !== 0 && value.length > 30 ? value.slice(0, 30) + '...' : value;
+});
 // spliceArr
 // Vue.prototype.$spliceHome = (home, stranger, loop) => {
 //   for (var i = 0; i < loop; i++) {

@@ -5,19 +5,25 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="운영체제" name="first">
-        운영체제 content
+        <span class="search-id">{{searchNavi}}에서 검색</span>
+        <!--<propertypannel></propertypannel>-->
+        <propertydatatable :propData="propertyOS"></propertydatatable>
       </el-tab-pane>
       <el-tab-pane label="브라우저" name="second">
-        브라우저 content
+        <span class="search-id">{{searchNavi}}에서 검색</span>
+        <propertydatatable :propData="propertyBR"></propertydatatable>
       </el-tab-pane>
       <el-tab-pane label="소프트웨어" name="third">
-        소프트웨어 content
+        <searchpannel :pannelType="pannelset"></searchpannel>
+        <propertydatatable :propData="propertySW"></propertydatatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
-import Templatetablerouter from "../template/Template.tablerouter.vue";
+  import Propertypannel from "./Property.pannel.vue"
+import Propertydatatable from "./Property.datatable.vue";
+  import Searchpannel from "../template/Template.searchpannel.vue";
 export default {
   name: "Propertysw",
   extends: {},
@@ -26,6 +32,10 @@ export default {
   },
   data() {
     return {
+      searchNavi : "전사",
+      pannelset:{
+        programs : true
+      },
       activeName: "first",
       infofile: {
         field: ["악성 파일", "진단 건수", "첫 유입일", "마지막 유입일", ""],
@@ -38,13 +48,36 @@ export default {
         search: [],
         url: "",
         data: [],
-        order: "count"
+        order: "count",
+      },
+      propertyOS:{
+        field : [
+          "운영체제", "서비스팩", "PC 대수"
+        ],
+        data:[],
+        orderOption:["1", "2", "3"],
+      },
+      propertyBR:{
+        field : [
+          "소프트웨어", "버전", "설치 PC 대수"
+        ],
+        data:[],
+        orderOption:["1", "2", "3"],
+      },
+      propertySW:{
+        field : [
+          "소프트웨어", "버전", "설치 PC 대수"
+        ],
+        data:[],
+        orderOption:["1", "2", "3"]
       }
     };
   },
   computed: {},
   components: {
-    Templatetablerouter
+    Propertydatatable,
+    Propertypannel,
+    Searchpannel
   },
   watch: {},
   methods: {},
@@ -62,4 +95,8 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+  .search-id{
+    display:block;
+    transform:translateY(20px)
+  }
 </style>

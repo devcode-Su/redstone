@@ -68,6 +68,13 @@
                 부분 일치
               </el-checkbox>
             </el-form-item>
+            <el-form-item class="programs" v-if="pannelType.programs" label="검색 조건" size="small">
+              <span class="program-name">
+                프로그램명
+              </span>
+              <el-input type="text" v-model="form.text" :laceholder="pannelType.placeholder">
+              </el-input>
+            </el-form-item>
           </div>
           <div class="btn-wrap">
             <templatesearchdetail v-if="showDetail" @close="detailColse" class="detail"></templatesearchdetail>
@@ -187,4 +194,10 @@ export default {
 .btn-date-wrap {
   margin-left: 5px;
 }
+  .programs{
+    width:700px;
+  }
+  .program-name{
+    width:120px;
+  }
 </style>

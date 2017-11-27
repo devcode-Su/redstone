@@ -43,44 +43,22 @@
         </div>
 </template>
 <script>
-  import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
-  import MixinsSearchAreaClose from "@/components/mixins/setDatetime.mixin";
-  //import { EventBus } from "@/main"
+  import _ from "lodash";
   export default {
     name: "Searchanalysis",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
+      propData:{
+        type : Array | Object
+      }
     },
     data() {
       return {
         activeName: "first",
-        datebtn: ["1시간", "일일", "주간", "월간"],
         checkAll: true,
         searchNavi: "전사",
         isIndeterminate: false,
-        checklistAll :[
-          "FILE", "IP", "RSC", "process", "network", "files", "registry"
-        ],
-        checklist: {
-          FILE :"TI진단 이벤트",
-          IP : "악성 URL/IP 접근 이벤트",
-          RSC : "RSC 엔진 진단 이벤트",
-          process : "프로세스",
-          network : "네트워크",
-          files : "파일",
-          registry:"레지스트리"
-        },
-        form: {
-          startTime: "",
-          endTime: "",
-          version: "",
-          checkType: [
-            "FILE", "IP", "RSC", "process", "network", "files", "registry"
-          ],
-          text: "",
-          agreement: false
-        },
         requestData : {
           page : 1,
           length : 50,
@@ -88,7 +66,16 @@
         }
       };
     },
-    computed: {},
+    computed: {
+      orderedItems() {
+        return _.orderBy(this.filteredMebers, this.orderField, this.direction);
+      },
+      filteredMebers() {
+        return this.members.filter(member => {
+          return member.username.match(this.filterText);
+        });
+      },
+    },
     components: {},
     watch: {},
     methods: {
@@ -102,65 +89,20 @@
         this.isIndeterminate =
           checkedCount > 0 && checkedCount < this.form.checkType.length;
       },
-      onSubmit(form) {
-        console.log(form)
-        const formData = this.$refs[form].model;
-        const url = "/api/admin/search/event";
-        console.log(formData)
-        if (formData.startTime === "" || formData.endTime === "") {
-          this.$notify.error({
-            title: "Error",
-            message: "검색 조건을 입력하세요."
-          });
+      reOrder(select, index) {
+        if (this.orderField === select) {
+          let check = (this.reverse = !this.reverse);
+          this.direction = check ? "asc" : "desc";
         } else {
-          const data = {
-            page: 1,
-            length: 50,
-            startDate: formData.startTime ? formData.startTime : null,
-            endDate: formData.endTime ? formData.endTime : null,
-            dept_code: formData.data.dept_code || "",
-            node_id: formData.data.node_id || "",
-            order: "time",
-            direction: 1,
-            q: formData.text,
-            all: this.checkAll,
-            partial_match: true,
-            ti_event: this.$refs.check[0].isChecked,
-            url_ip_event: this.$refs.check[1].isChecked,
-            engine_event: this.$refs.check[2].isChecked,
-            process_event: this.$refs.check[3].isChecked,
-            network_event: this.$refs.check[4].isChecked,
-            file_event: this.$refs.check[5].isChecked,
-            registry_event: this.$refs.check[6].isChecked
-          };
-          this.$http
-            .get(url, {
-              params: data
-            })
-            .then(result => {
-              //this.process.data = result.data.rows;
-              console.log(result.data);
-            });
+          this.selected = index;
+          this.orderField = select;
+          this.direction = "asc";
         }
       },
-      receiveSubmit(data){
-        console.log(data);
-        const defaultDate = new Date(data.EventTime);
-        const start = new Date(defaultDate.getTime() - 60 * 30 * 1000);
-        const end = new Date(defaultDate.getTime() + 60 * 30 * 1000);
-        this.form.startTime = start;
-        this.form.endTime = end;
-        this.form.checkType = [ data.Type ];
-        this.testest = data
-        console.log(this.form)
-        this.$bus.$off("process-search-data");
-        console.log("===========")
-      }
     },
     beforeCreate() {},
     created() {
-      this.$bus.$on("process-search-data", this.receiveSubmit)
-      //EventBus.$on("processtree", this.receiveBus)
+      this.$bus.$on("search-id", this.receiveSubmit)
     },
     beforeMounted() {},
     mounted() {},
@@ -168,12 +110,10 @@
     updated() {},
     actvated() {},
     deactivated() {},
-    beforeDestroy() {},
-    destroyed() {},
-    mixins:[
-      MixinsSetDatetime,
-      MixinsSearchAreaClose
-    ]
+    beforeDestroy() {
+      this.$bus.$off("search-id")
+    },
+    destroyed() {}
   };
 </script>
 <style lang='scss' scoped>

@@ -18,6 +18,7 @@
       </el-tab-pane>
       <el-tab-pane label="Bios" name="five">
         Bios content
+        <templatebaranimation></templatebaranimation>
       </el-tab-pane>
     </el-tabs>
   </article>
@@ -25,6 +26,8 @@
 <script>
 import TemplateSearchpannel from "../template/Template.searchpannel";
 import Templatetablerouter from "../template/Template.tablerouter.vue";
+import Templatebaranimation from "../template/Template.bar.animation.vue"
+
 export default {
   name: "Propertyhw",
   extends: {},
@@ -39,7 +42,8 @@ export default {
   computed: {},
   components: {
     TemplateSearchpannel,
-    Templatetablerouter
+    Templatetablerouter,
+    Templatebaranimation
   },
   watch: {},
   methods: {},

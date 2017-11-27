@@ -15,6 +15,8 @@ import DashboardThumb from "../dashboard/Dashboard.thumb";
 import GroupManagement from "../group/Group.management";
 import Systemadminadd from "../system/System.adminadd";
 import Systemresponsecutoff from "../system/System.response.cutoff";
+import Propertypannel from "../property/Property.pannel.vue";
+//import Processtree from "../search/Search.process.tree.vue"
 export default {
   name: "Templatemodal",
   extends: {},
@@ -38,7 +40,8 @@ export default {
     DashboardThumb,
     GroupManagement,
     Systemadminadd,
-    Systemresponsecutoff
+    Systemresponsecutoff,
+    Propertypannel
   },
   watch: {},
   methods: {},

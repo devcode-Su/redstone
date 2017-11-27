@@ -32,7 +32,6 @@
 </template>
 <script>
 import _ from "lodash";
-//import { EventBus } from "@/main";
 export default {
   name: "GroupMembers",
   extends: {},
