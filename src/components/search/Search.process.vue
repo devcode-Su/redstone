@@ -10,10 +10,10 @@
           <div class="form-align-box">
             <div class="form-item-wrap">
               <el-form-item label="조사기간 설정" size="small">
-                <el-date-picker v-model="form.starttime" type="datetime" placeholder="Select Start date and time">
+                <el-date-picker v-model="form.startTime" type="datetime" >
                 </el-date-picker>
                 <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-                <el-date-picker v-model="form.endtime" type="datetime" placeholder="Select End date and time">
+                <el-date-picker v-model="form.endTime" type="datetime" >
                 </el-date-picker>
                 <div class="btn-date-wrap">
                   <el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
@@ -25,8 +25,8 @@
                 <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
                   전체
                 </el-checkbox>
-                <el-checkbox-group v-model="form.checkedSearch" @change="handleCheckedEngineChange">
-                  <el-checkbox v-for="(search,i) in checklist" :label="search" :key="search" :ref="'check'">{{search}}</el-checkbox>
+                <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
+                  <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">{{search}}</el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
               <el-form-item label="검색 조건" size="small">
@@ -44,57 +44,48 @@
         </fieldset>
       </el-form>
     </div>
-    <processdatatable :propData="process"></processdatatable>
+    <processdatatable class="process-data-table" :propData="process"></processdatatable>
   </article>
 </template>
 <script>
-import { EventBus } from "@/main";
+//import { EventBus } from "@/main";
 import Processdatatable from "./Search.process.datatable.vue";
+import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin"
 
-//const newDate = new Date();
 export default {
   name: "Searchprocess",
   extends: {},
-  props: {
-    //알파벳 순으로 정렬할 것.
-  },
+  props: ['psd'],
+
   data() {
     return {
       datebtn: ["1시간", "일일", "주간", "월간"],
       checkAll: true,
       searchNavi: "전사",
       isIndeterminate: false,
-      checklist: [
-        "TI진단 이벤트",
-        "악성 URL/IP 접근 이벤트",
-        "RSC 엔진 진단 이벤트",
-        "프로세스",
-        "네트워크",
-        "파일",
-        "레지스트리"
+      checklistAll :[
+        "FILE", "IP", "RSC", "process", "network", "files", "registry"
       ],
-      datetimeOptions: [
-        new Date().setTime(new Date().getTime() - 3600 * 1000 * 1),
-        new Date().setTime(new Date().getTime() - 3600 * 1000 * 24),
-        new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 7),
-        new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 30)
-      ],
+      checklist: {
+        FILE :"TI진단 이벤트",
+        IP : "악성 URL/IP 접근 이벤트",
+        RSC : "RSC 엔진 진단 이벤트",
+        process : "프로세스",
+        network : "네트워크",
+        files : "파일",
+        registry:"레지스트리"
+      },
       form: {
-        data: "",
-        starttime: "",
-        endtime: "",
+        startTime: "",
+        endTime: "",
         version: "",
-        checkedSearch: [
-          "TI진단 이벤트",
-          "악성 URL/IP 접근 이벤트",
-          "RSC 엔진 진단 이벤트",
-          "프로세스",
-          "네트워크",
-          "파일",
-          "레지스트리"
+        checkType: [
+          "FILE", "IP", "RSC", "process", "network", "files", "registry"
         ],
         text: "",
-        agreement: false
+        agreement: false,
+        dept_code: 1,
+        node_id: 1
       },
       process: {
         field: [
@@ -112,10 +103,12 @@ export default {
         url: ""
       },
       //form:"",
-      formKey: ["EventTime", "Md5Hash", "Type"]
+      formKey: ["EventTime", "Md5Hash", "Type"],
+
     };
   },
-  computed: {},
+  computed: {
+  },
   components: {
     Processdatatable
   },
@@ -123,45 +116,37 @@ export default {
   methods: {
     handleCheckAllChange(val) {
       console.log(val);
-      this.form.checkedSearch = val ? this.checklist : [];
+      this.form.checkType = val ? this.form.checkType : [];
       this.isIndeterminate = false;
-      console.log(this.form.checkedSearch);
     },
     handleCheckedEngineChange(value) {
-      console.log(value);
-      console.log(this.$refs.check);
       let checkedCount = value.length;
-      this.checkAll = checkedCount === this.checklist.length;
+      this.checkAll = checkedCount === this.checklistAll.length;
       this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.checklist.length;
-    },
-    setDatetime(num) {
-      this.form.starttime = this.datetimeOptions[num];
-      this.form.endtime = new Date();
+        checkedCount > 0 && checkedCount < this.checklistAll.length;
     },
     onSubmit(form) {
-      console.log("???? adb");
+      console.log(form)
       const formData = this.$refs[form].model;
       const url = "/api/admin/search/event";
-      if (formData.starttime === "" || formData.endtime === "") {
+      if (formData.startTime === "" || formData.endTime === "") {
         this.$notify.error({
           title: "Error",
           message: "검색 조건을 입력하세요."
         });
-        console.log("aaa");
       } else {
         const data = {
           page: 1,
           length: 50,
-          startDate: formData.starttime ? formData.starttime : null,
-          endDate: formData.starttime ? formData.starttime : null,
-          dept_code: formData.data.dept_code || "",
-          node_id: formData.data.node_id || "",
+          startDate: formData.startTime ? formData.startTime : null,
+          endDate: formData.endTime ? formData.endTime : null,
+          dept_code: formData.dept_code || "",
+          node_id: formData.node_id || "",
           order: "time",
           direction: 1,
-          q: "",
+          q: formData.text,
           all: this.checkAll,
-          partial_match: true,
+          partial_match: form.agreement,
           ti_event: this.$refs.check[0].isChecked,
           url_ip_event: this.$refs.check[1].isChecked,
           engine_event: this.$refs.check[2].isChecked,
@@ -175,40 +160,51 @@ export default {
             params: data
           })
           .then(result => {
+            console.log(result.data);
             this.process.data = result.data.rows;
             console.log(result.data);
           });
         this.process.search = data;
         this.process.url = url;
       }
+    },
+    receiveSubmit(data){
+      console.log(data)
+      const defaultDate = new Date(data.EventTime);
+      const start = new Date(defaultDate.getTime() - 60 * 30 * 1000);
+      const end = new Date(defaultDate.getTime() + 60 * 30 * 1000);
+      this.form.startTime = start;
+      this.form.endTime = end;
+      this.form.checkType = [ data.Type ];
+      this.testest = data
+      console.log(this.form)
+      this.$bus.$off("process-search-data");
+      console.log("===========")
     }
   },
-  beforeCreate() {},
   created() {
-    EventBus.$on("infofile", data => {
-      //console.log(this.formKey)
-      //console.log(data);
-      //console.log(this.getValueEx(data, this.formKey));
-      //this.form = this.getValueEx(data, this.formKey);
-    });
-    EventBus.$on("searchNavi", data => {
-      this.searchNavi = data.name || data.dept.name + " / " + data.username;
-    });
-    (this.checkAll = false), (this.isIndeterminate = true);
-    this.form.text = "test";
-    this.form.checkedSearch = ["TI진단 이벤트"];
-    console.log(this.form);
+    //this.$bus.$on("process-search-data", this.receiveSubmit)
+//    setTimeout(this.$bus.$on("process-search-data", this.receiveSubmit),200)
+    this.$bus.$on("search-id", data => {
+      this.form.dept_code = data.dept_code;
+      this.form.nodeid = data.nodeid
+    })
   },
   beforeMounted() {},
-  mounted() {},
-  beforeUpdate() {},
-  updated() {
-    console.log(this.form);
+  mounted() {
+    console.log("mounted")
   },
+  beforeUpdate() {},
+  updated() {},
   actvated() {},
   deactivated() {},
-  beforeDestroy() {},
-  destroyed() {}
+  beforeDestroy() {
+    this.$bus.$on("search-id")
+  },
+  destroyed() {},
+  mixins:[
+    MixinsSetDatetime
+  ]
 };
 </script>
 <style lang='scss' scoped>

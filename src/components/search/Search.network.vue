@@ -41,6 +41,32 @@
                 <el-button class="detail-search" size="small" @click="showDetail = true">상세검색
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
+                <div class="detail" v-if="showDetail">
+                  <el-form-item label="PC IP 주소" prop="pcip" size="small">
+                    <el-input type="text" v-model="form.pcip" placeholder="ANY"></el-input>
+                  </el-form-item>
+                  <el-form-item label="목적지 IP 주소" prop="endip" size="small">
+                    <el-input type="text" v-model="form.endip" placeholder="ANY"></el-input>
+                  </el-form-item>
+                  <el-form-item label="방향" prop="direction" size="small">
+                    <el-select v-model="form.direction" placeholder="ANY">
+                      <el-option label="IN" value="in"></el-option>
+                      <el-option label="OUT" value="out"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="포트" prop="port" size="small">
+                    <el-input type="number" v-model="form.port" placeholder="ANY"></el-input>
+                  </el-form-item>
+                  <el-form-item label="프로토콜" prop="protocol" size="small">
+                    <el-select v-model="form.protocol" placeholder="ANY">
+                      <el-option label="TCP" value="tcp"></el-option>
+                      <el-option label="UDP" value="udp"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item class="btn-wrap" size="small">
+                    <el-button @click="showDetail = false">닫기</el-button>
+                  </el-form-item>
+                </div>
               </el-form-item>
             </div>
             <div class="btn-wrap">
@@ -89,7 +115,14 @@ export default {
           start: "",
           end: ""
         },
-        text: ""
+        text: "",
+        detail:{
+          pcip: "",
+          endip: "",
+          direction: "",
+          port: "",
+          type: [],
+        }
       },
       search: {
         field: [
@@ -169,6 +202,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+.btn-date-wrap,
 .detail-search {
   margin-left: 5px;
 }

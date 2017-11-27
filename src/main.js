@@ -1,6 +1,8 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
+import Vuex from "vuex";
+import store from "./store";
 import router from './router';
 import axios from 'axios';
 import ElementUI from 'element-ui';
@@ -19,7 +21,16 @@ import MyPlugin from "./my-vue-plugin";
 import App from './App';
 
 // event bus
-export const EventBus = new Vue();
+//export const EventBus = new Vue();
+
+const EventBus = new Vue();
+Object.defineProperties(Vue.prototype, {
+  $bus : {
+    get : function () {
+      return EventBus
+    }
+  }
+})
 
 Vue.config.productionTip = false
 
@@ -31,6 +42,11 @@ Vue.filter('snippet', value => {
   return value.length > 100 ? value.slice(0, 100) + '...' : value;
 });
 
+// grounp fillters
+Vue.filter('groupSnippet', value => {
+  return value.length > 15 ? value.slice(0, 15) + '...' : value;
+});
+
 // spliceArr
 // Vue.prototype.$spliceHome = (home, stranger, loop) => {
 //   for (var i = 0; i < loop; i++) {
@@ -39,6 +55,7 @@ Vue.filter('snippet', value => {
 // }
 
 // vue use
+Vue.use(Vuex);
 Vue.use(VueMaterial);
 
 Vue.material.registerTheme({
@@ -62,6 +79,7 @@ Vue.use(MyPlugin);
 
 /* eslint-disable no-new */
 new Vue({
+  store,
   el: '#app',
   router,
   template: '<App/>',

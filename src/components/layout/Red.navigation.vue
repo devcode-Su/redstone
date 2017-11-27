@@ -18,7 +18,7 @@
   </nav>
 </template>
 <script>
-import locationCheckMixin from "../resource/mixins/location.check.mixin";
+import locationCheckMixin from "../mixins/location.check.mixin";
 export default {
   name: "RedNavigation",
   extends: {},
@@ -78,6 +78,8 @@ export default {
 .aside-navigation {
   width: 45px;
   min-width: 45px;
+  position:relative;
+  z-index:2;
   background-color: color(default);
   ul {
     margin: 0;

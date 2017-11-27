@@ -113,6 +113,7 @@ export default {
   watch: {},
   methods: {
     receiveData(form) {
+      console.log(form)
       if (this.activeName === "first") {
         this.mixData(this.pcfile, form, "file");
       } else if (this.activeName === "second") {
@@ -126,10 +127,10 @@ export default {
       let data = {
         page: 1,
         length: 50,
-        startDate: receive.datetime[0] ? receive.datetime[0].getTime() : null,
-        endDate: receive.datetime[1] ? receive.datetime[0].getTime() : null,
-        dept_code: receive.data.dept_code || "",
-        node_id: receive.data.node_id || "",
+        startDate: receive.startTime ? receive.startTime.getTime() : null,
+        endDate: receive.endTime ? receive.endTime.getTime() : null,
+        dept_code: receive.dept_code,
+        node_id: receive.node_id,
         order: local.order,
         direction: 1
       };
@@ -139,6 +140,7 @@ export default {
         })
         .then(result => {
           local.data = result.data.data;
+          console.log(data)
         });
       local.search = data;
       local.url = url;

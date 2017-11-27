@@ -4,12 +4,35 @@
       파일 검색
     </h1>
     <template-searchpannel :pannelType="pannelset" @searchData="receiveData">></template-searchpannel>
-    <templatetablerouter :propData="search"></templatetablerouter>
+    <searchfiledatatable :propData="search"></searchfiledatatable>
   </article>
 </template>
 <script>
 import TemplateSearchpannel from "../template/Template.searchpannel";
-import Templatetablerouter from "../template/Template.tablerouter.vue";
+import Searchfiledatatable from "./Search.file.datatable.vue";
+
+function _plunk(item){
+  if (item.hasOwnProperty('info') && Array.isArray(item.info)) {
+    item.info = item.info.reduce((p, c) => {
+      p[c.name] = c.value;
+      return p;
+    }, {});
+  }
+  else {
+    for (let k in item) {
+      if (item.hasOwnProperty(k)) {
+        if (typeof item[k] === 'object') {
+          _plunk(item[k]);
+        }
+      }
+    }
+  }
+  return item;
+}
+function plunk(options){
+  options = options.map(_plunk);
+  return options;
+}
 export default {
   name: "Searchfile",
   extends: {},
@@ -39,47 +62,47 @@ export default {
         ],
         data: [],
         search: [],
-        url: ""
+        url: "",
+        rowKey:[
+          "nodeid", "node.info.username"
+        ]
       }
     };
   },
   computed: {},
   components: {
     TemplateSearchpannel,
-    Templatetablerouter
+    Searchfiledatatable
   },
   watch: {},
   methods: {
     receiveData(form) {
-      console.log("file");
       const url = "/api/admin/search/file";
-      if (form.datetime === "" || form.text === "") {
-        this.$notify.error({
-          title: "Error",
-          message: "검색 조건을 입력하세요."
-        });
-        console.log("aaa");
-      } else {
         const data = {
           page: 1,
           length: 50,
-          startDate: form.datetime[0].getTime(),
-          endDate: form.datetime[1].getTime(),
-          dept_code: form.data.dept_code || "",
-          node_id: form.data.node_id || "",
-          order: "insertTime",
+          startDate: form.startTime ? form.startTime.getTime() : "",
+          endDate: form.endTime ? form.endTime.getTime() : "",
+          dept_code: form.dept_code ,
+          node_id: form.node_id,
+          order: "time",
           direction: 1
         };
-        this.$http.get(url, data).then(result => {
-          this.file.data = result.data.data;
+        this.$http.get(url, {
+          params : data
+        }).then(result => {
+          console.log(result.data.data);
+          this.search.data = plunk(result.data.data)
         });
-        this.file.search = data;
-        this.file.url = url;
+        this.search.search = data;
+        this.search.url = url;
       }
-    }
+
   },
   beforeCreate() {},
-  created() {},
+  created() {
+
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},

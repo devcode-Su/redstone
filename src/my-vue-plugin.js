@@ -19,10 +19,10 @@ const MyPlugin = {
       }
       return item;
     };
-    vue.prototype.plunk = options => {
-      options = options.map(this._plunk);
-      return options;
-    };
+    // vue.prototype.plunk = options => {
+    //   options = options.map(th_plunk);
+    //   return options;
+    // };
     // ip validate
     vue.prototype.isIpValid = str => {
       return (

@@ -43,10 +43,6 @@ export default {
   },
   beforeCreate() {},
   created() {
-    const apiURL = "./static/data/userdata.json"; // /static 폴더가 아니면 404
-    this.$http.get(apiURL).then(result => {
-      this.posts = result.data;
-    });
   },
   mounted() {}
 };

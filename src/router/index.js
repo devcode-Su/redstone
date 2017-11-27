@@ -67,7 +67,8 @@ export default new Router({
         },
         {
           path: 'Search-process',
-          component: Searchprocess
+          component: Searchprocess,
+          props: true
         },
         {
           path: 'Search-network',

@@ -6,32 +6,32 @@
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           이동할 부서원 선택
         </h2>
-        <grouptree class="user-set-list group-members-tree" :type="'from'"></grouptree>
-        <group-members class="user-set-list group-members-move" :omitPath="'part'" :members="departNow" :moveTo="departChange" :colview="false" @moveitem="moveItem"></group-members>
+        <groupdepartment class="user-set-list group-members-tree" :type="'from'"></groupdepartment>
+        <groupmembersmove class="user-set-list group-members-move" :movebtn="true" :members="departNow" :moveTo="departChange" @moveitem="moveItem"></groupmembersmove>
       </div>
       <div class="user-set-area">
         <h2>
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
           이동될 부서 선택
         </h2>
-        <grouptree class="user-set-list group-members-tree" :type="'to'"></grouptree>
-        <group-members class="user-set-list group-members-move" :omitPath="'part'" :members="departChange" :moveTo="departNow" :colview="false" :icon="false" @moveitem="moveItem"></group-members>
+        <groupdepartment class="user-set-list group-members-tree" :type="'to'"></groupdepartment>
+        <groupmembersmove class="user-set-list group-members-move" :members="departChange" :moveTo="departNow" :icon="false" @moveitem="moveItem"></groupmembersmove>
       </div>
     </div>
     <div class="user-set-btn">
-      <md-button class="md-dense reset" @click="resetStorage">
-        <md-icon>replay</md-icon> 처음으로
-      </md-button>
+      <!--<md-button class="md-dense reset" @click="resetStorage">-->
+        <!--<md-icon>replay</md-icon> 처음으로-->
+      <!--</md-button>-->
       <md-button class="md-dense confirm" @click="saveStorage">
-        <md-icon>done</md-icon> 확인
+        <md-icon>done</md-icon> 저장
       </md-button>
     </div>
   </section>
 </template>
 <script>
-import Grouptree from "./Group.tree";
-import GroupMembers from "./Group.members";
-import { EventBus } from "@/main";
+import Groupdepartment from "./Group.department";
+import Groupmembersmove from "./Group.membersmove";
+//import { EventBus } from "@/main";
 export default {
   name: "GroupMemberset",
   extends: {},
@@ -49,10 +49,11 @@ export default {
       departChange: []
     };
   },
-  computed: {},
+  computed: {
+  },
   components: {
-    Grouptree,
-    GroupMembers
+    Groupdepartment,
+    Groupmembersmove
   },
   watch: {},
   methods: {
@@ -64,40 +65,40 @@ export default {
     saveStorage() {
       console.log("save");
     },
-    resetStorage() {
-      console.log("reset");
-      EventBus.$on("userfrom", data => {
-        const apiUrl = "/api/admin/group/recurse/" + data;
-        this.$http.get(apiUrl).then(result => {
-          this.departNow = result.data.data;
-          console.log(result.data);
-        });
-      });
-      EventBus.$on("userto", data => {
-        const apiUrl = "/api/admin/group/recurse/" + data;
-        this.$http.get(apiUrl).then(result => {
-          this.departChange = result.data.data;
-          console.log(result.data);
-        });
-      });
-    }
+//    resetStorage() {
+//      console.log("reset");
+//      EventBus.$on("userfrom", data => {
+//        const apiUrl = "/api/admin/group/node/" + data;
+//        this.$http.get(apiUrl).then(result => {
+//          this.departNow = result.data.data;
+//          console.log(result.data);
+//        });
+//      });
+//      EventBus.$on("userto", data => {
+//        const apiUrl = "/api/admin/group/node/" + data;
+//        this.$http.get(apiUrl).then(result => {
+//          this.departChange = result.data.data;
+//          console.log(result.data);
+//        });
+//      });
+//    }
   },
   beforeCreate() {},
   created() {
-    EventBus.$on("userfrom", data => {
-      const apiUrl = "/api/admin/group/recurse/" + data;
-      this.$http.get(apiUrl).then(result => {
-        this.departNow = result.data.data;
-        console.log(result.data);
-      });
-    });
-    EventBus.$on("userto", data => {
-      const apiUrl = "/api/admin/group/recurse/" + data;
-      this.$http.get(apiUrl).then(result => {
-        this.departChange = result.data.data;
-        console.log(result.data);
-      });
-    });
+//    EventBus.$on("userfrom", data => {
+//      const apiUrl = "/api/admin/group/node/" + data;
+//      this.$http.get(apiUrl).then(result => {
+//        this.departNow = result.data.data;
+//        console.log(result.data);
+//      });
+//    });
+//    EventBus.$on("userto", data => {
+//      const apiUrl = "/api/admin/group/node/" + data;
+//      this.$http.get(apiUrl).then(result => {
+//        this.departChange = result.data.data;
+//        console.log(result.data);
+//      });
+//    });
   },
   beforeMounted() {},
   mounted() {},

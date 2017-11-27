@@ -7,7 +7,7 @@
         <table>
           <thead>
             <tr>
-              <th v-for="(th, key, i) in fieldOmit" :key="th.i" :class="['col-'+key,{on : i === selected }]" @click.self="reOrder(key, i)">{{th}}</th>
+              <th v-for="(th, key, i) in fields" :key="th.i" :class="['col-'+key,{on : i === selected }]" @click.self="reOrder(key, i)">{{th}}</th>
             </tr>
           </thead>
         </table>
@@ -15,21 +15,13 @@
       <div class="table-body-wrap">
         <table>
           <tbody>
-            <tr v-for="member in orderedItems" :key="member.id" class="edit-wrap" :class="{'editing' : member === edited}" @click="selectRow(member)">
+            <tr v-for="member in orderedItems" :key="member.id" class="edit-wrap" @click="selectRow(member)">
               <td class="col-nodeid">{{member.nodeid}}</td>
               <td class="col-username">
-                <span class="view" @dblclick.stop="renameTo(member)">{{member.username}}</span>
-                <input class="edit" type="text" v-model="member.username" @blur="doneEdit(member)" @keyup.enter="doneEdit(member)" @keyup.esc="cancelEdit(member)" ref="name">
+                {{member.username | groupSnippet}}
               </td>
-              <td v-if="colview" class="col-end">
-                {{member.dept.name}}
-              </td>
-              <td v-else class="col-end col-btn">
-                {{member.ip}}
-                <button @click="moveItem(members, moveTo, member)">
-                  <i v-if="icon" class="fa fa-arrow-right" aria-hidden="true"></i>
-                  <i v-else class="fa fa-arrow-left" aria-hidden="true"></i>
-                </button>
+              <td class="col-end">
+                {{member.dept.name | groupSnippet}}
               </td>
             </tr>
           </tbody>
@@ -40,35 +32,24 @@
 </template>
 <script>
 import _ from "lodash";
-import { EventBus } from "@/main";
+//import { EventBus } from "@/main";
 export default {
   name: "GroupMembers",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
-    colview: {
-      type: Boolean,
-      default: true
-    },
     icon: {
       type: Boolean,
       default: true
     },
     members: {
       type: Array | Object
-    },
-    moveTo: {
-      type: Array | Object
-    },
-    omitPath: {
-      type: Array | String
     }
   },
   data() {
     return {
       filterText: "",
       edited: null,
-      rename: true,
       orderField: "id",
       direction: "asc",
       reverse: true,
@@ -78,7 +59,7 @@ export default {
         nodeid: "센서ID",
         name: "이름",
         part: "부서명",
-        ip: "아이피"
+        //ip: "아이피"
       }
     };
   },
@@ -91,31 +72,13 @@ export default {
         return member.username.match(this.filterText);
       });
     },
-    fieldOmit() {
-      return _.omit(this.fields, this.omitPath);
-    }
+//    fieldOmit() {
+//      return _.omit(this.fields, this.omitPath);
+//    }
   },
   components: {},
   watch: {},
   methods: {
-    renameTo(model) {
-      //console.log(index);
-      this.edited = model;
-      // setTimeout(() => {
-      //   console.log(this.$refs.name);
-      //   this.$refs.name[index].focus();
-      // });
-    },
-    doneEdit(model) {
-      if (!this.edited) return;
-      this.edited = null;
-      model.name = model.name.trim();
-      if (!model.name) this.removeModel(model);
-      this.rename = true;
-    },
-    cancelEdit() {
-      this.edited = null;
-    },
     reOrder(select, index) {
       if (this.orderField === select) {
         let check = (this.reverse = !this.reverse);
@@ -126,16 +89,9 @@ export default {
         this.direction = "asc";
       }
     },
-    moveItem(from, to, element) {
-      this.$emit("moveitem", {
-        from: from,
-        to: to,
-        element: element
-      });
-    },
     selectRow(member) {
       console.log(member);
-      EventBus.$emit("searchNavi", member);
+      this.$bus.$emit("search-id", member);
     }
   },
   beforeCreate() {},

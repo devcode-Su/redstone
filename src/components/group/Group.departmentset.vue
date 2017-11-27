@@ -6,30 +6,27 @@
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           부서 수정
         </h2>
-        <grouptree class="user-set-list" :treeEdit="true"></grouptree>
+        <groupdepartment class="user-set-list" :treeEdit="true"></groupdepartment>
       </div>
       <div class="user-set-area">
         <h2>
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
           부서원 정보
         </h2>
-        <groupmembers class="user-set-list" :omitPath="'part'" :members="membersData"></groupmembers>
+        <groupmembersmove class="user-set-list" :members="membersData"></groupmembersmove>
       </div>
     </div>
     <div class="user-set-btn">
-      <md-button class="md-dense reset" @click="resetStorage">
-        <md-icon>replay</md-icon> 처음으로
-      </md-button>
       <md-button class="md-dense confirm" @click="saveStorage">
-        <md-icon>done</md-icon> 확인
+        <md-icon>done</md-icon> 저장
       </md-button>
     </div>
   </section>
 </template>
 <script>
-import Grouptree from "./Group.tree";
-import Groupmembers from "./Group.members";
-import { EventBus } from "@/main";
+import Groupdepartment from "./Group.department";
+import Groupmembersmove from "./Group.membersmove";
+//import { EventBus } from "@/main";
 export default {
   name: "Grounpdetartmentset",
   extends: {},
@@ -41,38 +38,30 @@ export default {
       membersData: []
     };
   },
-  computed: {},
+  computed: {
+  },
   components: {
-    Grouptree,
-    Groupmembers
+    Groupdepartment,
+    Groupmembersmove
   },
   watch: {},
   methods: {
     saveStorage() {
-      // localStorage.setItem(
-      //   "dashboard-none",
-      //   JSON.stringify(this.dashboardNone)
-      // );
-      localStorage.setItem("members-now", JSON.stringify(this.membersData));
     },
     resetStorage() {
-      this.membersData = JSON.parse(localStorage.getItem("members-now"));
-      // localStorage.setItem("dashboard-none", "[]");
-      // localStorage.setItem(
-      //   "dashboard-view",
-      //   JSON.stringify(this.dashboardView)
-      //);
+      //EventBus.$emit("resetGroup");
+      this.membersData = []
     }
   },
   beforeCreate() {},
   created() {
-    EventBus.$on("userview", data => {
-      const apiUrl = "/api/admin/group/recurse/" + data;
-      this.$http.get(apiUrl).then(result => {
-        this.membersData = result.data.data;
-        console.log(result.data);
-      });
-    });
+//    EventBus.$on("userview", data => {
+//      const apiUrl = "/api/admin/group/node/" + data;
+//      this.$http.get(apiUrl).then(result => {
+//        console.log(result.data.data);
+//        this.membersData = result.data.data;
+//      });
+//    });
   },
   beforeMounted() {},
   mounted() {},

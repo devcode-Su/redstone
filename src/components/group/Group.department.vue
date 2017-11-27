@@ -1,45 +1,62 @@
 <template>
-  <div class="group-department">
-    <el-input size="medium" placeholder="부서 검색" v-model="filterText">
-    </el-input>
-    <el-tree :data="company" :props="defaultProps" :filter-node-method="filterNode" ref="department" accordion>
-    </el-tree>
+  <div class="tree-view" :class="{ on : position}">
+    <ul class="tree-wrap">
+      <groupdepartmenttree v-if="defaultData" :model="company[0]" @changeModel="overRide" :treeEdit="treeEdit" :type="type"></groupdepartmenttree>
+    </ul>
   </div>
 </template>
 <script>
+import Groupdepartmenttree from "./Group.department.tree";
+//import {EventBus} from "../../main";
 export default {
-  name: "GroupDepartment",
+  name: "Groupdepartment",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
+    position: {
+      type: Boolean,
+      default: false
+    },
+    treeEdit: {
+      type: Boolean,
+      default: false
+    },
+    type: String
   },
   data() {
     return {
       filterText: "",
-      company: [],
-      defaultProps: {
-        children: "subpart",
-        label: "part"
-      }
+      company: []
     };
   },
-  computed: {},
-  components: {},
-  watch: {
-    filterText(val) {
-      //console.log(this.$refs.department);
-      this.$refs.department.filter(val);
+  computed: {
+    defaultData() {
+      return this.company.length === 0 ? false : true;
     }
   },
+  components: {
+    Groupdepartmenttree
+  },
+  watch: {},
   methods: {
-    filterNode(value, data) {
-      if (!value) return true;
-      return data.part.indexOf(value) !== -1;
+    loadData(){
+      const apiUrl = "/api/admin/group/list";
+      this.$http.get(apiUrl).then(result => {
+        this.company = this.listToTree(result.data);
+        //EventBus.$emit("nodeid", this.company[0]);
+      });
+    },
+    overRide(model) {
+      this.company = model;
     }
   },
   beforeCreate() {},
   created() {
-    this.treeData();
+    this.loadData();
+//    this.$bus.$on("resetGroup", () => {
+//      this.loadData()
+//      console.log("hahaha")
+//    })
   },
   beforeMounted() {},
   mounted() {},
@@ -53,11 +70,4 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-
-.group-department {
-  height: 360px;
-  background-color: #fff;
-  border-bottom: 3px solid #4d5e72;
-  overflow: hidden;
-}
 </style>

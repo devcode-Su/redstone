@@ -17,7 +17,7 @@
             <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
           </el-button>
           <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-            <el-checkbox v-for="(check,i) in propData.field" :label="check" :key="check" :ref="'checked'" v-if="i !== propData.field.length -1">{{check}}</el-checkbox>
+            <el-checkbox v-for="(check,i) in propData.field" :label="check" :key="check.i" :ref="'checked'" v-if="i !== propData.field.length - 1">{{check}}</el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
@@ -27,7 +27,7 @@
         <table>
           <thead>
             <tr>
-              <th v-for="(th, i) in propData.field" :key="th" :class="['col'+i,{ 'col-end' : propData.field.length-1 === i }]" :ref="'checkedTh'">{{th}}</th>
+              <th v-for="(th, i) in propData.field" :key="th" :class="['col'+i,{ 'col-end' : propData.field.length-1 === i }]" :ref="'checkedTh'"><span>{{th}}</span></th>
             </tr>
           </thead>
         </table>
@@ -35,18 +35,20 @@
       <div class="table-body-wrap">
         <table>
           <tbody>
-            <template v-for="row in propData.data.data">
-              <tr :ref="'checkedRow'" :key="row">
+            <template v-for="(row,i) in propData.data.data">
+              <tr :ref="'checkedRow'" :key="row.i">
                 <td v-for="(col, key, idx) in row" :key="col.i" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
-                  {{col | snippet}}
+                  <span>{{col | snippet}}</span>
                 </td>
                 <td class="col-btn">
-                  <button class="icon-btn icon-wrap" @click="moreRow(row, row.FileHash)" :class="{on : row === more}">
+                  <span>
+                    <button class="icon-btn icon-wrap" @click="moreRow(row, row.FileHash)" :class="{on : row === more}">
                     <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
                   </button>
+                  </span>
                 </td>
               </tr>
-              <transition name="fade" :key="row">
+              <transition name="fade" :key="row.i">
                 <tr v-if="row === more" class="show-row">
                   <td :colspan="collength" :key="row.id">
                     <templatetableinnertype :propData="innerData" class="inner-view-file"></templatetableinnertype>
@@ -58,12 +60,12 @@
         </table>
       </div>
     </div>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="propData.data.current_page" :page-sizes="[25, 50, 100, 200]" :page-size="25" layout="sizes, prev, pager, next" :total="1000">
-    </el-pagination>
+    <templatepaginations :propData="pagis"></templatepaginations>
   </section>
 </template>
 <script>
 import Templatetableinnertype from "./Template.tableinnertype.vue";
+import Templatepaginations from "./Template.paginations.vue";
 export default {
   name: "Templatetableinsert",
   extends: {},
@@ -85,16 +87,25 @@ export default {
         field: this.propData.innerField,
         data: [],
         rowKey: this.propData.innerKey
+      },
+      pagis:{
+        total : "",
+        per_page : "",
+        current_page: "",
+        next_page_url : null,
+        prev_page_url : null
       }
     };
   },
   computed: {},
   components: {
-    Templatetableinnertype
+    Templatetableinnertype,
+    Templatepaginations
   },
   watch: {},
   methods: {
-    viewCheck() {
+    viewCheck(val) {
+      console.log(val)
       if (this.$refs.checkedRow !== undefined) {
         for (var j = 0; j < this.$refs.checkedRow.length; j++) {
           for (var i = 0; i < this.propData.field.length - 1; i++) {
@@ -109,6 +120,7 @@ export default {
       }
     },
     moreRow(row, key) {
+      console.log(this.propData)
       const url = "/api/admin/search/detect/list/file/" + key;
       if (this.more === row) {
         this.more = null;
@@ -118,10 +130,10 @@ export default {
         const data = {
           page: 1,
           length: 9007199254740991,
-          dept_code: this.propData.dept_code || "",
-          node_id: this.propData.node_id || "",
-          startDate: this.propData.startDate,
-          endDate: this.propData.endDate
+          dept_code: this.propData.search.dept_code || "",
+          node_id: this.propData.search.node_id || "",
+          startDate: this.propData.search.startDate,
+          endDate: this.propData.search.endDate
         };
         this.$http
           .get(url, {
@@ -142,12 +154,6 @@ export default {
         url: this.propData.url
       });
     },
-    handleSizeChange(val) {
-      console.log(`${val} items per page`);
-    },
-    handleCurrentChange(val) {
-      console.log(`current page: ${val}`);
-    }
   },
   beforeCreate() {},
   created() {
@@ -186,12 +192,6 @@ export default {
   }
   .show-row:hover {
     background-color: transparent;
-  }
-  .el-pagination {
-    margin-top: 5px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
   }
 }
 </style>

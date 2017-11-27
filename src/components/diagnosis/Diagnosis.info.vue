@@ -10,11 +10,11 @@
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
         <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
-        <!--<templatetableinsert class="diagosis-info-table" :propData="infoip" @reorder="reorder"></templatetableinsert>-->
+        <templatetableinsert class="diagosis-info-table" :propData="infoip" @reorder="reorder"></templatetableinsert>
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
         <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
-        <!--<templatetableinsert class="diagosis-info-table" :propData="inforsc" @reorder="reorder"></templatetableinsert>-->
+        <templatetableinsert class="diagosis-info-table" :propData="inforsc" @reorder="reorder"></templatetableinsert>
       </el-tab-pane>
     </el-tabs>
   </article>
@@ -143,12 +143,6 @@ export default {
   watch: {},
   methods: {
     receiveData(form) {
-      //      if (form.datetime === "") {
-      //        this.$notify.error({
-      //          title: "Error",
-      //          message: "검색 조건을 입력하세요."
-      //        });
-      //      } else {
       if (this.activeName === "first") {
         this.mixData(this.infofile, form, "file");
       } else if (this.activeName === "second") {
@@ -156,17 +150,16 @@ export default {
       } else if (this.activeName === "third") {
         this.mixData(this.inforsc, form, "rsc");
       }
-      //}
     },
     mixData(local, receive, apiurl) {
       const url = "/api/admin/search/detect/summary/" + apiurl;
       let data = {
         page: 1,
         length: 50,
-        startDate: receive.datetime[0] ? receive.datetime[0].getTime() : null,
-        endDate: receive.datetime[1] ? receive.datetime[1].getTime() : null,
-        dept_code: receive.data.dept_code || "",
-        node_id: receive.data.node_id || "",
+        startDate: receive.startTime ? receive.startTime.getTime() : null,
+        endDate: receive.endTime ? receive.endTime.getTime() : null,
+        dept_code: receive.dept_code,
+        node_id: receive.node_id,
         order: local.order,
         direction: 1
       };
@@ -176,6 +169,7 @@ export default {
           params: data
         })
         .then(result => {
+          console.log(result.data)
           local.data = result.data;
         });
       local.search = data;
@@ -191,6 +185,7 @@ export default {
             params: val.form
           })
           .then(result => {
+            console.log(result.data)
             this.infofile.data = result.data.data;
           });
       } else if (this.activeName === "second") {
@@ -209,6 +204,7 @@ export default {
             params: val.form
           })
           .then(result => {
+            console.log(result.data)
             this.inforsc.data = result.data.data;
           });
       }

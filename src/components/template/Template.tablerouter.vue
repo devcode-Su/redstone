@@ -17,7 +17,7 @@
             <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
           </el-button>
           <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-            <el-checkbox v-for="(check,i) in propData.field" :label="i" :key="check" :ref="'checked'">{{check}}</el-checkbox>
+            <el-checkbox v-for="(check,i) in propData.field" :label="i" :key="check.i" :ref="'checked'">{{check}}</el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
@@ -35,8 +35,8 @@
       <div class="table-body-wrap">
         <table>
           <tbody>
-            <tr v-for="row in propData.data" :key="row" @click="moveRow" :ref="'checkedRow'">
-              <td v-for="(col, key, idx) in row" :key="col" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
+            <tr v-for="(row,i) in tableData" :key="i.id" @click="moveRow" :ref="'checkedRow'">
+              <td v-for="(col, k, idx) in row" :key="k"  :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
                 {{col}}
               </td>
             </tr>
@@ -44,9 +44,11 @@
         </table>
       </div>
     </div>
+    <templatepaginations :propData="pagis"></templatepaginations>
   </section>
 </template>
 <script>
+  import Templatepaginations from "../template/Template.paginations.vue";
 export default {
   name: "Templatetablerouter",
   extends: {},
@@ -64,7 +66,14 @@ export default {
     return {
       more: null,
       order: "",
-      morebtn: false
+      morebtn: false,
+      pagis:{
+        total : "",
+        per_page : "",
+        current_page: "",
+        next_page_url : null,
+        prev_page_url : null
+      }
     };
   },
   computed: {
@@ -72,7 +81,9 @@ export default {
       return this.getValueEx(this.propData.data, this.propData.rowKey);
     }
   },
-  components: {},
+  components: {
+    Templatepaginations
+  },
   watch: {},
   methods: {
     viewCheck() {
@@ -91,17 +102,23 @@ export default {
     },
     moveRow() {
       console.log("moverow");
+    },
+    handleSizeChange(val) {
+      console.log(`${val} items per page`);
+    },
+    handleCurrentChange(val) {
+      console.log(`current page: ${val}`);
     }
   },
   beforeCreate() {},
   created() {
-    //console.log(this.propData)
+    console.log(this.propData)
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
   updated() {
-    //console.log(this.propData)
+    console.log(this.propData)
   },
   actvated() {},
   deactivated() {},

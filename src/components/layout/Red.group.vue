@@ -4,8 +4,8 @@
       <h1 class="group-title">
         그룹관리
       </h1>
-      <grouptree class="group-department" :position="false"></grouptree>
-      <group-members :omitPath="'ip'" :members="membersData"></group-members>
+      <groupdepartment :propsTree="groupData[0]" class="group-department" :position="false"></groupdepartment>
+      <group-members :members="membersData"></group-members>
       <ul class="group-notice">
         <li>
           <i class="fa fa-circle fa-fw dot-all" aria-hidden="true"></i>
@@ -31,11 +31,9 @@
 </template>
 
 <script>
-import GroupDepartment from "../group/Group.department";
-import Grouptree from "../group/Group.tree";
+import Groupdepartment from "../group/Group.department";
 import GroupMembers from "../group/Group.members";
 import Templatemodal from "../template/Template.modal";
-import { EventBus } from "@/main";
 export default {
   // 이름 적는 것을 잊지마세요
   name: "RedGroup",
@@ -51,6 +49,7 @@ export default {
   data() {
     return {
       showModal: false,
+      groupData : [],
       membersData: [],
       total: ""
     };
@@ -62,8 +61,7 @@ export default {
   },
   // 컴포넌트가 다른 컴포넌트를 사용할 경우
   components: {
-    GroupDepartment,
-    Grouptree,
+    Groupdepartment,
     GroupMembers,
     Templatemodal
   },
@@ -72,7 +70,14 @@ export default {
   methods: {},
   // 컴포넌트 라이프사이클 메서드 그룹
   created() {
-    EventBus.$on("userview", data => {
+    const apiGroupUrl = "/api/admin/group/list";
+    this.$http.get(apiGroupUrl).then(result => {
+      this.groupData = this.listToTree(result.data);
+      //console.log("???");
+      //console.log(this.groupData)
+      //EventBus.$emit("nodeid", this.company[0]);
+    });
+    this.$bus.$on("userview", data => {
       const apiUrl = "/api/admin/group/recurse/" + data;
       this.$http.get(apiUrl).then(result => {
         this.membersData = result.data.data;
@@ -81,6 +86,9 @@ export default {
   },
   mounted() {
     //console.log(typeof this.items);
+  },
+  beforeDestroy() {
+    this.$bus.$on("userview");
   }
 };
 </script>

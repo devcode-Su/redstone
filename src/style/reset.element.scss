@@ -98,7 +98,25 @@
       }
     }
   }
+  &.analysis-check{
+    > .el-form-item__content{
+      width:1000px;
+      >.el-checkbox{
+        width:10%;
+      }
+      >.el-checkbox-group{
+        display:flex;
+        flex-wrap:wrap;
+        width:900px;
+        > .el-checkbox{
+          width:25%;
+        }
+      }
+    }
+
+  }
 }
+
 
 .form-item-wrap {
   .el-form-item__content {

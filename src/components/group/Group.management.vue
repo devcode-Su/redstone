@@ -30,20 +30,20 @@ export default {
     };
   },
   computed: {
-    defaultStorage() {
-      if (localStorage.getItem("members-now")) {
-        if (localStorage.getItem("members-now")) {
-          return;
-        } else {
-          localStorage.setItem("members-change", "[]");
-        }
-      } else {
-        localStorage.setItem("members-now", "[]");
-        if (!localStorage.getItem("members-change")) {
-          localStorage.setItem("members-change", "[]");
-        }
-      }
-    }
+//    defaultStorage() {
+//      if (localStorage.getItem("members-now")) {
+//        if (localStorage.getItem("members-now")) {
+//          return;
+//        } else {
+//          localStorage.setItem("members-change", "[]");
+//        }
+//      } else {
+//        localStorage.setItem("members-now", "[]");
+//        if (!localStorage.getItem("members-change")) {
+//          localStorage.setItem("members-change", "[]");
+//        }
+//      }
+//    }
   },
   components: {
     Groupdepartmentset,
@@ -58,9 +58,6 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.membersData = JSON.parse(localStorage.getItem("member-data"));
-    //console.log(this.membersData);
-    this.defaultStorage;
   },
   beforeMounted() {},
   mounted() {},

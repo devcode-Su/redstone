@@ -1,0 +1,187 @@
+<template>
+
+        <div class="template-search-pannel template-container">
+          <el-form ref="form" :model="form" :label-width="'180px'" :label-position="'left'">
+            <fieldset>
+              <legend class="pannel small">{{searchNavi}} 에서 검색 </legend>
+              <div class="form-align-box">
+                <div class="form-item-wrap">
+                  <el-form-item label="조사기간 설정" size="small">
+                    <el-date-picker v-model="form.startTime" type="datetime" >
+                    </el-date-picker>
+                    <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+                    <el-date-picker v-model="form.endTime" type="datetime" >
+                    </el-date-picker>
+                    <div class="btn-date-wrap">
+                      <el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
+                        {{settime}}
+                      </el-button>
+                    </div>
+                  </el-form-item>
+                  <el-form-item class="analysis-check" label="검색 항목" size="small">
+                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+                      전체
+                    </el-checkbox>
+                    <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
+                      <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">{{search}}</el-checkbox>
+                    </el-checkbox-group>
+                  </el-form-item>
+                  <el-form-item label="검색 조건" size="small">
+                    <el-input type="text" v-model="form.text">
+                    </el-input>
+                    <el-checkbox class="agreement" v-model="form.agreement">
+                      부분 일치
+                    </el-checkbox>
+                  </el-form-item>
+                </div>
+                <div class="btn-wrap">
+                  <el-button size="small" type="primary" @click="onSubmit('form')">검색</el-button>
+                </div>
+              </div>
+            </fieldset>
+          </el-form>
+        </div>
+</template>
+<script>
+  import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
+  import MixinsSearchAreaClose from "@/components/mixins/setDatetime.mixin";
+  //import { EventBus } from "@/main"
+  export default {
+    name: "Searchanalysis",
+    extends: {},
+    props: {
+      //알파벳 순으로 정렬할 것.
+    },
+    data() {
+      return {
+        activeName: "first",
+        datebtn: ["1시간", "일일", "주간", "월간"],
+        checkAll: true,
+        searchNavi: "전사",
+        isIndeterminate: false,
+        checklistAll :[
+          "FILE", "IP", "RSC", "process", "network", "files", "registry"
+        ],
+        checklist: {
+          FILE :"TI진단 이벤트",
+          IP : "악성 URL/IP 접근 이벤트",
+          RSC : "RSC 엔진 진단 이벤트",
+          process : "프로세스",
+          network : "네트워크",
+          files : "파일",
+          registry:"레지스트리"
+        },
+        form: {
+          startTime: "",
+          endTime: "",
+          version: "",
+          checkType: [
+            "FILE", "IP", "RSC", "process", "network", "files", "registry"
+          ],
+          text: "",
+          agreement: false
+        },
+        requestData : {
+          page : 1,
+          length : 50,
+          order : 'time',
+        }
+      };
+    },
+    computed: {},
+    components: {},
+    watch: {},
+    methods: {
+      handleCheckAllChange(val) {
+      this.form.checkType = val ? this.form.checkType : [];
+      this.isIndeterminate = false;
+      },
+      handleCheckedEngineChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.form.checkType.length;
+        this.isIndeterminate =
+          checkedCount > 0 && checkedCount < this.form.checkType.length;
+      },
+      onSubmit(form) {
+        console.log(form)
+        const formData = this.$refs[form].model;
+        const url = "/api/admin/search/event";
+        console.log(formData)
+        if (formData.startTime === "" || formData.endTime === "") {
+          this.$notify.error({
+            title: "Error",
+            message: "검색 조건을 입력하세요."
+          });
+        } else {
+          const data = {
+            page: 1,
+            length: 50,
+            startDate: formData.startTime ? formData.startTime : null,
+            endDate: formData.endTime ? formData.endTime : null,
+            dept_code: formData.data.dept_code || "",
+            node_id: formData.data.node_id || "",
+            order: "time",
+            direction: 1,
+            q: formData.text,
+            all: this.checkAll,
+            partial_match: true,
+            ti_event: this.$refs.check[0].isChecked,
+            url_ip_event: this.$refs.check[1].isChecked,
+            engine_event: this.$refs.check[2].isChecked,
+            process_event: this.$refs.check[3].isChecked,
+            network_event: this.$refs.check[4].isChecked,
+            file_event: this.$refs.check[5].isChecked,
+            registry_event: this.$refs.check[6].isChecked
+          };
+          this.$http
+            .get(url, {
+              params: data
+            })
+            .then(result => {
+              //this.process.data = result.data.rows;
+              console.log(result.data);
+            });
+        }
+      },
+      receiveSubmit(data){
+        console.log(data);
+        const defaultDate = new Date(data.EventTime);
+        const start = new Date(defaultDate.getTime() - 60 * 30 * 1000);
+        const end = new Date(defaultDate.getTime() + 60 * 30 * 1000);
+        this.form.startTime = start;
+        this.form.endTime = end;
+        this.form.checkType = [ data.Type ];
+        this.testest = data
+        console.log(this.form)
+        this.$bus.$off("process-search-data");
+        console.log("===========")
+      }
+    },
+    beforeCreate() {},
+    created() {
+      this.$bus.$on("process-search-data", this.receiveSubmit)
+      //EventBus.$on("processtree", this.receiveBus)
+    },
+    beforeMounted() {},
+    mounted() {},
+    beforeUpdate() {},
+    updated() {},
+    actvated() {},
+    deactivated() {},
+    beforeDestroy() {},
+    destroyed() {},
+    mixins:[
+      MixinsSetDatetime,
+      MixinsSearchAreaClose
+    ]
+  };
+</script>
+<style lang='scss' scoped>
+  @import "~styles/variables";
+  .el-checkbox-group{
+    margin-left:0;
+    > label{
+      margin-left:0;
+    }
+  }
+</style>

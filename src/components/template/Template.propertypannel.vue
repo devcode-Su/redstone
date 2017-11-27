@@ -21,7 +21,7 @@
   </section>
 </template>
 <script>
-import { EventBus } from "@/main";
+//import { EventBus } from "@/main";
 export default {
   name: "TemplatePropertypannel",
   extends: {},
@@ -72,10 +72,10 @@ export default {
   watch: {},
   methods: {},
   created() {
-    EventBus.$on("searchNavi", data => {
-      //console.log(data)
-      this.searchNavi = data.name || data.dept.name + " / " + data.username;
-    });
+//    EventBus.$on("searchNavi", data => {
+//      //console.log(data)
+//      this.searchNavi = data.name || data.dept.name + " / " + data.username;
+//    });
   },
   beforeMounted() {},
   mounted() {},

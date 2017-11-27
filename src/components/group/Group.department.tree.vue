@@ -26,17 +26,17 @@
     </div>
     <transition @enter="enter" @leave="leave">
       <ul v-show="isOpen" v-if="model.children">
-        <grouptree v-for="(model, i) in model.children" :key="model.id" :model="model" :index="i" :treeEdit="treeEdit" :type="type">
-        </grouptree>
+        <template-grouptree v-for="(model, i) in model.children" :key="model.id" :model="model" :index="i" :treeEdit="treeEdit" :type="type">
+        </template-grouptree>
       </ul>
     </transition>
   </li>
 </template>
 <script>
 import Velocity from "velocity-animate";
-import { EventBus } from "@/main";
+//import { EventBus } from "@/main";
 export default {
-  name: "Grouptree",
+  name: "TemplateGrouptree",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
@@ -72,12 +72,12 @@ export default {
         if (this.isOpen) this.$emit("is-open", this.$parent.$children);
       }
       if (type === "from") {
-        EventBus.$emit("userfrom", this.model.dept_code);
+        this.$bus.$emit("userfrom", this.model.dept_code);
       } else if (type === "to") {
-        EventBus.$emit("userto", this.model.dept_code);
+        this.$bus.$emit("userto", this.model.dept_code);
       } else {
-        EventBus.$emit("userview", this.model.dept_code);
-        EventBus.$emit("searchNavi", this.model);
+        this.$bus.$emit("userview", this.model.dept_code);
+        this.$bus.$emit("search-id", this.model);
       }
     },
     enter(el, done) {

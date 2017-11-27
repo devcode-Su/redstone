@@ -37,6 +37,7 @@ export default {
   data() {
     return {
       selected: 0,
+      data:[],
       treeData: {
         data: data.Graph.tree,
         type: "tree",
@@ -50,19 +51,6 @@ export default {
         isLoading: false,
         events: []
       },
-      // treeBox: {
-      //   name: "father",
-      //   children: [
-      //     {
-      //       name: "son1",
-      //       children: [{ name: "grandson" }, { name: "grandson2" }]
-      //     },
-      //     {
-      //       name: "son2",
-      //       children: [{ name: "grandson3" }, { name: "grandson4" }]
-      //     }
-      //   ]
-      // },
       listSample: [
         {
           name: "PC 정보",
@@ -264,7 +252,9 @@ export default {
     }
   },
   created() {
-    console.log(data);
+//    this.$http.get("/static/data/treeexample.json").then(result => {
+//      console.log(result);
+//    });
   },
   mounted() {
     //console.log(this.$refs.infoMenu);

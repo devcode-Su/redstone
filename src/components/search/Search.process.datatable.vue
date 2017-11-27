@@ -36,9 +36,9 @@
         <table>
           <tbody>
             <template v-for="(row,i) in propData.data">
-              <tr :ref="'checkedRow'" :key="row">
+              <tr :ref="'checkedRow'" :key="row.id" @click="rowRoute(row.ProcessGuid)">
                 <td class="col0">{{row.EventTime}}</td>
-                <td class="col1">{{row.ProcessName}}</td>
+                <td class="col1">{{row.ProcessName | snippet(row.ProcessName, 2)}}</td>
                 <td class="col2">{{row.username}}</td>
                 <td class="col3">{{row.userdept}}</td>
                 <td class="col4">{{row.nodeid}}</td>
@@ -53,13 +53,13 @@
                   <span v-if="row.DetectIP">악성 URL/IP 접근 이벤트 : {{row.DetectIP}}</span>
                   <span v-if="row.DetectRSC">RSC 엔진 진단 이벤트 : {{row.DetectRSC}}</span>
                 </td>
-                <td class="col-btn">
-                  <button class="icon-btn icon-wrap" @click="moreRow(row, i)" :class="{on : row === more}">
+                <td class="col-btn col-end">
+                  <button class="icon-btn icon-wrap" @click.stop="moreRow(row, i)" :class="{on : row === more}">
                     <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
                   </button>
                 </td>
               </tr>
-              <transition name="fade" :key="row">
+              <transition name="fade">
                 <tr v-if="row === more" class="show-row">
                   <td :colspan="collength" :key="row.id">
                     <processinnerview :propData="innerData"></processinnerview>
@@ -71,12 +71,13 @@
         </table>
       </div>
     </div>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="propData.data.current_page" :page-sizes="[25, 50, 100, 200]" :page-size="25" layout="sizes, prev, pager, next" :total="1000">
-    </el-pagination>
+    <templatepaginations :propData="pagis"></templatepaginations>
   </section>
 </template>
 <script>
 import Processinnerview from "./Search.process.innerview.vue";
+import Templatepaginations from "../template/Template.paginations.vue";
+//import { EventBus } from "@/main"
 export default {
   name: "Processdatatable",
   extends: {},
@@ -98,12 +99,20 @@ export default {
         processData: [],
         fileData: [],
         checkData: []
+      },
+      pagis:{
+        total : "",
+        per_page : "",
+        current_page: "",
+        next_page_url : null,
+        prev_page_url : null
       }
     };
   },
   computed: {},
   components: {
-    Processinnerview
+    Processinnerview,
+    Templatepaginations
   },
   watch: {},
   methods: {
@@ -120,6 +129,11 @@ export default {
       } else {
         this.view = [];
       }
+    },
+    rowRoute(val){
+      console.log(val);
+      //EventBus.$emit("processtree", val);
+      this.$router.push("Search-analysis");
     },
     moreRow(row) {
       const prcessUrl = "/api/admin/search/process/info/" + row.ProcessGuid;
@@ -162,6 +176,7 @@ export default {
   },
   beforeCreate() {},
   created() {
+    console.log(this)
     //console.log(this.propData.data);
   },
   beforeMounted() {},

@@ -16,7 +16,9 @@
         </red-group>
       </aside>
       <main class="main">
-        <router-view/>
+        <!--<keep-alive component="ElForm">-->
+          <router-view/>
+        <!--</keep-alive>-->
       </main>
     </section>
   </section>
@@ -27,7 +29,7 @@ import RedHeader from "./layout/Red.header";
 import RedNavigation from "./layout/Red.navigation";
 import RedGroup from "./layout/Red.group";
 
-import locationCheckMixin from "./resource/mixins/location.check.mixin";
+import locationCheckMixin from "./mixins/location.check.mixin";
 export default {
   name: "Redstone",
   data() {
@@ -61,10 +63,10 @@ export default {
     this.$http.get(apiURL).then(result => {
       this.userdata = result.data;
       //console.log(this.userdata)
+      //console.log("aaa")
     });
   },
   mounted() {
-    //console.log(this.selectedDisabled)
   },
   mixins: [locationCheckMixin]
 };

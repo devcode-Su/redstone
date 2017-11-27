@@ -3,17 +3,21 @@
     <h1 class="page-title">
       상세분석
     </h1>
-    <propertypannel></propertypannel>
     <el-tabs v-model="activeName">
-      <el-tab-pane label="프로세스 트리" name="process">
-        <processtree></processtree>
+      <el-tab-pane label="프로세스 트리" name="first">
+        <!--<processtree></processtree>-->
+        <searchpannel></searchpannel>
+        <!--<processdatatable></processdatatable>-->
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
-import Propertypannel from "../template/Template.propertypannel.vue";
 import Processtree from "./Search.process.tree.vue";
+import Searchpannel from "./Search.pannel.vue";
+import Processdatatable from "./Search.process.datatable.vue";
+import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
+//import { EventBus } from "@/main"
 export default {
   name: "Searchanalysis",
   extends: {},
@@ -22,18 +26,35 @@ export default {
   },
   data() {
     return {
-      activeName: "process"
+      activeName: "first",
+      datebtn: ["1시간", "일일", "주간", "월간"],
+      checkAll: true,
+      searchNavi: "전사",
+      isIndeterminate: false,
+      checklistAll :[
+        "FILE", "IP", "RSC", "process", "network", "files", "registry"
+      ],
+      tableData : {
+        field : [ "시각", "분류", "내용"]
+      }
     };
   },
   computed: {},
   components: {
-    Propertypannel,
-    Processtree
+    Processtree,
+    Processdatatable,
+    Searchpannel
   },
   watch: {},
-  methods: {},
+  methods: {
+    receiveBus(data){
+      console.log(data)
+    }
+  },
   beforeCreate() {},
-  created() {},
+  created() {
+    //EventBus.$on("processtree", this.receiveBus)
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
@@ -41,7 +62,10 @@ export default {
   actvated() {},
   deactivated() {},
   beforeDestroy() {},
-  destroyed() {}
+  destroyed() {},
+  mixins:[
+    MixinsSetDatetime
+  ]
 };
 </script>
 <style lang='scss' scoped>
