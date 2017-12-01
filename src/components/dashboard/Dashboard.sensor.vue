@@ -41,7 +41,14 @@ export default {
     //알파벳 순으로 정렬할 것.
   },
   data() {
-    return {};
+    return {
+      sensor: {
+        count: "",
+        total: ""
+      },
+      dailyProcess: {},
+      dailyNetwork: []
+    };
   },
   computed: {
     sensorCount() {
@@ -66,7 +73,40 @@ export default {
     const process = "/dashboard/?method=get&resource=process";
     const network = "/dashboard/?method=get&resource=network";
 
-    this.
+    this.$http
+      .get(sensor)
+      .then(response => {
+        console.log("sensor get");
+        this.sensor.count = response.data.data.count;
+        this.sensor.total = response.data.data.total;
+      })
+      .catch(err => {
+        console.log("get failed");
+        this.sensor.count = 123;
+        this.sensor.total = 123456;
+      });
+
+    this.$http
+      .get(process)
+      .then(response => {
+        console.log("process get");
+        this.dailyProcess = response.data.data.count;
+      })
+      .catch(err => {
+        console.log("get failed");
+        this.dailyProcess = 123;
+      });
+
+    this.$http
+      .get(network)
+      .then(response => {
+        console.log("network get");
+        this.dailyNetwork = response.data.data.count;
+      })
+      .catch(err => {
+        console.log("get failed");
+        this.dailyNetwork = 123;
+      });
   },
   beforeMounted() {},
   mounted() {},

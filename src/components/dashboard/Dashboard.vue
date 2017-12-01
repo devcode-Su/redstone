@@ -3,26 +3,7 @@
     <h1 class="page-title">
       Dashboard 기본정보
     </h1>
-    <!-- <section class="basic-pannel section-wrap">
-      <dl class="pannel-content first">
-        <dt class="sensor">센서 현황</dt>
-        <dd>{{sensorCount}} /
-          <small>{{sensorTotal}}
-          </small>
-        </dd>
-      </dl>
-      <dl class="pannel-content">
-        <dt class="process">일간 프로세스탐지</dt>
-        <dd>{{dailyProcessCount}}</dd>
-      </dl>
-      <dl class="pannel-content">
-        <dt class="network">일간 네트워크 탐지</dt>
-        <dd>{{dailyNetworkCount}}</dd>
-      </dl>
-    </section>
-    <section class="section-wrap">
-      <dashboard-sensorchart></dashboard-sensorchart>
-    </section> -->
+    <dashboardSensor></dashboardSensor>
     <!-- <section class="section-wrap">
       <dashboard-detectiontable></dashboard-detectiontable>
     </section> -->
@@ -35,6 +16,7 @@
   </article>
 </template>
 <script>
+import DashboardSensor from "./Dashboard.sensor";
 import DashboardSensorchart from "./Dashboard.sensor.chart";
 import DashboardThumbcomponents from "./Dashboard.thumb.components";
 import DashboardDetectiontable from "./Dashboard.detection.table";
@@ -49,17 +31,12 @@ export default {
     return {
       showModal: false,
       //userSet: [],
-      sensor: {
-        count: "",
-        total: ""
-      },
-      dailyProcess: {},
-      dailyNetwork: {},
+
       resourceList: []
     };
   },
-  computed: {},
   components: {
+    DashboardSensor,
     DashboardSensorchart,
     DashboardDetectiontable,
     DashboardThumbcomponents,
@@ -67,37 +44,37 @@ export default {
   },
   watch: {},
   methods: {
-    getSensor() {
-      const url = "/dashboard/?method=get&resource=sensor";
-      this.$http.get(url).then(result => {
-        this.sensor.count = result.data.data.count;
-        this.sensor.total = result.data.data.total;
-      });
-    },
-    getDailyProcess() {
-      const url = "/dashboard/?method=get&resource=process";
-      this.$http.get(url).then(result => {
-        this.dailyProcess = result.data.data.count;
-      });
-    },
-    getDailyNetwork() {
-      const url = "/dashboard/?method=get&resource=network";
-      this.$http.get(url).then(result => {
-        this.dailyNetwork = result.data.data.count;
-      });
-    },
-    getResourceList() {
-      const url = "/dashboard/?method=define";
-      this.$http.get(url).then(result => {
-        console.log(result);
-      });
-    }
+    // getSensor() {
+    //   const url = "/dashboard/?method=get&resource=sensor";
+    //   this.$http.get(url).then(result => {
+    //     this.sensor.count = result.data.data.count;
+    //     this.sensor.total = result.data.data.total;
+    //   });
+    // },
+    // getDailyProcess() {
+    //   const url = "/dashboard/?method=get&resource=process";
+    //   this.$http.get(url).then(result => {
+    //     this.dailyProcess = result.data.data.count;
+    //   });
+    // },
+    // getDailyNetwork() {
+    //   const url = "/dashboard/?method=get&resource=network";
+    //   this.$http.get(url).then(result => {
+    //     this.dailyNetwork = result.data.data.count;
+    //   });
+    // },
+    // getResourceList() {
+    //   const url = "/dashboard/?method=define";
+    //   this.$http.get(url).then(result => {
+    //     console.log(result);
+    //   });
+    // }
   },
   beforeCreate() {},
   created() {
-    this.$bus.$emit("thumblist", () => {
-      console.log("버스");
-    });
+    // this.$bus.$emit("thumblist", () => {
+    //   console.log("버스");
+    // });
     // this.getSensor();
     // this.getDailyProcess();
     // this.getDailyNetwork();

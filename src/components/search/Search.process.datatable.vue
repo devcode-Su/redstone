@@ -1,7 +1,7 @@
 <template>
   <section class="template-table-wrap">
     <header>
-      <span>전체 : {{this.propData.data.total || "-"}}건</span>
+      <span>전체 : {{propData && propData.data ? propData.data.total : '-'}}건</span>
       <div class="btn-wrap">
         <el-button size="small">
           파일로 저장
@@ -36,9 +36,9 @@
         <table>
           <tbody>
             <template v-for="(row,i) in propData.data">
-              <tr :ref="'checkedRow'" :key="row.id" @click="rowRoute(row.ProcessGuid)">
+              <tr :ref="'checkedRow'" :key="row.id" @click="rowRoute(row)">
                 <td class="col0">{{row.EventTime}}</td>
-                <td class="col1">{{row.ProcessName | snippet(row.ProcessName, 2)}}</td>
+                <td class="col1">{{row.ProcessName}}</td>
                 <td class="col2">{{row.username}}</td>
                 <td class="col3">{{row.userdept}}</td>
                 <td class="col4">{{row.nodeid}}</td>
@@ -53,7 +53,7 @@
                   <span v-if="row.DetectIP">악성 URL/IP 접근 이벤트 : {{row.DetectIP}}</span>
                   <span v-if="row.DetectRSC">RSC 엔진 진단 이벤트 : {{row.DetectRSC}}</span>
                 </td>
-                <td class="col-btn col-end">
+                <td class="col-btn">
                   <button class="icon-btn icon-wrap" @click.stop="moreRow(row, i)" :class="{on : row === more}">
                     <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
                   </button>
@@ -71,12 +71,12 @@
         </table>
       </div>
     </div>
-    <templatepaginations :propData="pagis"></templatepaginations>
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="propData.data.current_page" :page-sizes="[25, 50, 100, 200]" :page-size="25" layout="sizes, prev, pager, next" :total="1000">
+    </el-pagination>
   </section>
 </template>
 <script>
 import Processinnerview from "./Search.process.innerview.vue";
-import Templatepaginations from "../template/Template.paginations.vue";
 //import { EventBus } from "@/main"
 export default {
   name: "Processdatatable",
@@ -89,7 +89,8 @@ export default {
   },
   data() {
     return {
-      collength: this.propData.field.length,
+//      collength: this.propData.field.length,
+      collength: 0,
       more: null,
       order: "",
       view: [],
@@ -99,20 +100,12 @@ export default {
         processData: [],
         fileData: [],
         checkData: []
-      },
-      pagis:{
-        total : "",
-        per_page : "",
-        current_page: "",
-        next_page_url : null,
-        prev_page_url : null
       }
     };
   },
   computed: {},
   components: {
-    Processinnerview,
-    Templatepaginations
+    Processinnerview
   },
   watch: {},
   methods: {
@@ -131,9 +124,7 @@ export default {
       }
     },
     rowRoute(val){
-      console.log(val);
-      //EventBus.$emit("processtree", val);
-      this.$router.push("Search-analysis");
+      this.$router.push({path:"Search-analysis", query: {ProcessGuid: val.ProcessGuid, nodeid: val.nodeid}});
     },
     moreRow(row) {
       const prcessUrl = "/api/admin/search/process/info/" + row.ProcessGuid;
@@ -176,7 +167,6 @@ export default {
   },
   beforeCreate() {},
   created() {
-    console.log(this)
     //console.log(this.propData.data);
   },
   beforeMounted() {},
