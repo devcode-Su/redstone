@@ -1,6 +1,6 @@
 <template>
-  <article>
-    <h1 class="page-title">
+  <article data-layout="Route-article">
+    <h1 data-page-title>
       무선 LAN 사용
     </h1>
     <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
@@ -20,7 +20,7 @@ export default {
     return {
       pannelset: {
         datetime: true,
-       check: "single"
+        check: "single"
       },
       search: {
         field: [

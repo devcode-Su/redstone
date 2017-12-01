@@ -139,7 +139,7 @@ const MyPlugin = {
       return ret;
     };
 
-    vue.prototype.getValueArr = (data, arr) => {
+    vue.prototype.getValueToArr = (data, arr) => {
       return data.data.map((m) => {
         let ret = [];
         if (m) {

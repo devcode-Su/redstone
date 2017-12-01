@@ -1,6 +1,6 @@
 <template>
-  <article>
-    <h1 class="page-title">
+  <article data-layout="Route-article">
+    <h1 data-page-title>
       HW 정보
     </h1>
     <el-tabs v-model="activeName">
@@ -26,7 +26,7 @@
 <script>
 import TemplateSearchpannel from "../template/Template.searchpannel";
 import Templatetablerouter from "../template/Template.tablerouter.vue";
-import Templatebaranimation from "../template/Template.bar.animation.vue"
+import Templatebaranimation from "../template/Template.bar.animation.vue";
 
 export default {
   name: "Propertyhw",

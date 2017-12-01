@@ -1,6 +1,6 @@
 <template>
-  <article>
-    <h1 class="page-title">
+  <article data-layout="Route-article">
+    <h1 data-page-title>
       상세분석
     </h1>
     <el-tabs v-model="activeName">

@@ -1,6 +1,6 @@
 <template>
-  <article>
-    <h1 class="page-title">
+  <article data-layout="Route-article">
+    <h1 data-page-title>
       SW 정보
     </h1>
     <el-tabs v-model="activeName">
@@ -21,9 +21,9 @@
   </article>
 </template>
 <script>
-  import Propertypannel from "./Property.pannel.vue"
+import Propertypannel from "./Property.pannel.vue";
 import Propertydatatable from "./Property.datatable.vue";
-  import Searchpannel from "../template/Template.searchpannel.vue";
+import Searchpannel from "../template/Template.searchpannel.vue";
 export default {
   name: "Propertysw",
   extends: {},
@@ -32,9 +32,9 @@ export default {
   },
   data() {
     return {
-      searchNavi : "전사",
-      pannelset:{
-        programs : true
+      searchNavi: "전사",
+      pannelset: {
+        programs: true
       },
       activeName: "first",
       infofile: {
@@ -48,28 +48,22 @@ export default {
         search: [],
         url: "",
         data: [],
-        order: "count",
+        order: "count"
       },
-      propertyOS:{
-        field : [
-          "운영체제", "서비스팩", "PC 대수"
-        ],
-        data:[],
-        orderOption:["1", "2", "3"],
+      propertyOS: {
+        field: ["운영체제", "서비스팩", "PC 대수"],
+        data: [],
+        orderOption: ["1", "2", "3"]
       },
-      propertyBR:{
-        field : [
-          "소프트웨어", "버전", "설치 PC 대수"
-        ],
-        data:[],
-        orderOption:["1", "2", "3"],
+      propertyBR: {
+        field: ["소프트웨어", "버전", "설치 PC 대수"],
+        data: [],
+        orderOption: ["1", "2", "3"]
       },
-      propertySW:{
-        field : [
-          "소프트웨어", "버전", "설치 PC 대수"
-        ],
-        data:[],
-        orderOption:["1", "2", "3"]
+      propertySW: {
+        field: ["소프트웨어", "버전", "설치 PC 대수"],
+        data: [],
+        orderOption: ["1", "2", "3"]
       }
     };
   },
@@ -95,8 +89,8 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-  .search-id{
-    display:block;
-    transform:translateY(20px)
-  }
+.search-id {
+  display: block;
+  transform: translateY(20px);
+}
 </style>

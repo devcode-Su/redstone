@@ -1,6 +1,6 @@
 <template>
-  <article>
-    <h1 class="page-title">
+  <article data-layout="Route-article">
+    <h1 data-page-title>
       사용자 계정
     </h1>
     <el-tabs v-model="activeName">

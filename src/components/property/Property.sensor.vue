@@ -1,6 +1,6 @@
 <template>
-  <article>
-    <h1 class="page-title">
+  <article data-layout="Route-article">
+    <h1 data-page-title>
       센서 정보
     </h1>
     <template-searchpannel :pannelType="pannelset"></template-searchpannel>

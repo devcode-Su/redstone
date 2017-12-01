@@ -1,6 +1,6 @@
 <template>
-  <article>
-    <h1 class="page-title">
+  <article data-layout="Route-article">
+    <h1 data-page-title>
       위협 PC 기반
     </h1>
     <el-tabs v-model="activeName">
@@ -113,7 +113,7 @@ export default {
   watch: {},
   methods: {
     receiveData(form) {
-      console.log(form)
+      console.log(form);
       if (this.activeName === "first") {
         this.mixData(this.pcfile, form, "file");
       } else if (this.activeName === "second") {
@@ -140,7 +140,7 @@ export default {
         })
         .then(result => {
           local.data = result.data.data;
-          console.log(data)
+          console.log(data);
         });
       local.search = data;
       local.url = url;

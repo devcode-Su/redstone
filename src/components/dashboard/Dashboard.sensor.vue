@@ -1,41 +1,25 @@
 <template>
-  <section data-sensor="counnt">
-    <dl class="pannel-content first">
+  <section data-dashboard-section="count">
+    <dl>
       <dt class="sensor">센서 현황</dt>
       <dd>{{sensorCount}} /
         <small>{{sensorTotal}}
         </small>
       </dd>
     </dl>
-    <dl class="pannel-content">
+    <dl>
       <dt class="process">일간 프로세스탐지</dt>
       <dd>{{dailyProcessCount}}</dd>
     </dl>
-    <dl class="pannel-content">
+    <dl>
       <dt class="network">일간 네트워크 탐지</dt>
       <dd>{{dailyNetworkCount}}</dd>
     </dl>
-
-    <!-- <dl class="pannel-content first">
-      <dt class="sensor">센서 현황</dt>
-      <dd>{{sensorCount}} /
-        <small>{{sensorTotal}}
-        </small>
-      </dd>
-    </dl>
-    <dl class="pannel-content">
-      <dt class="process">일간 프로세스탐지</dt>
-      <dd>{{dailyProcessCount}}</dd>
-    </dl>
-    <dl class="pannel-content">
-      <dt class="network">일간 네트워크 탐지</dt>
-      <dd>{{dailyNetworkCount}}</dd>
-    </dl> -->
   </section>
 </template>
 <script>
 export default {
-  name: "이름 꼭 적기",
+  name: "DashboardSensor",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
@@ -120,4 +104,38 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+[data-dashboard-section="count"] {
+  display: flex;
+  background-color: #24c6f4;
+  dl {
+    flex: 1;
+    padding: 0 25px;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    &:first-child {
+      border-left: 0 none;
+    }
+  }
+  dt {
+    padding: 5px 0 0 70px;
+    line-height: 40px;
+    font-size: 20px;
+    background: no-repeat left center;
+    &.sensor {
+      background-image: url(../../assets/icon-sensor.png);
+    }
+    &.process {
+      background-image: url(../../assets/icon-process.png);
+    }
+    &.network {
+      background-image: url(../../assets/icon-network.png);
+    }
+  }
+  dd {
+    margin: 0 10xp 0 0;
+    line-height: 52px;
+    font-size: 36px;
+    text-align: right;
+    color: #fff;
+  }
+}
 </style>

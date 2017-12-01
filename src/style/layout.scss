@@ -78,4 +78,18 @@
   overflow-y: auto
 }
 
-[data-layout="Route-article"] {}
+[data-layout="Route-article"] {
+  width: 100%;
+  min-width: 800px;
+  max-width: 1600px;
+  padding: 25px 35px;
+  position: relative;
+}
+
+[data-page-title] {
+  margin-bottom: 15px;
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 18px;
+  border-bottom: 2px solid color(highlight-color)
+}
