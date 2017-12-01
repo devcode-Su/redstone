@@ -3,12 +3,14 @@
     ["env", {
       "modules": false
     }],
+    "es2015",
     "stage-2"
+
   ],
-  "plugins": ["transform-runtime", "transform-vue-jsx"],
+  "plugins": ["transform-runtime", "transform-vue-jsx", "transform-object-rest-spread"],
   "env": {
     "test": {
-      "presets": ["env", "stage-2"]
+      "presets": ["env", "es2015", "stage-2"]
     }
   }
 }

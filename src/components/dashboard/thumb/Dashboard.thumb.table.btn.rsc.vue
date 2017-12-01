@@ -3,7 +3,7 @@
     <h1>
       {{datacollection.title}}
     </h1>
-    <sort-button :categorize="categorize" @btnSortClick="sortData"></sort-button>
+    <sort-button :categorize="categorize" @periodClick="periodData"></sort-button>
     <div class="template-table-wrap">
       <ul class="background-line">
         <li></li>
@@ -38,7 +38,7 @@
   </section>
 </template>
 <script>
-  import SortButton from "../Dashboard.thumb.btn.vue";
+  import SortButton from "../Dashboard.period.btn.vue";
   export default {
     name: "Thumbtablebtnurl",
     extends: {},
@@ -73,7 +73,7 @@
       SortButton
     },
     methods: {
-      sortData(sortNum) {
+      periodData(sortNum) {
         this.num = sortNum;
       },
     },

@@ -1,24 +1,35 @@
 <template>
-  <section class="app-index">
+  <section data-index="index">
+    <loading v-if="isLoading"></loading>
     <img src="../assets/logo.png">
-    <sign-in-form idErrorMsg="아이디를 입력하세요." passwordErrorMsg="비밀번호를 입력하세요." :signFailedMsg="crendentialFail" @signCrendentials="signAttempt">
-    </sign-in-form>
+    <signin-form idErrorMsg="아이디를 입력하세요." passwordErrorMsg="비밀번호를 입력하세요." :signFailedMsg="crendentialFail" @signCrendentials="signAttempt">
+    </signin-form>
+    <el-button style="border:1px solid" @click="test">test</el-button>
   </section>
 </template>
 
 <script>
-import SignInForm from "./sign/Sign.in.form";
+import Constant from "@/constant";
+import Loading from "./Loading";
+import SigninForm from "./form/Signin.form";
 
 export default {
   name: "AppIndex",
-  components: {
-    SignInForm
-  },
+
   data() {
     return {
       posts: {},
       crendentialFail: ""
     };
+  },
+  computed: {
+    isLoading() {
+      return this.$store.state.loadingState;
+    }
+  },
+  components: {
+    Loading,
+    SigninForm
   },
   methods: {
     signAttempt(input) {
@@ -39,12 +50,23 @@ export default {
       setTimeout(() => {
         this.crendentialFail = "Bad ID or Password";
       }, 1000);
+    },
+    test() {
+      this.$store.dispatch(Constant.LOADING_STATE, false);
+      //console.log(`"isLoading change" ` + payload);
+      this.$router.push("Redstone");
     }
   },
   beforeCreate() {},
   created() {
+    // setTimeout(() => {
+    //   console.log("created : " + new Date());
+    //   this.$store.dispatch(Constant.LOADING_STATE, false);
+    //   console.log(this.isLoading);
+    // }, 3000);
   },
-  mounted() {}
+  mounted() {},
+  destroyed() {}
 };
 </script>
 

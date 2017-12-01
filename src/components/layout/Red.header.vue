@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header data-layout="Header">
     <div class="header-logo-wrap">
       <img src="../../assets/redstone.png" alt="Redstone">
       <slot></slot>

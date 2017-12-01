@@ -1,5 +1,4 @@
 // http://eslint.org/docs/user-guide/configuring
-
 module.exports = {
   root: true,
   parser: 'babel-eslint',
@@ -7,7 +6,7 @@ module.exports = {
     ecmaVersion: 6,
     ecmaFeatures: {
       experimentalObjectRestSpread: true,
-      jsx: true
+      jsx: true,
     },
     sourceType: 'module'
   },

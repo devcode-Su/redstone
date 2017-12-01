@@ -1,7 +1,7 @@
 <template>
   <section class="process-tree">
     <div class="process-tree-area">
-      <tree ref="tree" :identifier="getId" :zoomable="treeData.zoomable" :data="treeData.data" :node-text="treeData.nodeText" :margin-x="treeData.Marginx" :margin-y="treeData.Marginy" :type="treeData.type" :layout-type="treeData.layoutType" :duration="treeData.duration" class="tree" @clicked="onClick" @expand="onExpand" @retract="onRetract" />
+      tree
     </div>
     <div class="pc-info">
       <transition-group tag="ul" class="info-list-wrap" name="infolist">
@@ -27,8 +27,6 @@
   </section>
 </template>
 <script>
-import { tree } from "vued3tree";
-import data from "../../../static/data/treeexample.json";
 
 export default {
   name: "Processtree",
@@ -38,19 +36,6 @@ export default {
     return {
       selected: 0,
       data:[],
-      treeData: {
-        data: data.Graph.tree,
-        type: "tree",
-        layoutType: "euclidean",
-        duration: 750,
-        Marginx: 30,
-        Marginy: 30,
-        nodeText: "text",
-        currentNode: null,
-        zoomable: true,
-        isLoading: false,
-        events: []
-      },
       listSample: [
         {
           name: "PC 정보",
@@ -201,7 +186,7 @@ export default {
     };
   },
   components: {
-    tree
+
   },
   methods: {
     infoList(num) {

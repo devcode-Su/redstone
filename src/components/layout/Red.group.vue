@@ -31,6 +31,7 @@
 </template>
 
 <script>
+
 import Groupdepartment from "../group/Group.department";
 import GroupMembers from "../group/Group.members";
 import Templatemodal from "../template/Template.modal";
@@ -49,12 +50,16 @@ export default {
   data() {
     return {
       showModal: false,
-      groupData : [],
+      groupData: [],
       membersData: [],
       total: ""
     };
   },
+
   computed: {
+    isLoading() {
+      return this.$store.state.loadingState;
+    },
     defaultData() {
       return this.membersData.length === 0 ? false : true;
     }
@@ -67,16 +72,17 @@ export default {
   },
   // 컴포넌트 메서드 그룹
   watch: {},
-  methods: {},
+  methods: {
+    // getData() {
+    //   const apiGroupUrl = "/api/admin/group/list";
+    //   this.$http.get(apiGroupUrl).then(result => {
+    //     this.groupData = this.listToTree(result.data);
+    //   });
+    // }
+  },
   // 컴포넌트 라이프사이클 메서드 그룹
   created() {
-    const apiGroupUrl = "/api/admin/group/list";
-    this.$http.get(apiGroupUrl).then(result => {
-      this.groupData = this.listToTree(result.data);
-      //console.log("???");
-      //console.log(this.groupData)
-      //EventBus.$emit("nodeid", this.company[0]);
-    });
+    //this.isLoading ? console.log("this.$router.push(" / ")") : this.getData();
     this.$bus.$on("userview", data => {
       const apiUrl = "/api/admin/group/recurse/" + data;
       this.$http.get(apiUrl).then(result => {
@@ -88,7 +94,7 @@ export default {
     //console.log(typeof this.items);
   },
   beforeDestroy() {
-    this.$bus.$on("userview");
+    this.$bus.$off("userview");
   }
 };
 </script>

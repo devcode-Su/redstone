@@ -3,10 +3,10 @@
     <h1>
       {{resultData.title}}
     </h1>
-    <sort-button :categorize="categorize" @btnSortClick="sortData"></sort-button>
+    <dashboard-periodbtn :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
     <div class="visual">
-      <horizontal-bar-chart :chart-data="datacollection" :width="500" :height="216"></horizontal-bar-chart>
-    </div>0
+      <chart-horizontalbar :chart-data="datacollection" :width="500" :height="216"></chart-horizontalbar>
+    </div>
     <button class="icon-btn icon-wrap more-link">
       More <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
     </button>
@@ -17,10 +17,10 @@
 </template>
 <script>
 
-  import SortButton from "../Dashboard.thumb.btn.vue";
-  import HorizontalBarChart from "../../chartjs/HorizontalBar";
+import DashboardPeriodbtn from "../Dashboard.period.btn.vue";
+import ChartHorizontalbar from "../../chartjs/HorizontalBar";
   export default {
-    name: "Dashboardthumbchaurlpc",
+    name: "DashboardThumbchatUrlpc",
     extends: {},
     props: {
       title: {
@@ -45,31 +45,11 @@
       };
     },
     components: {
-      "sort-button": SortButton,
-      "horizontal-bar-chart": HorizontalBarChart
+      DashboardPeriodbtn,
+      ChartHorizontalbar
     },
     methods: {
-      // startProgress() {
-      //   this.progressInterval = window.setInterval(() => {
-      //     this.progress += 3;
-      //     if (this.progress >= this.count) {
-      //       window.clearInterval(this.progressInterval);
-      //     }
-      //   }, 100);
-      // },
-      // restartProgress(index) {
-      //   if (this.idx !== index) {
-      //     this.progress = 0;
-      //     this.transition = false;
-      //     window.clearInterval(this.progressInterval);
-      //     window.setTimeout(() => {
-      //       this.transition = true;
-      //       this.startProgress();
-      //     }, 100);
-      //     this.idx = index
-      //   }
-      // }
-      sortData(sortNum) {
+      periodData(sortNum) {
         this.fillData(sortNum);
       },
       fillData(n) {

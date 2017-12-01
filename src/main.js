@@ -5,11 +5,11 @@ import Vuex from "vuex";
 import store from "./store";
 import router from './router';
 import axios from 'axios';
+import VueMasonry from "vue-masonry-css";
 import ElementUI from 'element-ui';
 import elementLocale from 'element-ui/lib/locale/lang/en';
 import VueMaterial from 'vue-material';
 import materialIcons from 'material-design-icons-iconfont/dist/material-design-icons.css';
-
 
 import 'babel-polyfill';
 import 'es6-promise/auto';
@@ -25,8 +25,8 @@ import App from './App';
 
 const EventBus = new Vue();
 Object.defineProperties(Vue.prototype, {
-  $bus : {
-    get : function () {
+  $bus: {
+    get: function () {
       return EventBus
     }
   }
@@ -60,6 +60,7 @@ Vue.filter('thumbSnippet', value => {
 
 // vue use
 Vue.use(Vuex);
+Vue.use(VueMasonry);
 Vue.use(VueMaterial);
 
 Vue.material.registerTheme({

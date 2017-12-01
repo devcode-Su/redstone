@@ -30,6 +30,9 @@ export default {
     };
   },
   computed: {
+    isLoading() {
+      return this.$store.state.loadingState;
+    },
     defaultData() {
       return this.company.length === 0 ? false : true;
     }
@@ -39,7 +42,7 @@ export default {
   },
   watch: {},
   methods: {
-    loadData(){
+    getData() {
       const apiUrl = "/api/admin/group/list";
       this.$http.get(apiUrl).then(result => {
         this.company = this.listToTree(result.data);
@@ -52,11 +55,11 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.loadData();
-//    this.$bus.$on("resetGroup", () => {
-//      this.loadData()
-//      console.log("hahaha")
-//    })
+    //this.loadData();
+    //    this.$bus.$on("resetGroup", () => {
+    //      this.loadData()
+    //      console.log("hahaha")
+    //    })
   },
   beforeMounted() {},
   mounted() {},

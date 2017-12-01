@@ -1,7 +1,7 @@
 <template>
-  <section class="dashboard-thumb">
+  <section data-thumbcomp="thumb" class="dashboard-thumb">
     <h1>
-      {{resultData.title}}
+      {{propData.title}}
     </h1>
     <dashboard-periodbtn :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
     <div class="visual">
@@ -11,24 +11,26 @@
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
     </button>
-    <button class="icon-wrap icon-btn thumb-remove">
+    <button class="icon-wrap icon-btn" @click.stop="itemRemove(index)">
       <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
     </button>
   </section>
 </template>
 <script>
+import Constant from "@/constant";
 import DashboardPeriodbtn from "../Dashboard.period.btn.vue";
 import ChartHorizontalbar from "../../chartjs/HorizontalBar";
 export default {
-  name: "DashboardThumbchartRscpc",
+  name: "ThumbComponentchart",
   extends: {},
   props: {
-    title: {
-      type: String
+    propData: {
+      type: Object,
+      default() {
+        return { message: "do not" };
+      }
     },
-    thumbData: {
-      type: Array | Object
-    }
+    index: Number
   },
   data() {
     return {
@@ -70,8 +72,8 @@ export default {
     //     this.idx = index
     //   }
     // }
-    periodData(sortNum) {
-      this.fillData(sortNum);
+    periodData(priodNum) {
+      this.fillData(priodNum);
     },
     fillData(n) {
       const insertData = this.chartData;
@@ -81,26 +83,31 @@ export default {
         datasets: [
           {
             label: "검출 건수",
-            backgroundColor: "#fdbbbb",
+            backgroundColor: "#b3d8ff",
             borderWidth: 1,
             data: insertData[n][0],
-            fill: true
+            fill: false
           }
         ]
       };
+    },
+    itemRemove(comNum) {
+      this.$store.dispatch(Constant.DELETE_THUMBLIST, { index: comNum });
     }
     //      getRandomInt() {
     //        return Math.floor(Math.random() * (100 - 5 + 1)) + 5;
     //      }
   },
   created() {
-    const url = "/dashboard/?method=get&resource=rscpc";
-    this.$http.get(url).then(result => {
-      this.resultData = result.data;
-      this.chartData = this.getValueArr(result.data, this.arr);
-      this.fillData();
-    });
+    // const url = "/dashboard/?method=get&resource=badfilepc";
+    // this.$http.get(url).then(result => {
+    //   this.resultData = result.data;
+    //   console.log(result);
+    //   this.chartData = this.getValueArr(result.data, this.arr);
+    //   this.fillData();
+    // });
     //this.fillData();
+    console.log(this.propData);
   },
   computed: {},
   mounted() {},

@@ -3,42 +3,41 @@
     <h1 class="page-title">
       Dashboard 기본정보
     </h1>
-    <section class="basic-pannel section-wrap">
+    <!-- <section class="basic-pannel section-wrap">
       <dl class="pannel-content first">
         <dt class="sensor">센서 현황</dt>
-        <dd>{{this.sensorCount}} /
-          <small>{{this.sensorTotal}}
+        <dd>{{sensorCount}} /
+          <small>{{sensorTotal}}
           </small>
         </dd>
       </dl>
       <dl class="pannel-content">
         <dt class="process">일간 프로세스탐지</dt>
-        <dd>{{this.dailyProcessCount}}</dd>
+        <dd>{{dailyProcessCount}}</dd>
       </dl>
       <dl class="pannel-content">
         <dt class="network">일간 네트워크 탐지</dt>
-        <dd>{{this.dailyNetworkCount}}</dd>
+        <dd>{{dailyNetworkCount}}</dd>
       </dl>
     </section>
     <section class="section-wrap">
-      <dashboard-chart></dashboard-chart>
-    </section>
-    <section class="section-wrap">
-      <dashboardlogtable></dashboardlogtable>
-    </section>
-    <dashboardthumblist class="dashboard-list"></dashboardthumblist>
+      <dashboard-sensorchart></dashboard-sensorchart>
+    </section> -->
+    <!-- <section class="section-wrap">
+      <dashboard-detectiontable></dashboard-detectiontable>
+    </section> -->
+    <dashboard-thumbcomponents class="dashboard-componets"></dashboard-thumbcomponents>
     <!--<button class="icon-btn icon-wrap dashboard-setbtn" type="button" @click="showModal = true">-->
-      <!--<i class="fa fa-cog fa-lg fa-spin" aria-hidden="true"></i>-->
+    <!--<i class="fa fa-cog fa-lg fa-spin" aria-hidden="true"></i>-->
     <!--</button>-->
     <!--<templatemodal v-if="showModal" :target="'user-custom'" @close="showModal = false" :title="'대시보드 설정'" :compSelect="'dashboard-thumb'">-->
     <!--</templatemodal>-->
   </article>
 </template>
 <script>
-//  import draggable from "vuedraggable";
-import DashboardChart from "./Dashboard.chart";
-import Dashboardthumblist from "./Dashboard.thumb.list.vue";
-import Dashboardlogtable from "./Dashboardlogtable.vue"
+import DashboardSensorchart from "./Dashboard.sensor.chart";
+import DashboardThumbcomponents from "./Dashboard.thumb.components";
+import DashboardDetectiontable from "./Dashboard.detection.table";
 import Templatemodal from "../template/Template.modal";
 export default {
   name: "Dashboard",
@@ -50,99 +49,99 @@ export default {
     return {
       showModal: false,
       //userSet: [],
-      sensor :{
+      sensor: {
         count: "",
-        total : ""
+        total: ""
       },
-      dailyProcess : {},
-      dailyNetwork : {},
-      resourceList:[]
+      dailyProcess: {},
+      dailyNetwork: {},
+      resourceList: []
     };
   },
   computed: {
-    sensorCount(){
-      return this.sensor.count
+    sensorCount() {
+      return this.sensor.count;
     },
-    sensorTotal(){
-      return this.sensor.total
+    sensorTotal() {
+      return this.sensor.total;
     },
-    dailyProcessCount(){
-      return this.dailyProcess
+    dailyProcessCount() {
+      return this.dailyProcess;
     },
-    dailyNetworkCount(){
-      return this.dailyNetwork
+    dailyNetworkCount() {
+      return this.dailyNetwork;
     }
   },
   components: {
-    Templatemodal,
-    DashboardChart,
-    //draggable,
-    Dashboardlogtable,
-    Dashboardthumblist
+    DashboardSensorchart,
+    DashboardDetectiontable,
+    DashboardThumbcomponents,
+    Templatemodal
   },
   watch: {},
   methods: {
-    getSensor(){
+    getSensor() {
       const url = "/dashboard/?method=get&resource=sensor";
       this.$http.get(url).then(result => {
-        this.sensor.count =  result.data.data.count;
-        this.sensor.total = result.data.data.total
-      })
+        this.sensor.count = result.data.data.count;
+        this.sensor.total = result.data.data.total;
+      });
     },
-    getDailyProcess(){
+    getDailyProcess() {
       const url = "/dashboard/?method=get&resource=process";
       this.$http.get(url).then(result => {
-        this.dailyProcess = result.data.data.count
-      })
+        this.dailyProcess = result.data.data.count;
+      });
     },
-    getDailyNetwork(){
+    getDailyNetwork() {
       const url = "/dashboard/?method=get&resource=network";
       this.$http.get(url).then(result => {
-        this.dailyNetwork = result.data.data.count
-      })
+        this.dailyNetwork = result.data.data.count;
+      });
     },
-    getResourceList(){
+    getResourceList() {
       const url = "/dashboard/?method=define";
       this.$http.get(url).then(result => {
-        console.log(result)
-      })
-    },
+        console.log(result);
+      });
+    }
   },
   beforeCreate() {},
   created() {
-    this.getSensor();
-    this.getDailyProcess();
-    this.getDailyNetwork();
-//    this.getDailyNetwork();
-      //this.getResourceList();
-//    const apiUrl = "/static/data/userset.json";
-//    let promise = [];
-//    this.$http.get(apiUrl).then(result => {
-//      result.data.forEach(item => {
-//        if (item.hasOwnProperty("url")) {
-//          promise.push(
-//            this.$http.get(item.url).then(r => {
-//              item.data = r.data;
-//            })
-//          );
-//        }
-//      });
-//      Promise.all(promise)
-//        .then(() => {
-//          this.defaultView = result.data;
-//          localStorage.setItem("dashboard-data", JSON.stringify(result.data));
-//        })
-//        .then(() => {
-//          this.defaultViews;
-//        });
-//    });
+    this.$bus.$emit("thumblist", () => {
+      console.log("버스");
+    });
+    // this.getSensor();
+    // this.getDailyProcess();
+    // this.getDailyNetwork();
+    //    this.getDailyNetwork();
+    //this.getResourceList();
+    //    const apiUrl = "/static/data/userset.json";
+    //    let promise = [];
+    //    this.$http.get(apiUrl).then(result => {
+    //      result.data.forEach(item => {
+    //        if (item.hasOwnProperty("url")) {
+    //          promise.push(
+    //            this.$http.get(item.url).then(r => {
+    //              item.data = r.data;
+    //            })
+    //          );
+    //        }
+    //      });
+    //      Promise.all(promise)
+    //        .then(() => {
+    //          this.defaultView = result.data;
+    //          localStorage.setItem("dashboard-data", JSON.stringify(result.data));
+    //        })
+    //        .then(() => {
+    //          this.defaultViews;
+    //        });
+    //    });
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {
-
-  },
+  updated() {},
   actvated() {},
   deactivated() {},
   beforeDestroy() {},
@@ -181,7 +180,7 @@ export default {
     padding: 5px;
   }
   .basic-pannel {
-    margin-top:30px;
+    margin-top: 30px;
     display: flex;
     background-color: #24c6f4;
     @include defaultShadow;
@@ -229,10 +228,10 @@ export default {
   .template-table-modal {
     @extend .chart-wrap;
   }
-  .dashboard-setbtn{
-    position:absolute;
-    top:30px;
-    right:30px;
+  .dashboard-setbtn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
   }
 }
 

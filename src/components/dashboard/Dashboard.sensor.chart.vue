@@ -1,22 +1,22 @@
 <template>
   <div class="chart-wrap">
     <div class="chart-header">
-      <h2>
-        센서정보 수집 히스토그램
-      </h2>
-      <sort-button :categorize="categorize" @btnSortClick="sortData"></sort-button>
+      <h1>
+        {{title}}
+      </h1>
+      <dashboard-periodbtn :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
     </div>
     <line-chart :chart-data="datacollection" ref="line"></line-chart>
-    <!--<button @click="fillData()">Randomize</button>-->
   </div>
 </template>
 <script>
   //import moment from "moment";
-  import LineChart from "../chartjs/LineChart";
-  import SortButton from "./Dashboard.thumb.btn.vue";
+  import DashboardPeriodbtn from "./Dashboard.period.btn.vue";
+  import ChartLine from "../chartjs/Line";
+
 
   export default {
-    name: "",
+    name: "DashboardSensorchart",
     extends: {},
     props: {},
     data() {
@@ -34,12 +34,12 @@
       };
     },
     components: {
-      LineChart,
-      SortButton
+      DashboardPeriodbtn,
+      ChartLine
     },
     computed: {},
     methods: {
-      sortData(sortNum) {
+      periodData(sortNum) {
         this.fillData(sortNum);
       },
       fillData(n) {

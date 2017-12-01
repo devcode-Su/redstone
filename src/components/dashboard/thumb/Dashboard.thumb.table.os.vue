@@ -38,7 +38,7 @@
   </section>
 </template>
 <script>
-  import SortButton from "../Dashboard.thumb.btn.vue";
+  import SortButton from "../Dashboard.period.btn.vue";
   import Templatebaranimation from "../../template/Template.bar.animation.vue"
   export default {
     name: "Thumbtableos",

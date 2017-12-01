@@ -1,3 +1,9 @@
 export default {
-  PROCESS_SEARCH : "processSearch"
+
+  LOADING_STATE: "loadingState",
+  FETCH_THUMBLIST: "fetchThumbList",
+  UPDATE_THUMBLIST: "updateThumbList",
+  DELETE_THUMBLIST: "deleteThumbList",
+  FETCH_THUMBDATA: "fetchThumbData",
+  PROCESS_SEARCH: "processSearch"
 }

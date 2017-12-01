@@ -46,7 +46,7 @@
   </section>
 </template>
 <script>
-  import SortButton from "../Dashboard.thumb.btn.vue";
+  import SortButton from "../Dashboard.thumb.period.btn";
   export default {
     name: "",
     extends: {},

@@ -1,5 +1,5 @@
 <template>
-  <section class="template-table-wrap dashboard-table">
+  <section class="template-table-wrap dashboard-detection-table">
     <div class="template-table dynamic-row">
       <h2>{{data.title}}</h2>
       <div class="table-head-wrap">
@@ -7,7 +7,7 @@
           <thead>
           <tr>
             <th v-for="(th, i) in field" :key="th.id" :class="['col'+i,{ 'col-end' : field.length-1 === i }]" :ref="'checkedTh'"><span>{{th}}</span></th>
-          </tr>
+,          </tr>
           </thead>
         </table>
       </div>
