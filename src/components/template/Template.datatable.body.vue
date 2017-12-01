@@ -4,7 +4,7 @@
       <table>
         <thead>
           <tr>
-            <th v-for="(th, k, i) in tableField" :key="th.id" :class="'col-'+k">{{th}}</th>
+            <th v-for="(th, k, i) in fields" :key="th.id" :class="['col-'+k, {'col-end' : fields.length-1 === i }]" @click.stop="reOrder(key, i)">{{th}}</th>
           </tr>
         </thead>
       </table>
@@ -13,7 +13,7 @@
       <table>
         <tbody>
           <tr data-tbody="row" v-for="(tr, k, i) in propData.data" :key="tr.id" @click.stop="rowClick(tr)">
-            <td data-tbody="column" v-for="(td, j) in fieldKeys" :key="td.id" :class="'col-'+td">
+            <td data-tbody="column" v-for="(td, j) in fieldKeys" :key="td.id" :class="['col-'+td,{'col-end' : tableField.length-1 === i }]">
               {{ tr[td] }}
             </td>
           </tr>
@@ -29,7 +29,7 @@ export default {
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
-    tableField: {
+    fields: {
       type: Object,
       default() {
         return { message: "wait receive data" };
@@ -40,12 +40,15 @@ export default {
       default() {
         return { message: "wait receive data" };
       }
+    },
+    reorder: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      fieldKeys: [],
-      bodyData: []
+      fieldKeys: []
     };
   },
   computed: {
@@ -55,9 +58,9 @@ export default {
   },
   components: {},
   watch: {
-    propData: function(data) {
+    propData: data => {
       if (data) {
-        this.fieldKeys = Object.keys(this.tableField);
+        this.fieldKeys = Object.keys(this.fields);
         return data;
       }
     }
@@ -82,49 +85,4 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-[data-table] {
-  table {
-    width: 100%;
-    table-layout: fixed;
-  }
-  thead {
-    color: #fff;
-    background-color: color(default);
-    border-bottom: 1px solid #d8dce5;
-  }
-  th,
-  td {
-    padding: 0 10px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  th {
-    height: 32px;
-    line-height: 32px;
-  }
-  td {
-    height: 28px;
-    line-height: 28px;
-  }
-  [data-tbody="row"] {
-    border-bottom: 1px solid #e6ebf5;
-    &:hover {
-      background-color: #f5f7fa;
-    }
-  }
-  .col-count,
-  .col-score {
-    width: 75px;
-    text-align: center;
-  }
-  .col-time {
-    width: 170px;
-  }
-  .col-ip {
-    width: 115px;
-  }
-  [data-tbody="column"] {
-  }
-}
 </style>

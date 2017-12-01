@@ -3,13 +3,7 @@
     <el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
       <fieldset>
         <legend class="pannel small">
-          <span v-if="form.dept_code === 1">{{searchNavi}}에서 검색</span>
-          <span v-else>
-            {{searchNavi}}에서 검색
-            <button class="icon-btn icon-wrap" style="display:inline-block; padding:0" @click.prevent="searchArea">
-              <i class="fa fa-times-circle"></i>
-            </button>
-          </span>
+          
         </legend>
         <div class="form-align-box">
           <div class="form-item-wrap">

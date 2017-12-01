@@ -6,14 +6,14 @@
     </div>
     <div class="header-nav-wrap">
       <p>{{username}}</p>
-      <button v-if="false" class="icon-btn">
-        <i class="fa fa-question-circle default" aria-hidden="true"></i>
+      <button data-icon v-if="false">
+        <i class="fa fa-question-circle fa-24" aria-hidden="true"></i>
       </button>
-      <button class="icon-btn" @click="fullScreen">
-        <i class="fa fa-arrows-alt default" aria-hidden="true"></i>
+      <button data-icon @click="fullScreen">
+        <i class="fa fa-arrows-alt fa-24" aria-hidden="true"></i>
       </button>
-      <button class="icon-btn" @click="signOut">
-        <i class="fa fa-sign-out default" aria-hidden="true"></i>
+      <button data-icon @click="signOut">
+        <i class="fa fa-sign-out fa-24" aria-hidden="true"></i>
       </button>
     </div>
   </header>

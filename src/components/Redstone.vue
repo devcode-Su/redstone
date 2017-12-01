@@ -1,17 +1,17 @@
 <template>
   <section data-index="Redstone" :class="{'ready' : !isLoading}">
     <red-header :username="userdata.name">
-      <button class="group-toggle tooltip-wrap icon-btn icon-btn-nav" :class="{ on : selected}" @click="btnToggle">
-        <i class="fa fa-navicon default" aria-hidden="true"></i>
-        <span class="tooltip">조직도</span>
+      <button data-tooltip-wrap data-icon="nav" class="group-toggle" :class="{ on : selected}" @click="btnToggle">
+        <i class="fa fa-navicon fa-24" aria-hidden="true"></i>
+        <span data-tooltip="group">조직도</span>
       </button>
     </red-header>
     <section data-layout="container">
       <aside data-layout="Aside" :class="{'active' : selected }">
         <red-navigation @selectedBoolean="selectedBoolean"></red-navigation>
-        <red-group>
-          <button class="group-toggle icon-btn icon-btn-nav" :class="{ on : selected}" @click="btnToggle">
-            <i class="el-icon-close default" aria-hidden="true"></i>
+        <red-group :selected="selected">
+          <button data-icon class="group-toggle" :class="{ on : selected}" @click="btnToggle">
+            <i class="el-icon-close fa-24" aria-hidden="true"></i>
           </button>
         </red-group>
       </aside>
@@ -71,6 +71,8 @@ export default {
       // });
     },
     btnToggle() {
+      console.log(this.selected);
+      console.log(this.locationCheck());
       this.locationCheck() !== undefined
         ? (this.selected = this.locationCheck())
         : (this.selected = !this.selected);
@@ -95,6 +97,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.group-toggle {
+  position: absolute;
+}
 </style>
 

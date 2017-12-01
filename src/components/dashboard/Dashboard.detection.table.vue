@@ -1,27 +1,35 @@
 <template>
-  <section class="template-table-wrap dashboard-detection-table">
+  <section class="dashboard-detection-table">
     <div class="template-table dynamic-row">
       <h2>{{data.title}}</h2>
-      <div class="table-head-wrap">
+      <div data-thead="thead">
         <table>
           <thead>
-          <tr>
-            <th v-for="(th, i) in field" :key="th.id" :class="['col'+i,{ 'col-end' : field.length-1 === i }]" :ref="'checkedTh'"><span>{{th}}</span></th>
-,          </tr>
+            <tr>
+              <th v-for="(th, i) in fields" :key="th.id" :class="['col-'+k,{ 'col-end' : fields.length-1 === i }]">
+                <span>{{th}}</span>
+              </th>
+              , </tr>
           </thead>
         </table>
       </div>
-      <div class="table-body-wrap">
+      <div data-tbody="tbody">
         <table>
           <tbody>
-          <tr v-for="(row,i) in rowData" :key="i.id" @click="moveRow(i)">
-            <td v-for="(col, k, idx) in row" :key="k"  :class="['col'+idx,{ 'col-end' : field.length-1 === idx }]">
-              <span>{{col}}</span>
-              <span v-if="idx === 'danger'" :class="[{'normal' : col >= 0 && col <= 50 },{'alpha' : col > 50 && col <= 70 },{'bravo' : col > 70 && col <= 80 },{'charile' : col > 80 && col <= 90 },{'delta' : col > 90 && col <= 100 }]">
-                <i class="fa fa-excalmation-triangle fa-lg"></i>
-              </span>
-            </td>
-          </tr>
+            <tr data-tbody="row" v-for="(row,i) in rowData" :key="i.id" @click="moveRow(i)">
+              <td data-tbody="column" v-for="(td, j) in fieldKeys" :key="td.id" :class="['col-'+td,{'col-end' : fieldKeys.length-1 === i }]">
+                <span>{{ tr[td] }}</span>
+                <span data-score v-if="td === 'score'" :class="[{'normal' : tr[td] >= 0 && tr[td] <= 50 },{'alpha' :tr[td] > 50 && tr[td] <= 70 },{'bravo' : tr[td] > 70 && tr[td] <= 80 },{'charile' : tr[td] > 80 && tr[td] <= 90 },{'delta' : tr[td] > 90 && tr[td] <= 100 }]">
+                  <i class="fa fa-excalmation-triangle fa-lg"></i>
+                </span>
+              </td>
+              <!-- <td data-tbody="column" v-for="(col, k, idx) in row" :key="k" :class="['col'+idx,{ 'col-end' : field.length-1 === idx }]">
+                <span>{{col}}</span>
+                <span data-count v-if="idx === 'danger'" :class="[{'normal' : col >= 0 && col <= 50 },{'alpha' : col > 50 && col <= 70 },{'bravo' : col > 70 && col <= 80 },{'charile' : col > 80 && col <= 90 },{'delta' : col > 90 && col <= 100 }]">
+                  <i class="fa fa-excalmation-triangle fa-lg"></i>
+                </span>
+              </td> -->
+            </tr>
           </tbody>
         </table>
       </div>
@@ -29,77 +37,81 @@
   </section>
 </template>
 <script>
-
-  export default {
-    name: 'Dashboardlogtable',
-    extends:{},
-    props:{ //알파벳 순으로 정렬할 것.
-      //        propData: {
-//          type: Array | Object
-//        }
-    },
-    data(){
-      return{
-        showModal : false,
-        field : [],
-        rowData:[],
-        data : [],
-        rowKey:[
-          "EventTime", "Type", "username", "userdept", "userip", "Score"
-        ]
+export default {
+  name: "Dashboardlogtable",
+  extends: {},
+  props: {
+    //알파벳 순으로 정렬할 것.
+    //        propData: {
+    //          type: Array | Object
+    //        }
+  },
+  data() {
+    return {
+      showModal: false,
+      fields: [],
+      rowData: [],
+      receiveData: [],
+      fieldKeys: [],
+      rowKey: ["EventTime", "Type", "username", "userdept", "userip", "Score"]
+    };
+  },
+  computed: {},
+  components: {},
+  watch: {
+    receiveData: data => {
+      if (data) {
+        this.fieldKeys = Object.keys(this.tableField);
+        return data;
       }
+    }
+  },
+  methods: {
+    moveRow() {
+      console.log("moverow");
     },
-    computed:{},
-    components:{},
-    watch:{},
-    methods:{
-      moveRow() {
-        console.log("moverow");
-      },
-      dataReceive(){
-        const url = "/dashboard/?method=get&resource=detect";
-        this.$http.get(url).then(result => {
-          console.log(result);
-          this.field = result.data.data.fields;
-          this.rowData = this.getValueEx(result.data.data.columns, this.rowKey);
-          this.data = result.data
-        })
-      }
-    },
-    beforeCreate(){},
-    created(){
-      this.dataReceive();
-    },
-    beforeMounted(){},
-    mounted(){},
-    beforeUpdate(){},
-    updated(){},
-    actvated(){},
-    deactivated(){},
-    beforeDestroy(){},
-    destroyed(){}
-  }
+    dataReceive() {
+      const url = "/dashboard/?method=get&resource=detect";
+      this.$http.get(url).then(result => {
+        console.log(result);
+        this.fields = result.data.data.fields;
+        this.data = result.data;
+      });
+    }
+  },
+  beforeCreate() {},
+  created() {
+    this.dataReceive();
+  },
+  beforeMounted() {},
+  mounted() {},
+  beforeUpdate() {},
+  updated() {},
+  actvated() {},
+  deactivated() {},
+  beforeDestroy() {},
+  destroyed() {}
+};
 </script>
 <style lang='scss' scoped>
-  @import '~styles/variables';
-.template-table-wrap{
+@import "~styles/variables";
+.template-table-wrap {
   box-shadow: 0px 2px 5px rgba(25, 25, 25, 0.27);
-  h2{
-    padding:10px;
-    margin-bottom:0;
+  h2 {
+    padding: 10px;
+    margin-bottom: 0;
   }
-  &.dashboard-table{
-    .col0{
-      width:200px;
+  &.dashboard-table {
+    .col0 {
+      width: 200px;
     }
-    .col1{
-      width:150px;
+    .col1 {
+      width: 150px;
     }
-    .col2{
-      width:150px;
+    .col2 {
+      width: 150px;
     }
-    .col3{
-
+    .col3 {
     }
   }
 }

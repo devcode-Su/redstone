@@ -1,9 +1,12 @@
 <template>
   <transition name="modal">
-    <section class="template-modal">
-      <div class="template-modal-container" :class="target">
-        <component :is="compSelect" :title="title"></component>
-        <button class="template-modal-close icon-btn" @click="$emit('close')">
+    <section data-modal>
+      <div data-modal-container :class="target">
+        <h1 data-modal-title>
+          {{title}}
+        </h1>
+        <component :is="compSelect"></component>
+        <button data-icon data-modal-close @click="$emit('close')">
           <i class="el-icon-close" aria-hidden="true"></i>
         </button>
       </div>
@@ -60,7 +63,7 @@ export default {
 <style lang='scss' scoped>
 @import "~styles/variables";
 
-.template-modal {
+[data-modal] {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,33 +75,38 @@ export default {
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.5);
   transition: opacity 0.3s ease;
-  &-container {
-    position: relative;
-    background-color: #fff;
-  }
-  &-close {
-    position: absolute;
-  }
-  @at-root {
-    &-container {
-      &.user-custom {
-        .template-modal-close {
-          width: 44px;
-          height: 72px;
-          top: 0;
-          right: 15px;
-          font-size: 32px;
-          color: #fff;
-        }
-      }
-    }
+}
+[data-modal-container] {
+  position: relative;
+  width: 800px;
+  background-color: #fff;
+}
+[data-modal-title] {
+  height: 72px;
+  line-height: 72px;
+  margin: 0;
+  padding: 0 15px;
+  font-size: 28px;
+  font-weight: 500;
+  color: #fff;
+  background-color: color(default);
+}
+[data-modal-close] {
+  position: absolute;
+  top: 0;
+  right: 15px;
+  width: 44px;
+  height: 72px;
+  font-size: 32px;
+  color: #fff;
+  i {
+    color: #fff;
   }
 }
 
 .modal-enter {
   opacity: 0;
 }
-
 .modal-leave-active {
   opacity: 0;
 }

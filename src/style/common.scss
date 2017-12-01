@@ -1,0 +1,170 @@
+// option
+//
+@keyframes setIcon {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+[data-icon] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  &.on i,
+  &:hover i,
+  &:active i {
+    color: color(highlight-color);
+  }
+  i {
+    color: color(default);
+    &.fa-24 {
+      font-size: 24px;
+    }
+    &.dot-all {
+      color: #3a49d8
+    }
+    &.dot-now {
+      color: #0072ff;
+    }
+    &.dot-not {
+      color: #5d5d5d
+    }
+  }
+}
+
+[data-icon="nav"] i {
+  color: color(icon-color);
+}
+
+[data-icon="set"].spin,
+[data-icon="set"]:hover {
+  transform-origin: 50% 50%;
+  animation: setIcon 3s linear
+}
+
+[data-tooltip-wrap] {
+  &:hover {
+    [data-tooltip] {
+      z-index: 3;
+      opacity: 1
+    }
+    [data-tooltip="group"] {
+      transform: translate(11px, 40px) scale(1, 1);
+    }
+    [data-tooltip="category"] {
+      transform: translate(7px, 48px) scale(1, 1);
+    }
+  }
+}
+
+[data-tooltip] {
+  position: absolute;
+  z-index: -1;
+  min-width: 60px;
+  line-height: normal;
+  padding: 3px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, .55);
+  border-radius: 3px;
+  opacity: 0;
+  transform: translateX(5px) scale(0, 0);
+  transition: all .3s ease
+}
+
+// data table
+[data-table] {
+  background-color: #fff;
+  thead {
+    color: #fff;
+    background-color: color(default);
+    border-bottom: 1px solid #d8dce5;
+  }
+  th,
+  td {
+    padding: 0 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  th {
+    height: 36px;
+    line-height: 36px;
+  }
+  td {
+    height: 28px;
+    line-height: 28px;
+  }
+  [data-tbody="tbody"] {
+    overflow-y: auto;
+    &.members {
+      height: 355px;
+    }
+  }
+  [data-tbody="row"] {
+    border-bottom: 1px solid #e6ebf5;
+    &:hover {
+      background-color: #f5f7fa;
+    }
+  }
+  .col-count,
+  .col-score {
+    width: 75px;
+    text-align: center;
+  }
+  .col-time {
+    width: 170px;
+  }
+  .col-ip {
+    width: 115px;
+  }
+  [data-tbody="column"] {}
+}
+
+// 그룹관리
+[data-management] {
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 35px;
+}
+
+[data-management-item] {
+  width: 355px;
+  [data-icon] {
+    justify-content: flex-start;
+    i {
+      margin-right: 15px;
+    }
+  }
+  [data-component] {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  [data-component="tree"] {
+    height: 564px;
+  }
+  [data-component="member"] {
+    [data-tbody="tbody"] {
+      height: 488px;
+    }
+  }
+  [data-component="tree-top"] {
+    height: 162px;
+  }
+  [data-component="member-bottom"] {
+    margin-top: 15px;
+    [data-tbody="tbody"] {
+      height: 311px;
+    }
+  }
+}
+
+[data-btn="confirm"] {
+  justify-content: flex-end;
+  border-top: 1px solid #ccc;
+  .md-button {
+    color: #fff;
+    background-color: #3265A4;
+  }
+}

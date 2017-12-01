@@ -1,8 +1,5 @@
 <template>
-  <section class="user-set">
-    <h1 class="user-set-title">
-      {{title}}
-    </h1>
+  <section class="management">
     <groupdepartmentset v-if="selected"></groupdepartmentset>
     <groupmemberset v-else></groupmemberset>
     <button class="icon-btn management-toggle" @click.stop="changeSec">
@@ -30,20 +27,20 @@ export default {
     };
   },
   computed: {
-//    defaultStorage() {
-//      if (localStorage.getItem("members-now")) {
-//        if (localStorage.getItem("members-now")) {
-//          return;
-//        } else {
-//          localStorage.setItem("members-change", "[]");
-//        }
-//      } else {
-//        localStorage.setItem("members-now", "[]");
-//        if (!localStorage.getItem("members-change")) {
-//          localStorage.setItem("members-change", "[]");
-//        }
-//      }
-//    }
+    //    defaultStorage() {
+    //      if (localStorage.getItem("members-now")) {
+    //        if (localStorage.getItem("members-now")) {
+    //          return;
+    //        } else {
+    //          localStorage.setItem("members-change", "[]");
+    //        }
+    //      } else {
+    //        localStorage.setItem("members-now", "[]");
+    //        if (!localStorage.getItem("members-change")) {
+    //          localStorage.setItem("members-change", "[]");
+    //        }
+    //      }
+    //    }
   },
   components: {
     Groupdepartmentset,
@@ -57,8 +54,7 @@ export default {
     }
   },
   beforeCreate() {},
-  created() {
-  },
+  created() {},
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},

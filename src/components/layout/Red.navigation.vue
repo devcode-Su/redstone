@@ -1,13 +1,13 @@
 <template>
-  <nav class="aside-navigation">
+  <nav data-layout="Navigation">
     <ul>
-      <li class="nav-list icon-btn tooltip-wrap-nav" v-for="(category,i) in nav" :key="category.i" :class="{on : i === selectNum}" @click="categorySelect(i)">
-        <span class="icon-wrap icon-btn-nav">
+      <li data-nav-list="category" data-tooltip-wrap v-for="(category,i) in nav" :key="category.i" :class="{on : i === selectNum}" @click="categorySelect(i)">
+        <span data-icon="nav">
           <i class="material-icons" aria-hidden="true">{{category.icon}}</i>
-          <span class="tooltip">{{category.title}}</span>
+          <span data-tooltip="category">{{category.title}}</span>
         </span>
-        <ul class="nav-page">
-          <li class="page-list" v-for="(page,i) in category.page" :key="page.i">
+        <ul data-nav-page>
+          <li data-nav-page-list v-for="(page,i) in category.page" :key="page.i">
             <router-link :to="'/Redstone/'+page.path">
               {{page.title}}
             </router-link>
@@ -75,82 +75,145 @@ export default {
 <style lang='scss' scoped>
 @import "~styles/variables";
 
-.aside-navigation {
-  width: 45px;
-  min-width: 45px;
-  position:relative;
-  z-index:2;
-  background-color: color(default);
-  ul {
-    margin: 0;
-    padding: 0;
-  }
-  .nav-list {
-    height: 50px;
-    position: relative;
-  }
-  .nav-page {
-    width: 0;
-    position: absolute;
-    top: 5px;
-    left: 50px;
+[data-nav-list="category"] {
+  position: relative;
+  height: 50px;
+  &:hover [data-icon] {
+    top: -7px;
+    right: -7px;
+    bottom: -7px;
     z-index: 5;
-    opacity: 0;
-    overflow: hidden;
-    @include transition(width, 0.3s);
+    border: 1px solid #1a222f;
+    box-shadow: 2px 3px rgba(26, 34, 47, 0.4);
   }
-  .page-list {
-    display: block;
-    margin: 0 0 5px 15px;
-    padding: 0;
-    background-color: rgba(26, 34, 47, 0.6);
-    border-radius: 2px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-      0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    a {
-      display: block;
-      width: 100%;
-      height: 32px;
-      min-height: 32px;
-      line-height: 32px;
-      padding: 0;
-      font-size: 14px;
-      text-align: center;
-      color: color(white);
-    }
-    &.on,
-    &:hover {
-      background-color: rgba(26, 34, 47, 0.9);
-    }
-  }
-
-  @at-root {
-    .nav-list {
-      > span {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background-color: color(default);
-        @include transition(all, 0.15s);
-      }
-
-      &:hover {
-        > span {
-          top: -7px;
-          right: -7px;
-          bottom: -7px;
-          z-index: 1;
-          border: 1px solid #1a222f;
-          box-shadow: 2px 3px rgba(26, 34, 47, 0.4);
-        }
-        ul {
-          width: 150px;
-          opacity: 1;
-        }
-      }
+  &:hover {
+    ul {
+      width: 150px;
+      opacity: 1;
     }
   }
 }
+[data-icon] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: color(default);
+  transition: all 0.15s ease;
+}
+
+[data-nav-page] {
+  width: 0;
+  position: absolute;
+  top: 5px;
+  left: 50px;
+  z-index: 5;
+  opacity: 0;
+  overflow: hidden;
+  transition: width, 0.3s ease;
+}
+
+[data-nav-page-list] {
+  display: block;
+  margin: 0 0 5px 15px;
+  padding: 0;
+  background-color: rgba(26, 34, 47, 0.6);
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  a {
+    display: block;
+    width: 100%;
+    height: 32px;
+    min-height: 32px;
+    line-height: 32px;
+    padding: 0;
+    font-size: 14px;
+    text-align: center;
+    color: color(white);
+  }
+  &.on,
+  &:hover {
+    background-color: rgba(26, 34, 47, 0.9);
+  }
+}
+// .aside-navigation {
+//   width: 45px;
+//   min-width: 45px;
+//   position: relative;
+//   z-index: 2;
+//   background-color: color(default);
+//   ul {
+//     margin: 0;
+//     padding: 0;
+//   }
+//   .nav-list {
+//     height: 50px;
+//     position: relative;
+//   }
+//   .nav-page {
+//     width: 0;
+//     position: absolute;
+//     top: 5px;
+//     left: 50px;
+//     z-index: 5;
+//     opacity: 0;
+//     overflow: hidden;
+//     @include transition(width, 0.3s);
+//   }
+//   .page-list {
+//     display: block;
+//     margin: 0 0 5px 15px;
+//     padding: 0;
+//     background-color: rgba(26, 34, 47, 0.6);
+//     border-radius: 2px;
+//     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+//       0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+//     a {
+//       display: block;
+//       width: 100%;
+//       height: 32px;
+//       min-height: 32px;
+//       line-height: 32px;
+//       padding: 0;
+//       font-size: 14px;
+//       text-align: center;
+//       color: color(white);
+//     }
+//     &.on,
+//     &:hover {
+//       background-color: rgba(26, 34, 47, 0.9);
+//     }
+//   }
+
+//   @at-root {
+//     .nav-list {
+//       > span {
+//         position: absolute;
+//         top: 0;
+//         right: 0;
+//         bottom: 0;
+//         left: 0;
+//         background-color: color(default);
+//         @include transition(all, 0.15s);
+//       }
+
+//       &:hover {
+//         > span {
+//           top: -7px;
+//           right: -7px;
+//           bottom: -7px;
+//           z-index: 1;
+//           border: 1px solid #1a222f;
+//           box-shadow: 2px 3px rgba(26, 34, 47, 0.4);
+//         }
+//         ul {
+//           width: 150px;
+//           opacity: 1;
+//         }
+//       }
+//     }
+//   }
+// }
 </style>

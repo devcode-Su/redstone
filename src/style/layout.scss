@@ -35,15 +35,38 @@
 
 [data-layout="container"] {
   display: flex;
-  height: calc(100vh-50px);
-  overflow: hidden;
+  height: calc(100vh - 50px);
 }
 
-[data-="Aside"] {
+[data-layout="Aside"] {
   position: relative;
   display: flex;
   width: 45px;
-  transition: all 0.3s ease
+  transition: all 0.3s ease;
+  &.active {
+    width: 350px;
+  }
+}
+
+[data-layout="Navigation"] {
+  position: relative;
+  z-index: 2;
+  width: 45px;
+  min-width: 45px;
+  background-color: color(default);
+}
+
+[data-layout="Group"] {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #f5f7fa;
+  overflow: hidden;
+  .wrap {
+    position: relative;
+    flex: 1;
+    width: 305px;
+  }
 }
 
 [data-layout="Route-view"] {
@@ -54,3 +77,5 @@
   box-shadow: 0 0 10px grey inset;
   overflow-y: auto
 }
+
+[data-layout="Route-article"] {}

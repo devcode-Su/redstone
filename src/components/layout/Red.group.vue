@@ -1,5 +1,5 @@
 <template>
-  <section class="group">
+  <section data-layout="Group" class="group">
     <div class="wrap">
       <h1 class="group-title">
         그룹관리
@@ -7,20 +7,20 @@
       <groupdepartment :propsTree="groupData[0]" class="group-department" :position="false"></groupdepartment>
       <group-members :members="membersData"></group-members>
       <ul class="group-notice">
-        <li>
+        <li data-icon>
           <i class="fa fa-circle fa-fw dot-all" aria-hidden="true"></i>
           전체 AGENT : 15
         </li>
-        <li>
+        <li data-icon>
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
           현재 접속 : 3
         </li>
-        <li>
+        <li data-icon>
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           일주일 이상 미 접속 : 1
         </li>
       </ul>
-      <button class="management-btn icon-btn" @click="showModal = true">
+      <button data-icon="set" class="management-btn" :class="{spin:selected}" @click="showModal = true">
         <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
       </button>
       <slot></slot>
@@ -31,7 +31,6 @@
 </template>
 
 <script>
-
 import Groupdepartment from "../group/Group.department";
 import GroupMembers from "../group/Group.members";
 import Templatemodal from "../template/Template.modal";
@@ -42,9 +41,7 @@ export default {
   extends: {},
   // 컴포넌트 어트리뷰트 그룹
   props: {
-    // selected: {
-    //   type: Boolean
-    // }, // 알파벳순으로 정렬합니다
+    selected: Boolean
   },
   // 컴포넌트 변수 그룹
   data() {
@@ -117,9 +114,8 @@ export default {
   .wrap {
     button {
       width: 26px;
-      height: 42px;
+      height: 26px;
       padding: 0;
-      top: 0;
     }
   }
   .group-department {
@@ -136,11 +132,16 @@ export default {
   }
   .management-btn {
     position: absolute;
+    top: 8px;
     right: 31px;
   }
   .group-toggle {
     position: absolute;
+    top: 8px;
     right: 5px;
+  }
+  .group-notice li {
+    justify-content: flex-start;
   }
 }
 </style>

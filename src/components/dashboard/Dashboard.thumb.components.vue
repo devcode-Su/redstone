@@ -24,7 +24,6 @@
     </draggable> -->
     <masonry :cols="{default: 3, 1200: 2, 600: 1}" :gutter="{default: '30px', 700: '15px'}">
       <div v-for="(thumb, index) in compList" :key="thumb.id">
-        <!-- <test :prop-data="thumb" :index="index"></test> -->
         <component :is="thumb.type" :prop-data="thumb" :index="index"></component>
       </div>
     </masonry>

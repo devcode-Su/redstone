@@ -1,25 +1,23 @@
 <template>
-  <section>
-    <div class="user-set-wrap">
-      <div class="user-set-area">
-        <h2>
+  <section data-group="management">
+    <div data-management>
+      <div data-management-item>
+        <h2 data-icon>
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           부서 수정
         </h2>
-        <groupdepartment class="user-set-list" :treeEdit="true"></groupdepartment>
+        <groupdepartment data-component="tree" :treeEdit="true"></groupdepartment>
       </div>
-      <div class="user-set-area">
-        <h2>
+      <div data-management-item>
+        <h2 data-icon>
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
           부서원 정보
         </h2>
-        <groupmembersmove class="user-set-list" :members="membersData"></groupmembersmove>
+        <groupmembersmove data-component="member" :members="membersData"></groupmembersmove>
       </div>
     </div>
-    <div class="user-set-btn">
-      <md-button class="md-dense confirm" @click="saveStorage">
-        <md-icon>done</md-icon> 저장
-      </md-button>
+    <div data-management data-btn="confirm">
+      <el-button type="success" plain>Done</el-button>
     </div>
   </section>
 </template>
@@ -38,30 +36,28 @@ export default {
       membersData: []
     };
   },
-  computed: {
-  },
+  computed: {},
   components: {
     Groupdepartment,
     Groupmembersmove
   },
   watch: {},
   methods: {
-    saveStorage() {
-    },
+    saveStorage() {},
     resetStorage() {
       //EventBus.$emit("resetGroup");
-      this.membersData = []
+      this.membersData = [];
     }
   },
   beforeCreate() {},
   created() {
-//    EventBus.$on("userview", data => {
-//      const apiUrl = "/api/admin/group/node/" + data;
-//      this.$http.get(apiUrl).then(result => {
-//        console.log(result.data.data);
-//        this.membersData = result.data.data;
-//      });
-//    });
+    //    EventBus.$on("userview", data => {
+    //      const apiUrl = "/api/admin/group/node/" + data;
+    //      this.$http.get(apiUrl).then(result => {
+    //        console.log(result.data.data);
+    //        this.membersData = result.data.data;
+    //      });
+    //    });
   },
   beforeMounted() {},
   mounted() {},

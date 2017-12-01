@@ -2,8 +2,8 @@
   <div class="group-members">
     <el-input size="medium" placeholder="사용자 검색" v-model="filterText">
     </el-input>
-    <div class="group-members-table">
-      <div class="table-head-wrap">
+    <div data-table="table">
+      <div data-thead="thead">
         <table>
           <thead>
             <tr>
@@ -12,10 +12,10 @@
           </thead>
         </table>
       </div>
-      <div class="table-body-wrap">
+      <div data-tbody="tbody" class="members">
         <table>
           <tbody>
-            <tr v-for="member in orderedItems" :key="member.id" class="edit-wrap" @click="selectRow(member)">
+            <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap" @click="selectRow(member)">
               <td class="col-nodeid">{{member.nodeid}}</td>
               <td class="col-username">
                 {{member.username | groupSnippet}}
@@ -57,7 +57,7 @@ export default {
       fields: {
         nodeid: "센서ID",
         name: "이름",
-        part: "부서명",
+        part: "부서명"
         //ip: "아이피"
       }
     };
@@ -70,10 +70,10 @@ export default {
       return this.members.filter(member => {
         return member.username.match(this.filterText);
       });
-    },
-//    fieldOmit() {
-//      return _.omit(this.fields, this.omitPath);
-//    }
+    }
+    //    fieldOmit() {
+    //      return _.omit(this.fields, this.omitPath);
+    //    }
   },
   components: {},
   watch: {},
@@ -109,5 +109,8 @@ export default {
 @import "~styles/variables";
 tr {
   cursor: pointer;
+}
+.group-members {
+  border-bottom: 1px solid #d8dce5;
 }
 </style>

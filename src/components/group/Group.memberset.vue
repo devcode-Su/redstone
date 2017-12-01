@@ -1,30 +1,25 @@
 <template>
-  <section class="group-members-move">
-    <div class="user-set-wrap">
-      <div class="user-set-area">
-        <h2>
+  <section data-group="management">
+    <div data-management>
+      <div data-management-item>
+        <h2 data-icon>
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           이동할 부서원 선택
         </h2>
-        <groupdepartment class="user-set-list group-members-tree" :type="'from'"></groupdepartment>
-        <groupmembersmove class="user-set-list group-members-move" :movebtn="true" :members="departNow" :moveTo="departChange" @moveitem="moveItem"></groupmembersmove>
+        <groupdepartment data-component="tree-top" :type="'from'"></groupdepartment>
+        <groupmembersmove data-component="member-bottom" :movebtn="true" :members="departNow" :moveTo="departChange" @moveitem="moveItem"></groupmembersmove>
       </div>
-      <div class="user-set-area">
-        <h2>
+      <div data-management-item>
+        <h2 data-icon>
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
           이동될 부서 선택
         </h2>
-        <groupdepartment class="user-set-list group-members-tree" :type="'to'"></groupdepartment>
-        <groupmembersmove class="user-set-list group-members-move" :members="departChange" :moveTo="departNow" :icon="false" @moveitem="moveItem"></groupmembersmove>
+        <groupdepartment data-component="tree-top" :type="'to'"></groupdepartment>
+        <groupmembersmove data-component="member-bottom" :members="departChange" :moveTo="departNow" :icon="false" @moveitem="moveItem"></groupmembersmove>
       </div>
     </div>
-    <div class="user-set-btn">
-      <!--<md-button class="md-dense reset" @click="resetStorage">-->
-        <!--<md-icon>replay</md-icon> 처음으로-->
-      <!--</md-button>-->
-      <md-button class="md-dense confirm" @click="saveStorage">
-        <md-icon>done</md-icon> 저장
-      </md-button>
+    <div data-management data-btn="confirm">
+      <el-button type="success" plain>Done</el-button>
     </div>
   </section>
 </template>
@@ -49,8 +44,7 @@ export default {
       departChange: []
     };
   },
-  computed: {
-  },
+  computed: {},
   components: {
     Groupdepartment,
     Groupmembersmove
@@ -64,41 +58,41 @@ export default {
     },
     saveStorage() {
       console.log("save");
-    },
-//    resetStorage() {
-//      console.log("reset");
-//      EventBus.$on("userfrom", data => {
-//        const apiUrl = "/api/admin/group/node/" + data;
-//        this.$http.get(apiUrl).then(result => {
-//          this.departNow = result.data.data;
-//          console.log(result.data);
-//        });
-//      });
-//      EventBus.$on("userto", data => {
-//        const apiUrl = "/api/admin/group/node/" + data;
-//        this.$http.get(apiUrl).then(result => {
-//          this.departChange = result.data.data;
-//          console.log(result.data);
-//        });
-//      });
-//    }
+    }
+    //    resetStorage() {
+    //      console.log("reset");
+    //      EventBus.$on("userfrom", data => {
+    //        const apiUrl = "/api/admin/group/node/" + data;
+    //        this.$http.get(apiUrl).then(result => {
+    //          this.departNow = result.data.data;
+    //          console.log(result.data);
+    //        });
+    //      });
+    //      EventBus.$on("userto", data => {
+    //        const apiUrl = "/api/admin/group/node/" + data;
+    //        this.$http.get(apiUrl).then(result => {
+    //          this.departChange = result.data.data;
+    //          console.log(result.data);
+    //        });
+    //      });
+    //    }
   },
   beforeCreate() {},
   created() {
-//    EventBus.$on("userfrom", data => {
-//      const apiUrl = "/api/admin/group/node/" + data;
-//      this.$http.get(apiUrl).then(result => {
-//        this.departNow = result.data.data;
-//        console.log(result.data);
-//      });
-//    });
-//    EventBus.$on("userto", data => {
-//      const apiUrl = "/api/admin/group/node/" + data;
-//      this.$http.get(apiUrl).then(result => {
-//        this.departChange = result.data.data;
-//        console.log(result.data);
-//      });
-//    });
+    //    EventBus.$on("userfrom", data => {
+    //      const apiUrl = "/api/admin/group/node/" + data;
+    //      this.$http.get(apiUrl).then(result => {
+    //        this.departNow = result.data.data;
+    //        console.log(result.data);
+    //      });
+    //    });
+    //    EventBus.$on("userto", data => {
+    //      const apiUrl = "/api/admin/group/node/" + data;
+    //      this.$http.get(apiUrl).then(result => {
+    //        this.departChange = result.data.data;
+    //        console.log(result.data);
+    //      });
+    //    });
   },
   beforeMounted() {},
   mounted() {},

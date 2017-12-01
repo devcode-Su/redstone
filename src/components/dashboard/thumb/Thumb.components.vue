@@ -4,7 +4,7 @@
       {{propData.title}}
     </h1>
     <dashboard-periodbtn v-if="propData.btnType" :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
-    <template-datatable :table-field="propData.column" :prop-data="compData"></template-datatable>
+    <template-datatable :fields="propData.column" :prop-data="compData"></template-datatable>
     <button class="icon-btn icon-wrap more-link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
@@ -17,7 +17,7 @@
 <script>
 import Constant from "@/constant";
 import DashboardPeriodbtn from "../Dashboard.period.btn.vue";
-import TemplateDatatable from "../../template/Template.datatable.contents";
+import TemplateDatatable from "../../template/Template.datatable.body";
 export default {
   name: "Test",
   extends: {},
