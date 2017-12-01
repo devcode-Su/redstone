@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -28,6 +29,11 @@ module.exports = {
       'styles': resolve('src/style/')
     }
   },
+  plugins: [
+    new CopyWebpackPlugin([
+      {from: 'src/meta', debug:'debug'}
+    ])
+  ],
   module: {
     rules: [
       ...(config.dev.useEslint ? [{
