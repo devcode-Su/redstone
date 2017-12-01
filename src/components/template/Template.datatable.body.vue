@@ -13,7 +13,7 @@
       <table>
         <tbody>
           <tr data-tbody="row" v-for="(tr, k, i) in propData.data" :key="tr.id" @click.stop="rowClick(tr)">
-            <td data-tbody="column" v-for="(td, j) in fieldKeys" :key="td.id" :class="['col-'+td,{'col-end' : tableField.length-1 === i }]">
+            <td data-tbody="column" v-for="(td, j) in fieldKeys" :key="td.id" :class="['col-'+td,{'col-end' : fields.length-1 === i }]">
               {{ tr[td] }}
             </td>
           </tr>
@@ -58,7 +58,7 @@ export default {
   },
   components: {},
   watch: {
-    propData: data => {
+    propData(data) {
       if (data) {
         this.fieldKeys = Object.keys(this.fields);
         return data;

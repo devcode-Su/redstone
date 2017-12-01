@@ -58,20 +58,7 @@ export default {
       resourceList: []
     };
   },
-  computed: {
-    sensorCount() {
-      return this.sensor.count;
-    },
-    sensorTotal() {
-      return this.sensor.total;
-    },
-    dailyProcessCount() {
-      return this.dailyProcess;
-    },
-    dailyNetworkCount() {
-      return this.dailyNetwork;
-    }
-  },
+  computed: {},
   components: {
     DashboardSensorchart,
     DashboardDetectiontable,

@@ -4,7 +4,7 @@
       {{propData.title}}
     </h1>
     <dashboard-periodbtn v-if="propData.btnType" :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
-    <template-datatable :fields="propData.column" :prop-data="compData"></template-datatable>
+    <template-datatablebody :fields="propData.column" :prop-data="compData"></template-datatablebody>
     <button class="icon-btn icon-wrap more-link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
@@ -17,7 +17,7 @@
 <script>
 import Constant from "@/constant";
 import DashboardPeriodbtn from "../Dashboard.period.btn.vue";
-import TemplateDatatable from "../../template/Template.datatable.body";
+import TemplateDatatablebody from "../../template/Template.datatable.body";
 export default {
   name: "Test",
   extends: {},
@@ -45,7 +45,7 @@ export default {
   },
   components: {
     DashboardPeriodbtn,
-    TemplateDatatable
+    TemplateDatatablebody
   },
   watch: {},
   methods: {
@@ -61,6 +61,7 @@ export default {
   created() {
     const url = "/static/data/exippc.json";
     this.$http.get(url).then(response => {
+      console.log(response);
       this.compData = response.data;
     });
   },

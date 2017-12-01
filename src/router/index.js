@@ -8,14 +8,15 @@ import Dashboardsystems from '@/components/dashboard/Dashboard.systems'
 
 import Diagnosisinfo from '@/components/diagnosis/Diagnosis.info'
 import Diagnosispc from '@/components/diagnosis/Diagnosis.pc'
+import Diagnosisanalysis from '@/components/diagnosis/Diagnosis.analysis'
 
 import Searchfile from '@/components/search/Search.file'
 import Searchprocess from '@/components/search/Search.process'
 import Searchnetwork from '@/components/search/Search.network'
-import Searchanalysis from '@/components/search/Search.analysis'
 
 import Securitymedia from '@/components/security/Security.media'
 import Securityaccount from '@/components/security/Security.account'
+import Securitywirelesslan from '@/components/security/Security.wirelesslan.vue'
 
 import Propertysw from '@/components/property/Property.sw'
 import Propertyhw from '@/components/property/Property.hw'
@@ -62,6 +63,10 @@ export default new Router({
           component: Diagnosispc
         },
         {
+          path: 'Diagnosis-analysis',
+          component: Diagnosisanalysis
+        },
+        {
           path: 'Search-file',
           component: Searchfile
         },
@@ -74,10 +79,7 @@ export default new Router({
           path: 'Search-network',
           component: Searchnetwork
         },
-        {
-          path: 'Search-analysis',
-          component: Searchanalysis
-        },
+
         {
           path: 'Security-media',
           component: Securitymedia
@@ -85,6 +87,10 @@ export default new Router({
         {
           path: 'Security-account',
           component: Securityaccount
+        },
+        {
+          path: 'Security-wirelesslan',
+          component: Securitywirelesslan
         },
         {
           path: 'Property-sw',

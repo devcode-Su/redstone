@@ -13,9 +13,9 @@
   </article>
 </template>
 <script>
-import Processtree from "./Search.process.tree.vue";
-import Searchpannel from "./Search.pannel.vue";
-import Processdatatable from "./Search.process.datatable.vue";
+import Processtree from "../search/Search.process.tree.vue";
+import Searchpannel from "../search/Search.pannel.vue";
+import Processdatatable from "../search/Search.process.datatable.vue";
 import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
 //import { EventBus } from "@/main"
 export default {
