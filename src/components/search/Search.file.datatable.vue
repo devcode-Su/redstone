@@ -1,7 +1,7 @@
 <template>
 	<section class="template-table-wrap file-data-table">
 		<header>
-			<span>전체</span>
+			<span>전체 : {{pagination.total}}</span>
 			<div class="btn-wrap">
 				<el-button size="small">
 					파일로 저장
