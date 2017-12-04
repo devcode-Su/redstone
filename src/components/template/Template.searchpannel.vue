@@ -3,7 +3,7 @@
     <el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
       <fieldset>
         <legend class="pannel small">
-          
+
         </legend>
         <div class="form-align-box">
           <div class="form-item-wrap">

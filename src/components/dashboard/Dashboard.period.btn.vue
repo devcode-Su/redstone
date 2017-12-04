@@ -32,6 +32,7 @@ export default {
 <style lang='scss' scoped>
 @import "~styles/variables";
 .el-button {
-  height: 30px;
+  height: 24px;
+  padding: 0 10px;
 }
 </style>

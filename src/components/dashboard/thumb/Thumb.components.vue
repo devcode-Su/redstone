@@ -1,15 +1,15 @@
 <template>
-  <section data-thumbcomp="thumb" class="dashboard-thumb">
-    <h1>
+  <section data-thumbcomp="thumb">
+    <h1 data-thumbcomp="title">
       {{propData.title}}
     </h1>
-    <dashboard-periodbtn v-if="propData.btnType" :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
+    <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
     <template-datatablebody :fields="propData.column" :prop-data="compData"></template-datatablebody>
-    <button class="icon-btn icon-wrap more-link">
+    <button data-icon class="more-link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
     </button>
-    <button class="icon-wrap icon-btn" @click.stop="itemRemove(index)">
+    <button data-icon class="remove" @click.stop="itemRemove(index)">
       <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
     </button>
   </section>
@@ -64,6 +64,7 @@ export default {
       console.log(response);
       this.compData = response.data;
     });
+    console.log(this.propData.button_type);
   },
   beforeMounted() {},
   mounted() {},

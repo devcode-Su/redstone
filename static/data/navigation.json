@@ -3,12 +3,10 @@
     "name": "Dashboard",
     "icon": "dashboard",
     "page": [{
-      "title": "기본정보",
-      "path": "Dashboard"
-    }, {
-      "title": "시스템정보",
-      "path": "Dashboard-systems"
-    }]
+        "title": "기본정보",
+        "path": "Dashboard"
+      }
+    ]
   },
   {
     "title": "진단",
