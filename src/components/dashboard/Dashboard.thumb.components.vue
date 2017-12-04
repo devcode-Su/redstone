@@ -1,33 +1,10 @@
 <template>
   <section class="components-thumb">
-    components list
-
-    <!-- <draggable v-model="compList" class="thumb-wrap">
-      <transition-group type="transition" name="thumb" tag="ul" class="thumb-wrap">
-        <li class="components-item thumb-item" v-for="item in compList" :key="item.seq"> -->
-    <!-- <component :is="item.type" :prop-data="item"></component> -->
-    <!-- <test :prop-data="item"></test>
-        </li>
-      </transition-group>
-    </draggable> -->
-    <button @click.stop="updateList">rr</button>
-    <!-- <draggable v-model="thumbData" class="thumb-wrap">
-      <transition-group type="transition" name="thumb" tag="ul" class="thumb-wrap">
-        <li class="thumb-item" v-for="(userSet, index) in thumbData" :key="userSet.title">
-          <test :prop-data="userSet"></test>
-          <router-link tag="md-button" to="#" class="md-raised">More</router-link>
-              <md-button class="md-dense" @click="removeThumb(userSets, index)">
-                <md-icon>delete</md-icon>
-              </md-button>
-        </li>
-      </transition-group>
-    </draggable> -->
     <masonry :cols="{default: 3, 1200: 2, 600: 1}" :gutter="{default: '30px', 700: '15px'}">
       <div v-for="(thumb, index) in compList" :key="thumb.id">
         <component :is="thumb.type" :prop-data="thumb" :index="index"></component>
       </div>
     </masonry>
-
   </section>
 </template>
 <script>

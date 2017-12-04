@@ -37,16 +37,20 @@
   color: color(icon-color);
 }
 
-[data-icon="set"].spin,
-[data-icon="set"]:hover {
+[data-icon="set"].spin {
   transform-origin: 50% 50%;
   animation: setIcon 3s linear
+}
+
+[data-icon="set"]:hover {
+  transform-origin: 50% 50%;
+  animation: setIcon 3s linear infinite
 }
 
 [data-tooltip-wrap] {
   &:hover {
     [data-tooltip] {
-      z-index: 3;
+      z-index: 5;
       opacity: 1
     }
     [data-tooltip="group"] {

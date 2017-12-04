@@ -7,11 +7,15 @@
     <dashboard-sensorchart></dashboard-sensorchart>
     <!-- <dashboard-detectiontable></dashboard-detectiontable> -->
     <dashboard-thumbcomponents class="dashboard-componets"></dashboard-thumbcomponents>
-    <!--<button class="icon-btn icon-wrap dashboard-setbtn" type="button" @click="showModal = true">-->
-    <!--<i class="fa fa-cog fa-lg fa-spin" aria-hidden="true"></i>-->
-    <!--</button>-->
-    <!--<templatemodal v-if="showModal" :target="'user-custom'" @close="showModal = false" :title="'대시보드 설정'" :compSelect="'dashboard-thumb'">-->
-    <!--</templatemodal>-->
+    <div data-tooltip-wrap>
+      <button data-icon="set" class="dashboard-setbtn spin" type="button" @click="showModal = true">
+        <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+      </button>
+      <span data-tooltip="category">대쉬보드 설정</span>
+    </div>
+
+    <templatemodal v-if="showModal" :target="'user-custom'" @close="showModal = false" :title="'대시보드 설정'" :compSelect="'dashboard-thumb'">
+    </templatemodal>
   </article>
 </template>
 <script>
@@ -120,5 +124,12 @@ export default {
   h1 {
     font-size: 18px;
   }
+}
+[data-icon="set"] {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 25px;
+  right: 35px;
 }
 </style>
