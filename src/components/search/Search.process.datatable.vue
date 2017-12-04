@@ -179,13 +179,16 @@
     beforeCreate() {
     },
     created() {
-      console.log('process datatable', this.propData.data);
     },
     beforeMounted() {
     },
     mounted() {
     },
     beforeUpdate() {
+      console.log('process datatable', this.props, this.propData);
+      if (this.propData && this.propData.data && this.propData.data.metrics) {
+        this.total = this.propData.data.metrics.resultCount;
+      }
     },
     updated() {
     },
