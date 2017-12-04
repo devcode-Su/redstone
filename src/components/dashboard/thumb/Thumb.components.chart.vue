@@ -97,13 +97,13 @@ export default {
     //      }
   },
   created() {
-    // const url = "/dashboard/?method=get&resource=badfilepc";
-    // this.$http.get(url).then(result => {
-    //   this.resultData = result.data;
-    //   console.log(result);
-    //   this.chartData = this.getValueArr(result.data, this.arr);
-    //   this.fillData();
-    // });
+    const url = "/dashboard/?method=get&resource="+this.propData.resource
+    this.$http.get(url).then(result => {
+      this.resultData = result.data;
+      console.log(result);
+      this.chartData = this.getValueArr(result.data, this.arr);
+      //this.fillData();
+    });
     //this.fillData();
     console.log(this.propData);
   },

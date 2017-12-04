@@ -3,7 +3,6 @@
     <h1 data-thumbcomp="title">
       {{propData.title}}
     </h1>
-    <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
     <template-datatablebody :fields="propData.column" :prop-data="compData"></template-datatablebody>
     <button data-icon class="more-link">
       More
@@ -16,7 +15,6 @@
 </template>
 <script>
 import Constant from "@/constant";
-import DashboardPeriodbtn from "../Dashboard.period.btn.vue";
 import TemplateDatatablebody from "../../template/Template.datatable.body";
 export default {
   name: "Test",
@@ -44,7 +42,6 @@ export default {
     // }
   },
   components: {
-    DashboardPeriodbtn,
     TemplateDatatablebody
   },
   watch: {},
@@ -52,6 +49,7 @@ export default {
     periodData(btnNum) {
       console.log(btnNum);
       this.btnNum = btnNum;
+      //console.log(this.compData)
     },
     itemRemove(comNum) {
       this.$store.dispatch(Constant.DELETE_THUMBLIST, { index: comNum });
@@ -59,12 +57,11 @@ export default {
   },
   beforeCreate() {},
   created() {
-    const url = "/static/data/exippc.json";
+    const url = "/dashboard/?method=get&resource="+this.propData.resource;
     this.$http.get(url).then(response => {
-      console.log(response);
+      //console.log(response);
       this.compData = response.data;
     });
-    console.log(this.propData.button_type);
   },
   beforeMounted() {},
   mounted() {},

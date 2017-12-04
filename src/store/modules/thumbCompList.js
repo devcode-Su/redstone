@@ -28,7 +28,7 @@ export default {
     [Constant.FETCH_THUMBLIST]: (store) => {
       console.log(`"list update" `);
       ContantApi.fetchThumbList().then(response => {
-        console.log(response)
+        console.log(response);
         store.commit(Constant.FETCH_THUMBLIST, response.data.data)
       });
     },
