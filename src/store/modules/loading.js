@@ -14,7 +14,7 @@ export default {
   actions: {
     [Constant.LOADING_STATE]: (store, payload) => {
       console.log(`"isLoading change" ` + payload);
-      //store.commit(Constant.LOADING_STATE, payload);
+      store.commit(Constant.LOADING_STATE, payload);
     }
   }
 }

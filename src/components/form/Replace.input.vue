@@ -1,8 +1,8 @@
 <template>
-  <el-form-item label="검색 조건" size="small">
-    <el-input type="text" v-model="input" placeholder="" @change="onInput">
+  <el-form-item data-input label="검색 조건" size="small">
+    <el-input type="text" v-model="q" placeholder="" @change="onInput">
     </el-input>
-    <el-checkbox class="agreement" v-model="checked">
+    <el-checkbox v-model="partial_match">
       부분 일치
     </el-checkbox>
   </el-form-item>
@@ -16,8 +16,8 @@ export default {
   },
   data() {
     return {
-      input: "",
-      checked:false
+      q: "",
+      partial_match:false
     };
   },
   computed: {},
@@ -33,7 +33,12 @@ export default {
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+    this.$emit("replace", {
+      q : this.q,
+      partial_match : this.partial_match
+    })
+  },
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

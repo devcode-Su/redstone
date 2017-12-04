@@ -5,7 +5,7 @@
     <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
     <el-date-picker v-model="endTime" type="datetime" placeholder="Select End date and time">
     </el-date-picker>
-    <div class="btn-date-wrap">
+    <div data-dateset-btn>
       <el-button v-for="(settime,i) in datelabel" :key="settime.i" @click="setDatetime(i)">
         {{settime}}
       </el-button>
@@ -30,13 +30,20 @@ export default {
   computed: {},
   components: {},
   watch: {},
-  methods: {},
+  methods: {
+  },
   beforeCreate() {},
   created() {},
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+    console.log(this.startTime);
+    this.$emit("dateTime", {
+      start : this.startTime,
+      end : this.endTime
+    })
+  },
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

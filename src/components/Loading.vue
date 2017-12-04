@@ -62,7 +62,7 @@ export default {
   align-items: center;
   background-color: rgba(255, 255, 255, 1);
   .symbol {
-    animation: loading 5s cubic-bezier(0.41, 0.77, 0.66, -1.41) infinite;
+    animation: loading 3s cubic-bezier(0.41, 0.77, 0.66, -1.41) infinite;
   }
 }
 </style>

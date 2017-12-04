@@ -1,21 +1,22 @@
 <template>
-  <section class="dashboard-detection-table">
+  <section data-dashboard-section="detect-table">
     <div class="template-table dynamic-row">
-      <h2>{{data.title}}</h2>
-      <div data-thead="thead">
-        <table>
-          <thead>
+      <h1>{{receiveData.title}}</h1>
+      <div data-table="table">
+        <div data-thead="thead">
+          <table>
+            <thead>
             <tr>
               <th v-for="(th, i) in fields" :key="th.id" :class="['col-'+k,{ 'col-end' : fields.length-1 === i }]">
                 <span>{{th}}</span>
               </th>
-              , </tr>
-          </thead>
-        </table>
-      </div>
-      <div data-tbody="tbody">
-        <table>
-          <tbody>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div data-tbody="tbody">
+          <table>
+            <tbody>
             <tr data-tbody="row" v-for="(row,i) in rowData" :key="i.id" @click="moveRow(i)">
               <td data-tbody="column" v-for="(td, j) in fieldKeys" :key="td.id" :class="['col-'+td,{'col-end' : fieldKeys.length-1 === i }]">
                 <span>{{ tr[td] }}</span>
@@ -23,15 +24,10 @@
                   <i class="fa fa-excalmation-triangle fa-lg"></i>
                 </span>
               </td>
-              <!-- <td data-tbody="column" v-for="(col, k, idx) in row" :key="k" :class="['col'+idx,{ 'col-end' : field.length-1 === idx }]">
-                <span>{{col}}</span>
-                <span data-count v-if="idx === 'danger'" :class="[{'normal' : col >= 0 && col <= 50 },{'alpha' : col > 50 && col <= 70 },{'bravo' : col > 70 && col <= 80 },{'charile' : col > 80 && col <= 90 },{'delta' : col > 90 && col <= 100 }]">
-                  <i class="fa fa-excalmation-triangle fa-lg"></i>
-                </span>
-              </td> -->
             </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
@@ -75,7 +71,7 @@ export default {
       this.$http.get(url).then(result => {
         console.log(result);
         this.fields = result.data.data.fields;
-        this.data = result.data;
+        this.receiveData = result.data;
       });
     }
   },
@@ -97,8 +93,9 @@ export default {
 @import "~styles/variables";
 .template-table-wrap {
   box-shadow: 0px 2px 5px rgba(25, 25, 25, 0.27);
-  h2 {
+  h1 {
     padding: 10px;
+    font-size:16px;
     margin-bottom: 0;
   }
   &.dashboard-table {

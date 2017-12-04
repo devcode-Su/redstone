@@ -47,9 +47,11 @@ export default {
       }
     },
     signOut() {
-      //const apiURL = "/api/admin/login";
-      //this.$http.get(apiURL);
-      this.$router.replace("/");
+      const apiURL = "/api/admin/logout";
+      this.$http.get(apiURL).then(()=>{
+        this.$router.replace("/");
+      });
+      //
       //this.$router.go(this.$router.currentRoute);
     }
   },

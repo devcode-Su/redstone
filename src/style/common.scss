@@ -203,3 +203,38 @@
     padding: 5px;
   }
 }
+
+
+// search form
+[data-search-pannel]{
+  margin-top:55px;
+  padding:15px 15px 15px 110px;
+  background: url(/src/assets/search-box.jpg) no-repeat 30px center;
+  border: 1px solid #ccc;
+  form{
+    display:flex;
+    padding-left:30px;
+    border-left:1px solid #ccc;
+  }
+  .el-form-item__content{
+    display:flex;
+    align-items: center;
+  }
+}
+[data-dateset-btn]{
+  margin-left:5px;
+  button{
+    vertical-align: 1px;
+  }
+}
+[data-input]{
+  .el-checkbox{
+    margin-left:10px;
+  }
+}
+[data-search-submit]{
+  display:flex;
+  align-items: flex-end;
+  margin-left:20px;
+  padding-bottom:18px;
+}

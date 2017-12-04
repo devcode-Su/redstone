@@ -1,14 +1,14 @@
 <template>
-  <article>
-    <h1 class="page-title">
+  <article data-layout="Route-article">
+    <h1 data-page-title>
       파일 검색
     </h1>
-    <template-searchpannel :pannelType="pannelset" @searchData="receiveData">></template-searchpannel>
+    <file-searchform></file-searchform>
     <searchfiledatatable :propData="search"></searchfiledatatable>
   </article>
 </template>
 <script>
-import TemplateSearchpannel from "../template/Template.searchpannel";
+import FileSearchform from "../form/File.search.form";
 import Searchfiledatatable from "./Search.file.datatable.vue";
 
 function _plunk(item){
@@ -71,7 +71,7 @@ export default {
   },
   computed: {},
   components: {
-    TemplateSearchpannel,
+    FileSearchform,
     Searchfiledatatable
   },
   watch: {},

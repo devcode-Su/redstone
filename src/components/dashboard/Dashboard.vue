@@ -5,7 +5,7 @@
     </h1>
     <dashboardSensor></dashboardSensor>
     <dashboard-sensorchart></dashboard-sensorchart>
-    <!-- <dashboard-detectiontable></dashboard-detectiontable> -->
+    <dashboard-detectiontable></dashboard-detectiontable>
     <dashboard-thumbcomponents class="dashboard-componets"></dashboard-thumbcomponents>
     <div data-tooltip-wrap>
       <button data-icon="set" class="dashboard-setbtn spin" type="button" @click="showModal = true">
@@ -47,63 +47,10 @@ export default {
   },
   watch: {},
   methods: {
-    // getSensor() {
-    //   const url = "/dashboard/?method=get&resource=sensor";
-    //   this.$http.get(url).then(result => {
-    //     this.sensor.count = result.data.data.count;
-    //     this.sensor.total = result.data.data.total;
-    //   });
-    // },
-    // getDailyProcess() {
-    //   const url = "/dashboard/?method=get&resource=process";
-    //   this.$http.get(url).then(result => {
-    //     this.dailyProcess = result.data.data.count;
-    //   });
-    // },
-    // getDailyNetwork() {
-    //   const url = "/dashboard/?method=get&resource=network";
-    //   this.$http.get(url).then(result => {
-    //     this.dailyNetwork = result.data.data.count;
-    //   });
-    // },
-    // getResourceList() {
-    //   const url = "/dashboard/?method=define";
-    //   this.$http.get(url).then(result => {
-    //     console.log(result);
-    //   });
-    // }
   },
   beforeCreate() {},
   created() {
-    // this.$bus.$emit("thumblist", () => {
-    //   console.log("버스");
-    // });
-    // this.getSensor();
-    // this.getDailyProcess();
-    // this.getDailyNetwork();
-    //    this.getDailyNetwork();
-    //this.getResourceList();
-    //    const apiUrl = "/static/data/userset.json";
-    //    let promise = [];
-    //    this.$http.get(apiUrl).then(result => {
-    //      result.data.forEach(item => {
-    //        if (item.hasOwnProperty("url")) {
-    //          promise.push(
-    //            this.$http.get(item.url).then(r => {
-    //              item.data = r.data;
-    //            })
-    //          );
-    //        }
-    //      });
-    //      Promise.all(promise)
-    //        .then(() => {
-    //          this.defaultView = result.data;
-    //          localStorage.setItem("dashboard-data", JSON.stringify(result.data));
-    //        })
-    //        .then(() => {
-    //          this.defaultViews;
-    //        });
-    //    });
+    console.log(this.is)
   },
   beforeMounted() {},
   mounted() {},

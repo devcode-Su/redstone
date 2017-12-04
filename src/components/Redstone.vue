@@ -1,5 +1,5 @@
 <template>
-  <section data-index="Redstone" :class="{'ready' : !isLoading}">
+  <section data-index="Redstone" :class="{'ready' : isLoading}">
     <red-header :username="userdata.name">
       <button data-tooltip-wrap data-icon="nav" class="group-toggle" :class="{ on : selected}" @click="btnToggle">
         <i class="fa fa-navicon fa-24" aria-hidden="true"></i>
@@ -59,13 +59,9 @@ export default {
   methods: {
     fetchData() {
       console.log("Aaa");
-      this.$store.dispatch(Constant.FETCH_COMPONENTS);
+      //this.$store.dispatch(Constant.FETCH_COMPONENTS);
       //this.$bus.$emit("thumblist", this.compLists);
-      // const adminInfo = "/api/admin/info";
       // const groupList = "/api/admin/group/list";
-      // this.$http.get(adminInfo).then(result => {
-      //   this.userdata = result.data;
-      // });
       // this.$http.get(groupList).then(result => {
       //   this.groupData = this.listToTree(result.data);
       // });
@@ -84,12 +80,15 @@ export default {
         : (this.selected = check);
     }
   },
-  beforeCreated() {
-    console.log("before");
-  },
   created() {
-    //this.isLoading ? this.$router.push("/") : this.getData();
-    //this.fetchData();
+    const adminInfo = "/api/admin/info";
+    this.$http.get(adminInfo).then(result => {
+      this.$store.dispatch(Constant.LOADING_STATE, false);
+      // this.userdata = result.data;
+      console.log("redstone")
+    }).catch(() => {
+      this.$router.push("/");
+    });
   },
   mounted() {},
   mixins: [locationCheckMixin]

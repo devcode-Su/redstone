@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     isLoading() {
-      return this.$store.state.loadingState;
+      return this.$store.state.load.loadingState;
     }
   },
   components: {
@@ -59,11 +59,11 @@ export default {
   },
   beforeCreate() {},
   created() {
-    // setTimeout(() => {
-    //   console.log("created : " + new Date());
-    //   this.$store.dispatch(Constant.LOADING_STATE, false);
-    //   console.log(this.isLoading);
-    // }, 3000);
+    setTimeout(() => {
+      console.log("created : " + new Date());
+      this.$store.dispatch(Constant.LOADING_STATE, false);
+      console.log(this.isLoading);
+    }, 3000);
   },
   mounted() {},
   destroyed() {}
