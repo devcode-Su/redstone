@@ -266,10 +266,6 @@ a
 					</template>
 					<template v-else-if="propData.EventType === 'HttpDownload'">
 						<dl>
-							<dt>파일명</dt>
-							<dd>{{propData.NameInfo1}}</dd>
-						</dl>
-						<dl>
 							<dt>경로</dt>
 							<dd>
 								<template v-if="propData.detect && propData.detect.malware">

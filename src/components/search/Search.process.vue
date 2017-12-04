@@ -10,10 +10,10 @@
 					<div class="form-align-box">
 						<div class="form-item-wrap">
 							<el-form-item label="조사기간 설정" size="small">
-								<el-date-picker v-model="form.startTime" type="datetime">
+								<el-date-picker v-model="startTime" type="datetime">
 								</el-date-picker>
 								<span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-								<el-date-picker v-model="form.endTime" type="datetime">
+								<el-date-picker v-model="endTime" type="datetime">
 								</el-date-picker>
 								<div class="btn-date-wrap">
 									<el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
@@ -51,7 +51,7 @@
 <script>
 
   import Processdatatable from "./Search.process.datatable.vue";
-  import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin"
+  import MixinsSetDatetime from "../mixins/setDatetime.mixin"
 
   export default {
     name: "Searchprocess",
@@ -80,14 +80,16 @@
           registry: "레지스트리"
         },
         form: {
-          startTime: null,
-          endTime: null,
           checkType: [
             "FILE", "IP", "RSC", "process", "network", "files", "registry"
           ],
           checkAll: true,
           text: ""
         },
+        startTime: null,
+        endTime: null,
+        page: 1,
+        length: 50,
         process: {
           field: [
             "프로세스 시작 시간",
@@ -104,8 +106,6 @@
           url: ""
         },
         formKey: ["EventTime", "Md5Hash", "Type"],
-        //test:"가나다"
-
       };
     },
     computed: {
@@ -113,9 +113,6 @@
         return this.$store.state.processSearchData
       }
     },
-//  computed: mapState({
-//    test : state => state.processSearchData.text
-//  }),
     components: {
       Processdatatable
     },
@@ -136,17 +133,17 @@
         const formData = this.$refs[form].model;
         const url = "/api/admin/search/event";
 
-        if (formData.startTime === "" || formData.endTime === "") {
+        if (this.startTime === "" || this.endTime === "") {
           this.$notify.error({
             title: "Error",
             message: "검색 조건을 입력하세요."
           });
         } else {
           const data = {
-            page: 1,
-            length: 50,
-            startDate: formData.startTime ? formData.startTime : null,
-            endDate: formData.endTime ? formData.endTime : null,
+            page: this.page,
+            length: this.length,
+            startDate: this.startTime ? this.startTime : null,
+            endDate: this.endTime ? this.endTime : null,
             dept_code: formData && formData.data ? formData.data.dept_code || "" : null,
             node_id: formData && formData.data ? formData.data.node_id || "" : null,
             order: "time",
@@ -162,17 +159,14 @@
             file_event: this.$refs.check[5].isChecked,
             registry_event: this.$refs.check[6].isChecked
           };
-          this.$http
-            .get(url, {
-              params: data
-            })
-            .then(result => {
-              this.process.data = result.data.rows;
-              console.log(result.data);
-            });
-          this.process.search = data;
-          this.process.url = url;
+          this.getData(url, data);
         }
+      },
+      getData(url, data) {
+        return this.$http.get(url, {params: data})
+          .then(result => {
+            this.process.data = result.data;
+          });
       },
       receiveSubmit(data) {
         console.log('receiveSubmit');
@@ -180,14 +174,21 @@
     },
     created() {
       this.$bus.$on("process-search-data", this.receiveSubmit.bind(this));
+      this.$bus.$on('process-page-length-change', (item) => {
+        if (item.page !== this.page || item.length !== this.length) {
+          this.page = item.page;
+          this.length = item.length;
+          this.onSubmit('form');
+        }
+      });
       if (this.$route.query && this.$route.query.psd) {
         let data = this.$route.query.psd;
         const defaultData = new Date(data.EventTime);
         const start = new Date(defaultData.getTime() - 60 * 30 * 1000);
         const end = new Date(defaultData.getTime() + 60 * 30 * 1000);
 
-        this.form.startTime = start;
-        this.form.endTime = end;
+        this.startTime = start;
+        this.endTime = end;
         this.form.checkType = [data.Type];
 //        this.form.checkedSearch = [data.Type];
       }
@@ -205,7 +206,8 @@
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off("process-search-data")
+      this.$bus.$off("process-search-data");
+      this.$bus.$off('process-page-length-change');
     },
     destroyed() {
     },
