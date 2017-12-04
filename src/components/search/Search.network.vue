@@ -1,6 +1,6 @@
 <template>
-  <article data-layout="Route-article">
-    <h1 data-page-title>
+  <article>
+    <h1 class="page-title">
       네트워크 검색
     </h1>
     <div class="template-search-pannel template-container">
@@ -116,12 +116,12 @@ export default {
           end: ""
         },
         text: "",
-        detail: {
+        detail:{
           pcip: "",
           endip: "",
           direction: "",
           port: "",
-          type: []
+          type: [],
         }
       },
       search: {

@@ -1,6 +1,6 @@
 <template>
-  <article data-layout="Route-article">
-    <h1 data-page-title>
+  <article>
+    <h1 class="page-title">
       파일 검색
     </h1>
     <template-searchpannel :pannelType="pannelset" @searchData="receiveData">></template-searchpannel>
@@ -11,16 +11,17 @@
 import TemplateSearchpannel from "../template/Template.searchpannel";
 import Searchfiledatatable from "./Search.file.datatable.vue";
 
-function _plunk(item) {
-  if (item.hasOwnProperty("info") && Array.isArray(item.info)) {
+function _plunk(item){
+  if (item.hasOwnProperty('info') && Array.isArray(item.info)) {
     item.info = item.info.reduce((p, c) => {
       p[c.name] = c.value;
       return p;
     }, {});
-  } else {
+  }
+  else {
     for (let k in item) {
       if (item.hasOwnProperty(k)) {
-        if (typeof item[k] === "object") {
+        if (typeof item[k] === 'object') {
           _plunk(item[k]);
         }
       }
@@ -28,7 +29,7 @@ function _plunk(item) {
   }
   return item;
 }
-function plunk(options) {
+function plunk(options){
   options = options.map(_plunk);
   return options;
 }
@@ -62,7 +63,9 @@ export default {
         data: [],
         search: [],
         url: "",
-        rowKey: ["nodeid", "node.info.username"]
+        rowKey:[
+          "nodeid", "node.info.username"
+        ]
       }
     };
   },
@@ -75,30 +78,31 @@ export default {
   methods: {
     receiveData(form) {
       const url = "/api/admin/search/file";
-      const data = {
-        page: 1,
-        length: 50,
-        startDate: form.startTime ? form.startTime.getTime() : "",
-        endDate: form.endTime ? form.endTime.getTime() : "",
-        dept_code: form.dept_code,
-        node_id: form.node_id,
-        order: "time",
-        direction: 1
-      };
-      this.$http
-        .get(url, {
-          params: data
-        })
-        .then(result => {
+        const data = {
+          page: 1,
+          length: 50,
+          startDate: form.startTime ? form.startTime.getTime() : "",
+          endDate: form.endTime ? form.endTime.getTime() : "",
+          dept_code: form.dept_code ,
+          node_id: form.node_id,
+          order: "time",
+          direction: 1
+        };
+        this.$http.get(url, {
+          params : data
+        }).then(result => {
           console.log(result.data.data);
-          this.search.data = plunk(result.data.data);
+          this.search.data = plunk(result.data.data)
         });
-      this.search.search = data;
-      this.search.url = url;
-    }
+        this.search.search = data;
+        this.search.url = url;
+      }
+
   },
   beforeCreate() {},
-  created() {},
+  created() {
+
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},

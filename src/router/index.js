@@ -13,6 +13,7 @@ import Diagnosisanalysis from '@/components/diagnosis/Diagnosis.analysis'
 import Searchfile from '@/components/search/Search.file'
 import Searchprocess from '@/components/search/Search.process'
 import Searchnetwork from '@/components/search/Search.network'
+import Searchanalysis from '@/components/search/Search.analysis'
 
 import Securitymedia from '@/components/security/Security.media'
 import Securityaccount from '@/components/security/Security.account'
@@ -65,6 +66,10 @@ export default new Router({
         {
           path: 'Diagnosis-analysis',
           component: Diagnosisanalysis
+        },
+        {
+          path: 'Search-analysis',
+          component: Searchanalysis
         },
         {
           path: 'Search-file',
