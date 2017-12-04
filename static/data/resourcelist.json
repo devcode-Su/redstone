@@ -13,7 +13,7 @@
         "score": "위험도",
         "count": "개수"
       },
-      "button_type": "0",
+      "button_type": "1",
       "link": null
     },
     {
@@ -26,7 +26,7 @@
         "score": "위험도",
         "count": "개수"
       },
-      "button_type": "0",
+      "button_type": "1",
       "link": null
     },
     {
@@ -39,7 +39,7 @@
         "score": "위험도",
         "count": "개수"
       },
-      "button_type": "0",
+      "button_type": "1",
       "link": null
     },
     {
@@ -48,7 +48,7 @@
       "title": "악성파일 검출 PC 현황",
       "type": "thumbchart",
       "column": null,
-      "button_type": "0",
+      "button_type": "1",
       "link": null
     },
     {
@@ -57,7 +57,7 @@
       "title": "악성 URL/IP 접근 검출 PC 현황",
       "type": "thumbchart",
       "column": null,
-      "button_type": "0",
+      "button_type": "1",
       "link": null
     },
     {
@@ -66,7 +66,7 @@
       "title": "RSC엔진 검출 PC 현황",
       "type": "thumbchart",
       "column": null,
-      "button_type": "0",
+      "button_type": "1",
       "link": null
     },
     {

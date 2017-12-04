@@ -6,6 +6,7 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="센서 로그" name="sensor">
         센서로그
+        <searchform></searchform>
       </el-tab-pane>
       <el-tab-pane label="관리자 로그" name="admin">
         관리자 로그
@@ -14,6 +15,7 @@
   </article>
 </template>
 <script>
+import Searchform from "../form/Search.form";
 export default {
   name: "Systemlog",
   extends: {},
@@ -26,7 +28,9 @@ export default {
     };
   },
   computed: {},
-  components: {},
+  components: {
+    Searchform
+  },
   watch: {},
   methods: {},
   beforeCreate() {},

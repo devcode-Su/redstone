@@ -1,17 +1,15 @@
 <template>
-  <section data-thumbcomp="thumb" class="dashboard-thumb">
+  <section data-thumbcomp="thumb">
     <h1>
       {{propData.title}}
     </h1>
-    <dashboard-periodbtn :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
-    <div class="visual">
-      <chart-horizontalbar :chart-data="datacollection" :width="500" :height="216"></chart-horizontalbar>
-    </div>
-    <button class="icon-btn icon-wrap more-link">
+    <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
+    <chart-horizontalbar :chart-data="datacollection" :width="500" :height="216"></chart-horizontalbar>
+    <button data-icon class="more-link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
     </button>
-    <button class="icon-wrap icon-btn" @click.stop="itemRemove(index)">
+    <button data-icon class="remove" @click.stop="itemRemove(index)">
       <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
     </button>
   </section>

@@ -168,3 +168,34 @@
     background-color: #3265A4;
   }
 }
+
+// dashboard thumb components
+[data-thumbcomp="thumb"] {
+  position: relative;
+  padding: 5px 5px 40px;
+  box-shadow: 0px 2px 5px rgba(25, 25, 25, 0.27);
+  margin-bottom: 25px;
+  h1 {
+    margin-bottom: 10px;
+    padding: 7px 0;
+    font-size: 18px;
+  }
+  .dashboard-period-btn {
+    margin-bottom: 10px;
+  }
+  .more-link {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    padding: 5px;
+    &:hover {
+      color: color(highlight-color);
+    }
+  }
+  .remove {
+    position: absolute;
+    right: 5px;
+    bottom: 10px;
+    padding: 5px;
+  }
+}

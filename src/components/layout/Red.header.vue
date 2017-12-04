@@ -88,12 +88,13 @@ header {
     }
   }
   .group-toggle {
-    width: 45px;
-    height: 48px;
     position: absolute;
     top: 0;
     left: 0;
+    width: 45px;
+    height: 48px;
     background-color: color(default);
+    border-radius: 0;
   }
 }
 </style>
