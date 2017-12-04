@@ -157,8 +157,8 @@ export default {
       this.radioDisabled = val;
     },
     setDatetime(num) {
-      this.form.starttime = this.datetimeOptions[num];
-      this.form.endtime = new Date();
+      this.form.startDate = this.datetimeOptions[num];
+      this.form.endDate = new Date();
     },
     onSubmit(form) {
       console.log("file");

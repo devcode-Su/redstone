@@ -86,8 +86,8 @@
           checkAll: true,
           text: ""
         },
-        startTime: null,
-        endTime: null,
+        startDate: null,
+        endDate: null,
         page: 1,
         length: 50,
         process: {
@@ -133,7 +133,7 @@
         const formData = this.$refs[form].model;
         const url = "/api/admin/search/event";
 
-        if (this.startTime === "" || this.endTime === "") {
+        if (this.startDate === "" || this.endDate === "") {
           this.$notify.error({
             title: "Error",
             message: "검색 조건을 입력하세요."
@@ -142,8 +142,8 @@
           const data = {
             page: this.page,
             length: this.length,
-            startDate: this.startTime ? this.startTime : null,
-            endDate: this.endTime ? this.endTime : null,
+            startDate: this.startDate ? this.startDate : null,
+            endDate: this.endDate ? this.endDate : null,
             dept_code: formData && formData.data ? formData.data.dept_code || "" : null,
             node_id: formData && formData.data ? formData.data.node_id || "" : null,
             order: "time",
@@ -187,8 +187,8 @@
         const start = new Date(defaultData.getTime() - 60 * 30 * 1000);
         const end = new Date(defaultData.getTime() + 60 * 30 * 1000);
 
-        this.startTime = start;
-        this.endTime = end;
+        this.startDate = start;
+        this.endDate = end;
         this.form.checkType = [data.Type];
 //        this.form.checkedSearch = [data.Type];
       }
