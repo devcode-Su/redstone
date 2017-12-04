@@ -205,7 +205,7 @@
     beforeCreate() {
     },
     created() {
-      this.$bus.$on('search-option', function(data) {
+      this.$bus.$on('search-option', (data) => {
         this.pagination.currentPage = 1;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {
