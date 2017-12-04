@@ -38,8 +38,6 @@ export default {
     return {
       form: {
         data: "",
-        startTime: "",
-        endTime: "",
         startDate: "",
         endDate: "",
         version: "",

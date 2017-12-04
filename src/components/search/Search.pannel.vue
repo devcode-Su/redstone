@@ -7,10 +7,10 @@
               <div class="form-align-box">
                 <div class="form-item-wrap">
                   <el-form-item label="조사기간 설정" size="small">
-                    <el-date-picker v-model="form.startTime" type="datetime" >
+                    <el-date-picker v-model="form.startDate" type="datetime" >
                     </el-date-picker>
                     <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-                    <el-date-picker v-model="form.endTime" type="datetime" >
+                    <el-date-picker v-model="form.endDate" type="datetime" >
                     </el-date-picker>
                     <div class="btn-date-wrap">
                       <el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">

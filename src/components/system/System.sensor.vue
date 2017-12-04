@@ -33,7 +33,7 @@
                   <el-checkbox-group :disabled="radioDidabled" v-model="form.type">
                     <el-checkbox label="settime" name="type">
                       <span class="indent-txt-reverse">특정시간 선택</span>
-                      <el-time-select :disabled="!form.type" size="mini" placeholder="Start time" v-model="form.startTime" :picker-options="{
+                      <el-time-select :disabled="!form.type" size="mini" placeholder="Start time" v-model="form.startDate" :picker-options="{
 start: '00:00',
 step: '00:15',
 end: '24:00'
@@ -41,11 +41,11 @@ end: '24:00'
 
                       </el-time-select>
                       ~
-                      <el-time-select :disabled="!form.type" size="mini" placeholder="End time" v-model="form.endTime" :picker-options="{
+                      <el-time-select :disabled="!form.type" size="mini" placeholder="End time" v-model="form.endDate" :picker-options="{
 start: '00:00',
 step: '00:15',
 end: '24:00',
-minTime: form.startTime
+minTime: form.startDate
 }">
                       </el-time-select>
                     </el-checkbox>
@@ -94,8 +94,8 @@ export default {
         radio: "",
         inervalSelect: "",
         type: "",
-        startTime: "",
-        endTime: "",
+        startDate: "",
+        endDate: "",
         checked: false,
         disableSensor: ""
       }
@@ -117,8 +117,8 @@ export default {
       this.$refs[formName].resetFields();
       this.form.type = "";
       this.form.inervalSelect = "";
-      this.form.startTime = "";
-      this.form.endTime = "";
+      this.form.startDate = "";
+      this.form.endDate = "";
       this.form.disableSensor = "";
     }
   },

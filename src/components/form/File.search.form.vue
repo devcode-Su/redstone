@@ -1,17 +1,17 @@
 <template>
-  <div data-search-pannel>
-    <el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
-      <fieldset>
-        <datetime @dateTime="dateset"></datetime>
-        <replace-input @replace="inputset"></replace-input>
-      </fieldset>
-      <div data-search-submit>
-        <el-button  type="primary" plain size="small" @click="submit">
-          검색
-        </el-button>
-      </div>
-    </el-form>
-  </div>
+	<div data-search-pannel>
+		<el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
+			<fieldset>
+				<datetime @dateTime="dateset"></datetime>
+				<replace-input @replace="inputset"></replace-input>
+			</fieldset>
+			<div data-search-submit>
+				<el-button type="primary" plain size="small" @click="submit">
+					검색
+				</el-button>
+			</div>
+		</el-form>
+	</div>
 </template>
 <script>
   import Datetime from "./Datetime";
@@ -34,8 +34,8 @@
     data() {
       return {
         form: {
-          startTime: "",
-          endTime: "",
+          startDate: "",
+          endDate: "",
           q: "",
           partial_match: false
         }
@@ -48,30 +48,41 @@
     },
     watch: {},
     methods: {
-      dateset(dateTime){
-        this.form.startTime = dateTime.start;
-        this.form.endTime = dateTime.end
+      dateset(dateTime) {
+        this.form.startDate = dateTime.start;
+        this.form.endDate = dateTime.end
       },
-      inputset(replace){
-        this.form.q = replace.text;
-        this.form.parcial_match = replace.checked;
+      inputset(replace) {
+        console.log('inputset', replace);
+        this.form.q = replace.q;
+        this.form.partial_match = replace.partial_match;
       },
-      submit(){
-        console.log(this.form);
+      submit() {
+        this.$bus.$emit('search-option', this.form);
       }
     },
-    beforeCreate() {},
-    created() {},
-    beforeMounted() {},
-    mounted() {},
-    beforeUpdate() {},
-    updated() {},
-    actvated() {},
-    deactivated() {},
-    beforeDestroy() {},
-    destroyed() {}
+    beforeCreate() {
+    },
+    created() {
+    },
+    beforeMounted() {
+    },
+    mounted() {
+    },
+    beforeUpdate() {
+    },
+    updated() {
+    },
+    actvated() {
+    },
+    deactivated() {
+    },
+    beforeDestroy() {
+    },
+    destroyed() {
+    }
   };
 </script>
 <style lang='scss' scoped>
-  @import "~styles/variables";
+	@import "~styles/variables";
 </style>

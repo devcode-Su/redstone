@@ -127,8 +127,8 @@ export default {
       let data = {
         page: 1,
         length: 50,
-        startDate: receive.startTime ? receive.startTime.getTime() : null,
-        endDate: receive.endTime ? receive.endTime.getTime() : null,
+        startDate: receive.startDate ? receive.startDate.getTime() : null,
+        endDate: receive.endDate ? receive.endDate.getTime() : null,
         dept_code: receive.dept_code,
         node_id: receive.node_id,
         order: local.order,
