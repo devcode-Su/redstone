@@ -10,10 +10,10 @@
 					<div class="form-align-box">
 						<div class="form-item-wrap">
 							<el-form-item label="조사기간 설정" size="small">
-								<el-date-picker v-model="startTime" type="datetime">
+								<el-date-picker v-model="startDate" type="datetime">
 								</el-date-picker>
 								<span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-								<el-date-picker v-model="endTime" type="datetime">
+								<el-date-picker v-model="endDate" type="datetime">
 								</el-date-picker>
 								<div class="btn-date-wrap">
 									<el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
@@ -31,11 +31,11 @@
 								</el-checkbox-group>
 							</el-form-item>
 							<el-form-item label="검색 조건" size="small">
-								<el-input type="text" v-model="form.text">
+								<el-input type="text" v-model="form.q">
 								</el-input>
-								<!--<el-checkbox class="agreement" v-model="form.agreement">-->
-								<!--부분 일치-->
-								<!--</el-checkbox>-->
+								<el-checkbox class="agreement" v-model="form.partial_match">
+									부분 일치
+								</el-checkbox>
 							</el-form-item>
 						</div>
 						<div class="btn-wrap">
@@ -84,7 +84,8 @@
             "FILE", "IP", "RSC", "process", "network", "files", "registry"
           ],
           checkAll: true,
-          text: ""
+          q: "",
+          partial_match: false
         },
         startDate: null,
         endDate: null,
@@ -148,9 +149,9 @@
             node_id: formData && formData.data ? formData.data.node_id || "" : null,
             order: "time",
             direction: 1,
-            q: formData.text,
+            q: formData.q,
             all: this.form.checkAll,
-            partial_match: true,
+            partial_match: formData.partial_match ? formData.partial_match : null,
             ti_event: this.$refs.check[0].isChecked,
             url_ip_event: this.$refs.check[1].isChecked,
             engine_event: this.$refs.check[2].isChecked,

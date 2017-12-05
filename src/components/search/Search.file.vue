@@ -35,6 +35,12 @@
           url: "/api/admin/search/file",
           rowKey: [
             "nodeid", "node.info.username"
+          ],
+          order: [
+            {label: '검출시각', value: 'InsertTime', default: true},
+            {label: '파일명', value:'FileName'},
+            {label: '파일경로', value:'FilePath'},
+            {label: '파일해시', value:'Sha256Hash'},
           ]
         },
         condition: null
@@ -46,8 +52,7 @@
       Searchfiledatatable
     },
     watch: {},
-    methods: {
-    },
+    methods: {},
     beforeCreate() {
     },
     created() {
