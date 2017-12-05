@@ -14,7 +14,10 @@ export default {
 
   // 대시보드 썸네일 콤포넌트 설정 조회
   FETCH_THUMBALL: "/dashboard/?method=define",
-  FETCH_HIDELIST: BASE_URL + "/resourcelist.json",
-  FETCH_VIEWLIST: BASE_URL + "/resourcelist.json",
-  THUMBDATA: BASE_URL + "/resourcelist.json",
+
+  // 그룹관리
+  FETCH_GROUP : BASE_URL + "/group/list",
+  FETCH_GLOBALUSER : BASE_URL + "/group/recurse/${no}",
+  FETCH_EDITUSER : BASE_URL + "/node/${no}"
+
 }

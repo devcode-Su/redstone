@@ -17,7 +17,7 @@
           <tbody>
             <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap" @click="selectRow(member)">
               <td class="col-nodeid">{{member.nodeid}}</td>
-              <td class="col-username">
+              <td class="col-name">
                 {{member.username | groupSnippet}}
               </td>
               <td class="col-end">
@@ -32,6 +32,8 @@
 </template>
 <script>
 import _ from "lodash";
+import { mapGetters } from "vuex";
+import Constant from "@/constant";
 export default {
   name: "GroupMembers",
   extends: {},
@@ -63,14 +65,15 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({ fetchUsers: "fetchGlobalUser" }),
     orderedItems() {
       return _.orderBy(this.filteredMebers, this.orderField, this.direction);
     },
     filteredMebers() {
-      return this.members.filter(member => {
+      return this.fetchUsers.filter(member => {
         return member.username.match(this.filterText);
       });
-    }
+    },
     //    fieldOmit() {
     //      return _.omit(this.fields, this.omitPath);
     //    }
@@ -90,7 +93,12 @@ export default {
     },
     selectRow(member) {
       console.log(member);
-      this.$bus.$emit("search-id", member);
+      this.$store.dispatch(Constant.RANGE_CODE, {
+        dept_code : member.dept_code,
+        name : member.dept.name,
+        nodeid : member.nodeid,
+        username : member.username
+      });
     }
   },
   beforeCreate() {},
@@ -98,7 +106,8 @@ export default {
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+  },
   actvated() {},
   deactivated() {},
   beforeDestroy() {},
@@ -113,4 +122,8 @@ tr {
 .group-members {
   border-bottom: 1px solid #d8dce5;
 }
+  .col-nodeid{
+    width:55px;
+    text-align:center
+  }
 </style>

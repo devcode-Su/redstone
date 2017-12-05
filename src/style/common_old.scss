@@ -216,15 +216,33 @@
 .tree-wrap {
   padding-left: 1.2em;
   position: relative;
+  line-height: 1.7em;
+  overflow: hidden;
   ul {
     padding-left: 1.2em;
   }
-  .item-root>ul {
-    max-height: 463px;
-    overflow-y: auto;
+  .item-root {
+    > ul {
+
+      max-height: 463px;
+      overflow-y: auto;
+      > .end-list {
+        padding-left: 0;
+      }
+    }
+    &.off {
+      .edit-wrap {
+        display: none;
+      }
+    }
+
+    &.on {
+      .edit-wrap {
+        display: block;
+      }
+    }
   }
-  line-height: 1.7em;
-  overflow: hidden;
+
   li {
     line-height: 32px;
     cursor: pointer;

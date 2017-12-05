@@ -6,7 +6,10 @@ export default {
   fetchThumbAll() {
     return axios.get(CONF.FETCH_THUMBALL);
   },
-  // fetchCompData(comp) {
-  //   return axios.get(CONF.FETCH_THUMBDATA, comp);
-  // }
+  fetchGroup(){
+    return axios.get(CONF.FETCH_GROUP);
+  },
+  fetchGlobalUser(dept){
+    return axios.get(CONF.FETCH_GLOBALUSER.replace("${no}", dept))
+  }
 }
