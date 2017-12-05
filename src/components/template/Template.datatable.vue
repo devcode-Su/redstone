@@ -69,15 +69,10 @@ export default {
     propData(data) {
       if (data) {
         this.fieldKeys = Object.keys(this.fields);
-        console.log(data.data)
         if(!data.data.indexOf(null)){
           this.rowCheck = true;
-          // for(var i =0; i< data.data.length; i++){
-          //   this.rowData = data.data[i] = "Not data"
-          // }
         }
-        this.rowData = data.data
-        console.log(this.rowData)
+        this.rowData = data.data;
         return data;
       }
     }

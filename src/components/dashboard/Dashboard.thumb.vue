@@ -1,37 +1,30 @@
 <template>
-  <section class="user-set">
-    <h1 class="user-set-title">
-      {{title}}
-    </h1>
-    <div class="user-set-wrap">
-      <div class="user-set-area">
-        <h2>
+  <section class="management">
+    <div data-management>
+      <div data-management-item>
+        <h2 data-icon>
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           표시 가능한 정보
         </h2>
-        <dashboardthumbset class="dashboard-thumbset user-set-list off" v-model="dashboardNone" :moveTo="dashboardView" :icon="false" :option="false" @moveitem="moveItem"></dashboardthumbset>
+        <dashboardthumbset data-component="thumbset" class="off" v-model="hideList" :moveTo="viewList" :icon="false" :option="false" @moveitem="moveItem"></dashboardthumbset>
       </div>
-      <div class="user-set-area">
-        <h2>
+      <div data-management-item>
+        <h2 data-icon>
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
           현재 표시된 정보
         </h2>
-        <dashboardthumbset class="user-set-list" v-model="dashboardView" :moveTo="dashboardNone" :icon="true" :option="true" @moveitem="moveItem"></dashboardthumbset>
-
+        <dashboardthumbset data-component="thumbset" v-model="viewList" :moveTo="hideList" :icon="true" :option="true" @moveitem="moveItem"></dashboardthumbset>
       </div>
     </div>
-    <div class="user-set-btn">
-      <md-button class="md-dense reset" @click="resetStorage">
-        <md-icon>replay</md-icon> 처음으로
-      </md-button>
-      <md-button class="md-dense confirm" @click="saveStorage">
-        <md-icon>done</md-icon> 확인
-      </md-button>
+    <div data-management data-btn="confirm">
+      <el-button @click="resetList">처음으로</el-button>
+      <el-button type="success" plain @click="saveList">저장</el-button>
     </div>
   </section>
 </template>
 <script>
-import TemplateDraglist from "../template/Template.draglist";
+ // import Constant from "@/constant";
+  import { mapGetters } from "vuex";
 import Dashboardthumbset from "./Dashboard.thumbset";
 export default {
   name: "DashboardSet",
@@ -44,29 +37,20 @@ export default {
   },
   data() {
     return {
-      dashboardNone: [],
-      dashboardView: []
+      hideList: [],
+      viewList: []
     };
   },
   computed: {
-    defaultViews() {
-      return this.dashboardView.length === 0
-        ? (this.dashboardView = JSON.parse(
-            localStorage.getItem("dashboard-data")
-          ))
-        : (this.dashboardView = JSON.parse(
-            localStorage.getItem("dashboard-view")
-          ));
-    },
+    ...mapGetters({ compAll: "fetchThumbAll" }),
     dragSave() {
       return localStorage.setItem(
         "dashboard-view",
-        JSON.stringify(this.dashboardView)
+        JSON.stringify(this.viewList)
       );
     }
   },
   components: {
-    TemplateDraglist,
     Dashboardthumbset
   },
   watch: {},
@@ -75,38 +59,53 @@ export default {
       setItem.to.push(setItem.element);
       setItem.from.splice(setItem.from.indexOf(setItem.element), 1);
     },
-    saveStorage() {
-      localStorage.setItem(
-        "dashboard-none",
-        JSON.stringify(this.dashboardNone)
-      );
-      localStorage.setItem(
-        "dashboard-view",
-        JSON.stringify(this.dashboardView)
-      );
+    saveList() {
+      const getHide = "/dashboard/?method=set&resource=config&from=&to=&name=hidelist&time=";
+      const getView = "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
+
+      this.$http.post(getHide,JSON.stringify(this.hideList));
+      this.$http.post(getView,JSON.stringify(this.viewList));
+      this.$bus.$emit("thumb-data");
     },
-    resetStorage() {
-      this.dashboardNone = [];
-      this.dashboardView = JSON.parse(localStorage.getItem("dashboard-data"));
-      localStorage.setItem("dashboard-none", "[]");
-      localStorage.setItem(
-        "dashboard-view",
-        JSON.stringify(this.dashboardView)
-      );
+    resetList() {
+      const setHide = "/dashboard/?method=set&resource=config&from=&to=&name=hidelist&time=";
+      const setView = "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
+      const getView = "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
+
+      this.$http.post(setHide,JSON.stringify([])).then(() => {
+        this.hideList = [];
+      });
+      this.$http.post(setView,JSON.stringify(this.compAll)).then(() =>{
+        this.$http.get(getView).then( response => {
+          this.viewList = response.data;
+        });
+      });
+      this.$bus.$emit("thumb-data")
     }
   },
   beforeCreate() {},
   created() {
-    this.dashboardNone = JSON.parse(localStorage.getItem("dashboard-none"));
-    this.dashboardView = JSON.parse(localStorage.getItem("dashboard-view"));
+    const getHide = "/dashboard/?method=get&resource=config&from=&to=&name=hidelist&time=";
+    const getView = "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
+
+    this.$http.get(getHide).then( response => {
+      console.log(response.data);
+      if(response.data === null){
+        this.hideList = [];
+      }else{
+        this.hideList = response.data;
+      }
+    });
+    this.$http.get(getView).then( response => {
+      this.viewList = response.data;
+    });
   },
   beforeMounted() {},
-  mounted() {
-    this.defaultViews;
-  },
+  mounted() {},
   beforeUpdate() {},
   updated() {
-    this.dragSave;
+    // console.log(this.hideList);
+    // console.log(this.viewList);
   },
   actvated() {},
   deactivated() {},

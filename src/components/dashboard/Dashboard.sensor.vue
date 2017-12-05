@@ -60,7 +60,7 @@ export default {
     this.$http
       .get(sensor)
       .then(response => {
-        console.log("sensor get");
+        //console.log("sensor get");
         this.sensor.count = response.data.data.count;
         this.sensor.total = response.data.data.total;
       })
@@ -73,7 +73,7 @@ export default {
     this.$http
       .get(process)
       .then(response => {
-        console.log("process get");
+        //console.log("process get");
         this.dailyProcess = response.data.data.count;
       })
       .catch(err => {
@@ -84,7 +84,7 @@ export default {
     this.$http
       .get(network)
       .then(response => {
-        console.log("network get");
+        //console.log("network get");
         this.dailyNetwork = response.data.data.count;
       })
       .catch(err => {

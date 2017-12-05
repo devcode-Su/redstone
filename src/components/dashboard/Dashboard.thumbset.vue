@@ -1,7 +1,7 @@
 <template>
   <draggable class="drag-wrap" :class="{ 'on' : option }" v-model="modelData" :options="propOption" @start="isDragging=true" @end="isDragging=false">
-    <transition-group type="transition" tag="ul" class="drag-group" :name="'flip-list'">
-      <li class="drag-item" v-for="element in modelData" :key="element.title">
+    <transition-group data-drag-group type="transition" tag="ul" class="drag-group" :name="'flip-list'">
+      <li class="drag-item" v-for="element in modelData" :key="element.seq">
         {{element.title}}
         <button @click="moveItem(modelData, moveTo, element)">
           <i v-if="icon" class="fa fa-minus-circle" aria-hidden="true"></i>

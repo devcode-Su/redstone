@@ -4,7 +4,6 @@
     <img src="../assets/logo.png">
     <signin-form idErrorMsg="아이디를 입력하세요." passwordErrorMsg="비밀번호를 입력하세요." :signFailedMsg="crendentialFail" @signCrendentials="signAttempt">
     </signin-form>
-    <el-button style="border:1px solid" @click="test">test</el-button>
   </section>
 </template>
 

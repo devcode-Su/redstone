@@ -3,8 +3,9 @@
     <h1>
       {{propData.title}}
     </h1>
-    <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick="periodData"></dashboard-periodbtn>
-    <chart-horizontalbar :chart-data="datacollection" :width="500" :height="216"></chart-horizontalbar>
+    <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick.self="periodNumber"></dashboard-periodbtn>
+    <div data-chart-none v-if="dataCheck">검출된 내역이 없습니다.</div>
+    <chart-horizontalbar v-else :chart-data="datacollection" :width="500" :height="216"></chart-horizontalbar>
     <button data-icon class="more-link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
@@ -32,15 +33,10 @@ export default {
   },
   data() {
     return {
-      progress: 0,
-      progressInterval: null,
-      transition: true,
-      count: 60,
-      progressColor: "red",
+      dataCheck : false,
       categorize: ["일일", "주간", "월간"],
-      chartNum: 0,
       datacollection: {},
-      resultData: [],
+      responseData: [],
       chartData: [],
       arr: ["ip", "count"]
     };
@@ -48,6 +44,19 @@ export default {
   components: {
     DashboardPeriodbtn,
     ChartHorizontalbar
+  },
+  watch:{
+    responseData(data){
+      if(data){
+        //console.log(data);
+        if(data.data[0] === null){
+          this.dataCheck = true;
+        }else{
+          console.log(data.data[0]);
+          //this.chartData = data.data[0];
+        }
+      }
+    }
   },
   methods: {
     // startProgress() {
@@ -70,8 +79,9 @@ export default {
     //     this.idx = index
     //   }
     // }
-    periodData(priodNum) {
-      this.fillData(priodNum);
+    periodNumber(periodNum) {
+      console.log(periodNum)
+      //this.fillData(priodNum);
     },
     fillData(n) {
       const insertData = this.chartData;
@@ -98,14 +108,11 @@ export default {
   },
   created() {
     const url = "/dashboard/?method=get&resource="+this.propData.resource
-    this.$http.get(url).then(result => {
-      this.resultData = result.data;
-      console.log(result);
-      this.chartData = this.getValueArr(result.data, this.arr);
-      //this.fillData();
+    this.$http.get(url).then(response => {
+      this.responseData = response.data;
     });
     //this.fillData();
-    console.log(this.propData);
+    //console.log(this.propData);
   },
   computed: {},
   mounted() {},
@@ -114,7 +121,11 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-.visual {
-  margin-top: 10px;
+[data-chart-none]{
+  display:flex;
+  justify-content: center;
+  align-items:center;
+  height:198px;
+  border:1px solid color(border)
 }
 </style>

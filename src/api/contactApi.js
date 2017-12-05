@@ -3,10 +3,10 @@ import axios from "axios"
 
 export default {
   // dashboard thumb components
-  fetchThumbList() {
-    return axios.get(CONF.FETCH_THUMBLIST);
+  fetchThumbAll() {
+    return axios.get(CONF.FETCH_THUMBALL);
   },
-  fetchCompData(comp) {
-    return axios.get(CONF.FETCH_THUMBDATA, comp);
-  }
+  // fetchCompData(comp) {
+  //   return axios.get(CONF.FETCH_THUMBDATA, comp);
+  // }
 }

@@ -1,7 +1,7 @@
 <template>
   <section class="components-thumb">
     <masonry :cols="{default: 3, 1200: 2, 600: 1}" :gutter="{default: '30px', 700: '15px'}">
-      <div v-for="(thumb, index) in compList" :key="thumb.id">
+      <div v-for="(thumb, index) in thumbData" :key="thumb.id">
         <component :is="thumb.type" :prop-data="thumb" :index="index"></component>
       </div>
     </masonry>
@@ -26,7 +26,7 @@ export default {
   },
   computed: {
     // ...mapState({ compLists: state => state.thumbComp.thumbCompState }),
-    ...mapGetters({ compList: "fetchThumbList" })
+    ...mapGetters({ compAll: "fetchThumbAll" })
     // compList() {
     //   return this.$store.getters.thumbComp;
     // }
@@ -37,12 +37,24 @@ export default {
   },
   watch: {},
   methods: {
-    fetchData() {
-      console.log("=====");
-      this.$store.dispatch(Constant.FETCH_THUMBLIST);
-      // setTimeout(() => {
-      //   this.thumbData = this.compList;
-      // }, 200);
+    fetchList() {
+      console.log("aaa")
+      const getView = "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
+      this.$http.get(getView).then( response => {
+        if (response.data === null) {
+          console.log("null")
+          const setView = "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
+          this.$http.post(setView, JSON.stringify(this.compAll)).then(() => {
+            this.$http.get(getView).then(response => {
+              console.log("null && get")
+              console.log(response.data);
+              this.thumbData = response.data;
+            })
+          })
+        } else {
+          this.thumbData = response.data;
+        }
+      });
     }
     // updateList() {
     //   this.$store.dispatch(Constant.UPDATE_THUMBLIST, this.thumbData);
@@ -53,18 +65,20 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.fetchData();
+    this.$store.dispatch(Constant.FETCH_THUMBALL);
+    this.fetchList();
+    this.$bus.$on("thumb-data", this.fetchList);
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
   updated() {
-    //this.updateList();
+    //console.log(this.compAll)
   },
   actvated() {},
   deactivated() {},
   beforeDestroy() {
-    this.$bus.$off("thumblist");
+    this.$bus.$off("thumb-data")
   },
   destroyed() {}
 };
