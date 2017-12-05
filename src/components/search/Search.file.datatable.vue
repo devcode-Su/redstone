@@ -7,7 +7,7 @@
 					파일로 저장
 					<i class="fa fa-download" aria-hidden="true"></i>
 				</el-button>
-				<el-select v-model="order" placeholder="정렬" size="small">
+				<el-select v-model="selectedOrder" placeholder="정렬" size="small" @change="orderChange">
 					<el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
@@ -137,7 +137,13 @@
     props: {
       //알파벳 순으로 정렬할 것.
       definition: {
-        type: Object
+        type: Object,
+        default: {
+          order: [],
+          field: [],
+          url: '',
+          rowKey: []
+        }
       }
     },
     data() {
@@ -152,7 +158,8 @@
           currentPage: 1
         },
         searchOption: {},
-        data: []
+        data: [],
+        selectedOrder: null
       };
     },
     computed: {},
@@ -186,6 +193,7 @@
 
         this.searchOption.page = this.pagination.currentPage;
         this.searchOption.length = this.pagination.size;
+        this.searchOption.order = this.selectedOrder ? this.selectedOrder : null;
 
         this.$http.get(this.definition.url, {params: this.searchOption})
           .then((result) => {
@@ -200,11 +208,17 @@
       },
       currentChange($event) {
         this.getData($event, null);
+      },
+      orderChange($event) {
+        this.getData();
       }
     },
     beforeCreate() {
     },
     created() {
+      if (this.definition && this.definition.order && this.definition.order.length > 0) {
+        this.selectedOrder = this.definition.order[0].value;
+      }
       this.$bus.$on('search-option', (data) => {
         this.pagination.currentPage = 1;
         for (let key in data) {
@@ -213,7 +227,7 @@
               this.searchOption[key] = data[key].getTime();
             }
             else {
-              this.searchOption[key] = data[key];
+              this.searchOption[key] = data[key] ? data[key] : null;
             }
           }
         }
