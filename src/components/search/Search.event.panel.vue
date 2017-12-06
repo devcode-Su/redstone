@@ -1,40 +1,40 @@
 <template>
-	<div class="template-search-pannel template-container">
-		<el-form @submit.prevent.native="find" ref="form" :label-width="'180px'" :label-position="'left'">
-			<fieldset>
-				<div class="form-align-box">
-					<div class="form-item-wrap">
-						<el-form-item label="검색 항목" size="small">
-							<el-radio-group v-model="form.selectedRadio" @change="radioSelected">
-								<el-radio v-for="(item, k) in radioList" :label="k" :key="k">{{item}}</el-radio>
-							</el-radio-group>
-						</el-form-item>
-						<el-form-item size="small">
-							<template v-if="form.selectedRadio === 'EventAll'">
-								<el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
-									전체
-								</el-checkbox>
-								<el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
-									<el-checkbox v-for="(search, k) in checklist" :label="k" :key="k" :ref="'check'">
-										{{search.name}} ({{search.count}})
-									</el-checkbox>
-								</el-checkbox-group>
-							</template>
-						</el-form-item>
-						<el-form-item label="검색 조건" size="small">
-							<el-input type="text" v-model="text">
-							</el-input>
-							<el-button size="small" @click="find($event, 0)">▲</el-button>
-							<el-button size="small" @click="find($event, 1)">▼</el-button>
-						</el-form-item>
-					</div>
-					<div class="btn-wrap">
-						<el-button size="small" type="primary" @click="find">검색</el-button>
-					</div>
-				</div>
-			</fieldset>
-		</el-form>
-	</div>
+  <div class="template-search-pannel template-container">
+    <el-form @submit.prevent.native="find" ref="form" :label-width="'180px'" :label-position="'left'">
+      <fieldset>
+        <div class="form-align-box">
+          <div class="form-item-wrap">
+            <el-form-item label="검색 항목" size="small">
+              <el-radio-group v-model="form.selectedRadio" @change="radioSelected">
+                <el-radio v-for="(item, k) in radioList" :label="k" :key="k">{{item}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item size="small">
+              <template v-if="form.selectedRadio === 'EventAll'">
+                <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
+                  전체
+                </el-checkbox>
+                <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
+                  <el-checkbox v-for="(search, k) in checklist" :label="k" :key="k" :ref="'check'">
+                    {{search.name}} ({{search.count}})
+                  </el-checkbox>
+                </el-checkbox-group>
+              </template>
+            </el-form-item>
+            <el-form-item label="검색 조건" size="small">
+              <el-input type="text" v-model="text">
+              </el-input>
+              <el-button size="small" @click="find($event, 0)">▲</el-button>
+              <el-button size="small" @click="find($event, 1)">▼</el-button>
+            </el-form-item>
+          </div>
+          <div class="btn-wrap">
+            <el-button size="small" type="primary" @click="find">검색</el-button>
+          </div>
+        </div>
+      </fieldset>
+    </el-form>
+  </div>
 </template>
 <script>
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
@@ -146,5 +146,5 @@
   };
 </script>
 <style lang='scss' scoped>
-	@import "~styles/variables";
+  @import "~styles/variables";
 </style>

@@ -1,17 +1,17 @@
 <template>
-	<article>
-		<h1 class="page-title">
-			상세분석
-		</h1>
-		<el-tabs v-model="activeName">
-			<el-tab-pane label="프로세스 트리" name="first">
-				<processtree v-if="ProcessGuid && nodeid" :propData="{ProcessGuid:ProcessGuid,nodeid:nodeid}"></processtree>
-				<SearchEventPanel v-if="ProcessGuid" :propData="ProcessGuid"></SearchEventPanel>
-				<EventDataTable v-if="ProcessGuid" :propData="ProcessGuid"></EventDataTable>
-			</el-tab-pane>
-		</el-tabs>
+  <article>
+    <h1 class="page-title">
+      상세분석
+    </h1>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="프로세스 트리" name="first">
+        <processtree v-if="ProcessGuid && nodeid" :propData="{ProcessGuid:ProcessGuid,nodeid:nodeid}"></processtree>
+        <SearchEventPanel v-if="ProcessGuid" :propData="ProcessGuid"></SearchEventPanel>
+        <EventDataTable v-if="ProcessGuid" :propData="ProcessGuid"></EventDataTable>
+      </el-tab-pane>
+    </el-tabs>
 
-	</article>
+  </article>
 </template>
 <script>
   import Processtree from "./Search.process.tree.vue";
@@ -87,5 +87,5 @@
   };
 </script>
 <style lang='scss' scoped>
-	@import "~styles/variables";
+  @import "~styles/variables";
 </style>
