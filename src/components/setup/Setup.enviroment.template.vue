@@ -31,14 +31,14 @@
           <div data-form-item>
             <label data-form-label="required">이름</label>
             <div data-form-tag>
-              <el-input type="text" v-model="form.name" size="small" :class="required" clearable @blur="requiredChcek"></el-input>
+              <el-input type="text" v-model="form.name" size="small" :class="{ 'is-error' : required}" id="name" clearable @blur="requiredChcek"></el-input>
               <span data-required-msg>빈칸을 채워주세요.</span>
             </div>
           </div>
           <div data-form-item>
             <label data-form-label="required">IP 주소</label>
             <div data-form-tag>
-              <el-input type="text" v-model="form.ipAddress" placeholder="#.#.#.#" size="small" clearable></el-input>
+              <el-input type="text" v-model="form.ipAddress" :class="{ 'is-error' : required}" placeholder="#.#.#.#" size="small" clearable @blur="requiredChcek"></el-input>
               <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
               <el-input type="text" v-model="form.ipAddress" placeholder="#.#.#.#" size="small" clearable></el-input>
             </div>
@@ -95,6 +95,7 @@ export default {
   },
   data() {
     return {
+      required: false,
       options: [
         { value: "연구소", label: "연구소" },
         { value: "영업1팀", label: "영업1팀" },
@@ -138,10 +139,10 @@ export default {
     };
   },
   computed: {
-    required() {
-      console.log(this.form.name)
-      if(this.form.name === "") return { "is-error" : true }
-    }
+    // required() {
+    //   console.log(this.form.name)
+    //   if(this.form.name === "") return { "is-error" : true }
+    // }
   },
   components: {},
   watch: {},
@@ -175,8 +176,12 @@ export default {
       this.multipleSelection = val;
     },
     requiredChcek(val){
+      console.log(val)
       console.log(val.target.value)
       console.log("???")
+      if(val.target.value === "") {
+        return this.required = true
+      }
     }
   },
   beforeCreate() {},
