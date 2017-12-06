@@ -6,7 +6,7 @@
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           이동할 부서원 선택
         </h2>
-        <groupdepartment data-component="tree-top" :type="'from'"></groupdepartment>
+        <groupdepartment data-component="tree-top" :page="'from'"></groupdepartment>
         <groupmembersmove data-component="member-bottom" :movebtn="true" :members="departNow" :moveTo="departChange" @moveitem="moveItem"></groupmembersmove>
       </div>
       <div data-management-item>
@@ -14,7 +14,7 @@
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
           이동될 부서 선택
         </h2>
-        <groupdepartment data-component="tree-top" :type="'to'"></groupdepartment>
+        <groupdepartment data-component="tree-top" :page="'to'"></groupdepartment>
         <groupmembersmove data-component="member-bottom" :members="departChange" :moveTo="departNow" :icon="false" @moveitem="moveItem"></groupmembersmove>
       </div>
     </div>

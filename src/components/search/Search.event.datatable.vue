@@ -154,7 +154,6 @@
       this._current = current;
       this.total = total;
     }
-
     get current() {
       let value = this._current;
       if (value < 0) {
@@ -462,7 +461,6 @@
         let start = (this.paging.currentPage - 1 ) * this.paging.size;
         let end = start + this.paging.size;
         this.viewData = this.filteredData.slice(start, end);
-
 //        let el = this.$refs.table;
 //        if (el) {
 //          el.scrollIntoView(true);
@@ -544,6 +542,7 @@
   };
 </script>
 <style lang='scss' scoped>
+
   //noinspection CssUnknownTarget
   @import "~styles/variables";
 
@@ -571,6 +570,7 @@
       }
     }
   }
+
 
   .template-table-wrap {
     .fade-enter-active,

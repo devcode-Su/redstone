@@ -1,6 +1,6 @@
 <template>
   <section data-index="Redstone" :class="{'ready' : isLoading}">
-    <red-header :username="userdata.name">
+    <red-header :username="userData.name">
       <button data-tooltip-wrap data-icon="nav" class="group-toggle" :class="{ on : selected}" @click="btnToggle">
         <i class="fa fa-navicon fa-24" aria-hidden="true"></i>
         <span data-tooltip="group">조직도</span>
@@ -40,7 +40,7 @@ export default {
     return {
       selected: false,
       selectedDisabled: true,
-      userdata: []
+      userData: []
     };
   },
   computed: {
@@ -82,13 +82,16 @@ export default {
   },
   created() {
     const adminInfo = "/api/admin/info";
-    this.$http.get(adminInfo).then(result => {
-      this.$store.dispatch(Constant.LOADING_STATE, false);
-      // this.userdata = result.data;
-      console.log("redstone")
-    }).catch(() => {
-      this.$router.push("/");
-    });
+    this.$http
+      .get(adminInfo)
+      .then(response => {
+        this.$store.dispatch(Constant.LOADING_STATE, false);
+        //console.log("redstone")
+        this.userData = response.data;
+      })
+      .catch(() => {
+        this.$router.push("/");
+      });
   },
   mounted() {},
   mixins: [locationCheckMixin]

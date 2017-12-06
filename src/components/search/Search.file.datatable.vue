@@ -254,8 +254,8 @@
   };
 </script>
 <style lang='scss' scoped>
-  @import "~styles/variables";
 
+  @import "~styles/variables";
   .file-data-table {
     .table-body-wrap {
       max-height: 600px;

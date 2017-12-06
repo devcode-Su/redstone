@@ -1,13 +1,14 @@
 <template>
   <div class="tree-view" :class="{ on : position}">
     <ul class="tree-wrap">
-      <groupdepartmenttree v-if="defaultData" :model="company[0]" @changeModel="overRide" :treeEdit="treeEdit" :type="type"></groupdepartmenttree>
+      <groupdepartmenttree :model="groups" :treeEdit="treeEdit" :page="page"></groupdepartmenttree>
     </ul>
   </div>
 </template>
 <script>
 import Groupdepartmenttree from "./Group.department.tree";
-//import {EventBus} from "../../main";
+import Constant from "@/constant";
+import { mapGetters } from "vuex";
 export default {
   name: "Groupdepartment",
   extends: {},
@@ -21,33 +22,30 @@ export default {
       type: Boolean,
       default: false
     },
-    type: String
+    page: String
   },
   data() {
     return {
       filterText: "",
-      company: []
+      groups: []
     };
   },
   computed: {
-    isLoading() {
-      return this.$store.state.loadingState;
-    },
-    defaultData() {
-      return this.company.length === 0 ? false : true;
-    }
+    ...mapGetters({ groupData: "fetchGroup" })
   },
   components: {
     Groupdepartmenttree
   },
-  watch: {},
+  watch: {
+    groupData(data) {
+      if (data) {
+        this.groups = data;
+      }
+    }
+  },
   methods: {
     getData() {
-      const apiUrl = "/api/admin/group/list";
-      this.$http.get(apiUrl).then(result => {
-        this.company = this.listToTree(result.data);
-        //EventBus.$emit("nodeid", this.company[0]);
-      });
+      this.$store.dispatch(Constant.FETCH_GROUP);
     },
     overRide(model) {
       this.company = model;
@@ -55,11 +53,9 @@ export default {
   },
   beforeCreate() {},
   created() {
-    //this.loadData();
-    //    this.$bus.$on("resetGroup", () => {
-    //      this.loadData()
-    //      console.log("hahaha")
-    //    })
+    //this.getData();
+    console.log("그룹관리 메뉴");
+    this.$store.dispatch(Constant.FETCH_GROUP);
   },
   beforeMounted() {},
   mounted() {},

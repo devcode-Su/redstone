@@ -1,12 +1,12 @@
 <template>
-    <section data-group="management">
+  <section data-group="management">
     <div data-management>
       <div data-management-item>
         <h2 data-icon>
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
           부서 수정
         </h2>
-        <groupdepartment data-component="tree" :treeEdit="true"></groupdepartment>
+        <groupdepartment data-component="tree" :treeEdit="true" :page="'user'"></groupdepartment>
       </div>
       <div data-management-item>
         <h2 data-icon>

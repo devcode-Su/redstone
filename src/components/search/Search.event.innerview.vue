@@ -1,4 +1,3 @@
-a
 <template>
   <section class="inner-view inner-view-box">
     <h1>상세정보</h1>
@@ -358,12 +357,15 @@ a
   };
 </script>
 <style lang='scss' scoped>
+
   //noinspection CssUnknownTarget
   @import "~styles/variables";
+
 
   tr {
     cursor: pointer;
   }
+
 
   .inner-view-box {
     margin: 10px 0;

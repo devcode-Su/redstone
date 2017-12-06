@@ -1,20 +1,17 @@
 <template>
-  <el-form-item class="none-label" size="small">
-    <el-checkbox v-model="checked">일주일 이상 미로그인 센서
-    </el-checkbox>
-  </el-form-item>
+  <div>
+    테이블
+  </div>
 </template>
 <script>
 export default {
-  name: "LoginCheck",
+  name: "DatatableTable",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
   },
   data() {
-    return {
-      checked: []
-    };
+    return {};
   },
   computed: {},
   components: {},

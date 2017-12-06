@@ -1,6 +1,6 @@
 <template>
   <li :class="[{'item-root' : isRootItem },{'off' : !isOpen && isRootItem },{'end-list' : !model.children }]">
-    <div @click.self="setOpen(type)" :class="{on: model.children && isOpen}">
+    <div @click.self="setOpen(page)" :class="{on: model.children && isOpen}">
       <span>
         <i v-if="isFolder" class="fa fa-caret-right" :class="{'rotate' : isOpen}">
         </i>
@@ -26,7 +26,7 @@
     </div>
     <transition @enter="enter" @leave="leave">
       <ul v-show="isOpen" v-if="model.children">
-        <template-grouptree v-for="(model, i) in model.children" :key="model.id" :model="model" :index="i" :treeEdit="treeEdit" :type="type">
+        <template-grouptree v-for="(model, i) in model.children" :key="model.id" :model="model" :index="i" :treeEdit="treeEdit" :page="page">
         </template-grouptree>
       </ul>
     </transition>
@@ -34,7 +34,7 @@
 </template>
 <script>
 import Velocity from "velocity-animate";
-//import { EventBus } from "@/main";
+import Constant from "@/constant";
 export default {
   name: "TemplateGrouptree",
   extends: {},
@@ -46,7 +46,7 @@ export default {
       type: Boolean,
       default: false
     },
-    type: String
+    page: String
   },
   data() {
     return {
@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     isRootItem() {
-      return this.model.name === "undefined" && this.model.name === "전사";
+      return this.model.name === "undefined" || this.model.name === "전사";
     },
     isFolder() {
       return this.model.children && this.model.children.length;
@@ -66,18 +66,20 @@ export default {
   components: {},
   watch: {},
   methods: {
-    setOpen(type) {
+    setOpen(page) {
+      console.log(page);
       this.isOpen = !this.isOpen;
       if (this.model.name !== "전사" && this.$children.length) {
         if (this.isOpen) this.$emit("is-open", this.$parent.$children);
       }
-      if (type === "from") {
+      if (page === "from") {
         this.$bus.$emit("userfrom", this.model.dept_code);
-      } else if (type === "to") {
+      } else if (page === "to") {
         this.$bus.$emit("userto", this.model.dept_code);
+      } else if (page === "user") {
+        console.log("aaa");
       } else {
-        this.$bus.$emit("userview", this.model.dept_code);
-        this.$bus.$emit("search-id", this.model);
+        this.$store.dispatch(Constant.GLOBAL_RANGECODE, this.model);
       }
     },
     enter(el, done) {
@@ -118,10 +120,39 @@ export default {
     },
     addTree() {
       this.isOpen = true;
-      this.model.depart.push({
-        name: "이름을 수정하세요."
-      });
-      this.$emit("changeModel", this.model);
+
+      this.$prompt("추가할 부서의 이름을 입력하세요.", "부서추가", {
+        confirmButtonText: "추가",
+        cancelButtonText: "취소"
+      })
+        .then(value => {
+          this.$message({
+            showClose: true,
+            type: "success",
+            message: "추가될 부서명 : " + value.value,
+            duration: 2000
+          });
+          console.log(this.model);
+          this.$store.dispatch(Constant.ADD_GROUP, {
+            pcode: this.model.dept_code,
+            name: value.value
+          });
+        })
+        .catch(() => {
+          this.$message({
+            showClose: true,
+            type: "info",
+            message: "부서추가를 취소합니다.",
+            duration: 2000
+          });
+        });
+      // var name = prompt("추가될 부서의 이름을 입력하세요.","");
+      // alert(name)
+
+      //this.$store.dispatch(Constant.ADD_GROUP, )
+      // this.model.children.push({
+      //   name: "이름을 수정하세요."
+      // });
     },
     removeTree(model) {
       const tree = this.$parent.model.children;

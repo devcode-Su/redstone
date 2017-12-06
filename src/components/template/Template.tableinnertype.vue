@@ -26,7 +26,7 @@
   </section>
 </template>
 <script>
-  import Templatepaginations from "./Template.paginations.vue";
+import Templatepaginations from "./Template.paginations.vue";
 export default {
   name: "Templatetablerouter",
   extends: {},
@@ -39,12 +39,12 @@ export default {
   data() {
     return {
       more: null,
-      pagis:{
-        total : "",
-        per_page : "",
+      pagis: {
+        total: "",
+        per_page: "",
         current_page: "",
-        next_page_url : null,
-        prev_page_url : null
+        next_page_url: null,
+        prev_page_url: null
       }
     };
   },
@@ -77,34 +77,34 @@ export default {
       console.log(getdata);
       this.$bus.$emit("process-search-data", getdata);
       this.$router.push("Search-process");
-      this.$router.push({path: 'Search-process', params: { psd : getdata}});
+      this.$router.push({ path: "Search-process", params: { psd: getdata } });
 
-//      const defaultDate = new Date(getdata.EventTime);
-//      const start = new Date(defaultDate.getTime() - 60 * 30 * 1000);
-//      const end = new Date(defaultDate.getTime() + 60 * 30 * 1000);
-//      let type = null,text = null ,processGuid = null;
-//      if(getdata.Type) {
-//        console.log(getdata);
-//        if (getdata.Type === "FILE") {
-//          type = "FILE";
-//          text = getdata.Md5Hash
-//        } else if (getdata.Type === "IP") {
-//          type = "IP";
-//          processGuid = getdata.ProcessGuid
-//        } else if (getdata.Type === "RSC") {
-//          type = "RSC";
-//            processGuid = getdata.ProcessGuid
-//        }
-//      }else if(getdata.VolumeGuid){
-//        text = getdata.VolumeGuid
-//      }
-//      this.$store.commit(Constant.PROCESS_SEARCH, {
-//        startTime : start,
-//        endTime : end,
-//        checkType : [type],
-//        text : text,
-//        processGuid : processGuid
-//      });
+      //      const defaultDate = new Date(getdata.EventTime);
+      //      const start = new Date(defaultDate.getTime() - 60 * 30 * 1000);
+      //      const end = new Date(defaultDate.getTime() + 60 * 30 * 1000);
+      //      let type = null,text = null ,processGuid = null;
+      //      if(getdata.Type) {
+      //        console.log(getdata);
+      //        if (getdata.Type === "FILE") {
+      //          type = "FILE";
+      //          text = getdata.Md5Hash
+      //        } else if (getdata.Type === "IP") {
+      //          type = "IP";
+      //          processGuid = getdata.ProcessGuid
+      //        } else if (getdata.Type === "RSC") {
+      //          type = "RSC";
+      //            processGuid = getdata.ProcessGuid
+      //        }
+      //      }else if(getdata.VolumeGuid){
+      //        text = getdata.VolumeGuid
+      //      }
+      //      this.$store.commit(Constant.PROCESS_SEARCH, {
+      //        startTime : start,
+      //        endTime : end,
+      //        checkType : [type],
+      //        text : text,
+      //        processGuid : processGuid
+      //      });
       //this.$store.commit(Constant.PROCESS_SEARCH, getdata)
       this.$router.push("Search-process");
     }

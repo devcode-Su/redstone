@@ -1,10 +1,13 @@
 export default {
 
   LOADING_STATE: "loadingState",
-  FETCH_USER : "fetchUser",
+
   FETCH_THUMBALL: "fetchThumbAll",
-  UPDATE_THUMBLIST: "updateThumbList",
-  DELETE_THUMBLIST: "deleteThumbList",
-  FETCH_THUMBDATA: "fetchThumbData",
-  PROCESS_SEARCH: "processSearch"
+
+  FETCH_GROUP : "fetchGroup",
+  ADD_GROUP : "addGroup",
+  GLOBAL_RANGECODE : "globalRangeCode",
+  GLOBAL_RANGEUSER : "globalRangeUser",
+  FETCH_GLOBALUSER : "fetchGlobalUser",
+  FETCH_EDITUSER : "fetchEditUser",
 }

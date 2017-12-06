@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      dataCheck : false,
+      dataCheck: false,
       categorize: ["일일", "주간", "월간"],
       datacollection: {},
       responseData: [],
@@ -45,13 +45,13 @@ export default {
     DashboardPeriodbtn,
     ChartHorizontalbar
   },
-  watch:{
-    responseData(data){
-      if(data){
+  watch: {
+    responseData(data) {
+      if (data) {
         //console.log(data);
-        if(data.data[0] === null){
+        if (data.data[0] === null) {
           this.dataCheck = true;
-        }else{
+        } else {
           console.log(data.data[0]);
           //this.chartData = data.data[0];
         }
@@ -80,7 +80,7 @@ export default {
     //   }
     // }
     periodNumber(periodNum) {
-      console.log(periodNum)
+      console.log(periodNum);
       //this.fillData(priodNum);
     },
     fillData(n) {
@@ -107,7 +107,7 @@ export default {
     //      }
   },
   created() {
-    const url = "/dashboard/?method=get&resource="+this.propData.resource
+    const url = "/dashboard/?method=get&resource=" + this.propData.resource;
     this.$http.get(url).then(response => {
       this.responseData = response.data;
     });
@@ -121,11 +121,11 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-[data-chart-none]{
-  display:flex;
+[data-chart-none] {
+  display: flex;
   justify-content: center;
-  align-items:center;
-  height:198px;
-  border:1px solid color(border)
+  align-items: center;
+  height: 198px;
+  border: 1px solid color(border);
 }
 </style>

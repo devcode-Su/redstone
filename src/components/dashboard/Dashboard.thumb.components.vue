@@ -38,19 +38,21 @@ export default {
   watch: {},
   methods: {
     fetchList() {
-      console.log("aaa")
-      const getView = "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
-      this.$http.get(getView).then( response => {
+      console.log("aaa");
+      const getView =
+        "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
+      this.$http.get(getView).then(response => {
         if (response.data === null) {
-          console.log("null")
-          const setView = "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
+          console.log("null");
+          const setView =
+            "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
           this.$http.post(setView, JSON.stringify(this.compAll)).then(() => {
             this.$http.get(getView).then(response => {
-              console.log("null && get")
+              console.log("null && get");
               console.log(response.data);
               this.thumbData = response.data;
-            })
-          })
+            });
+          });
         } else {
           this.thumbData = response.data;
         }
@@ -78,7 +80,7 @@ export default {
   actvated() {},
   deactivated() {},
   beforeDestroy() {
-    this.$bus.$off("thumb-data")
+    this.$bus.$off("thumb-data");
   },
   destroyed() {}
 };

@@ -1,6 +1,6 @@
 <template>
   <el-form-item label="조사기간 설정" size="small">
-    <el-checkbox v-model="checked" >
+    <el-checkbox v-model="checked">
       <span style="margin-right:20px;">비밀번호 미 변경자 조회</span>
     </el-checkbox>
     <el-date-picker v-model="startDate" type="datetime" placeholder="Select Start date and time">
@@ -26,10 +26,9 @@ export default {
   data() {
     return {
       datelabel: ["1주일전", "1개월전", "3개월전", "6개월전"],
-      checked:[],
+      checked: [],
       startDate: "",
-      endDate: "",
-
+      endDate: ""
     };
   },
   computed: {},

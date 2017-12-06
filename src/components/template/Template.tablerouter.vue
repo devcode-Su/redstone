@@ -36,7 +36,7 @@
         <table>
           <tbody>
             <tr v-for="(row,i) in tableData" :key="i.id" @click="moveRow" :ref="'checkedRow'">
-              <td v-for="(col, k, idx) in row" :key="k"  :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
+              <td v-for="(col, k, idx) in row" :key="k" :class="['col'+idx,{ 'col-end' : propData.field.length-1 === idx }]">
                 {{col}}
               </td>
             </tr>
@@ -48,7 +48,7 @@
   </section>
 </template>
 <script>
-  import Templatepaginations from "../template/Template.paginations.vue";
+import Templatepaginations from "../template/Template.paginations.vue";
 export default {
   name: "Templatetablerouter",
   extends: {},
@@ -67,12 +67,12 @@ export default {
       more: null,
       order: "",
       morebtn: false,
-      pagis:{
-        total : "",
-        per_page : "",
+      pagis: {
+        total: "",
+        per_page: "",
         current_page: "",
-        next_page_url : null,
-        prev_page_url : null
+        next_page_url: null,
+        prev_page_url: null
       }
     };
   },
@@ -112,13 +112,13 @@ export default {
   },
   beforeCreate() {},
   created() {
-    console.log(this.propData)
+    console.log(this.propData);
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
   updated() {
-    console.log(this.propData)
+    console.log(this.propData);
   },
   actvated() {},
   deactivated() {},
