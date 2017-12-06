@@ -56,18 +56,14 @@
     },
     data() {
       return {
-        data: {
-          FileHash: {
-            type: String
-          }
-       }
-      }
-  },
-  computed: {},
-  components: {
-    // Component List
-  },
-  watch: {},
+        data: {}
+      };
+    },
+    computed: {},
+    components: {
+      // Component List
+    },
+    watch: {},
     methods: {
       getData(processGuid) {
         const url = `/api/admin/search/file/info/master/process_guid/${processGuid}`;
@@ -118,7 +114,7 @@
     },
     destroyed() {
     },
-  }
+  };
 </script>
 <style lang='scss' scoped>
   //noinspection CssUnknownTarget

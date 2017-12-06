@@ -7,19 +7,19 @@
           파일로 저장
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
-        <el-select v-model="order" placeholder="정렬" size="small" @change="reorder"
-                   :disabled="(!propData || !propData.search ||  propData.search.length == 0)">
-          <el-option v-for="item in orderOption" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
+        <!--<el-select v-model="order" placeholder="정렬" size="small" @change="reorder"-->
+                   <!--:disabled="(!propData || !propData.search ||  propData.search.length == 0)">-->
+          <!--<el-option v-for="item in orderOption" :key="item.value" :label="item.label" :value="item.value">-->
+          <!--</el-option>-->
+        <!--</el-select>-->
         <div class="view-check">
           <el-button @click="morebtn = !morebtn" size="small">
             보기
             <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
           </el-button>
           <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-            <el-checkbox v-for="(check,i) in field" :label="check" :key="check" :ref="'checked'"
-                         v-if="i !== field.length -1">{{check}}
+            <el-checkbox v-for="(check,i) in head" :label="check" :key="check" :ref="'checked'"
+                         v-if="i !== head.length -1">{{check}}
             </el-checkbox>
           </el-checkbox-group>
         </div>
@@ -126,8 +126,8 @@
             </tr>
             <transition name="fade">
               <tr v-if="row === more" class="show-row">
-                <td :colspan="collength" :key="row.id">
-                  <event-inner-view :propData="row"></event-inner-view>
+                <td :colspan="colLength" :key="row.id">
+                  <EventInnerView :propData="row"></EventInnerView>
                 </td>
               </tr>
             </transition>
@@ -154,6 +154,7 @@
       this._current = current;
       this.total = total;
     }
+
     get current() {
       let value = this._current;
       if (value < 0) {
@@ -196,7 +197,7 @@
         head: [
           '시각', '분류', '내용', ''
         ],
-        collength: 0,
+        colLength: 0,
         more: null,
         order: "",
         view: [],
@@ -239,7 +240,7 @@
     },
     computed: {},
     components: {
-      "event-inner-view":EventInnerView
+      EventInnerView
     },
     watch: {
       propData: function (n, o) {
@@ -427,11 +428,11 @@
         return Math.floor(idx / this.paging.size) + 1;
       },
       viewCheck() {
-        if (this.$refs.checkedRow !== undefined) {
-          for (let j = 0; j < this.$refs.checkedRow.length; j++) {
-            for (let i = 0; i < this.propData.field.length - 1; i++) {
+        if (this.$refs.trs !== undefined) {
+          for (let j = 0; j < this.$refs.trs.length; j++) {
+            for (let i = 0; i < this.head.length - 1; i++) {
               this.$refs.checkedTh[i].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i].hidden = this.$refs.checked[i].isChecked;
+              this.$refs.trs[j].children[i].hidden = this.$refs.checked[i].isChecked;
             }
           }
         } else {
@@ -513,6 +514,9 @@
       if (this.propData) {
         this.getData(this.propData);
       }
+      if (this.head) {
+        this.colLength = this.head.length;
+      }
 
       this.$bus.$on('EventFilter', (data) => {
         this.lastFilter = data;
@@ -570,7 +574,6 @@
       }
     }
   }
-
 
   .template-table-wrap {
     .fade-enter-active,
