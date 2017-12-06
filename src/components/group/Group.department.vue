@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       filterText: "",
-      groups : []
+      groups: []
     };
   },
   computed: {
@@ -37,8 +37,8 @@ export default {
     Groupdepartmenttree
   },
   watch: {
-    groupData(data){
-      if(data) {
+    groupData(data) {
+      if (data) {
         this.groups = data;
       }
     }

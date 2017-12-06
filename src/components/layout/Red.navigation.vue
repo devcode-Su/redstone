@@ -77,7 +77,7 @@ export default {
   actvated() {},
   deactivated() {},
   beforeDestroy() {},
-  destroyed() {},
+  destroyed() {}
   //mixins: [locationCheckMixin]
 };
 </script>
@@ -87,7 +87,7 @@ export default {
 [data-nav-list="category"] {
   position: relative;
   height: 50px;
-  &:hover{
+  &:hover {
     [data-icon] {
       top: -7px;
       right: -7px;
@@ -102,9 +102,9 @@ export default {
     }
   }
   &:hover,
-  &.on{
-    i{
-      color:color(highlight-color)
+  &.on {
+    i {
+      color: color(highlight-color);
     }
   }
 }

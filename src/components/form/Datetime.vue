@@ -30,8 +30,7 @@ export default {
   computed: {},
   components: {},
   watch: {},
-  methods: {
-  },
+  methods: {},
   beforeCreate() {},
   created() {},
   beforeMounted() {},
@@ -39,9 +38,9 @@ export default {
   beforeUpdate() {},
   updated() {
     this.$emit("dateTime", {
-      start : this.startDate,
-      end : this.endDate
-    })
+      start: this.startDate,
+      end: this.endDate
+    });
   },
   actvated() {},
   deactivated() {},

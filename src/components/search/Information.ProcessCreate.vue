@@ -70,71 +70,62 @@
 	</div>
 </template>
 <script>
-  export default {
-    name: "InformationProcessCreate",
-    props: {
-      ProcessGuid: {
-        type: String
-      }
-    },
-    data() {
-      return {
-        data: {}
-      };
-    },
-    computed: {},
-    components: {
-      // Component List
-    },
-    watch: {},
-    methods: {
-      getData(processGuid) {
-        const url = `/api/admin/search/process/info/${processGuid}`;
-        this.$http.get(url)
-          .then((data) => {
-            let d = data.data.rows;
-            if (d.length > 1) {
-              d[0].EventTime1 = d[1].EventTime;
-            }
-            this.data = d[0];
-          });
-      }
-    },
-    beforeCreate() {
-    },
-    created() {
-      console.log(this);
-      if (this.ProcessGuid) {
-        this.getData(this.ProcessGuid);
-      }
-//      if (this.$route.query && this.$route.query.ProcessGuid) {
-//        this.ProcessGuid = this.$route.query.ProcessGuid;
-//        this.nodeid = this.$route.query.nodeid;
-//      }
-//      this.$bus.$on('TreeProcessSelected', (processGuid) => {
-//        this.ProcessGuid = processGuid;
-//      });
-    },
-    beforeMounted() {
-    },
-    mounted() {
-    },
-    beforeUpdate() {
-    },
-    updated() {
-    },
-    actvated() {
-    },
-    deactivated() {
-    },
-    beforeDestroy() {
-//      this.$bus.$off('TreeProcessSelected');
-    },
-    destroyed() {
-    },
-  };
+export default {
+  name: "InformationProcessCreate",
+  props: {
+    ProcessGuid: {
+      type: String
+    }
+  },
+  data() {
+    return {
+      data: {}
+    };
+  },
+  computed: {},
+  components: {
+    // Component List
+  },
+  watch: {},
+  methods: {
+    getData(processGuid) {
+      const url = `/api/admin/search/process/info/${processGuid}`;
+      this.$http.get(url).then(data => {
+        let d = data.data.rows;
+        if (d.length > 1) {
+          d[0].EventTime1 = d[1].EventTime;
+        }
+        this.data = d[0];
+      });
+    }
+  },
+  beforeCreate() {},
+  created() {
+    console.log(this);
+    if (this.ProcessGuid) {
+      this.getData(this.ProcessGuid);
+    }
+    //      if (this.$route.query && this.$route.query.ProcessGuid) {
+    //        this.ProcessGuid = this.$route.query.ProcessGuid;
+    //        this.nodeid = this.$route.query.nodeid;
+    //      }
+    //      this.$bus.$on('TreeProcessSelected', (processGuid) => {
+    //        this.ProcessGuid = processGuid;
+    //      });
+  },
+  beforeMounted() {},
+  mounted() {},
+  beforeUpdate() {},
+  updated() {},
+  actvated() {},
+  deactivated() {},
+  beforeDestroy() {
+    //      this.$bus.$off('TreeProcessSelected');
+  },
+  destroyed() {}
+};
 </script>
 <style lang='scss' scoped>
-	//noinspection CssUnknownTarget
-	@import "~styles/variables";
+//noinspection CssUnknownTarget
+@import "~styles/variables";
 </style>

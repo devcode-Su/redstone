@@ -1,11 +1,11 @@
 <template>
-  <section>
-    데이터 테이블
-  </section>
+  <div>
+    테이블
+  </div>
 </template>
 <script>
 export default {
-  name: "Datatable",
+  name: "DatatableTable",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.

@@ -73,7 +73,7 @@ export default {
       return this.fetchUsers.filter(member => {
         return member.username.match(this.filterText);
       });
-    },
+    }
     //    fieldOmit() {
     //      return _.omit(this.fields, this.omitPath);
     //    }
@@ -101,8 +101,7 @@ export default {
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {
-  },
+  updated() {},
   actvated() {},
   deactivated() {},
   beforeDestroy() {},
@@ -117,8 +116,8 @@ tr {
 .group-members {
   border-bottom: 1px solid #d8dce5;
 }
-  .col-nodeid{
-    width:55px;
-    text-align:center
-  }
+.col-nodeid {
+  width: 55px;
+  text-align: center;
+}
 </style>

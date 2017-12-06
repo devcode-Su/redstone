@@ -82,13 +82,16 @@ export default {
   },
   created() {
     const adminInfo = "/api/admin/info";
-    this.$http.get(adminInfo).then(response => {
-      this.$store.dispatch(Constant.LOADING_STATE, false);
-      //console.log("redstone")
-      this.userData = response.data
-    }).catch(() => {
-      this.$router.push("/");
-    });
+    this.$http
+      .get(adminInfo)
+      .then(response => {
+        this.$store.dispatch(Constant.LOADING_STATE, false);
+        //console.log("redstone")
+        this.userData = response.data;
+      })
+      .catch(() => {
+        this.$router.push("/");
+      });
   },
   mounted() {},
   mixins: [locationCheckMixin]

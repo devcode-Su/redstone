@@ -67,7 +67,7 @@ export default {
   watch: {},
   methods: {
     setOpen(page) {
-      console.log(page)
+      console.log(page);
       this.isOpen = !this.isOpen;
       if (this.model.name !== "전사" && this.$children.length) {
         if (this.isOpen) this.$emit("is-open", this.$parent.$children);
@@ -76,8 +76,8 @@ export default {
         this.$bus.$emit("userfrom", this.model.dept_code);
       } else if (page === "to") {
         this.$bus.$emit("userto", this.model.dept_code);
-      }else if ( page === "user"){
-        console.log("aaa")
+      } else if (page === "user") {
+        console.log("aaa");
       } else {
         this.$store.dispatch(Constant.GLOBAL_RANGECODE, this.model);
       }
@@ -121,29 +121,31 @@ export default {
     addTree() {
       this.isOpen = true;
 
-      this.$prompt("추가할 부서의 이름을 입력하세요.","부서추가",{
-        confirmButtonText: '추가',
-        cancelButtonText: '취소',
-      }).then(value => {
-        this.$message({
-          showClose: true,
-          type : "success",
-          message : "추가될 부서명 : " + value.value,
-          duration: 2000
-        });
-        console.log(this.model);
-        this.$store.dispatch(Constant.ADD_GROUP, {
-        pcode : this.model.dept_code,
-        name : value.value
-        })
-      }).catch(() => {
-        this.$message({
-          showClose: true,
-          type: "info",
-          message : "부서추가를 취소합니다.",
-          duration: 2000
-        })
+      this.$prompt("추가할 부서의 이름을 입력하세요.", "부서추가", {
+        confirmButtonText: "추가",
+        cancelButtonText: "취소"
       })
+        .then(value => {
+          this.$message({
+            showClose: true,
+            type: "success",
+            message: "추가될 부서명 : " + value.value,
+            duration: 2000
+          });
+          console.log(this.model);
+          this.$store.dispatch(Constant.ADD_GROUP, {
+            pcode: this.model.dept_code,
+            name: value.value
+          });
+        })
+        .catch(() => {
+          this.$message({
+            showClose: true,
+            type: "info",
+            message: "부서추가를 취소합니다.",
+            duration: 2000
+          });
+        });
       // var name = prompt("추가될 부서의 이름을 입력하세요.","");
       // alert(name)
 
@@ -158,7 +160,7 @@ export default {
     },
     changeType() {
       if (!this.isFolder) {
-        this.$set(this.model, "children", [{ name: "이름을 수정하세요."}]);
+        this.$set(this.model, "children", [{ name: "이름을 수정하세요." }]);
       }
     },
     cancelEdit() {

@@ -190,149 +190,148 @@
   </section>
 </template>
 <script>
-  import Templatepaginations from "../template/Template.paginations.vue";
-  export default {
-    name: "Processinnerview",
-    extends: {},
-    props: {
-      //알파벳 순으로 정렬할 것.
-      propData: {
-        type: Array | Object
+import Templatepaginations from "../template/Template.paginations.vue";
+export default {
+  name: "Processinnerview",
+  extends: {},
+  props: {
+    //알파벳 순으로 정렬할 것.
+    propData: {
+      type: Array | Object
+    }
+  },
+  data() {
+    return {
+      more: null,
+      pagis: {
+        total: "",
+        per_page: "",
+        current_page: "",
+        next_page_url: null,
+        prev_page_url: null
       }
-    },
-    data() {
-      return {
-        more: null,
-        pagis:{
-          total : "",
-          per_page : "",
-          current_page: "",
-          next_page_url : null,
-          prev_page_url : null
-        }
-      };
-    },
-    computed: {
-      tableData() {
-        return this.getValueEx(this.propData.data, this.propData.rowKey);
-      }
-    },
-    components: {
-      Templatepaginations
-    },
-    watch: {},
-    methods: {
-      viewCheck() {
-        if (this.$refs.checkedRow !== undefined) {
-          for (var j = 0; j < this.$refs.checkedRow.length; j++) {
-            for (var i = 0; i < this.propData.field.length - 1; i++) {
-              this.$refs.checkedTh[i].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i].hidden = this.$refs.checked[
-                i
-                ].isChecked;
-            }
+    };
+  },
+  computed: {
+    tableData() {
+      return this.getValueEx(this.propData.data, this.propData.rowKey);
+    }
+  },
+  components: {
+    Templatepaginations
+  },
+  watch: {},
+  methods: {
+    viewCheck() {
+      if (this.$refs.checkedRow !== undefined) {
+        for (var j = 0; j < this.$refs.checkedRow.length; j++) {
+          for (var i = 0; i < this.propData.field.length - 1; i++) {
+            this.$refs.checkedTh[i].hidden = this.$refs.checked[i].isChecked;
+            this.$refs.checkedRow[j].children[i].hidden = this.$refs.checked[
+              i
+            ].isChecked;
           }
-        } else {
-          this.view = [];
         }
-      },
-      moveRow(index) {
-        console.log(this.propData.data[index]);
-        this.$router.push("Search-process");
-        //EventBus.$emit("infofile", this.propData.data[index]);
+      } else {
+        this.view = [];
       }
     },
-    beforeCreate() {},
-    created() {
-      console.log(this.propData);
-    },
-    beforeMounted() {},
-    mounted() {},
-    beforeUpdate() {},
-    updated() {
-      console.log(this.propData);
-    },
-    actvated() {},
-    deactivated() {},
-    beforeDestroy() {},
-    destroyed() {}
-  };
+    moveRow(index) {
+      console.log(this.propData.data[index]);
+      this.$router.push("Search-process");
+      //EventBus.$emit("infofile", this.propData.data[index]);
+    }
+  },
+  beforeCreate() {},
+  created() {
+    console.log(this.propData);
+  },
+  beforeMounted() {},
+  mounted() {},
+  beforeUpdate() {},
+  updated() {
+    console.log(this.propData);
+  },
+  actvated() {},
+  deactivated() {},
+  beforeDestroy() {},
+  destroyed() {}
+};
 </script>
 <style lang='scss' scoped>
-  @import "~styles/variables";
-  tr {
-    cursor: pointer;
+@import "~styles/variables";
+tr {
+  cursor: pointer;
+}
+.inner-view-box {
+  margin: 10px 0;
+  border: 1px solid color(default);
+  h1 {
+    margin-bottom: 0;
+    padding: 0 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: color(default);
   }
-  .inner-view-box {
-    margin: 10px 0;
-    border: 1px solid color(default);
-    h1 {
-      margin-bottom: 0;
-      padding: 0 20px;
-      font-size: 16px;
-      color: #fff;
-      background-color: color(default);
+  .process-info {
+    padding: 15px 20px;
+  }
+  h2 {
+    margin-bottom: 0;
+    font-size: 14px;
+    color: color(default);
+  }
+  .content-wrap {
+    margin-bottom: 30px;
+    padding-left: 30px;
+    dl {
+      display: flex;
+      margin: 0;
     }
-    .process-info {
-      padding: 15px 20px;
-    }
-    h2 {
-      margin-bottom: 0;
+    dt {
+      width: 130px;
       font-size: 14px;
+      font-weight: bold;
       color: color(default);
-    }
-    .content-wrap {
-      margin-bottom: 30px;
-      padding-left: 30px;
-      dl {
-        display: flex;
-        margin: 0;
-      }
-      dt {
-        width: 130px;
-        font-size: 14px;
-        font-weight: bold;
-        color: color(default);
-        &:before {
-          content: "";
-          display: inline-block;
-          width: 3px;
-          height: 3px;
-          margin-right: 5px;
-          vertical-align: 3px;
-          background-color: color(default);
-        }
-      }
-      dd {
-        flex: 1;
-        margin-left: 0;
-        color: #5d5d5d;
-      }
-      dt,
-      dd {
-        line-height: 24px !important;
+      &:before {
+        content: "";
+        display: inline-block;
+        width: 3px;
+        height: 3px;
+        margin-right: 5px;
+        vertical-align: 3px;
+        background-color: color(default);
       }
     }
-    .info-list{
-      margin-bottom:15px;
+    dd {
+      flex: 1;
+      margin-left: 0;
+      color: #5d5d5d;
     }
+    dt,
+    dd {
+      line-height: 24px !important;
+    }
+  }
+  .info-list {
+    margin-bottom: 15px;
+  }
 
-      .danger-label-1{
-        font-weight:bold;
-        color:red
-      }
-    .danger-label-2{
-        color:orangered;
-      }
-    .danger-label-3{
-        color:orange;
-      }
-    .danger-label-4{
-       color:yellow;
-      }
-    .danger-label-5{
-        color:greenyellow;
-      }
-      }
-
+  .danger-label-1 {
+    font-weight: bold;
+    color: red;
+  }
+  .danger-label-2 {
+    color: orangered;
+  }
+  .danger-label-3 {
+    color: orange;
+  }
+  .danger-label-4 {
+    color: yellow;
+  }
+  .danger-label-5 {
+    color: greenyellow;
+  }
+}
 </style>

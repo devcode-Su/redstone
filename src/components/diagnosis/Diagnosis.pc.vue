@@ -20,7 +20,7 @@
   </article>
 </template>
 <script>
-  import DateSearchform from "../form/Date.search.form";
+import DateSearchform from "../form/Date.search.form";
 import Templatetableinsert from "../template/Template.tableinsert.vue";
 export default {
   name: "Diagnosisinfo",

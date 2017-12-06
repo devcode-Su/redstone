@@ -1,19 +1,19 @@
 <template>
   <section data-dashboard-section="detect-table">
-      <h1>{{receiveData.title}}</h1>
-      <div data-table="table">
-        <div data-thead="thead">
-          <table>
-            <thead>
+    <h1>{{receiveData.title}}</h1>
+    <div data-table="table">
+      <div data-thead="thead">
+        <table>
+          <thead>
             <tr>
               <th v-for="(th,k, i) in fields" :key="th.id" :class="['col-'+k,{ 'col-end' : fields.length-1 === i }]">{{th}}</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <div data-tbody="tbody">
-          <table>
-            <tbody>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div data-tbody="tbody">
+        <table>
+          <tbody>
             <tr data-tbody="row" v-for="(tr,i) in columns" :key="i.id" @click="moveRow(tr)">
               <td data-tbody="column" v-for="(td, j) in rowKey" :key="td.id" :class="['col-'+td,{'col-end' : rowKey.length-1 === j }]">
                 <span>{{ tr[td] }}</span>
@@ -22,10 +22,10 @@
                 </span>
               </td>
             </tr>
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </table>
       </div>
+    </div>
   </section>
 </template>
 <script>
@@ -44,7 +44,7 @@ export default {
       fields: [],
       fieldsData: [],
       receiveData: [],
-      columns:[],
+      columns: [],
       fieldKeys: [],
       rowKey: ["EventTime", "Type", "username", "userdept", "userip", "Score"]
     };
@@ -55,22 +55,20 @@ export default {
     receiveData(data) {
       if (data) {
         let fields = {};
-        for(var i =0; i < this.rowKey.length ; i ++){
+        for (var i = 0; i < this.rowKey.length; i++) {
           fields[this.rowKey[i]] = this.fieldsData[i];
         }
         this.fields = fields;
-        return this.columns = data.data.columns;
+        return (this.columns = data.data.columns);
       }
     }
   },
   methods: {
     moveRow(val) {
       console.log("moverow");
-      console.log(val)
+      console.log(val);
     },
-    dataReceive() {
-
-    }
+    dataReceive() {}
   },
   beforeCreate() {},
   created() {
@@ -93,10 +91,9 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-  h1 {
-    padding: 10px 0;
-    font-size:16px;
-    margin-bottom: 0;
-  }
-
+h1 {
+  padding: 10px 0;
+  font-size: 16px;
+  margin-bottom: 0;
+}
 </style>

@@ -15,7 +15,9 @@ a
 				<div class="content-wrap">
 					<dl>
 						<dt>자식 프로세스 고유 ID</dt>
-						<dd><a @click="selectProcess(propData.ChildProcessGuid)">{{propData.ChildProcessGuid}}</a></dd>
+						<dd>
+							<a @click="selectProcess(propData.ChildProcessGuid)">{{propData.ChildProcessGuid}}</a>
+						</dd>
 					</dl>
 				</div>
 			</div>
@@ -28,7 +30,9 @@ a
 				<div class="content-wrap">
 					<dl>
 						<dt>SHA256</dt>
-						<dd><a>{{propData.FileHash}}</a></dd>
+						<dd>
+							<a>{{propData.FileHash}}</a>
+						</dd>
 					</dl>
 				</div>
 			</div>
@@ -299,121 +303,113 @@ a
 	</section>
 </template>
 <script>
-  import InformationProcessCreate from "./Information.ProcessCreate.vue";
-  import InformationFileMaster from "./Information.FileMaster.vue";
-  import InformationDetect from './Information.Detect.vue';
+import InformationProcessCreate from "./Information.ProcessCreate.vue";
+import InformationFileMaster from "./Information.FileMaster.vue";
+import InformationDetect from "./Information.Detect.vue";
 
-  export default {
-    name: "EventInnerView",
-    extends: {},
-    props: {
-      //알파벳 순으로 정렬할 것.
-      propData: {
-        type: Array | Object
-      }
-    },
-    data() {
-      return {
-        more: null
-      };
-    },
-    computed: {
-      tableData() {
-        return this.getValueEx(this.propData.data, this.propData.rowKey);
-      }
-    },
-    components: {
-      InformationProcessCreate,
-      InformationFileMaster,
-      InformationDetect
-    },
-    watch: {},
-    methods: {
-      selectProcess(processGuid) {
-        this.$bus.$emit('TreeProcessSelected', processGuid);
-      }
-    },
-    beforeCreate() {
-    },
-    created() {
-      console.log(this.propData);
-    },
-    beforeMounted() {
-    },
-    mounted() {
-    },
-    beforeUpdate() {
-    },
-    updated() {
-      console.log(this.propData);
-    },
-    actvated() {
-    },
-    deactivated() {
-    },
-    beforeDestroy() {
-    },
-    destroyed() {
+export default {
+  name: "EventInnerView",
+  extends: {},
+  props: {
+    //알파벳 순으로 정렬할 것.
+    propData: {
+      type: Array | Object
     }
-  };
+  },
+  data() {
+    return {
+      more: null
+    };
+  },
+  computed: {
+    tableData() {
+      return this.getValueEx(this.propData.data, this.propData.rowKey);
+    }
+  },
+  components: {
+    InformationProcessCreate,
+    InformationFileMaster,
+    InformationDetect
+  },
+  watch: {},
+  methods: {
+    selectProcess(processGuid) {
+      this.$bus.$emit("TreeProcessSelected", processGuid);
+    }
+  },
+  beforeCreate() {},
+  created() {
+    console.log(this.propData);
+  },
+  beforeMounted() {},
+  mounted() {},
+  beforeUpdate() {},
+  updated() {
+    console.log(this.propData);
+  },
+  actvated() {},
+  deactivated() {},
+  beforeDestroy() {},
+  destroyed() {}
+};
 </script>
 <style lang='scss' scoped>
-	//noinspection CssUnknownTarget
-	@import "~styles/variables";
+//noinspection CssUnknownTarget
+@import "~styles/variables";
 
-	tr {
-		cursor: pointer;
-	}
+tr {
+  cursor: pointer;
+}
 
-	.inner-view-box {
-		margin: 10px 0;
-		border: 1px solid color(default);
-		h1 {
-			margin-bottom: 0;
-			padding: 0 20px;
-			font-size: 16px;
-			color: #fff;
-			background-color: color(default);
-		}
-		.process-info {
-			padding: 15px 20px;
-		}
-		h2 {
-			margin-bottom: 0;
-			font-size: 14px;
-			color: color(default);
-		}
-		.content-wrap {
-			margin-bottom: 30px;
-			padding-left: 30px;
-			dl {
-				display: flex;
-				margin: 0;
-			}
-			dt {
-				width: 130px;
-				font-size: 14px;
-				font-weight: bold;
-				color: color(default);
-				&:before {
-					content: "";
-					display: inline-block;
-					width: 3px;
-					height: 3px;
-					margin-right: 5px;
-					vertical-align: 3px;
-					background-color: color(default);
-				}
-			}
-			dd {
-				flex: 1;
-				margin-left: 0;
-				color: #5d5d5d;
-			}
-			dt,
-			dd {
-				line-height: 24px !important;
-			}
-		}
-	}
+.inner-view-box {
+  margin: 10px 0;
+  border: 1px solid color(default);
+  h1 {
+    margin-bottom: 0;
+    padding: 0 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: color(default);
+  }
+  .process-info {
+    padding: 15px 20px;
+  }
+  h2 {
+    margin-bottom: 0;
+    font-size: 14px;
+    color: color(default);
+  }
+  .content-wrap {
+    margin-bottom: 30px;
+    padding-left: 30px;
+    dl {
+      display: flex;
+      margin: 0;
+    }
+    dt {
+      width: 130px;
+      font-size: 14px;
+      font-weight: bold;
+      color: color(default);
+      &:before {
+        content: "";
+        display: inline-block;
+        width: 3px;
+        height: 3px;
+        margin-right: 5px;
+        vertical-align: 3px;
+        background-color: color(default);
+      }
+    }
+    dd {
+      flex: 1;
+      margin-left: 0;
+      color: #5d5d5d;
+    }
+    dt,
+    dd {
+      line-height: 24px !important;
+    }
+  }
+}
 </style>

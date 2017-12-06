@@ -27,7 +27,9 @@
         <table>
           <thead>
             <tr>
-              <th v-for="(th, i) in propData.field" :key="th" :class="['col'+i,{ 'col-end' : propData.field.length-1 === i }]" :ref="'checkedTh'"><span>{{th}}</span></th>
+              <th v-for="(th, i) in propData.field" :key="th" :class="['col'+i,{ 'col-end' : propData.field.length-1 === i }]" :ref="'checkedTh'">
+                <span>{{th}}</span>
+              </th>
             </tr>
           </thead>
         </table>
@@ -43,8 +45,8 @@
                 <td class="col-btn">
                   <span>
                     <button class="icon-btn icon-wrap" @click="moreRow(row, row.FileHash)" :class="{on : row === more}">
-                    <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
-                  </button>
+                      <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
+                    </button>
                   </span>
                 </td>
               </tr>
@@ -88,12 +90,12 @@ export default {
         data: [],
         rowKey: this.propData.innerKey
       },
-      pagis:{
-        total : "",
-        per_page : "",
+      pagis: {
+        total: "",
+        per_page: "",
         current_page: "",
-        next_page_url : null,
-        prev_page_url : null
+        next_page_url: null,
+        prev_page_url: null
       }
     };
   },
@@ -105,7 +107,7 @@ export default {
   watch: {},
   methods: {
     viewCheck(val) {
-      console.log(val)
+      console.log(val);
       if (this.$refs.checkedRow !== undefined) {
         for (var j = 0; j < this.$refs.checkedRow.length; j++) {
           for (var i = 0; i < this.propData.field.length - 1; i++) {
@@ -120,7 +122,7 @@ export default {
       }
     },
     moreRow(row, key) {
-      console.log(this.propData)
+      console.log(this.propData);
       const url = "/api/admin/search/detect/list/file/" + key;
       if (this.more === row) {
         this.more = null;
@@ -153,7 +155,7 @@ export default {
         form: this.propData.search,
         url: this.propData.url
       });
-    },
+    }
   },
   beforeCreate() {},
   created() {

@@ -116,12 +116,12 @@ export default {
           end: ""
         },
         text: "",
-        detail:{
+        detail: {
           pcip: "",
           endip: "",
           direction: "",
           port: "",
-          type: [],
+          type: []
         }
       },
       search: {

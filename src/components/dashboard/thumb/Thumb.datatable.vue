@@ -12,11 +12,11 @@
     <div data-tbody="tbody">
       <table>
         <tbody>
-        <tr data-tbody="row" v-if="rowCheck">
-          <td data-tbody="column" :colspan="fieldKeys.length - 1">
-            검색된 데이터가 없습니다.
-          </td>
-        </tr>
+          <tr data-tbody="row" v-if="rowCheck">
+            <td data-tbody="column" :colspan="fieldKeys.length - 1">
+              검색된 데이터가 없습니다.
+            </td>
+          </tr>
           <tr data-tbody="row" v-else v-for="(tr, h) in rowData" :key="tr.h" @click.stop="rowClick(tr)">
             <td data-tbody="column" v-for="(td, j) in fieldKeys" :key="td.j" :class="['col-'+td,{'col-end' : fields.length-1 === j }]">
               {{ tr[td] }}
@@ -50,13 +50,13 @@ export default {
     reorder: {
       type: Boolean,
       default: false
-    },
+    }
   },
   data() {
     return {
       fieldKeys: [],
-      rowData : [],
-      rowCheck : false
+      rowData: [],
+      rowCheck: false
     };
   },
   computed: {
@@ -69,7 +69,7 @@ export default {
     propData(data) {
       if (data) {
         this.fieldKeys = Object.keys(this.fields);
-        if(!data.data.indexOf(null)){
+        if (!data.data.indexOf(null)) {
           this.rowCheck = true;
         }
         this.rowData = data.data;
@@ -84,13 +84,11 @@ export default {
     }
   },
   beforeCreate() {},
-  created() {
-  },
+  created() {},
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {
-  },
+  updated() {},
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

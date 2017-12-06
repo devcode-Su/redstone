@@ -1,5 +1,5 @@
 <template>
-    <section data-group="management">
+  <section data-group="management">
     <div data-management>
       <div data-management-item>
         <h2 data-icon>

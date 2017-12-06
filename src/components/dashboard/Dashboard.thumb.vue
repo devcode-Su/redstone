@@ -23,8 +23,8 @@
   </section>
 </template>
 <script>
- // import Constant from "@/constant";
-  import { mapGetters } from "vuex";
+// import Constant from "@/constant";
+import { mapGetters } from "vuex";
 import Dashboardthumbset from "./Dashboard.thumbset";
 export default {
   name: "DashboardSet",
@@ -60,43 +60,50 @@ export default {
       setItem.from.splice(setItem.from.indexOf(setItem.element), 1);
     },
     saveList() {
-      const getHide = "/dashboard/?method=set&resource=config&from=&to=&name=hidelist&time=";
-      const getView = "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
+      const getHide =
+        "/dashboard/?method=set&resource=config&from=&to=&name=hidelist&time=";
+      const getView =
+        "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
 
-      this.$http.post(getHide,JSON.stringify(this.hideList));
-      this.$http.post(getView,JSON.stringify(this.viewList));
+      this.$http.post(getHide, JSON.stringify(this.hideList));
+      this.$http.post(getView, JSON.stringify(this.viewList));
       this.$bus.$emit("thumb-data");
     },
     resetList() {
-      const setHide = "/dashboard/?method=set&resource=config&from=&to=&name=hidelist&time=";
-      const setView = "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
-      const getView = "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
+      const setHide =
+        "/dashboard/?method=set&resource=config&from=&to=&name=hidelist&time=";
+      const setView =
+        "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
+      const getView =
+        "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
 
-      this.$http.post(setHide,JSON.stringify([])).then(() => {
+      this.$http.post(setHide, JSON.stringify([])).then(() => {
         this.hideList = [];
       });
-      this.$http.post(setView,JSON.stringify(this.compAll)).then(() =>{
-        this.$http.get(getView).then( response => {
+      this.$http.post(setView, JSON.stringify(this.compAll)).then(() => {
+        this.$http.get(getView).then(response => {
           this.viewList = response.data;
         });
       });
-      this.$bus.$emit("thumb-data")
+      this.$bus.$emit("thumb-data");
     }
   },
   beforeCreate() {},
   created() {
-    const getHide = "/dashboard/?method=get&resource=config&from=&to=&name=hidelist&time=";
-    const getView = "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
+    const getHide =
+      "/dashboard/?method=get&resource=config&from=&to=&name=hidelist&time=";
+    const getView =
+      "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
 
-    this.$http.get(getHide).then( response => {
+    this.$http.get(getHide).then(response => {
       console.log(response.data);
-      if(response.data === null){
+      if (response.data === null) {
         this.hideList = [];
-      }else{
+      } else {
         this.hideList = response.data;
       }
     });
-    this.$http.get(getView).then( response => {
+    this.$http.get(getView).then(response => {
       this.viewList = response.data;
     });
   },

@@ -20,7 +20,7 @@
   </article>
 </template>
 <script>
-  import DateSearchform from "../form/Date.search.form";
+import DateSearchform from "../form/Date.search.form";
 import Templatetableinsert from "../template/Template.tableinsert.vue";
 export default {
   name: "Diagnosisinfo",
@@ -169,7 +169,7 @@ export default {
           params: data
         })
         .then(result => {
-          console.log(result.data)
+          console.log(result.data);
           local.data = result.data;
         });
       local.search = data;
@@ -185,7 +185,7 @@ export default {
             params: val.form
           })
           .then(result => {
-            console.log(result.data)
+            console.log(result.data);
             this.infofile.data = result.data.data;
           });
       } else if (this.activeName === "second") {
@@ -204,7 +204,7 @@ export default {
             params: val.form
           })
           .then(result => {
-            console.log(result.data)
+            console.log(result.data);
             this.inforsc.data = result.data.data;
           });
       }

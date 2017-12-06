@@ -31,11 +31,17 @@ export default {
       checkAll: true,
       searchNavi: "전사",
       isIndeterminate: false,
-      checklistAll :[
-        "FILE", "IP", "RSC", "process", "network", "files", "registry"
+      checklistAll: [
+        "FILE",
+        "IP",
+        "RSC",
+        "process",
+        "network",
+        "files",
+        "registry"
       ],
-      tableData : {
-        field : [ "시각", "분류", "내용"]
+      tableData: {
+        field: ["시각", "분류", "내용"]
       }
     };
   },
@@ -47,8 +53,8 @@ export default {
   },
   watch: {},
   methods: {
-    receiveBus(data){
-      console.log(data)
+    receiveBus(data) {
+      console.log(data);
     }
   },
   beforeCreate() {},
@@ -63,9 +69,7 @@ export default {
   deactivated() {},
   beforeDestroy() {},
   destroyed() {},
-  mixins:[
-    MixinsSetDatetime
-  ]
+  mixins: [MixinsSetDatetime]
 };
 </script>
 <style lang='scss' scoped>

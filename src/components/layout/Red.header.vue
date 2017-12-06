@@ -48,7 +48,7 @@ export default {
     },
     signOut() {
       const apiURL = "/api/admin/logout";
-      this.$http.get(apiURL).then(()=>{
+      this.$http.get(apiURL).then(() => {
         this.$router.replace("/");
       });
       //

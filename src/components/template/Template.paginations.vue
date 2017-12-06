@@ -3,45 +3,44 @@
   </el-pagination>
 </template>
 <script>
-  export default {
-    name: "Templatepaginations",
-    extends: {},
-    props: {
-      propData:{
-      type : Array | Object
-      }
+export default {
+  name: "Templatepaginations",
+  extends: {},
+  props: {
+    propData: {
+      type: Array | Object
+    }
+  },
+  data() {
+    return {
+      currentPage: 10
+    };
+  },
+  computed: {},
+  components: {},
+  watch: {},
+  methods: {
+    handleSizeChange(val) {
+      console.log(`${val} items per page`);
     },
-    data() {
-      return {
-        currentPage:10
-      };
-    },
-    computed: {},
-    components: {
-    },
-    watch: {},
-    methods: {
-      handleSizeChange(val) {
-        console.log(`${val} items per page`);
-      },
-      handleCurrentChange(val) {
-        console.log(`current page: ${val}`);
-      }
-    },
-    beforeCreate() {},
-    created() {
-      //EventBus.$on("processtree", this.receiveBus)
-    },
-    beforeMounted() {},
-    mounted() {},
-    beforeUpdate() {},
-    updated() {},
-    actvated() {},
-    deactivated() {},
-    beforeDestroy() {},
-    destroyed() {}
-  };
+    handleCurrentChange(val) {
+      console.log(`current page: ${val}`);
+    }
+  },
+  beforeCreate() {},
+  created() {
+    //EventBus.$on("processtree", this.receiveBus)
+  },
+  beforeMounted() {},
+  mounted() {},
+  beforeUpdate() {},
+  updated() {},
+  actvated() {},
+  deactivated() {},
+  beforeDestroy() {},
+  destroyed() {}
+};
 </script>
 <style lang='scss' scoped>
-  @import "~styles/variables";
+@import "~styles/variables";
 </style>

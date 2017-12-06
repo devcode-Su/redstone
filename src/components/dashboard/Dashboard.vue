@@ -46,11 +46,9 @@ export default {
     Templatemodal
   },
   watch: {},
-  methods: {
-  },
+  methods: {},
   beforeCreate() {},
-  created() {
-  },
+  created() {},
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},

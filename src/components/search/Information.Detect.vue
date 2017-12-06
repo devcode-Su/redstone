@@ -7,7 +7,9 @@
 					<dt>진단명</dt>
 					<dd>
 						{{data.RuleId}}
-						<a><i class="fa fa-exclamation-circle"></i></a>
+						<a>
+							<i class="fa fa-exclamation-circle"></i>
+						</a>
 					</dd>
 				</dl>
 				<dl>
@@ -88,51 +90,42 @@
 	</div>
 </template>
 <script>
-  export default {
-    name: "InformationDetect",
-    props: {
-      ProcessGuid: {
-        type: String
-      },
-      data: {
-        type: Object
-      }
+export default {
+  name: "InformationDetect",
+  props: {
+    ProcessGuid: {
+      type: String
     },
-    data() {
-      return {
-        data: {}
-      };
-    },
-    computed: {},
-    components: {
-      // Component List
-    },
-    watch: {},
-    methods: {},
-    beforeCreate() {
-    },
-    created() {
-    },
-    beforeMounted() {
-    },
-    mounted() {
-    },
-    beforeUpdate() {
-    },
-    updated() {
-    },
-    actvated() {
-    },
-    deactivated() {
-    },
-    beforeDestroy() {
-//      this.$bus.$off('TreeProcessSelected');
-    },
-    destroyed() {
-    },
-  };
+    data: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      data: {}
+    };
+  },
+  computed: {},
+  components: {
+    // Component List
+  },
+  watch: {},
+  methods: {},
+  beforeCreate() {},
+  created() {},
+  beforeMounted() {},
+  mounted() {},
+  beforeUpdate() {},
+  updated() {},
+  actvated() {},
+  deactivated() {},
+  beforeDestroy() {
+    //      this.$bus.$off('TreeProcessSelected');
+  },
+  destroyed() {}
+};
 </script>
 <style lang='scss' scoped>
-	//noinspection CssUnknownTarget
-	@import "~styles/variables";
+//noinspection CssUnknownTarget
+@import "~styles/variables";
 </style>
