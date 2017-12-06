@@ -46,8 +46,8 @@ export default {
   },
   computed: {},
   components: {
-    Groupdepartment,
-    Groupmembersmove
+    "groupdepartment":Groupdepartment,
+    "groupmembersmove":Groupmembersmove
   },
   watch: {},
   methods: {

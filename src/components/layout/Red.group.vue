@@ -63,9 +63,9 @@ export default {
   },
   // 컴포넌트가 다른 컴포넌트를 사용할 경우
   components: {
-    Groupdepartment,
-    GroupMembers,
-    Templatemodal
+    "groupdepartment":Groupdepartment,
+    "group-members":GroupMembers,
+    "templatemodal":Templatemodal
   },
   // 컴포넌트 메서드 그룹
   watch: {},

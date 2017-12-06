@@ -5,8 +5,9 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
-        <date-searchform></date-searchform>
-        <templatetableinsert class="diagosis-info-table" :propData="infofile" @reorder="reorder"></templatetableinsert>
+        <date-searchform @form="receive"></date-searchform>
+        <datatable :prop-data="propData"></datatable>
+        <!--<templatetableinsert class="diagosis-info-table" :propData="infofile" @reorder="reorder"></templatetableinsert>-->
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
         <date-searchform></date-searchform>
@@ -21,6 +22,7 @@
 </template>
 <script>
 import DateSearchform from "../form/Date.search.form";
+import Datatable from "../template/Datatable";
 import Templatetableinsert from "../template/Template.tableinsert.vue";
 export default {
   name: "Diagnosisinfo",
@@ -30,10 +32,15 @@ export default {
   },
   data() {
     return {
-      pannelset: {
-        datetime: true
-      },
       activeName: "first",
+      propData : {
+        url : "",
+        startDate:"",
+        endDate: "",
+        dept_code: "",
+        node_id: "",
+        local : {}
+      },
       infofile: {
         field: ["악성 파일", "진단 건수", "첫 유입일", "마지막 유입일", ""],
         innerField: [
@@ -137,12 +144,14 @@ export default {
   },
   computed: {},
   components: {
-    DateSearchform,
-    Templatetableinsert
+    "date-searchform":DateSearchform,
+    "datatable":Datatable,
+    "templatetableinsert":Templatetableinsert
   },
   watch: {},
   methods: {
-    receiveData(form) {
+    receive(form) {
+      console.log(form)
       if (this.activeName === "first") {
         this.mixData(this.infofile, form, "file");
       } else if (this.activeName === "second") {
@@ -151,29 +160,20 @@ export default {
         this.mixData(this.inforsc, form, "rsc");
       }
     },
-    mixData(local, receive, apiurl) {
-      const url = "/api/admin/search/detect/summary/" + apiurl;
-      let data = {
-        page: 1,
-        length: 50,
-        startDate: receive.startDate ? receive.startDate.getTime() : null,
-        endDate: receive.endDate ? receive.endDate.getTime() : null,
-        dept_code: receive.dept_code,
-        node_id: receive.node_id,
-        order: local.order,
-        direction: 1
-      };
-      //console.log(data)
-      this.$http
-        .get(url, {
-          params: data
-        })
-        .then(result => {
-          console.log(result.data);
-          local.data = result.data;
-        });
-      local.search = data;
-      local.url = url;
+    mixData(local, form, apiurl) {
+      this.propData = {
+        url : "/api/admin/search/detect/summary/" + apiurl,
+        startDate : form.startDate ? form.startDate.getTime() : null,
+        endDate : form.endDate ? form.endDate.getTime() : null,
+        dept_code : form.dept_code ? form.dept_code : 1,
+        node_id : form.nodeid  ? form.nodeid : null,
+        local : local
+      }
+      // this.propData.url = "/api/admin/search/detect/summary/" + apiurl;
+      // this.propData.startDate = form.startDate ? form.startDate.getTime() : null;
+      //  this.propData.endDate = form.endDate ? form.endDate.getTime() : null;
+      // this.propData.dept_code = form.dept_code;
+      // this.propData.node_id = form.node_id;
     },
     reorder(val) {
       //console.log(val)

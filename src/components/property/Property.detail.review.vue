@@ -51,7 +51,7 @@ export default {
   },
   computed: {},
   components: {
-    Templatemodal
+    "templatemodal":Templatemodal
   },
   watch: {},
   methods: {},

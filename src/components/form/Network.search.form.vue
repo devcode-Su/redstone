@@ -39,7 +39,7 @@
     },
     computed: {},
     components: {
-      datetime: Datetime,
+      "datetime": Datetime,
       "replace-input": ReplaceInput
     },
     watch: {},

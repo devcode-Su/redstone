@@ -66,7 +66,7 @@ export default {
     }
   },
   components: {
-    draggable
+    "draggable":draggable
   },
   watch: {
     isDragging(newValue) {

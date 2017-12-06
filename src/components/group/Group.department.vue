@@ -34,7 +34,7 @@ export default {
     ...mapGetters({ groupData: "fetchGroup" })
   },
   components: {
-    Groupdepartmenttree
+    "groupdepartmenttree":Groupdepartmenttree
   },
   watch: {
     groupData(data) {

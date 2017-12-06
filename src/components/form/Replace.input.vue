@@ -1,11 +1,14 @@
 <template>
-  <el-form-item data-input label="검색 조건" size="small">
-    <el-input type="text" v-model="q" placeholder="" @change="onInput">
+  <div data-form-item>
+    <label>검색 조건</label>
+    <div data-form-tag>
+    <el-input type="text" v-model="q" placeholder="" @change="onInput" size="small">
     </el-input>
     <el-checkbox v-model="partial_match" @change="onInput">
       부분 일치
     </el-checkbox>
-  </el-form-item>
+  </div>
+  </div>
 </template>
 <script>
 export default {
@@ -46,4 +49,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+  .el-checkbox{
+    margin-left:10px;
+  }
 </style>

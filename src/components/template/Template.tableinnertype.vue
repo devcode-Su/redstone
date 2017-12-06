@@ -54,7 +54,7 @@ export default {
     }
   },
   components: {
-    Templatepaginations
+    "templatepaginations":Templatepaginations
   },
   watch: {},
   methods: {

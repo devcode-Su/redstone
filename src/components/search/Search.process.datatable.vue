@@ -124,7 +124,7 @@
     },
     computed: {},
     components: {
-      Processinnerview
+      "processinnerview":Processinnerview
     },
     watch: {},
     methods: {

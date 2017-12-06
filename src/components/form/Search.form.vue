@@ -45,8 +45,8 @@ export default {
   },
   computed: {},
   components: {
-    datetime: Datetime,
-    datelast: Datelast,
+    "datetime": Datetime,
+    "datelast": Datelast,
     "type-checkbox": TypeCheckbox,
     "sensor-checkbox": SensorCheckbox,
     "normal-input": NormalInput,

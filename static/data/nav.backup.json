@@ -18,7 +18,12 @@
     }, {
       "title": "위협 PC 기반",
       "path": "Diagnosis-pc"
-    }]
+    },
+      {
+        "title": "상세분석",
+        "path": "Diagnosis-analysis"
+      }
+    ]
   },
   {
     "title": "검색",
@@ -68,13 +73,13 @@
   {
     "title": "시스템",
     "name": "System",
-    "icon": "subject",
+    "icon": "settings_applications",
     "page": [{
       "title": "센서로그",
-      "path": "System-sensor-log"
+      "path": "System-sensorLog"
     }, {
       "title": "관리자 로그",
-      "path": "System-admin-log"
+      "path": "System-adminLog"
     }]
   },
   {
@@ -83,13 +88,13 @@
     "icon": "settings_applications",
     "page": [{
       "title": "관리자설정",
-      "path": "Setup-admin"
+      "path": "System-admin"
     }, {
       "title": "센서설정",
-      "path": "Setup-sensor"
+      "path": "System-sensor"
     }, {
       "title": "네트워크 환경설정",
-      "path": "Setup-enviroment"
+      "path": "System-enviroment"
     }]
   }
 ]

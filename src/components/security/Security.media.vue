@@ -49,8 +49,8 @@ export default {
   },
   computed: {},
   components: {
-    TemplateSearchpannel,
-    Templatetablerouter
+    "template-searchpannel":TemplateSearchpannel,
+    "templatetablerouter":Templatetablerouter
   },
   watch: {},
   methods: {

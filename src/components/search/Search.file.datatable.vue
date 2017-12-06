@@ -164,7 +164,7 @@
     },
     computed: {},
     components: {
-      Templatepaginations
+      "templatepaginations":Templatepaginations
     },
     watch: {},
     methods: {

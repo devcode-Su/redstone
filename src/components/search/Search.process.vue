@@ -128,7 +128,7 @@
       }
     },
     components: {
-      Processdatatable
+      "processdatatable":Processdatatable
     },
     watch: {},
     methods: {

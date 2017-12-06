@@ -43,8 +43,8 @@ export default {
     //    }
   },
   components: {
-    Groupdepartmentset,
-    Groupmemberset
+    "groupdepartmentset":Groupdepartmentset,
+    "groupmemberset":Groupmemberset
   },
   watch: {},
   methods: {

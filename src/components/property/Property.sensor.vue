@@ -25,7 +25,7 @@ export default {
   },
   computed: {},
   components: {
-    TemplateSearchpannel
+    "template-searchpannel":TemplateSearchpannel
   },
   watch: {},
   methods: {},

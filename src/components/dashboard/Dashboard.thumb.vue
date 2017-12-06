@@ -51,7 +51,7 @@ export default {
     }
   },
   components: {
-    Dashboardthumbset
+    "dashboardthumbset":Dashboardthumbset
   },
   watch: {},
   methods: {

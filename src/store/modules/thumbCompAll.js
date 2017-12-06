@@ -1,5 +1,5 @@
 import Constant from "@/constant";
-import ContantApi from "@/api/contactApi"
+import ContantApi from "@/api/contactApi";
 
 export default {
   state: {
@@ -12,7 +12,7 @@ export default {
   },
   mutations: {
     [Constant.FETCH_THUMBALL]: (state, payload) => {
-      state.thumbCompAll = payload
+      state.thumbCompAll = payload;
     }
   },
   actions: {
@@ -20,7 +20,7 @@ export default {
       //console.log(`"list update" `);
       ContantApi.fetchThumbAll().then(response => {
         //console.log(response.data.data);
-        store.commit(Constant.FETCH_THUMBALL, response.data.data)
+        store.commit(Constant.FETCH_THUMBALL, response.data.data);
       });
     }
   }

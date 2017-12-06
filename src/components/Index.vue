@@ -27,8 +27,8 @@ export default {
     }
   },
   components: {
-    Loading,
-    SigninForm
+    "loading":Loading,
+    "signin-form":SigninForm
   },
   methods: {
     signAttempt(input) {

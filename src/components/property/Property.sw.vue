@@ -69,9 +69,9 @@ export default {
   },
   computed: {},
   components: {
-    Propertydatatable,
-    Propertypannel,
-    Searchpannel
+    "propertydatatable":Propertydatatable,
+    "propertypannel":Propertypannel,
+    "searchpannel":Searchpannel
   },
   watch: {},
   methods: {},

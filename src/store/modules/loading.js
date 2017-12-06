@@ -1,4 +1,4 @@
-import Constant from "@/constant"
+import Constant from "@/constant";
 
 export default {
   state: {
@@ -7,7 +7,7 @@ export default {
   mutations: {
     [Constant.LOADING_STATE]: (state, payload) => {
       if (payload !== "") {
-        state.loadingState = payload
+        state.loadingState = payload;
       }
     }
   },

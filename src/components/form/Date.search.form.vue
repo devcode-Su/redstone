@@ -10,16 +10,16 @@
       </span>
       에서 검색
     </p>
-    <el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
+    <form>
       <fieldset>
         <datetime @dateTime="dateset"></datetime>
       </fieldset>
       <div data-search-submit>
-        <el-button type="primary" plain size="small" @click="submit">
+        <el-button type="primary" plain size="small" @click="send">
           검색
         </el-button>
       </div>
-    </el-form>
+    </form>
   </div>
 </template>
 <script>
@@ -45,12 +45,10 @@ export default {
   data() {
     return {
       form: {
-        dept_code: "",
+        dept_code: 1,
         nodeid: "",
         startDate: "",
         endDate: "",
-        q: "",
-        partial_match: false
       }
     };
   },
@@ -58,7 +56,7 @@ export default {
     ...mapGetters({ globalRangeCode: "globalRangeCode" })
   },
   components: {
-    datetime: Datetime,
+    "datetime": Datetime,
     "replace-input": ReplaceInput
   },
   watch: {
@@ -86,8 +84,8 @@ export default {
       this.form.q = replace.q;
       this.form.partial_match = replace.partial_match;
     },
-    submit() {
-      this.$bus.$emit("search-option", this.form);
+    send() {
+      this.$emit("form", this.form);
     }
   },
   beforeCreate() {},

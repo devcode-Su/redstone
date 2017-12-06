@@ -27,7 +27,6 @@
 <script>
 import Constant from "@/constant";
 import { mapState } from "vuex";
-import VueLoading from "vue-simple-loading";
 import RedHeader from "./layout/Red.header";
 import RedNavigation from "./layout/Red.navigation";
 import RedGroup from "./layout/Red.group";
@@ -50,11 +49,10 @@ export default {
     })
   },
   components: {
-    Loading,
-    VueLoading,
-    RedHeader,
-    RedNavigation,
-    RedGroup
+    "loading":Loading,
+    "red-header":RedHeader,
+    "red-navigation":RedNavigation,
+    "red-group":RedGroup
   },
   methods: {
     fetchData() {

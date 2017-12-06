@@ -1,9 +1,13 @@
 <template>
   <section>
     데이터 테이블
+    <datatable-option></datatable-option>
+    <datatable-table></datatable-table>
   </section>
 </template>
 <script>
+  import DatatableOption from "./Datatable.option"
+  import DatatableTable from "./Datatable.table"
 export default {
   name: "Datatable",
   extends: {},
@@ -14,7 +18,10 @@ export default {
     return {};
   },
   computed: {},
-  components: {},
+  components: {
+    "datatable-option":DatatableOption,
+    "datatable-table":DatatableTable
+  },
   watch: {},
   methods: {},
   beforeCreate() {},

@@ -41,9 +41,9 @@ export default {
   },
   computed: {},
   components: {
-    TemplateSearchpannel,
-    Templatetablerouter,
-    Templatebaranimation
+    "template-searchpannel":TemplateSearchpannel,
+    "templatetablerouter":Templatetablerouter,
+    "templatebaranimation":Templatebaranimation
   },
   watch: {},
   methods: {},

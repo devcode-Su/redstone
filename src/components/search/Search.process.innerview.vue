@@ -1,8 +1,8 @@
 <template>
   <section class="inner-view inner-view-box">
-    <InformationProcessCreate :ProcessGuid="ProcessGuid"></InformationProcessCreate>
-    <InformationFileMaster :ProcessGuid="ProcessGuid"></InformationFileMaster>
-    <InformationDetect :ProcessGuid="ProcessGuid"></InformationDetect>
+    <information-process-create :ProcessGuid="ProcessGuid"></information-process-create>
+    <information-file-master :ProcessGuid="ProcessGuid"></information-file-master>
+    <information-detect :ProcessGuid="ProcessGuid"></information-detect>
   </section>
 </template>
 <script>
@@ -25,9 +25,9 @@
     },
     computed: {},
     components: {
-      InformationProcessCreate,
-      InformationFileMaster,
-      InformationDetect
+      "information-process-create":InformationProcessCreate,
+      "information-file-master":InformationFileMaster,
+      "information-detect":InformationDetect
     },
     watch: {},
     methods: {},

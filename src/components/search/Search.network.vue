@@ -9,11 +9,11 @@
         <fieldset>
           <div class="form-align-box">
             <div class="form-item-wrap">
-              <Datetime @dateTime="setDatetime"></Datetime>
-              <TypeRadioBox :listList="radioInfo.list" :label="radioInfo.labels" @change="setFilter"></TypeRadioBox>
+              <datetime @dateTime="setDatetime"></datetime>
+              <type-radio-box :listList="radioInfo.list" :label="radioInfo.labels" @change="setFilter"></type-radio-box>
               <el-form-item label="검색 조건" size="small">
                 <el-input type="text" v-model="form.q"></el-input>
-                <el-button class="detail-search" size="small" @click="showDetail = true">상세검색
+                <el-button class="detail-search" size="smll" @click="showDetail = true">상세검색
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <div class="detail" v-if="showDetail">
@@ -126,10 +126,10 @@
     },
     computed: {},
     components: {
-      TemplateSearchpannel,
-      Templatetablerouter,
-      TypeRadioBox,
-      Datetime,
+      "template-searchpannel":TemplateSearchpannel,
+      "templatetablerouter":Templatetablerouter,
+      "type-radio-box":TypeRadioBox,
+      "datetime":Datetime,
     },
     watch: {},
     methods: {

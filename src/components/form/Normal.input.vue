@@ -1,45 +1,51 @@
 <template>
-  <el-form-item label="검색 조건" size="small">
-    <span>
-      {{label}}
-    </span>
-    <el-input type="text" v-model="input" :laceholder="label+'을 입력하세요.'" @change="onInput">
-    </el-input>
-  </el-form-item>
+  <div data-form-item>
+    <label>검색 조건</label>
+    <div data-form-tag>
+      <el-input type="text" v-model="q" placeholder="" @change="onInput" size="small">
+      </el-input>
+    </div>
+  </div>
 </template>
 <script>
-export default {
-  name: "Input",
-  extends: {},
-  props: {
-    //알파벳 순으로 정렬할 것.
-    label: String
-  },
-  data() {
-    return {
-      input: ""
-    };
-  },
-  computed: {},
-  components: {},
-  watch: {},
-  methods: {
-    onInput(v) {
-      console.log(v);
-    }
-  },
-  beforeCreate() {},
-  created() {},
-  beforeMounted() {},
-  mounted() {},
-  beforeUpdate() {},
-  updated() {},
-  actvated() {},
-  deactivated() {},
-  beforeDestroy() {},
-  destroyed() {}
-};
+  export default {
+    name: "NormalInput",
+    extends: {},
+    props: {
+      //알파벳 순으로 정렬할 것.
+    },
+    data() {
+      return {
+        q: "",
+        partial_match: false
+      };
+    },
+    computed: {},
+    components: {},
+    watch: {},
+    methods: {
+      onInput(v) {
+        this.$emit("replace", {
+          q: this.q
+        });
+        console.log(v);
+      }
+    },
+    beforeCreate() {},
+    created() {},
+    beforeMounted() {},
+    mounted() {},
+    beforeUpdate() {},
+    updated() {},
+    actvated() {},
+    deactivated() {},
+    beforeDestroy() {},
+    destroyed() {}
+  };
 </script>
 <style lang='scss' scoped>
-@import "~styles/variables";
+  @import "~styles/variables";
+  .el-checkbox{
+    margin-left:10px;
+  }
 </style>

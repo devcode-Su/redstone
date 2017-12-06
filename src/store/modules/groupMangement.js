@@ -1,5 +1,5 @@
 import Constant from "@/constant";
-import ContantApi from "@/api/contactApi"
+import ContantApi from "@/api/contactApi";
 
 const tree =list => {
   var map = {}, node, roots = [], i;
@@ -17,7 +17,7 @@ const tree =list => {
     }
   }
   return roots[0];
-}
+};
 
 export default {
   state: {
@@ -68,13 +68,13 @@ export default {
   },
   mutations: {
     [Constant.FETCH_GROUP]: (state, payload) => {
-      state.group = payload
+      state.group = payload;
     },
     [Constant.GLOBAL_RANGECODE]: (state, payload) => {
-      state.globalRange.code = payload
+      state.globalRange.code = payload;
     },
     [Constant.FETCH_GLOBALUSER]: (state, payload) => {
-      state.globalRange.user = payload
+      state.globalRange.user = payload;
     }
   },
   actions: {

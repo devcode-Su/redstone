@@ -42,8 +42,8 @@ export default {
     };
   },
   components: {
-    DashboardPeriodbtn,
-    ChartHorizontalbar
+    "dashboard-periodbtn":DashboardPeriodbtn,
+    "chart-horizontalbar":ChartHorizontalbar
   },
   watch: {
     responseData(data) {

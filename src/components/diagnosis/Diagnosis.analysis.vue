@@ -47,9 +47,9 @@ export default {
   },
   computed: {},
   components: {
-    Processtree,
-    Processdatatable,
-    Searchpannel
+    "processtree":Processtree,
+    "processdatatable":Processdatatable,
+    "searchpannel":Searchpannel
   },
   watch: {},
   methods: {

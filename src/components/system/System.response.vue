@@ -28,7 +28,7 @@ export default {
   },
   computed: {},
   components: {
-    ResponseTemplate
+    "response-template":ResponseTemplate
   },
   watch: {},
   methods: {},

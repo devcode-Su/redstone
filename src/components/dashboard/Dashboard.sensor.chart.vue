@@ -32,8 +32,8 @@ export default {
     };
   },
   components: {
-    DashboardPeriodbtn,
-    ChartLine
+    "dashboard-periodbtn":DashboardPeriodbtn,
+    "chart-line":ChartLine
   },
   computed: {},
   wahtch: {

@@ -49,8 +49,8 @@
     },
     computed: {},
     components: {
-      FileSearchform,
-      Searchfiledatatable
+      "file-searchform":FileSearchform,
+      "searchfiledatatable":Searchfiledatatable
     },
     watch: {},
     methods: {},

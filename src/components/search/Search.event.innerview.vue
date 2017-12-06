@@ -2,11 +2,11 @@
   <section class="inner-view inner-view-box">
     <h1>상세정보</h1>
     <div class="process-info" v-if="propData.Table === 'PROCESS_CREATE_LOG'">
-      <InformationProcessCreate :ProcessGuid="propData.ProcessGuid"></InformationProcessCreate>
-      <InformationFileMaster :ProcessGuid="propData.ProcessGuid"></InformationFileMaster>
+      <information-process-create :ProcessGuid="propData.ProcessGuid"></information-process-create>
+      <information-file-master :ProcessGuid="propData.ProcessGuid"></information-file-master>
     </div>
     <div v-else-if="propData.Table === 'PROCESS_EXIT_LOG'">
-      <InformationProcessCreate :ProcessGuid="propData.ProcessGuid"></InformationProcessCreate>
+      <information-process-create :ProcessGuid="propData.ProcessGuid"></information-process-create>
     </div>
     <div v-else-if="propData.Table === 'CHILDPROCESS_CREATE_LOG'">
       <div>
@@ -18,8 +18,8 @@
           </dl>
         </div>
       </div>
-      <InformationProcessCreate :ProcessGuid="propData.ChildProcessGuid"></InformationProcessCreate>
-      <InformationFileMaster :ProcessGuid="propData.ChildProcessGuid"></InformationFileMaster>
+      <information-process-create :ProcessGuid="propData.ChildProcessGuid"></information-process-create>
+      <information-file-master :ProcessGuid="propData.ChildProcessGuid"></information-file-master>
     </div>
     <div v-else-if="propData.Table === 'MODULE_LOAD_LOG'">
       <div>
@@ -31,7 +31,7 @@
           </dl>
         </div>
       </div>
-      <InformationFileMaster v-if="propData.FileHash" :FileHash="propData.FileHash"></InformationFileMaster>
+      <information-file-master v-if="propData.FileHash" :FileHash="propData.FileHash"></information-file-master>
     </div>
     <div v-else-if="propData.Table === 'NETWORK_CONNECT_LOG'">
       <div>
@@ -214,7 +214,7 @@
         </div>
       </div>
       <template v-if="propData.FileHash">
-        <InformationFileMaster :FileHash="propData.FileHash"></InformationFileMaster>
+        <information-file-master :FileHash="propData.FileHash"></information-file-master>
       </template>
     </div>
     <div v-else-if="propData.Table === 'FILE_TRANSFER_LOG'">
@@ -293,13 +293,13 @@
       </div>
     </div>
     <div v-if="propData.detect">
-      <InformationDetect :data="propData.detect"></InformationDetect>
+      <information-detect :data="propData.detect"></information-detect>
     </div>
   </section>
 </template>
 <script>
-  import InformationProcessCreate from "./Information.ProcessCreate.vue";
-  import InformationFileMaster from "./Information.FileMaster.vue";
+  import informationProcessCreate from "./Information.ProcessCreate.vue";
+  import informationFileMaster from "./Information.FileMaster.vue";
   import InformationDetect from './Information.Detect.vue';
 
   export default {
@@ -322,9 +322,9 @@
       }
     },
     components: {
-      InformationProcessCreate,
-      InformationFileMaster,
-      InformationDetect
+      "information-process-create":informationProcessCreate,
+      "information-file-master":informationFileMaster,
+      "InformationDetect":InformationDetect
     },
     watch: {},
     methods: {

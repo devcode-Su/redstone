@@ -101,8 +101,8 @@ export default {
   },
   computed: {},
   components: {
-    Templatetableinnertype,
-    Templatepaginations
+    "templatetableinnertype":Templatetableinnertype,
+    "templatepaginations":Templatepaginations
   },
   watch: {},
   methods: {

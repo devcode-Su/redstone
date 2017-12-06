@@ -16,7 +16,7 @@
 <script>
 import DashboardThumb from "../dashboard/Dashboard.thumb";
 import GroupManagement from "../group/Group.management";
-import Systemadminadd from "../system/System.adminadd";
+import Systemadminadd from "../setup/Setup.adminadd";
 import Systemresponsecutoff from "../system/System.response.cutoff";
 import Propertypannel from "../property/Property.pannel.vue";
 //import Processtree from "../search/Search.process.tree.vue"
@@ -40,11 +40,11 @@ export default {
   },
   computed: {},
   components: {
-    DashboardThumb,
-    GroupManagement,
-    Systemadminadd,
-    Systemresponsecutoff,
-    Propertypannel
+    "dashboard-thumb":DashboardThumb,
+    "group-management":GroupManagement,
+    "systemadminadd":Systemadminadd,
+    "systemresponsecutoff":Systemresponsecutoff,
+    "propertypannel":Propertypannel
   },
   watch: {},
   methods: {},

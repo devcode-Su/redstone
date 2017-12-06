@@ -39,8 +39,8 @@
 <script>
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
   import MixinsSearchAreaClose from "@/components/mixins/setDatetime.mixin";
-  import ElRadioGroup from "../../../node_modules/element-ui/packages/radio/src/radio-group.vue";
-  import ElRadio from "../../../node_modules/element-ui/packages/radio/src/radio.vue";
+  // import ElRadioGroup from "../../../node_modules/element-ui/packages/radio/src/radio-group.vue";
+  // import ElRadio from "../../../node_modules/element-ui/packages/radio/src/radio.vue";
 
   export default {
     name: "SearchEventPanel",
@@ -84,8 +84,8 @@
     },
     computed: {},
     components: {
-      ElRadio,
-      ElRadioGroup
+      // ElRadio,
+      // ElRadioGroup
     },
     watch: {
       propData: function (n, o) {

@@ -107,8 +107,8 @@ export default {
   },
   computed: {},
   components: {
-    DateSearchform,
-    Templatetableinsert
+    "date-searchform":DateSearchform,
+    "templatetableinsert":Templatetableinsert
   },
   watch: {},
   methods: {

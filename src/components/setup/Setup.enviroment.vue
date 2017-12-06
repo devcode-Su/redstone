@@ -1,35 +1,34 @@
 <template>
   <article data-layout="Route-article">
     <h1 data-page-title>
-      시스템로그
+      네트워크 환경설정
     </h1>
     <el-tabs v-model="activeName">
-      <el-tab-pane label="센서 로그" name="sensor">
-        센서로그
-        <searchform></searchform>
+      <el-tab-pane label="내부 IP 대역 설정" name="first">
+        <enviroment-template :inputTitle="'내부 IP 대역 추가'" :viewTitle="'내부 IP 대역 목록'"></enviroment-template>
       </el-tab-pane>
-      <el-tab-pane label="관리자 로그" name="admin">
-        관리자 로그
+      <el-tab-pane label="주요 IP 대역 설정" name="second">
+        <enviroment-template :inputTitle="'주요 IP 대역 추가'" :viewTitle="'주요 IP 대역 목록'" :addList="true"></enviroment-template>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
-import Searchform from "../form/Search.form";
+import EnviromentTemplate from "./Setup.enviroment.template";
 export default {
-  name: "Systemlog",
+  name: "Systemenviroment",
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
   },
   data() {
     return {
-      activeName: "sensor"
+      activeName: "first"
     };
   },
   computed: {},
   components: {
-    Searchform
+    "enviroment-template":EnviromentTemplate
   },
   watch: {},
   methods: {},

@@ -46,9 +46,9 @@ export default {
     }
   },
   components: {
-    DashboardPeriodbtn,
-    ThumbDatatable,
-    ThumbDatatableSelect
+    "dashboard-periodbtn":DashboardPeriodbtn,
+    "thumb-datatable":ThumbDatatable,
+    "thumb-datatable-select":ThumbDatatableSelect
   },
   watch: {},
   methods: {

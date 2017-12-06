@@ -6,8 +6,8 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="프로세스 트리" name="first">
         <processtree v-if="ProcessGuid && nodeid" :propData="{ProcessGuid:ProcessGuid,nodeid:nodeid}"></processtree>
-        <SearchEventPanel v-if="ProcessGuid" :propData="ProcessGuid"></SearchEventPanel>
-        <EventDataTable v-if="ProcessGuid" :propData="ProcessGuid"></EventDataTable>
+        <search-event-panel v-if="ProcessGuid" :propData="ProcessGuid"></search-event-panel>
+        <event-data-table v-if="ProcessGuid" :propData="ProcessGuid"></event-data-table>
       </el-tab-pane>
     </el-tabs>
 
@@ -45,9 +45,9 @@
     },
     computed: {},
     components: {
-      Processtree,
-      EventDataTable,
-      SearchEventPanel
+      "processtree":Processtree,
+      "event-data-table":EventDataTable,
+      "search-event-panel":SearchEventPanel
     },
     watch: {},
     methods: {},

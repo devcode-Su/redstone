@@ -32,8 +32,8 @@ export default {
     // }
   },
   components: {
-    thumbchart: ThumbComponentsChart,
-    thumbtable: ThumbComponents
+    "thumbchart": ThumbComponentsChart,
+    "thumbtable": ThumbComponents
   },
   watch: {},
   methods: {

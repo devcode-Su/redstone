@@ -127,7 +127,7 @@
             <transition name="fade">
               <tr v-if="row === more" class="show-row">
                 <td :colspan="collength" :key="row.id">
-                  <EventInnerView :propData="row"></EventInnerView>
+                  <event-inner-view :propData="row"></event-inner-view>
                 </td>
               </tr>
             </transition>
@@ -239,7 +239,7 @@
     },
     computed: {},
     components: {
-      EventInnerView
+      "event-inner-view":EventInnerView
     },
     watch: {
       propData: function (n, o) {

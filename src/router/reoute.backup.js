@@ -8,6 +8,7 @@ import Dashboardsystems from '@/components/dashboard/Dashboard.systems'
 
 import Diagnosisinfo from '@/components/diagnosis/Diagnosis.info'
 import Diagnosispc from '@/components/diagnosis/Diagnosis.pc'
+import Diagnosisanalysis from '@/components/diagnosis/Diagnosis.analysis'
 
 import Searchfile from '@/components/search/Search.file'
 import Searchprocess from '@/components/search/Search.process'
@@ -27,9 +28,8 @@ import Systemsadminlog from '@/components/system/System.admin.log'
 
 import Setupadmin from '@/components/setup/Setup.admin'
 import Setupsensor from '@/components/setup/Setup.sensor'
-import Setupenviroment from '@/components/setup/Setup.enviroment'
-
-Vue.use(Router);
+import Setupemenviroment from '@/components/Setup/Setup.enviroment'
+Vue.use(Router)
 
 export default new Router({
   mode: 'history',
@@ -62,6 +62,10 @@ export default new Router({
         {
           path: 'Diagnosis-pc',
           component: Diagnosispc
+        },
+        {
+          path: 'Diagnosis-analysis',
+          component: Diagnosisanalysis
         },
         {
           path: 'Search-analysis',
@@ -114,16 +118,16 @@ export default new Router({
           component: Systemsadminlog
         },
         {
-          path: 'Setup-admin',
-          component: Setupadmin
+          path: 'System-enviroment',
+          component: Systemenviroment
         },
         {
-          path: 'Setup-sensor',
-          component: Setupsensor
+          path: 'System-log',
+          component: Systemlog
         },
         {
-          path: 'Setup-enviroment',
-          component: Setupenviroment
+          path: 'System-response',
+          component: Systemresponse
         }
       ]
     }

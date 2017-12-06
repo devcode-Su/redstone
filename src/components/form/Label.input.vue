@@ -1,11 +1,14 @@
 <template>
-  <el-form-item label="검색 조건" size="small">
-    <span>
+  <div data-form-item>
+    <label>검색 조건</label>
+    <div data-form-tag>
+      <span>
       {{label}}
     </span>
-    <el-input type="text" v-model="input" :placeholder="label+'을 입력하세요.'" @change="onInput">
-    </el-input>
-  </el-form-item>
+      <el-input type="text" v-model="q" :placeholder="label+'을 입력하세요.'" @change="onInput" size="small">
+      </el-input>
+    </div>
+  </div>
 </template>
 <script>
 export default {
@@ -17,7 +20,7 @@ export default {
   data() {
     return {
       label: "프로그램명",
-      input: ""
+      q: ""
     };
   },
   computed: {},

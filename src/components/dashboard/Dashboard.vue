@@ -39,11 +39,11 @@ export default {
     };
   },
   components: {
-    DashboardSensor,
-    DashboardSensorchart,
-    DashboardDetectiontable,
-    DashboardThumbcomponents,
-    Templatemodal
+    "dashboard-sensor" : DashboardSensor,
+    "dashboard-sensorchart":DashboardSensorchart,
+    "dashboard-detectiontable":DashboardDetectiontable,
+    "dashboard-thumbcomponents":DashboardThumbcomponents,
+    "templatemodal":Templatemodal
   },
   watch: {},
   methods: {},
