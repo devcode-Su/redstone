@@ -39,8 +39,6 @@
 <script>
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
   import MixinsSearchAreaClose from "@/components/mixins/setDatetime.mixin";
-  // import ElRadioGroup from "../../../node_modules/element-ui/packages/radio/src/radio-group.vue";
-  // import ElRadio from "../../../node_modules/element-ui/packages/radio/src/radio.vue";
 
   export default {
     name: "SearchEventPanel",
@@ -146,5 +144,6 @@
   };
 </script>
 <style lang='scss' scoped>
+  //noinspection CssUnknownTarget
   @import "~styles/variables";
 </style>

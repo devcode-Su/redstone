@@ -157,7 +157,42 @@ const MyPlugin = {
         }
         return ret;
       });
+    };
+
+    vue.prototype.padStart = (str, length, padStr) => {
+      str = String(str);
+      // noinspection TsLint
+      length = length >> 0;
+      padStr = String(padStr || ' ');
+      if (str.length > length) {
+        return String(str);
+      }
+      else {
+        length = length - str.length;
+        if (length > padStr.length) {
+          padStr += padStr.repeat(length / padStr.length);
+        }
+        return padStr.slice(0, length) + String(str);
+      }
+    };
+
+    vue.prototype.timeToUTC = function(t) {
+      let ret = '';
+      let now = new Date();
+      let diff = now.getTimezoneOffset();
+      let diffHour = this.padStart((Math.abs(diff) / 60).toString(), 2, '0');
+      let diffMin = this.padStart((Math.abs(diff) % 60).toString(), 2, '0');
+
+      if (diff > 0) {
+        ret = `${t}-${diffHour}:${diffMin}`;
+      }
+      else {
+        ret = `${t}+${diffHour}:${diffMin}`;
+      }
+      ret = ret.replace(' ', 'T');
+      return ret;
     }
+
   }
 };
 

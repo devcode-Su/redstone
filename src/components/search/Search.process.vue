@@ -44,7 +44,7 @@
         </fieldset>
       </el-form>
     </div>
-    <processdatatable v-if="process" :propData="process" :definition="definition"></processdatatable>
+    <processdatatable v-if="definition" :definition="definition"></processdatatable>
   </article>
 </template>
 <script>
@@ -53,57 +53,42 @@
   import MixinsSetDatetime from "../mixins/setDatetime.mixin"
 
   export default {
-    name: "Searchprocess",
+    name:    "Searchprocess",
     extends: {},
-    props: {
+    props:   {
       psd: {
-        type: Object | Array
-      }
+        type: Object | Array,
+      },
     },
 
     data() {
       return {
-        datebtn: ["1시간", "일일", "주간", "월간"],
-        searchNavi: "전사",
+        datebtn:         ["1시간", "일일", "주간", "월간"],
+        searchNavi:      "전사",
         isIndeterminate: false,
-        checklistAll: [
-          "FILE", "IP", "RSC", "process", "network", "files", "registry"
+        checklistAll:    [
+          "FILE", "IP", "RSC", "process", "network", "files", "registry",
         ],
-        checklist: {
-          FILE: "TI진단 이벤트",
-          IP: "악성 URL/IP 접근 이벤트",
-          RSC: "RSC 엔진 진단 이벤트",
-          process: "프로세스",
-          network: "네트워크",
-          files: "파일",
-          registry: "레지스트리"
+        checklist:       {
+          FILE:     "TI진단 이벤트",
+          IP:       "악성 URL/IP 접근 이벤트",
+          RSC:      "RSC 엔진 진단 이벤트",
+          process:  "프로세스",
+          network:  "네트워크",
+          files:    "파일",
+          registry: "레지스트리",
         },
-        form: {
-          checkType: [
-            "FILE", "IP", "RSC", "process", "network", "files", "registry"
+        form:            {
+          checkType:     [
+            "FILE", "IP", "RSC", "process", "network", "files", "registry",
           ],
-          checkAll: true,
-          q: "",
-          partial_match: false
+          checkAll:      true,
+          q:             "",
+          partial_match: false,
         },
-        startDate: null,
-        endDate: null,
-        process: {
-          field: [
-            "프로세스 시작 시간",
-            "프로세스 이름",
-            "이름",
-            "부서",
-            "센서 ID",
-            "검색된 이벤트 수",
-            "위협 정보",
-            ""
-          ],
-          data: [],
-          search: [],
-          url: ""
-        },
-        definition: {
+        startDate:       null,
+        endDate:         null,
+        definition:      {
           field: [
             "프로세스 시작 시각",
             "프로세스 이름",
@@ -112,26 +97,29 @@
             "센서 ID",
             "검색된 이벤트 수",
             "위협 정보",
-            ""
+            "",
           ],
-          url: "/api/admin/search/event",
+          url:   "/api/admin/search/event",
           order: [
             {label: '프로세스 시작 시각', value: 'time', default: true},
             {label: '프로세스 이름', value: 'process_name'},
-          ]
+          ],
         },
+        queryList:       [
+          'Sha256Hash', 'Md5Hash', 'FileName', 'Domain', 'RemoteIp', 'VolumeGuid',
+        ],
       };
     },
-    computed: {
+    computed:   {
       recieveData() {
         return this.$store.state.processSearchData
-      }
+      },
     },
     components: {
-      "processdatatable":Processdatatable
+      "processdatatable": Processdatatable,
     },
-    watch: {},
-    methods: {
+    watch:      {},
+    methods:    {
       handleCheckAllChange(val) {
         console.log(val);
         this.form.checkType = val ? this.checklistAll : [];
@@ -148,27 +136,28 @@
 
         if (this.startDate === "" || this.endDate === "") {
           this.$notify.error({
-            title: "Error",
-            message: "검색 조건을 입력하세요."
+            title:   "Error",
+            message: "검색 조건을 입력하세요.",
           });
         } else {
           const data = {
-            startDate: this.startDate ? this.startDate : null,
-            endDate: this.endDate ? this.endDate : null,
-            dept_code: formData && formData.data ? formData.data.dept_code : null,
-            node_id: formData && formData.data ? formData.data.node_id : null,
-            order: "time",
-            direction: 1,
-            q: formData.q,
-            all: this.form.checkAll,
-            partial_match: formData.partial_match ? formData.partial_match : null,
-            ti_event: this.$refs.check[0].isChecked,
-            url_ip_event: this.$refs.check[1].isChecked,
-            engine_event: this.$refs.check[2].isChecked,
-            process_event: this.$refs.check[3].isChecked,
-            network_event: this.$refs.check[4].isChecked,
-            file_event: this.$refs.check[5].isChecked,
-            registry_event: this.$refs.check[6].isChecked
+            startDate:      this.startDate ? this.startDate : null,
+            endDate:        this.endDate ? this.endDate : null,
+            dept_code:      formData && formData.data ? formData.data.dept_code : null,
+            node_id:        formData && formData.data ? formData.data.node_id : null,
+            order:          "time",
+            direction:      1,
+            q:              formData.q,
+            all:            this.form.checkAll,
+            partial_match:  formData.partial_match ? formData.partial_match : null,
+            ti_event:       this.$refs.check[0].isChecked,
+            url_ip_event:   this.$refs.check[1].isChecked,
+            engine_event:   this.$refs.check[2].isChecked,
+            process_event:  this.$refs.check[3].isChecked,
+            network_event:  this.$refs.check[4].isChecked,
+            file_event:     this.$refs.check[5].isChecked,
+            registry_event: this.$refs.check[6].isChecked,
+            ProcessGuid:    formData && formData.ProcessGuid ? formData.ProcessGuid : null,
           };
           this.$bus.$emit('process-search-data', data);
         }
@@ -181,40 +170,45 @@
       },
       receiveSubmit(data) {
         console.log('receiveSubmit');
-      }
+      },
     },
     created() {
+    },
+    beforeMounted() {
+    },
+    mounted() {
       if (this.$route.query) {
         let query = this.$route.query;
         if (query.EventTime || query.InsertTime) {
-          let d = new Date(query.EventTime || query.InsertTime);
+          let date = query.EventTime || query.InsertTime;
+
+          let d = new Date(this.timeToUTC(date));
           d.setMinutes(d.getMinutes() - 30);
           this.startDate = d;
           d = new Date(query.EventTime || query.InsertTime);
           d.setMinutes(d.getMinutes() + 30);
           this.endDate = d;
         }
-        if (query.ProcessGuid) {
-          console.log('ProcessGuid', query.ProcessGuid);
+        for (let i in this.queryList) {
+          if (query.hasOwnProperty(this.queryList[i])) {
+            this.form.q = query[this.queryList[i]];
+            break;
+          }
         }
-        else if (query.FileHash) {
-          console.log('FileHash', query.FileHash);
+        if (query.Type) {
+          this.form.checkType = [query.Type];
         }
-        if (query.psd) {
-          let data = this.$route.query.psd;
-          const defaultData = new Date(data.EventTime);
-          const start = new Date(defaultData.getTime() - 60 * 30 * 1000);
-          const end = new Date(defaultData.getTime() + 60 * 30 * 1000);
 
-          this.startDate = start;
-          this.endDate = end;
-          this.form.checkType = [data.Type];
+        if (query.ProcessGuid) {
+          this.form.ProcessGuid = query.ProcessGuid;
+        }
+
+        this.onSubmit('form');
+
+        if (query.ProcessGuid) {
+          this.form.ProcessGuid = null;
         }
       }
-    },
-    beforeMounted() {
-    },
-    mounted() {
     },
     beforeUpdate() {
     },
@@ -228,9 +222,9 @@
     },
     destroyed() {
     },
-    mixins: [
-      MixinsSetDatetime
-    ]
+    mixins:     [
+      MixinsSetDatetime,
+    ],
   };
 </script>
 <style lang='scss' scoped>
