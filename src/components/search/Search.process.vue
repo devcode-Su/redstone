@@ -1,52 +1,51 @@
 <template>
-	<article>
-		<h1 class="page-title">
-			프로세스 검색
-		</h1>
-		<div class="template-search-pannel template-container">
-			<el-form ref="form" :model="form" :label-width="'180px'" :label-position="'left'">
-				<fieldset>
-					<legend class="pannel small">{{searchNavi}} 에서 검색 </legend>
-					<div class="form-align-box">
-						<div class="form-item-wrap">
-							<el-form-item label="조사기간 설정" size="small">
-								<el-date-picker v-model="startDate" type="datetime">
-								</el-date-picker>
-								<span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-								<el-date-picker v-model="endDate" type="datetime">
-								</el-date-picker>
-								<div class="btn-date-wrap">
-									<el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
-										{{settime}}
-									</el-button>
-								</div>
-							</el-form-item>
-							<el-form-item label="검색 항목" size="small">
-								<el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
-									전체
-								</el-checkbox>
-								<el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
-									<el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">{{search}}
-									</el-checkbox>
-								</el-checkbox-group>
-							</el-form-item>
-							<el-form-item label="검색 조건" size="small">
-								<el-input type="text" v-model="form.q">
-								</el-input>
-								<el-checkbox class="agreement" v-model="form.partial_match">
-									부분 일치
-								</el-checkbox>
-							</el-form-item>
-						</div>
-						<div class="btn-wrap">
-							<el-button size="small" type="primary" @click="onSubmit('form')">검색</el-button>
-						</div>
-					</div>
-				</fieldset>
-			</el-form>
-		</div>
-		<processdatatable v-if="process" :propData="process"></processdatatable>
-	</article>
+  <article data-layout="Route-article">
+    <h1 class="page-title">
+      프로세스 검색
+    </h1>
+    <div class="template-search-pannel template-container">
+      <el-form ref="form" :model="form" :label-width="'180px'" :label-position="'left'">
+        <fieldset>
+          <div class="form-align-box">
+            <div class="form-item-wrap">
+              <el-form-item label="조사기간 설정" size="small">
+                <el-date-picker v-model="startDate" type="datetime">
+                </el-date-picker>
+                <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+                <el-date-picker v-model="endDate" type="datetime">
+                </el-date-picker>
+                <div class="btn-date-wrap">
+                  <el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
+                    {{settime}}
+                  </el-button>
+                </div>
+              </el-form-item>
+              <el-form-item label="검색 항목" size="small">
+                <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
+                  전체
+                </el-checkbox>
+                <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
+                  <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">{{search}}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </el-form-item>
+              <el-form-item label="검색 조건" size="small">
+                <el-input type="text" v-model="form.q">
+                </el-input>
+                <el-checkbox class="agreement" v-model="form.partial_match">
+                  부분 일치
+                </el-checkbox>
+              </el-form-item>
+            </div>
+            <div class="btn-wrap">
+              <el-button size="small" type="primary" @click="onSubmit('form')">검색</el-button>
+            </div>
+          </div>
+        </fieldset>
+      </el-form>
+    </div>
+    <processdatatable v-if="process" :propData="process" :definition="definition"></processdatatable>
+  </article>
 </template>
 <script>
 
@@ -89,8 +88,6 @@
         },
         startDate: null,
         endDate: null,
-        page: 1,
-        length: 50,
         process: {
           field: [
             "프로세스 시작 시간",
@@ -106,7 +103,23 @@
           search: [],
           url: ""
         },
-        formKey: ["EventTime", "Md5Hash", "Type"],
+        definition: {
+          field: [
+            "프로세스 시작 시각",
+            "프로세스 이름",
+            "이름",
+            "부서",
+            "센서 ID",
+            "검색된 이벤트 수",
+            "위협 정보",
+            ""
+          ],
+          url: "/api/admin/search/event",
+          order: [
+            {label: '프로세스 시작 시각', value: 'time', default: true},
+            {label: '프로세스 이름', value: 'process_name'},
+          ]
+        },
       };
     },
     computed: {
@@ -132,7 +145,6 @@
       },
       onSubmit(form) {
         const formData = this.$refs[form].model;
-        const url = "/api/admin/search/event";
 
         if (this.startDate === "" || this.endDate === "") {
           this.$notify.error({
@@ -141,8 +153,6 @@
           });
         } else {
           const data = {
-            page: this.page,
-            length: this.length,
             startDate: this.startDate ? this.startDate : null,
             endDate: this.endDate ? this.endDate : null,
             dept_code: formData && formData.data ? formData.data.dept_code || "" : null,
@@ -160,7 +170,7 @@
             file_event: this.$refs.check[5].isChecked,
             registry_event: this.$refs.check[6].isChecked
           };
-          this.getData(url, data);
+          this.$bus.$emit('process-search-data', data);
         }
       },
       getData(url, data) {
@@ -174,14 +184,14 @@
       }
     },
     created() {
-      this.$bus.$on("process-search-data", this.receiveSubmit.bind(this));
-      this.$bus.$on('process-page-length-change', (item) => {
-        if (item.page !== this.page || item.length !== this.length) {
-          this.page = item.page;
-          this.length = item.length;
-          this.onSubmit('form');
-        }
-      });
+//      this.$bus.$on("process-search-data", this.receiveSubmit.bind(this));
+//      this.$bus.$on('process-page-length-change', (item) => {
+//        if (item.page !== this.page || item.length !== this.length) {
+//          this.page = item.page;
+//          this.length = item.length;
+//          this.onSubmit('form');
+//        }
+//      });
       if (this.$route.query && this.$route.query.psd) {
         let data = this.$route.query.psd;
         const defaultData = new Date(data.EventTime);
@@ -191,7 +201,6 @@
         this.startDate = start;
         this.endDate = end;
         this.form.checkType = [data.Type];
-//        this.form.checkedSearch = [data.Type];
       }
     },
     beforeMounted() {
@@ -207,8 +216,6 @@
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off("process-search-data");
-      this.$bus.$off('process-page-length-change');
     },
     destroyed() {
     },
@@ -218,10 +225,10 @@
   };
 </script>
 <style lang='scss' scoped>
-	//noinspection CssUnknownTarget
-	@import "~styles/variables";
+  //noinspection CssUnknownTarget
+  @import "~styles/variables";
 
-	.btn-date-wrap {
-		margin-left: 5px;
-	}
+  .btn-date-wrap {
+    margin-left: 5px;
+  }
 </style>

@@ -1,91 +1,93 @@
 <template>
-	<div>
-		<h2>진단 정보</h2>
-		<div class="content-wrap" v-if="data">
-			<template v-if="data.Type === 'RSC'">
-				<dl>
-					<dt>진단명</dt>
-					<dd>
-						{{data.RuleId}}
-						<a><i class="fa fa-exclamation-circle"></i></a>
-					</dd>
-				</dl>
-				<dl>
-					<dt>위험도</dt>
-					<dd>{{data.Score}}</dd>
-				</dl>
-				<dl>
-					<dt>검출파일</dt>
-					<dd>{{data.PathInfo1}}</dd>
-				</dl>
-				<dl v-if="data.rule">
-					<dt>세부사항</dt>
-					<dd>{{data.rule.description}}</dd>
-				</dl>
-				<dl v-if="data.AdditionalInfo">
-					<dt>추가정보</dt>
-					<dd>{{data.AdditionalInfo}}</dd>
-				</dl>
-			</template>
-			<template v-if="data.Type === 'FILE'">
-				<dl>
-					<dt>진단명</dt>
-					<dd>
-						TI 엔진
-						<a v-if="data.malware" @href="detect.malware.permalink" target="_new">
-							<i class="fa fa-exclamation-circle"></i>
-						</a>
-					</dd>
-				</dl>
-				<dl v-if="data.Score">
-					<dt>위험도</dt>
-					<dd>{{data.Score}}</dd>
-				</dl>
-				<dl v-if="data.malware">
-					<dt>TI 엔진 스코어</dt>
-					<dd>{{data.malware.positives}} / {{data.malware.total}}</dd>
-				</dl>
-				<dl v-if="data.PathInfo1">
-					<dt>악성 파일</dt>
-					<dd>{{data.PathInfo1}}</dd>
-				</dl>
-				<dl v-if="data.PathInfo2">
-					<dt>악성 파일</dt>
-					<dd>{{data.PathInfo2}}</dd>
-				</dl>
-			</template>
-			<template v-if="data.Type === 'IP'">
-				<dl>
-					<dt>진단명</dt>
-					<dd>
-						TI 엔진
-						<a v-if="data.malware" @href="detect.malware.permalink" target="_new">
-							<i class="fa fa-exclamation-circle"></i>
-						</a>
-					</dd>
-				</dl>
-				<dl>
-					<dt>위험도</dt>
-					<dd>{{data.Score}}</dd>
-				</dl>
-				<dl v-if="detect.malware">
-					<dt>TI 엔진 스코어</dt>
-					<dd>{{data.malware.positives}} / {{data.malware.total}}</dd>
-				</dl>
-				<dl v-if="data.PathInfo1">
-					<dt>악성 IP</dt>
-					<dd>{{data.PathInfo1}}</dd>
-				</dl>
-				<dl v-if="data.PathInfo2">
-					<dt>악성 IP</dt>
-					<dd>{{data.PathInfo2}}</dd>
-				</dl>
-			</template>
-		</div>
-		<div v-else>
-			진단 정보가 없습니다
-		</div>
-	</div>
+  <div>
+    <h2>진단 정보</h2>
+    <div class="content-wrap" v-if="(myData && myData.length > 0)">
+      <template v-for="item in myData">
+        <template v-if="item.Type === 'RSC'">
+          <dl>
+            <dt>진단명</dt>
+            <dd>
+              {{item.RuleId}}
+              <a><i class="fa fa-exclamation-circle"></i></a>
+            </dd>
+          </dl>
+          <dl>
+            <dt>위험도</dt>
+            <dd>{{item.Score}}</dd>
+          </dl>
+          <dl>
+            <dt>검출파일</dt>
+            <dd>{{item.PathInfo1}}</dd>
+          </dl>
+          <dl v-if="item.rule">
+            <dt>세부사항</dt>
+            <dd>{{item.rule.description}}</dd>
+          </dl>
+          <dl v-if="item.AdditionalInfo">
+            <dt>추가정보</dt>
+            <dd>{{item.AdditionalInfo}}</dd>
+          </dl>
+        </template>
+        <template v-if="item.Type === 'FILE'">
+          <dl>
+            <dt>진단명</dt>
+            <dd>
+              TI 엔진
+              <a v-if="item.malware" @href="item.malware.permalink" target="_new">
+                <i class="fa fa-exclamation-circle"></i>
+              </a>
+            </dd>
+          </dl>
+          <dl v-if="item.Score">
+            <dt>위험도</dt>
+            <dd>{{item.Score}}</dd>
+          </dl>
+          <dl v-if="item.malware">
+            <dt>TI 엔진 스코어</dt>
+            <dd>{{item.malware.positives}} / {{item.malware.total}}</dd>
+          </dl>
+          <dl v-if="item.PathInfo1">
+            <dt>악성 파일</dt>
+            <dd>{{item.PathInfo1}}</dd>
+          </dl>
+          <dl v-if="item.PathInfo2">
+            <dt>악성 파일</dt>
+            <dd>{{item.PathInfo2}}</dd>
+          </dl>
+        </template>
+        <template v-if="item.Type === 'IP'">
+          <dl>
+            <dt>진단명</dt>
+            <dd>
+              TI 엔진
+              <a v-if="item.malware" @href="item.malware.permalink" target="_new">
+                <i class="fa fa-exclamation-circle"></i>
+              </a>
+            </dd>
+          </dl>
+          <dl>
+            <dt>위험도</dt>
+            <dd>{{item.Score}}</dd>
+          </dl>
+          <dl v-if="detect.malware">
+            <dt>TI 엔진 스코어</dt>
+            <dd>{{item.malware.positives}} / {{item.malware.total}}</dd>
+          </dl>
+          <dl v-if="item.PathInfo1">
+            <dt>악성 IP</dt>
+            <dd>{{item.PathInfo1}}</dd>
+          </dl>
+          <dl v-if="item.PathInfo2">
+            <dt>악성 IP</dt>
+            <dd>{{item.PathInfo2}}</dd>
+          </dl>
+        </template>
+      </template>
+    </div>
+    <div v-else>
+      진단 정보가 없습니다
+    </div>
+  </div>
 </template>
 <script>
   export default {
@@ -100,7 +102,7 @@
     },
     data() {
       return {
-        data: {}
+        myData: []
       };
     },
     computed: {},
@@ -108,10 +110,24 @@
       // Component List
     },
     watch: {},
-    methods: {},
+    methods: {
+      getData(processGuid) {
+        const url = `/api/admin/search/process/detect/${processGuid}`;
+        this.$http.get(url)
+          .then((data) => {
+            this.myData = data.data;
+          });
+      },
+    },
     beforeCreate() {
     },
     created() {
+      if (this.data) {
+        this.myData.push(this.data);
+      }
+      else if (this.ProcessGuid) {
+        this.getData(this.ProcessGuid);
+      }
     },
     beforeMounted() {
     },
@@ -133,6 +149,6 @@
   };
 </script>
 <style lang='scss' scoped>
-	//noinspection CssUnknownTarget
-	@import "~styles/variables";
+  //noinspection CssUnknownTarget
+  @import "~styles/variables";
 </style>

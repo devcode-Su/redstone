@@ -1,221 +1,221 @@
 <template>
-	<section class="process-tree">
-		<div class="process-tree-area">
-			<svg id="process-tree" ref="svg" :width="tree.viewer.w" :height="tree.viewer.h">
-				<g :transform="`translate(${tree.zoom.x},${tree.zoom.y}) scale(${tree.zoom.k})`"></g>
-			</svg>
-		</div>
-		<div class="pc-info">
-			<transition-group tag="ul" class="info-list-wrap" name="infolist">
-				<li class="infolist" v-for="(list, index) in list" :key="index" ref="infoMenu"
-				    :class="{'on' : index === selected}">
-					<template v-if="list.name === '요약 정보'">
-						<span @click="infoList(index)" class="title">{{list.name}}</span>
-						<div class="info-wrap" v-if="list.info.nodeInformation">
-							<span>PC 정보</span>
-							<dl>
-								<dt>
-									<md-icon class="dot">fiber_manual_record</md-icon>
-									사용자명
-								</dt>
-								<dd>{{list.info.nodeInformation.username}}/{{list.info.nodeInformation.userdept}}</dd>
-							</dl>
-							<dl>
-								<dt>
-									<md-icon class="dot">fiber_manual_record</md-icon>
-									사용자 IP
-								</dt>
-								<dd>{{list.info.nodeInformation.userip}}</dd>
-							</dl>
-						</div>
-						<div class="info-wrap" v-if="list.info.processInformation">
-							<span>프로세스 정보</span>
-							<dl>
-								<dt>
-									<md-icon class="dot">fiber_manual_record</md-icon>
-									프로세스명
-								</dt>
-								<dd>{{list.info.processInformation.rows[0].ProcessName}}</dd>
-							</dl>
-							<dl v-if="list.info.processInformation.rows.IsSystem">
-								<dt>
-									<md-icon class="dot">fiber_manual_record</md-icon>
-									시스템파일
-								</dt>
-								<dd>TRUE</dd>
-							</dl>
-							<template v-if="list.info.fileInformation">
-								<dl>
-									<dt>
-										<md-icon class="dot">fiber_manual_record</md-icon>
-										서명
-									</dt>
-									<dd :class="{'red': list.info.fileInformation.sign_status !== 'signed'}">
-										{{list.info.fileInformation.sign_status}}
-									</dd>
-								</dl>
-								<dl v-if="list.info.fileInformation.sign_status === 'signed'">
-									<dt>
-										<md-icon class="dot">fiber_manual_record</md-icon>
-										서명자
-									</dt>
-									<dd>{{list.info.fileInformation.sign_publisher}}</dd>
-								</dl>
-								<dl v-if="list.info.fileInformation.sign_validity === 'invalid'">
-									<dt>
-										<md-icon class="dot">fiber_manual_record</md-icon>
-										검증
-									</dt>
-									<dd>{{list.info.fileInformation.sign_validity}}</dd>
-								</dl>
-								<dl>
-									<dt>
-										<md-icon class="dot">fiber_manual_record</md-icon>
-										회사명
-									</dt>
-									<dd>{{list.info.fileInformation.company_name}}</dd>
-								</dl>
-								<dl>
-									<dt>
-										<md-icon class="dot">fiber_manual_record</md-icon>
-										제품명
-									</dt>
-									<dd>{{list.info.fileInformation.product_name}}</dd>
-								</dl>
-								<dl>
-									<dt>
-										<md-icon class="dot">fiber_manual_record</md-icon>
-										설명
-									</dt>
-									<dd>{{list.info.fileInformation.description || 'N/A'}}</dd>
-								</dl>
-							</template>
-						</div>
-						<div class="info-wrap" v-if="list.info.detectInformation">
-							<span>진단 정보</span>
-							<template v-for="(detect, idx) in list.info.detectInformation">
-								<template v-if="detect.Type === 'RSC'">
-									<dl>
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											진단명
-										</dt>
-										<dd>{{detect.RuleId}}</dd>
-									</dl>
-									<dl>
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											위험도
-										</dt>
-										<dd>{{detect.Score}}</dd>
-									</dl>
-									<dl v-if="detect.rule">
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											진단사유
-										</dt>
-										<dd v-html="detect.rule.reason"></dd>
-									</dl>
-								</template>
-								<template v-else-if="detect.Type === 'FILE'">
-									<dl>
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											진단명
-										</dt>
-										<dd>TI 엔진</dd>
-									</dl>
-									<dl>
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											위험도
-										</dt>
-										<dd>{{detect.Score}}</dd>
-									</dl>
-									<dl v-if="detect.malware">
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											TI 엔진 스코어
-										</dt>
-										<dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
-									</dl>
-									<dl>
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											진단파일
-										</dt>
-										<dd>{{detect.PathInfo1}}</dd>
-									</dl>
-								</template>
-								<template v-else-if="detect.Type === 'IP'">
-									<dl>
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											진단엔진
-										</dt>
-										<dd>TI 엔진</dd>
-									</dl>
-									<dl>
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											위험도
-										</dt>
-										<dd>{{detect.Score}}</dd>
-									</dl>
-									<dl v-if="detect.malware">
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											TI 엔진 스코어
-										</dt>
-										<dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
-									</dl>
-									<dl>
-										<dt>
-											<md-icon class="dot">fiber_manual_record</md-icon>
-											진단 IP
-										</dt>
-										<dd>{{detect.PathInfo1}}</dd>
-									</dl>
-								</template>
-							</template>
-						</div>
-						<div class="info-wrap" v-if="list.info.inflowInformation">
-							<span>유입 정보</span>
-							<dl>
-								<dt>
-									<md-icon class="dot">fiber_manual_record</md-icon>
-									유입타입
-								</dt>
-								<dd>{{list.info.inflowInformation.SrcType}}</dd>
-							</dl>
-							<dl>
-								<dt>
-									<md-icon class="dot">fiber_manual_record</md-icon>
-									유입경로
-								</dt>
-								<dd>{{list.info.inflowInformation.SrcInfo}}</dd>
-							</dl>
-						</div>
-					</template>
-					<template v-else>
-						<span @click="infoList(index)">{{list.name}}</span>
-						<div class="info-wrap">
-							<dl v-for="dl in list.info" :key="dl.id">
-								<dt>
-									<md-icon class="dot">fiber_manual_record</md-icon>
-									{{dl.dt}}
-								</dt>
-								<dd>{{dl.dd}}</dd>
-							</dl>
-							<template v-if="list.info.length === 0">
-								{{list.name}}가 없습니다.
-							</template>
-						</div>
-					</template>
-				</li>
-			</transition-group>
-		</div>
-	</section>
+  <section class="process-tree">
+    <div class="process-tree-area">
+      <svg id="process-tree" ref="svg" :width="tree.viewer.w" :height="tree.viewer.h">
+        <g :transform="`translate(${tree.zoom.x},${tree.zoom.y}) scale(${tree.zoom.k})`"></g>
+      </svg>
+    </div>
+    <div class="pc-info">
+      <transition-group tag="ul" class="info-list-wrap" name="infolist">
+        <li class="infolist" v-for="(list, index) in list" :key="index" ref="infoMenu"
+            :class="{'on' : index === selected}">
+          <template v-if="list.name === '요약 정보'">
+            <span @click="infoList(index)" class="title">{{list.name}}</span>
+            <div class="info-wrap" v-if="list.info.nodeInformation">
+              <span>PC 정보</span>
+              <dl>
+                <dt>
+                  <md-icon class="dot">fiber_manual_record</md-icon>
+                  사용자명
+                </dt>
+                <dd>{{list.info.nodeInformation.username}}/{{list.info.nodeInformation.userdept}}</dd>
+              </dl>
+              <dl>
+                <dt>
+                  <md-icon class="dot">fiber_manual_record</md-icon>
+                  사용자 IP
+                </dt>
+                <dd>{{list.info.nodeInformation.userip}}</dd>
+              </dl>
+            </div>
+            <div class="info-wrap" v-if="list.info.processInformation">
+              <span>프로세스 정보</span>
+              <dl>
+                <dt>
+                  <md-icon class="dot">fiber_manual_record</md-icon>
+                  프로세스명
+                </dt>
+                <dd>{{list.info.processInformation.rows[0].ProcessName}}</dd>
+              </dl>
+              <dl v-if="list.info.processInformation.rows.IsSystem">
+                <dt>
+                  <md-icon class="dot">fiber_manual_record</md-icon>
+                  시스템파일
+                </dt>
+                <dd>TRUE</dd>
+              </dl>
+              <template v-if="list.info.fileInformation">
+                <dl>
+                  <dt>
+                    <md-icon class="dot">fiber_manual_record</md-icon>
+                    서명
+                  </dt>
+                  <dd :class="{'red': list.info.fileInformation.sign_status !== 'signed'}">
+                    {{list.info.fileInformation.sign_status}}
+                  </dd>
+                </dl>
+                <dl v-if="list.info.fileInformation.sign_status === 'signed'">
+                  <dt>
+                    <md-icon class="dot">fiber_manual_record</md-icon>
+                    서명자
+                  </dt>
+                  <dd>{{list.info.fileInformation.sign_publisher}}</dd>
+                </dl>
+                <dl v-if="list.info.fileInformation.sign_validity === 'invalid'">
+                  <dt>
+                    <md-icon class="dot">fiber_manual_record</md-icon>
+                    검증
+                  </dt>
+                  <dd>{{list.info.fileInformation.sign_validity}}</dd>
+                </dl>
+                <dl>
+                  <dt>
+                    <md-icon class="dot">fiber_manual_record</md-icon>
+                    회사명
+                  </dt>
+                  <dd>{{list.info.fileInformation.company_name}}</dd>
+                </dl>
+                <dl>
+                  <dt>
+                    <md-icon class="dot">fiber_manual_record</md-icon>
+                    제품명
+                  </dt>
+                  <dd>{{list.info.fileInformation.product_name}}</dd>
+                </dl>
+                <dl>
+                  <dt>
+                    <md-icon class="dot">fiber_manual_record</md-icon>
+                    설명
+                  </dt>
+                  <dd>{{list.info.fileInformation.description || 'N/A'}}</dd>
+                </dl>
+              </template>
+            </div>
+            <div class="info-wrap" v-if="list.info.detectInformation">
+              <span>진단 정보</span>
+              <template v-for="(detect, idx) in list.info.detectInformation">
+                <template v-if="detect.Type === 'RSC'">
+                  <dl>
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      진단명
+                    </dt>
+                    <dd>{{detect.RuleId}}</dd>
+                  </dl>
+                  <dl>
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      위험도
+                    </dt>
+                    <dd>{{detect.Score}}</dd>
+                  </dl>
+                  <dl v-if="detect.rule">
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      진단사유
+                    </dt>
+                    <dd v-html="detect.rule.reason"></dd>
+                  </dl>
+                </template>
+                <template v-else-if="detect.Type === 'FILE'">
+                  <dl>
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      진단명
+                    </dt>
+                    <dd>TI 엔진</dd>
+                  </dl>
+                  <dl>
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      위험도
+                    </dt>
+                    <dd>{{detect.Score}}</dd>
+                  </dl>
+                  <dl v-if="detect.malware">
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      TI 엔진 스코어
+                    </dt>
+                    <dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
+                  </dl>
+                  <dl>
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      진단파일
+                    </dt>
+                    <dd>{{detect.PathInfo1}}</dd>
+                  </dl>
+                </template>
+                <template v-else-if="detect.Type === 'IP'">
+                  <dl>
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      진단엔진
+                    </dt>
+                    <dd>TI 엔진</dd>
+                  </dl>
+                  <dl>
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      위험도
+                    </dt>
+                    <dd>{{detect.Score}}</dd>
+                  </dl>
+                  <dl v-if="detect.malware">
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      TI 엔진 스코어
+                    </dt>
+                    <dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
+                  </dl>
+                  <dl>
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      진단 IP
+                    </dt>
+                    <dd>{{detect.PathInfo1}}</dd>
+                  </dl>
+                </template>
+              </template>
+            </div>
+            <div class="info-wrap" v-if="list.info.inflowInformation">
+              <span>유입 정보</span>
+              <dl>
+                <dt>
+                  <md-icon class="dot">fiber_manual_record</md-icon>
+                  유입타입
+                </dt>
+                <dd>{{list.info.inflowInformation.SrcType}}</dd>
+              </dl>
+              <dl>
+                <dt>
+                  <md-icon class="dot">fiber_manual_record</md-icon>
+                  유입경로
+                </dt>
+                <dd>{{list.info.inflowInformation.SrcInfo}}</dd>
+              </dl>
+            </div>
+          </template>
+          <template v-else>
+            <span @click="infoList(index)">{{list.name}}</span>
+            <div class="info-wrap">
+              <dl v-for="dl in list.info" :key="dl.id">
+                <dt>
+                  <md-icon class="dot">fiber_manual_record</md-icon>
+                  {{dl.dt}}
+                </dt>
+                <dd>{{dl.dd}}</dd>
+              </dl>
+              <template v-if="list.info.length === 0">
+                {{list.name}}가 없습니다.
+              </template>
+            </div>
+          </template>
+        </li>
+      </transition-group>
+    </div>
+  </section>
 </template>
 <script>
   import * as d3 from "d3";
@@ -985,142 +985,142 @@
   };
 </script>
 <style lang="scss">
-	#process-tree {
-		max-width: none;
-		.node {
-			cursor: pointer;
-			.circle {
-				fill: #fff;
-				stroke: steelblue;
-				stroke-width: 1.5px;
-			}
-			text {
-				font: 10px sans-serif;
-			}
+  #process-tree {
+    max-width: none;
+    .node {
+      cursor: pointer;
+      .circle {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
+      text {
+        font: 10px sans-serif;
+      }
 
-			&.warning {
-				.text {
-					fill: red;
-				}
-			}
+      &.warning {
+        .text {
+          fill: red;
+        }
+      }
 
-			&.has-child {
-				.circle {
-					fill: steelblue;
-				}
-			}
+      &.has-child {
+        .circle {
+          fill: steelblue;
+        }
+      }
 
-			&.selected {
-				.circle {
-					fill: rgb(32, 32, 32);
-				}
-				> text {
-					font-weight: bold;
-				}
-			}
-		}
+      &.selected {
+        .circle {
+          fill: rgb(32, 32, 32);
+        }
+        > text {
+          font-weight: bold;
+        }
+      }
+    }
 
-		.link {
-			fill: none;
-			stroke: #ccc;
-			stroke-width: 1.5px;
-		}
-	}
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 1.5px;
+    }
+  }
 </style>
 <style lang='scss' scoped>
-	//noinspection CssUnknownTarget
-	@import "~styles/variables.scss";
+  //noinspection CssUnknownTarget
+  @import "~styles/variables.scss";
 
-	.process-tree {
-		display: flex;
+  .process-tree {
+    display: flex;
 
-		> div {
-			background-color: color(white);
-			border: 1px solid color(border);
-		}
-		h1 {
-			display: block;
-			height: 42px;
-			margin: 0;
-			line-height: 42px;
-			font-size: 18px;
-			font-weight: 500;
-			text-align: center;
-			color: color(white);
-			background-color: #6e8d9f;
-			border: 0 none;
-		}
-		&-area {
-			flex: 1 0 auto;
-			width: 830px;
-			margin-right: 10px;
-		}
-		.pc-info {
-			width: 360px;
-			position: relative;
-			overflow: hidden;
-			li {
-				height: 32px;
-				line-height: 32px;
-				text-align: center;
-				cursor: pointer;
-				border-top: 1px solid color(border);
-				overflow: hidden;
-				@include transition(all, 0.3s);
-				span {
-					display: block;
-					border-bottom: 1px solid color(border);
-				}
-				&:first-child {
-					height: 42px;
-					line-height: 42px;
-					border-top: 0 none;
-					&.on {
-						height: 450px;
-					}
-					span {
-						font-size: 18px;
-						font-weight: 500;
-						color: color(white);
-						background-color: #4e6f82;
-					}
-				}
-				&.on {
-					height: 440px;
-					span {
-						font-weight: bold;
-					}
-				}
-			}
-			div {
-				padding: 25px;
-			}
-			dl {
-				display: flex;
-				margin: 0;
-				line-height: 150%;
-				text-align: left;
-			}
-			dt,
-			dd {
-				padding: 10px 0;
-			}
-			dt {
-				min-width: 130px;
-				padding-left: 10px;
-				position: relative;
-				.md-icon.dot {
-					width: 14px;
-					min-width: 14px;
-					top: 20px;
-					left: 0;
-					font-size: 10px;
-					color: #1c5bbc;
-				}
-			}
-			dd {
-				margin: 0;
-			}
-		}
-	}
+    > div {
+      background-color: color(white);
+      border: 1px solid color(border);
+    }
+    h1 {
+      display: block;
+      height: 42px;
+      margin: 0;
+      line-height: 42px;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+      color: color(white);
+      background-color: #6e8d9f;
+      border: 0 none;
+    }
+    &-area {
+      flex: 1 0 auto;
+      width: 830px;
+      margin-right: 10px;
+    }
+    .pc-info {
+      width: 360px;
+      position: relative;
+      overflow: hidden;
+      li {
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+        cursor: pointer;
+        border-top: 1px solid color(border);
+        overflow: hidden;
+        @include transition(all, 0.3s);
+        span {
+          display: block;
+          border-bottom: 1px solid color(border);
+        }
+        &:first-child {
+          height: 42px;
+          line-height: 42px;
+          border-top: 0 none;
+          &.on {
+            height: 450px;
+          }
+          span {
+            font-size: 18px;
+            font-weight: 500;
+            color: color(white);
+            background-color: #4e6f82;
+          }
+        }
+        &.on {
+          height: 440px;
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+      div {
+        padding: 25px;
+      }
+      dl {
+        display: flex;
+        margin: 0;
+        line-height: 150%;
+        text-align: left;
+      }
+      dt,
+      dd {
+        padding: 10px 0;
+      }
+      dt {
+        min-width: 130px;
+        padding-left: 10px;
+        position: relative;
+        .md-icon.dot {
+          width: 14px;
+          min-width: 14px;
+          top: 20px;
+          left: 0;
+          font-size: 10px;
+          color: #1c5bbc;
+        }
+      }
+      dd {
+        margin: 0;
+      }
+    }
+  }
 </style>

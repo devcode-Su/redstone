@@ -1,146 +1,146 @@
 <template>
-	<section class="template-table-wrap">
-		<header>
-			<span>전체 : {{filteredData ? filteredData.length : '-'}}건</span>
-			<div class="btn-wrap">
-				<el-button size="small">
-					파일로 저장
-					<i class="fa fa-download" aria-hidden="true"></i>
-				</el-button>
-				<el-select v-model="order" placeholder="정렬" size="small" @change="reorder"
-				           :disabled="(!propData || !propData.search ||  propData.search.length == 0)">
-					<el-option v-for="item in orderOption" :key="item.value" :label="item.label" :value="item.value">
-					</el-option>
-				</el-select>
-				<div class="view-check">
-					<el-button @click="morebtn = !morebtn" size="small">
-						보기
-						<i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
-					</el-button>
-					<el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-						<el-checkbox v-for="(check,i) in field" :label="check" :key="check" :ref="'checked'"
-						             v-if="i !== field.length -1">{{check}}
-						</el-checkbox>
-					</el-checkbox-group>
-				</div>
-			</div>
-		</header>
-		<div class="template-table dynamic-row">
-			<div class="table-head-wrap">
-				<table>
-					<thead>
-					<tr>
-						<th v-for="(th, i) in head" :key="th.id"
-						    :class="['col'+i,{ 'col-end' : head.length-1 === i }]" :ref="'checkedTh'">{{th}}
-						</th>
-					</tr>
-					</thead>
-				</table>
-			</div>
-			<div class="table-body-wrap">
-				<table :ref="'table'">
-					<tbody :ref="'table'">
-					<template v-for="(row,i) in viewData">
-						<tr :ref="'trs'" :key="row.id" :id="'row' + (row.EventSeq||'0')"
-						    :class="[row.detect ? row.detect.Type : '', {'founded': row.isFounded, 'selected': row.isSelected}]">
-							<td class="col0">{{row.EventTime}}</td>
-							<td class="col1">{{getDisplayEventType(row)}}</td>
-							<td class="col2">
-								<template v-if="row.Table === 'PROCESS_CREATE_LOG'">
-									{{row.ProcessImagePath}} ({{row.ProcessId}})
-								</template>
-								<template v-else-if="row.Table === 'CHILDPROCESS_CREATE_LOG'">
-									{{row.ProcessImagePath}} ({{row.ChildProcessId}})
-								</template>
-								<template v-else-if="row.Table === 'PROCESS_EXIT_LOG'">
-									{{row.ProcessId}}
-								</template>
-								<template v-else-if="row.Table === 'FILE_LOG'">
-									{{row.FilePath1}}
-									<template v-if="row.EventType === 'FileCreate'">
-										<template v-if="row.FileType">
-											[{{row.FileType}}]
-										</template>
-										({{row.FileSize}})
-									</template>
-									<template v-else-if="row.EventType === 'FileMod'">
-										<template v-if="row.FileType">
-											[{{row.FileType}}]
-										</template>
-									</template>
-									<template v-else-if="row.EventType === 'FileMove'">
-										▶ {{row.FilePath2}}
-									</template>
-									<template v-else-if="row.EventType === 'FileDelete'"></template>
-									<template v-else-if="row.EventType === 'FileRead'"></template>
-									<template v-else-if="row.EventType === 'FileSetAttr'">
-										<template v-if="row.FileType">
-											[{{row.FileType}}]
-										</template>
-									</template>
-								</template>
-								<template v-else-if="row.Table === 'REGISTRY_LOG'">
-									<template v-if="row.EventType === 'RegCreateKey'">
-										{{row.RegKeyPath}}
-									</template>
-									<template v-else-if="row.EventType === 'RegRenameKey'">
-										{{row.RegKeyPath}} => {{row.RegNewKeyPath}}
-									</template>
-									<template v-else-if="row.EventType === 'RegSetValue'">
-										{{row.RegKeyPath}}
-										[{{row.RegValueName}}] => [{{row.RegValue}}]
-									</template>
-									<template v-else-if="row.EventType === 'RegDeleteKey'">
-										{{row.RegKeyPath}}
-									</template>
-									<template v-else-if="row.EventType === 'RegDeleteValue'">
-										{{row.RegKeyPath}} [{{row.RegValueName}}]
-									</template>
-								</template>
-								<template v-else-if="row.Table === 'NETWORK_CONNECT_LOG'">
-									{{row.Direction === 'OUT' ? ' >> ' : ' << '}}{{row.Domain ? row.Domain : row.RemoteIp}}:{{row.RemotePort}}/{{row.Protocol}}
-								</template>
-								<template v-else-if="row.Table === 'NETWORK_DISCONNECT_LOG'">
-									Sent: {{row.BytesSent}} / Received: {{row.BytesRecved}}
-								</template>
-								<template v-else-if="row.Table === 'MODULE_LOAD_LOG'">
-									{{row.ModulePath}} {{row.IsSystem ? '[System]' : ''}}
-								</template>
-								<template v-else-if="row.Table === 'FILE_TRANSFER_LOG'">
-									<template v-if="row.EventType === 'RelatedFile'">
-										{{row.PathInfo1}} => {{row.PathInfo2}}
-									</template>
-									<template v-else-if="row.EventType === 'FileCopy'">
-										{{row.PathInfo1}} => {{row.PathInfo2}}
-									</template>
-									<template v-else-if="row.EventType === 'HttpDownload'">
-										{{row.PathInfo2}} from {{row.PathInfo1}}
-									</template>
-								</template>
-							</td>
-							<td class="col-btn">
-								<button class="icon-btn icon-wrap" @click.stop="moreRow(row, i)" :class="{on : row === more}">
-									<i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
-								</button>
-							</td>
-						</tr>
-						<transition name="fade">
-							<tr v-if="row === more" class="show-row">
-								<td :colspan="collength" :key="row.id">
-									<EventInnerView :propData="row"></EventInnerView>
-								</td>
-							</tr>
-						</transition>
-					</template>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-		               :current-page.sync="paging.currentPage" :page-sizes="paging.sizeList" :page-size="paging.size"
-		               layout="sizes, prev, pager, next" :total="filteredData.length">
-		</el-pagination>
-	</section>
+  <section class="template-table-wrap">
+    <header>
+      <span>전체 : {{filteredData ? filteredData.length : '-'}}건</span>
+      <div class="btn-wrap">
+        <el-button size="small">
+          파일로 저장
+          <i class="fa fa-download" aria-hidden="true"></i>
+        </el-button>
+        <el-select v-model="order" placeholder="정렬" size="small" @change="reorder"
+                   :disabled="(!propData || !propData.search ||  propData.search.length == 0)">
+          <el-option v-for="item in orderOption" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+        <div class="view-check">
+          <el-button @click="morebtn = !morebtn" size="small">
+            보기
+            <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
+          </el-button>
+          <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
+            <el-checkbox v-for="(check,i) in field" :label="check" :key="check" :ref="'checked'"
+                         v-if="i !== field.length -1">{{check}}
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+      </div>
+    </header>
+    <div class="template-table dynamic-row">
+      <div class="table-head-wrap">
+        <table>
+          <thead>
+          <tr>
+            <th v-for="(th, i) in head" :key="th.id"
+                :class="['col'+i,{ 'col-end' : head.length-1 === i }]" :ref="'checkedTh'">{{th}}
+            </th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-body-wrap">
+        <table :ref="'table'">
+          <tbody :ref="'table'">
+          <template v-for="(row,i) in viewData">
+            <tr :ref="'trs'" :key="row.id" :id="'row' + (row.EventSeq||'0')"
+                :class="[row.detect ? row.detect.Type : '', {'founded': row.isFounded, 'selected': row.isSelected}]">
+              <td class="col0">{{row.EventTime}}</td>
+              <td class="col1">{{getDisplayEventType(row)}}</td>
+              <td class="col2">
+                <template v-if="row.Table === 'PROCESS_CREATE_LOG'">
+                  {{row.ProcessImagePath}} ({{row.ProcessId}})
+                </template>
+                <template v-else-if="row.Table === 'CHILDPROCESS_CREATE_LOG'">
+                  {{row.ProcessImagePath}} ({{row.ChildProcessId}})
+                </template>
+                <template v-else-if="row.Table === 'PROCESS_EXIT_LOG'">
+                  {{row.ProcessId}}
+                </template>
+                <template v-else-if="row.Table === 'FILE_LOG'">
+                  {{row.FilePath1}}
+                  <template v-if="row.EventType === 'FileCreate'">
+                    <template v-if="row.FileType">
+                      [{{row.FileType}}]
+                    </template>
+                    ({{row.FileSize}})
+                  </template>
+                  <template v-else-if="row.EventType === 'FileMod'">
+                    <template v-if="row.FileType">
+                      [{{row.FileType}}]
+                    </template>
+                  </template>
+                  <template v-else-if="row.EventType === 'FileMove'">
+                    ▶ {{row.FilePath2}}
+                  </template>
+                  <template v-else-if="row.EventType === 'FileDelete'"></template>
+                  <template v-else-if="row.EventType === 'FileRead'"></template>
+                  <template v-else-if="row.EventType === 'FileSetAttr'">
+                    <template v-if="row.FileType">
+                      [{{row.FileType}}]
+                    </template>
+                  </template>
+                </template>
+                <template v-else-if="row.Table === 'REGISTRY_LOG'">
+                  <template v-if="row.EventType === 'RegCreateKey'">
+                    {{row.RegKeyPath}}
+                  </template>
+                  <template v-else-if="row.EventType === 'RegRenameKey'">
+                    {{row.RegKeyPath}} => {{row.RegNewKeyPath}}
+                  </template>
+                  <template v-else-if="row.EventType === 'RegSetValue'">
+                    {{row.RegKeyPath}}
+                    [{{row.RegValueName}}] => [{{row.RegValue}}]
+                  </template>
+                  <template v-else-if="row.EventType === 'RegDeleteKey'">
+                    {{row.RegKeyPath}}
+                  </template>
+                  <template v-else-if="row.EventType === 'RegDeleteValue'">
+                    {{row.RegKeyPath}} [{{row.RegValueName}}]
+                  </template>
+                </template>
+                <template v-else-if="row.Table === 'NETWORK_CONNECT_LOG'">
+                  {{row.Direction === 'OUT' ? ' >> ' : ' << '}}{{row.Domain ? row.Domain : row.RemoteIp}}:{{row.RemotePort}}/{{row.Protocol}}
+                </template>
+                <template v-else-if="row.Table === 'NETWORK_DISCONNECT_LOG'">
+                  Sent: {{row.BytesSent}} / Received: {{row.BytesRecved}}
+                </template>
+                <template v-else-if="row.Table === 'MODULE_LOAD_LOG'">
+                  {{row.ModulePath}} {{row.IsSystem ? '[System]' : ''}}
+                </template>
+                <template v-else-if="row.Table === 'FILE_TRANSFER_LOG'">
+                  <template v-if="row.EventType === 'RelatedFile'">
+                    {{row.PathInfo1}} => {{row.PathInfo2}}
+                  </template>
+                  <template v-else-if="row.EventType === 'FileCopy'">
+                    {{row.PathInfo1}} => {{row.PathInfo2}}
+                  </template>
+                  <template v-else-if="row.EventType === 'HttpDownload'">
+                    {{row.PathInfo2}} from {{row.PathInfo1}}
+                  </template>
+                </template>
+              </td>
+              <td class="col-btn">
+                <button class="icon-btn icon-wrap" @click.stop="moreRow(row, i)" :class="{on : row === more}">
+                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
+                </button>
+              </td>
+            </tr>
+            <transition name="fade">
+              <tr v-if="row === more" class="show-row">
+                <td :colspan="collength" :key="row.id">
+                  <EventInnerView :propData="row"></EventInnerView>
+                </td>
+              </tr>
+            </transition>
+          </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                   :current-page.sync="paging.currentPage" :page-sizes="paging.sizeList" :page-size="paging.size"
+                   layout="sizes, prev, pager, next" :total="filteredData.length">
+    </el-pagination>
+  </section>
 </template>
 <script>
   import EventInnerView from "./Search.event.innerview.vue";
@@ -370,10 +370,11 @@
           });
           this.findDataPosition = new Position();
           this.findDataPosition.total = this.findData.length;
+          this.findDataPosition.current = this.findDataPosition.total - 1;
           if (this.findData.length > 0) {
-            let selectedItem = this.findData[0];
+            let selectedItem = this.findData[this.findData.length - 1];
             selectedItem.isSelected = true;
-
+            this.move(true);
           }
         }
         else {
@@ -462,10 +463,10 @@
         let end = start + this.paging.size;
         this.viewData = this.filteredData.slice(start, end);
 
-        let el = this.$refs.table;
-        if (el) {
-          el.scrollIntoView(true);
-        }
+//        let el = this.$refs.table;
+//        if (el) {
+//          el.scrollIntoView(true);
+//        }
       },
       getData(processGuid) {
         const url = `/api/admin/search/process/${processGuid}`;
@@ -543,61 +544,61 @@
   };
 </script>
 <style lang='scss' scoped>
-	//noinspection CssUnknownTarget
-	@import "~styles/variables";
+  //noinspection CssUnknownTarget
+  @import "~styles/variables";
 
-	table {
-		tr {
-			&.founded {
-				background: rgba(255, 255, 0, 0.2) !important;
-				color: #000000 !important;
-			}
-			&.selected {
-				background: rgba(255, 255, 0, 1) !important;
-				color: #000000 !important;
-			}
-			&.rsc, &.RSC {
-				background: rgb(165, 139, 212);
-				color: #FFF;
-			}
-			&.vt_file_hash, &.file, &.FILE {
-				background: rgb(255, 0, 0);
-				color: #FFF;
-			}
-			&.vt_ip_url, &.ip, &.IP {
-				background: #ff9d00;
-				color: #FFF;
-			}
-		}
-	}
+  table {
+    tr {
+      &.founded {
+        background: rgba(255, 255, 0, 0.2) !important;
+        color: #000000 !important;
+      }
+      &.selected {
+        background: rgba(255, 255, 0, 1) !important;
+        color: #000000 !important;
+      }
+      &.rsc, &.RSC {
+        background: rgb(165, 139, 212);
+        color: #FFF;
+      }
+      &.vt_file_hash, &.file, &.FILE {
+        background: rgb(255, 0, 0);
+        color: #FFF;
+      }
+      &.vt_ip_url, &.ip, &.IP {
+        background: #ff9d00;
+        color: #FFF;
+      }
+    }
+  }
 
-	.template-table-wrap {
-		.fade-enter-active,
-		.fade-leave-active {
-			transition: opacity 0.3s;
-		}
-		.fade-enter,
-		.fade-leave-to {
-			opacity: 0;
-		}
-		.fa {
-			transition: all 0.3s ease;
-			&.rotate {
-				transform: rotateZ(-180deg);
-				transform-origin: 44% 50%;
-			}
-		}
-		.col-end[hidden] {
-			display: none;
-		}
-		.show-row:hover {
-			background-color: transparent;
-		}
-		.el-pagination {
-			margin-top: 5px;
-			display: flex;
-			justify-content: flex-end;
-			align-items: center;
-		}
-	}
+  .template-table-wrap {
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 0.3s;
+    }
+    .fade-enter,
+    .fade-leave-to {
+      opacity: 0;
+    }
+    .fa {
+      transition: all 0.3s ease;
+      &.rotate {
+        transform: rotateZ(-180deg);
+        transform-origin: 44% 50%;
+      }
+    }
+    .col-end[hidden] {
+      display: none;
+    }
+    .show-row:hover {
+      background-color: transparent;
+    }
+    .el-pagination {
+      margin-top: 5px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
 </style>

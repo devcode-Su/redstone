@@ -1,108 +1,109 @@
 <template>
-	<section class="template-table-wrap file-data-table">
-		<header>
-			<span>전체 : {{pagination.total}}</span>
-			<div class="btn-wrap">
-				<el-button size="small">
-					파일로 저장
-					<i class="fa fa-download" aria-hidden="true"></i>
-				</el-button>
-				<el-select v-model="selectedOrder" placeholder="정렬" size="small" @change="orderChange">
-					<el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
-					</el-option>
-				</el-select>
-				<div class="view-check">
-					<el-button @click="morebtn = !morebtn" size="small">
-						보기
-						<i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
-					</el-button>
-					<el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-						<el-checkbox v-for="(check,i) in definition.field" :label="i" :key="check.i" :ref="'checked'"
-						             v-if="i !== 0">
-							{{check}}
-						</el-checkbox>
-					</el-checkbox-group>
-				</div>
-			</div>
-		</header>
-		<div class="template-table dynamic-row">
-			<div class="table-head-wrap">
-				<table>
-					<thead>
-					<tr>
-						<th v-for="(th, i) in definition.field" :key="th.id"
-						    :class="['col'+i,{ 'col-end' : definition.field.length-1 === i }]" :ref="'checkedTh'">
-							<span>{{th}}</span>
-						</th>
-					</tr>
-					</thead>
-				</table>
-			</div>
-			<div class="table-body-wrap">
-				<table>
-					<tbody>
-					<tr v-if="data" v-for="(row,i) in data" :key="i.id" @click="moveRow" :ref="'checkedRow'">
-						<td class="col0">
-							<i class="fa fa-power-off"></i>
-							<!--{{row.connected}}-->
-						</td>
-						<td class="col1">
+  <section class="template-table-wrap file-data-table">
+    <header>
+      <span>전체 : {{pagination.total}}</span>
+      <div class="btn-wrap">
+        <el-button size="small">
+          파일로 저장
+          <i class="fa fa-download" aria-hidden="true"></i>
+        </el-button>
+        <el-select v-model="selectedOrder" placeholder="정렬" size="small" @change="orderChange"
+                   :disabled="!definition.order.length">
+          <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+        <div class="view-check">
+          <el-button @click="morebtn = !morebtn" size="small">
+            보기
+            <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
+          </el-button>
+          <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
+            <el-checkbox v-for="(check,i) in definition.field" :label="i" :key="check.i" :ref="'checked'"
+                         v-if="i !== 0">
+              {{check}}
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+      </div>
+    </header>
+    <div class="template-table dynamic-row">
+      <div class="table-head-wrap">
+        <table>
+          <thead>
+          <tr>
+            <th v-for="(th, i) in definition.field" :key="th.id"
+                :class="['col'+i,{ 'col-end' : definition.field.length-1 === i }]" :ref="'checkedTh'">
+              <span>{{th}}</span>
+            </th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-body-wrap">
+        <table>
+          <tbody>
+          <tr v-if="data" v-for="(row,i) in data" :key="i.id" @click="moveRow" :ref="'checkedRow'">
+            <td class="col0">
+              <i class="fa fa-power-off"></i>
+              <!--{{row.connected}}-->
+            </td>
+            <td class="col1">
               <span>
                 {{row.nodeid}}
               </span>
-						</td>
-						<td class="col2">
+            </td>
+            <td class="col2">
               <span>
                 {{row.node.info.username}}
               </span>
-						</td>
-						<td class="col3">
+            </td>
+            <td class="col3">
               <span>
                 {{row.node.dept.name}}
               </span>
-						</td>
-						<td class="col4">
+            </td>
+            <td class="col4">
               <span>
                 {{row.node.info.computer}}
               </span>
-						</td>
-						<td class="col5">
+            </td>
+            <td class="col5">
               <span>
                 {{row.node.info.ip}}
               </span>
-						</td>
-						<td class="col6">
+            </td>
+            <td class="col6">
               <span>
                 {{row.FileName}}
               </span>
-						</td>
-						<td class="col7">
+            </td>
+            <td class="col7">
               <span>
                 {{row.Md5Hash}}
               </span>
-						</td>
-						<td class="col8">
+            </td>
+            <td class="col8">
               <span>
                 {{row.FilePath}}
               </span>
-						</td>
-						<td class="col9">
+            </td>
+            <td class="col9">
               <span>
                 {{row.InsertTime}}
               </span>
-						</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<el-pagination @size-change="sizeChange"
-		               @current-change="currentChange"
-		               :current-page.sync="pagination.currentPage"
-		               :page-sizes="[25, 50, 100, 200, 500]"
-		               :page-size="pagination.size" layout="sizes, prev, pager, next" :total="pagination.total">
-		</el-pagination>
-	</section>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <el-pagination @size-change="sizeChange"
+                   @current-change="currentChange"
+                   :current-page.sync="pagination.currentPage"
+                   :page-sizes="[25, 50, 100, 200, 500]"
+                   :page-size="pagination.size" layout="sizes, prev, pager, next" :total="pagination.total">
+    </el-pagination>
+  </section>
 </template>
 <script>
   import Templatepaginations from "../template/Template.paginations.vue"
@@ -138,18 +139,17 @@
       //알파벳 순으로 정렬할 것.
       definition: {
         type: Object,
+        required: true,
         default: {
           order: [],
           field: [],
           url: '',
-          rowKey: []
         }
       }
     },
     data() {
       return {
         more: null,
-        order: "",
         morebtn: false,
         view: [],
         pagination: {
@@ -254,59 +254,59 @@
   };
 </script>
 <style lang='scss' scoped>
-	@import "~styles/variables";
+  @import "~styles/variables";
 
-	.file-data-table {
-		.table-body-wrap {
-			max-height: 600px;
-		}
-		th, td {
-			padding: 0 10px;
-		}
-		.col0 {
-			width: 15px;
-			min-width: 15px;
-			padding: 0 7px;
-			span {
-				width: 16px;
-			}
-		}
-		.col1 {
-			min-width: 20px;
-			width: 20px;
-		}
-		td.col1 {
-			width: 62px;
-			min-width: 62px;
-			padding-left: 20px;
-		}
-		.col2,
-		.col3,
-		.col4,
-		.col5 {
-			width: 120px;
-			min-width: 120px;
-		}
-		.col2 span,
-		.col3 span,
-		.col4 span,
-		.col5 span {
-			width: 100px;
-			min-width: 100px;
-		}
-		.col6,
-		.col6 span {
-			width: 130px;
-		}
-		.col7,
-		.col7 span {
-			width: 200px;
-			min-width: 200px;
-		}
-		.col8,
-		.col8 span {
-			width: 420px;
-		}
-	}
+  .file-data-table {
+    .table-body-wrap {
+      max-height: 600px;
+    }
+    th, td {
+      padding: 0 10px;
+    }
+    .col0 {
+      width: 15px;
+      min-width: 15px;
+      padding: 0 7px;
+      span {
+        width: 16px;
+      }
+    }
+    .col1 {
+      min-width: 20px;
+      width: 20px;
+    }
+    td.col1 {
+      width: 62px;
+      min-width: 62px;
+      padding-left: 20px;
+    }
+    .col2,
+    .col3,
+    .col4,
+    .col5 {
+      width: 120px;
+      min-width: 120px;
+    }
+    .col2 span,
+    .col3 span,
+    .col4 span,
+    .col5 span {
+      width: 100px;
+      min-width: 100px;
+    }
+    .col6,
+    .col6 span {
+      width: 130px;
+    }
+    .col7,
+    .col7 span {
+      width: 200px;
+      min-width: 200px;
+    }
+    .col8,
+    .col8 span {
+      width: 420px;
+    }
+  }
 
 </style>

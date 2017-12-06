@@ -1,11 +1,13 @@
 <template>
-	<article data-layout="Route-article">
-		<h1 data-page-title>
-			파일 검색
-		</h1>
-		<file-searchform></file-searchform>
-		<searchfiledatatable :definition="definition"></searchfiledatatable>
-	</article>
+  <article data-layout="Route-article">
+    <h1 data-page-title>
+      파일 검색
+    </h1>
+    <div class="template-search-pannel template-container">
+      <file-searchform></file-searchform>
+    </div>
+    <searchfiledatatable :definition="definition"></searchfiledatatable>
+  </article>
 </template>
 <script>
   import FileSearchform from "../form/File.search.form";
@@ -38,12 +40,11 @@
           ],
           order: [
             {label: '검출시각', value: 'InsertTime', default: true},
-            {label: '파일명', value:'FileName'},
-            {label: '파일경로', value:'FilePath'},
-            {label: '파일해시', value:'Sha256Hash'},
+            {label: '파일명', value: 'FileName'},
+            {label: '파일경로', value: 'FilePath'},
+            {label: '파일해시', value: 'Sha256Hash'},
           ]
         },
-        condition: null
       };
     },
     computed: {},
@@ -77,5 +78,5 @@
   };
 </script>
 <style lang='scss' scoped>
-	@import "~styles/variables";
+  @import "~styles/variables";
 </style>

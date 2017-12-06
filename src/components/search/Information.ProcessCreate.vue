@@ -1,73 +1,73 @@
 <template>
-	<div>
-		<h2>프로세스 정보</h2>
-		<div class="content-wrap">
-			<dl>
-				<dt>프로세스 고유 ID</dt>
-				<dd>{{data.ProcessGuid}}</dd>
-			</dl>
-			<dl>
-				<dt>프로세스 명</dt>
-				<dd>{{data.ProcessName}}</dd>
-			</dl>
-			<dl>
-				<dt>SHA256</dt>
-				<dd>{{data.FileHash}}</dd>
-			</dl>
-			<dl>
-				<dt>MD5</dt>
-				<dd>{{data.Md5Hash}}</dd>
-			</dl>
-			<dl>
-				<dt>PID</dt>
-				<dd>{{data.ProcessId}}</dd>
-			</dl>
-			<dl>
-				<dt>프로세스 경로</dt>
-				<dd>{{data.ProcessImagePath}}</dd>
-			</dl>
-			<dl>
-				<dt>Session ID"</dt>
-				<dd>{{data.SessionId}}</dd>
-			</dl>
-			<dl v-if="data.InteractiveFlag !== '0'">
-				<dt>GUI</dt>
-				<dd>{{data.InteractiveFlag}}</dd>
-			</dl>
-			<dl v-if="data.InteractiveFlag !== '0'">
-				<dt>WindowText</dt>
-				<dd>{{data.WindowTex}}</dd>
-			</dl>
-			<dl v-if="data.InteractiveFlag !== '0'">
-				<dt>WindowClassName</dt>
-				<dd>{{data.WindowClassName}}</dd>
-			</dl>
-			<dl>
-				<dt>CommandLine</dt>
-				<dd>{{data.CommandLine}}</dd>
-			</dl>
-			<dl>
-				<dt>파일 생성 시각</dt>
-				<dd>{{data.CreateDate}}</dd>
-			</dl>
-			<dl>
-				<dt>파일 수정 시각</dt>
-				<dd>{{data.InsertTime}}</dd>
-			</dl>
-			<dl>
-				<dt>파일 속성</dt>
-				<dd>{{data.FileAttributes}}</dd>
-			</dl>
-			<dl>
-				<dt>시작 시각</dt>
-				<dd>{{data.EventTime}}</dd>
-			</dl>
-			<dl>
-				<dt>종료 시각</dt>
-				<dd>{{data.EventTime1}}</dd>
-			</dl>
-		</div>
-	</div>
+  <div>
+    <h2>프로세스 정보</h2>
+    <div class="content-wrap">
+      <dl>
+        <dt>프로세스 고유 ID</dt>
+        <dd>{{data.ProcessGuid}}</dd>
+      </dl>
+      <dl>
+        <dt>프로세스 명</dt>
+        <dd>{{data.ProcessName}}</dd>
+      </dl>
+      <dl>
+        <dt>SHA256</dt>
+        <dd>{{data.FileHash}}</dd>
+      </dl>
+      <dl>
+        <dt>MD5</dt>
+        <dd>{{data.Md5Hash}}</dd>
+      </dl>
+      <dl>
+        <dt>PID</dt>
+        <dd>{{data.ProcessId}}</dd>
+      </dl>
+      <dl>
+        <dt>프로세스 경로</dt>
+        <dd>{{data.ProcessImagePath}}</dd>
+      </dl>
+      <dl>
+        <dt>Session ID"</dt>
+        <dd>{{data.SessionId}}</dd>
+      </dl>
+      <dl v-if="data.InteractiveFlag !== '0'">
+        <dt>GUI</dt>
+        <dd>{{data.InteractiveFlag}}</dd>
+      </dl>
+      <dl v-if="data.InteractiveFlag !== '0'">
+        <dt>WindowText</dt>
+        <dd>{{data.WindowTex}}</dd>
+      </dl>
+      <dl v-if="data.InteractiveFlag !== '0'">
+        <dt>WindowClassName</dt>
+        <dd>{{data.WindowClassName}}</dd>
+      </dl>
+      <dl>
+        <dt>CommandLine</dt>
+        <dd>{{data.CommandLine}}</dd>
+      </dl>
+      <dl>
+        <dt>파일 생성 시각</dt>
+        <dd>{{data.CreateDate}}</dd>
+      </dl>
+      <dl>
+        <dt>파일 수정 시각</dt>
+        <dd>{{data.InsertTime}}</dd>
+      </dl>
+      <dl>
+        <dt>파일 속성</dt>
+        <dd>{{data.FileAttributes}}</dd>
+      </dl>
+      <dl>
+        <dt>시작 시각</dt>
+        <dd>{{data.EventTime}}</dd>
+      </dl>
+      <dl>
+        <dt>종료 시각</dt>
+        <dd>{{data.EventTime1}}</dd>
+      </dl>
+    </div>
+  </div>
 </template>
 <script>
   export default {
@@ -135,6 +135,6 @@
   };
 </script>
 <style lang='scss' scoped>
-	//noinspection CssUnknownTarget
-	@import "~styles/variables";
+  //noinspection CssUnknownTarget
+  @import "~styles/variables";
 </style>

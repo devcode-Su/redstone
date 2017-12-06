@@ -25,10 +25,6 @@ export default {
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
-    pannelType: {
-      type: Array | Object,
-      default: false
-    },
     widthsize: {
       type: Number,
       default: 120

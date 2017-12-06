@@ -1,47 +1,47 @@
 <template>
-	<div>
-		<h2>파일 정보</h2>
-		<div class="content-wrap">
-			<dl>
-				<dt>전자서명</dt>
-				<dd>{{data.sign_status}}</dd>
-			</dl>
-			<dl v-if="data.sign_status === 'signed'">
-				<dt>검증</dt>
-				<dd>{{data.sign_validity}}</dd>
-				<dt>서명자</dt>
-				<dd>{{data.sign_publisher}}</dd>
-			</dl>
-			<dl>
-				<dt>회사명</dt>
-				<dd>{{data.company_name}}</dd>
-			</dl>
-			<dl>
-				<dt>종류</dt>
-				<dd>{{data.type}}</dd>
-			</dl>
-			<dl>
-				<dt>실행파일 종류</dt>
-				<dd>{{data.exe_type}} ({{data.platform}})</dd>
-			</dl>
-			<dl>
-				<dt>버전</dt>
-				<dd>{{data.version}}</dd>
-			</dl>
-			<dl>
-				<dt>내부 이름</dt>
-				<dd>{{data.internal_name}}</dd>
-			</dl>
-			<dl>
-				<dt>제품명</dt>
-				<dd>{{data.product_name}}</dd>
-			</dl>
-			<dl>
-				<dt>빌드시각</dt>
-				<dd>{{data.build_date}}</dd>
-			</dl>
-		</div>
-	</div>
+  <div>
+    <h2>파일 정보</h2>
+    <div class="content-wrap">
+      <dl>
+        <dt>전자서명</dt>
+        <dd>{{data.sign_status}}</dd>
+      </dl>
+      <dl v-if="data.sign_status === 'signed'">
+        <dt>검증</dt>
+        <dd>{{data.sign_validity}}</dd>
+        <dt>서명자</dt>
+        <dd>{{data.sign_publisher}}</dd>
+      </dl>
+      <dl>
+        <dt>회사명</dt>
+        <dd>{{data.company_name}}</dd>
+      </dl>
+      <dl>
+        <dt>종류</dt>
+        <dd>{{data.type}}</dd>
+      </dl>
+      <dl>
+        <dt>실행파일 종류</dt>
+        <dd>{{data.exe_type}} ({{data.platform}})</dd>
+      </dl>
+      <dl>
+        <dt>버전</dt>
+        <dd>{{data.version}}</dd>
+      </dl>
+      <dl>
+        <dt>내부 이름</dt>
+        <dd>{{data.internal_name}}</dd>
+      </dl>
+      <dl>
+        <dt>제품명</dt>
+        <dd>{{data.product_name}}</dd>
+      </dl>
+      <dl>
+        <dt>빌드시각</dt>
+        <dd>{{data.build_date}}</dd>
+      </dl>
+    </div>
+  </div>
 </template>
 <script>
   export default {
@@ -117,6 +117,6 @@
   };
 </script>
 <style lang='scss' scoped>
-	//noinspection CssUnknownTarget
-	@import "~styles/variables";
+  //noinspection CssUnknownTarget
+  @import "~styles/variables";
 </style>
