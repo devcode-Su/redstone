@@ -42,7 +42,7 @@
       <div class="table-body-wrap">
         <table>
           <tbody>
-          <tr v-if="data" v-for="(row,i) in data" :key="i.id" @click="moveRow" :ref="'checkedRow'">
+          <tr v-if="data" v-for="(row,i) in data" :key="i.id" @click="moveRow(row, $event)" :ref="'checkedRow'">
             <td class="col0">
               <i class="fa fa-power-off"></i>
               <!--{{row.connected}}-->
@@ -180,8 +180,8 @@
           this.view = [];
         }
       },
-      moveRow() {
-        console.log("moverow");
+      moveRow(data, $event) {
+        this.$router.push({path: "Search-process", query: data});
       },
       getData(page = null, size = null) {
         if (page) {
