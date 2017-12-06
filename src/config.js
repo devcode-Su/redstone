@@ -17,6 +17,7 @@ export default {
 
   // 그룹관리
   FETCH_GROUP : BASE_URL + "/group/list",
+  MANAGEMENT_GROUP : BASE_URL + "/group",
   FETCH_GLOBALUSER : BASE_URL + "/group/recurse/${no}",
   FETCH_EDITUSER : BASE_URL + "/node/${no}"
 

@@ -5,22 +5,22 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
-        <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
+        <date-searchform></date-searchform>
         <templatetableinsert class="diagosis-info-table" :propData="infofile" @reorder="reorder"></templatetableinsert>
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
-        <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
+        <date-searchform></date-searchform>
         <templatetableinsert class="diagosis-info-table" :propData="infoip" @reorder="reorder"></templatetableinsert>
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
-        <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
+        <date-searchform></date-searchform>
         <templatetableinsert class="diagosis-info-table" :propData="inforsc" @reorder="reorder"></templatetableinsert>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
-import TemplateSearchpannel from "../template/Template.searchpannel";
+  import DateSearchform from "../form/Date.search.form";
 import Templatetableinsert from "../template/Template.tableinsert.vue";
 export default {
   name: "Diagnosisinfo",
@@ -137,7 +137,7 @@ export default {
   },
   computed: {},
   components: {
-    TemplateSearchpannel,
+    DateSearchform,
     Templatetableinsert
   },
   watch: {},

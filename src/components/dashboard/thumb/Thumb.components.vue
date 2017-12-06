@@ -4,8 +4,8 @@
       {{propData.title}}
     </h1>
     <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick.self="periodNumber"></dashboard-periodbtn>
-    <template-datatable-select  v-if="propData.button_type === '1'"  :fields="propData.column" :prop-data="compData" :prop-index="selectNum"></template-datatable-select>
-    <template-datatable v-else :fields="propData.column" :prop-data="compData"></template-datatable>
+    <thumb-datatable-select  v-if="propData.button_type === '1'"  :fields="propData.column" :prop-data="compData" :prop-index="selectNum"></thumb-datatable-select>
+    <thumb-datatable v-else :fields="propData.column" :prop-data="compData"></thumb-datatable>
     <button data-icon class="more-link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
@@ -18,8 +18,8 @@
 <script>
   import Constant from "@/constant";
   import DashboardPeriodbtn from "../Dashboard.period.btn.vue";
-  import TemplateDatatable from "../../template/Template.datatable";
-  import TemplateDatatableSelect from "../../template/Template.datatable.select";
+  import ThumbDatatable from "./Thumb.datatable";
+  import ThumbDatatableSelect from "./Thumb.datatable.select";
   export default {
     name: "ThumbComponent",
     extends: {},
@@ -47,8 +47,8 @@
     },
     components: {
       DashboardPeriodbtn,
-      TemplateDatatable,
-      TemplateDatatableSelect
+      ThumbDatatable,
+      ThumbDatatableSelect
     },
     watch: {},
     methods: {

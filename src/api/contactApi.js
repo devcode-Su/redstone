@@ -9,6 +9,9 @@ export default {
   fetchGroup(){
     return axios.get(CONF.FETCH_GROUP);
   },
+  addGroup(addDept){
+    return axios.post(CONF.MANAGEMENT_GROUP, addDept)
+  },
   fetchGlobalUser(dept){
     return axios.get(CONF.FETCH_GLOBALUSER.replace("${no}", dept))
   }

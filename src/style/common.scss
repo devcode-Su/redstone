@@ -227,18 +227,28 @@
 
 // search form
 [data-search-pannel]{
+  position:relative;
   margin-top:55px;
   padding:15px 15px 15px 110px;
   background: url(/src/assets/search-box.jpg) no-repeat 30px center;
   border: 1px solid #ccc;
   form{
     display:flex;
-    padding-left:30px;
+    padding:18px 0 0 30px;
     border-left:1px solid #ccc;
   }
   .el-form-item__content{
     display:flex;
     align-items: center;
+  }
+}
+[data-range]{
+  position:absolute;
+  top:-25px;
+  left:0;
+  display:flex;
+  span{
+    display:flex;
   }
 }
 [data-dateset-btn]{

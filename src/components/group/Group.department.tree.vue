@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     isRootItem() {
-      return this.model.name === "undefined" && this.model.name === "전사";
+      return this.model.name === "undefined" || this.model.name === "전사";
     },
     isFolder() {
       return this.model.children && this.model.children.length;
@@ -119,12 +119,38 @@ export default {
       this.rename = true;
     },
     addTree() {
-      console.log("aa")
       this.isOpen = true;
-      console.log(this.model)
-      this.model.children.push({
-        name: "이름을 수정하세요."
-      });
+
+      this.$prompt("추가할 부서의 이름을 입력하세요.","부서추가",{
+        confirmButtonText: '추가',
+        cancelButtonText: '취소',
+      }).then(value => {
+        this.$message({
+          showClose: true,
+          type : "success",
+          message : "추가될 부서명 : " + value.value,
+          duration: 2000
+        });
+        console.log(this.model);
+        this.$store.dispatch(Constant.ADD_GROUP, {
+        pcode : this.model.dept_code,
+        name : value.value
+        })
+      }).catch(() => {
+        this.$message({
+          showClose: true,
+          type: "info",
+          message : "부서추가를 취소합니다.",
+          duration: 2000
+        })
+      })
+      // var name = prompt("추가될 부서의 이름을 입력하세요.","");
+      // alert(name)
+
+      //this.$store.dispatch(Constant.ADD_GROUP, )
+      // this.model.children.push({
+      //   name: "이름을 수정하세요."
+      // });
     },
     removeTree(model) {
       const tree = this.$parent.model.children;
@@ -132,7 +158,7 @@ export default {
     },
     changeType() {
       if (!this.isFolder) {
-        this.$set(this.model, "children", [{ name: "이름을 수정하세요." }]);
+        this.$set(this.model, "children", [{ name: "이름을 수정하세요."}]);
       }
     },
     cancelEdit() {

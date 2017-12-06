@@ -18,10 +18,10 @@
             <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap" @click="selectRow(member)">
               <td class="col-nodeid">{{member.nodeid}}</td>
               <td class="col-name">
-                {{member.username | groupSnippet}}
+                {{member.username}}
               </td>
               <td class="col-end">
-                {{member.dept.name | groupSnippet}}
+                {{member.dept.name}}
               </td>
             </tr>
           </tbody>
@@ -92,13 +92,8 @@ export default {
       }
     },
     selectRow(member) {
-      console.log(member);
-      this.$store.dispatch(Constant.RANGE_CODE, {
-        dept_code : member.dept_code,
-        name : member.dept.name,
-        nodeid : member.nodeid,
-        username : member.username
-      });
+      //console.log(member);
+      this.$store.dispatch(Constant.GLOBAL_RANGEUSER, member);
     }
   },
   beforeCreate() {},

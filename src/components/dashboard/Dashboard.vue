@@ -50,7 +50,6 @@ export default {
   },
   beforeCreate() {},
   created() {
-    console.log(this.is)
   },
   beforeMounted() {},
   mounted() {},

@@ -1,5 +1,15 @@
 <template>
   <div data-search-pannel>
+    <p data-range>
+      <span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>
+      <span v-else>
+        {{globalRangeCode.dept.name}} / {{globalRangeCode.username}}
+        <button data-icon @click="resetRange">
+          <i class="fa fa-times-circle"></i>
+        </button>
+      </span>
+      에서 검색
+    </p>
     <el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
       <fieldset>
         <datetime @dateTime="dateset"></datetime>
@@ -13,9 +23,10 @@
   </div>
 </template>
 <script>
+  import Constant from "@/constant";
+  import { mapGetters } from "vuex";
   import Datetime from "./Datetime";
   import ReplaceInput from "./Replace.input";
-
 
   export default {
     name: "FileSearchform",
@@ -34,6 +45,8 @@
     data() {
       return {
         form: {
+          dept_code : '',
+          nodeid : '',
           startDate: "",
           endDate: "",
           q: "",
@@ -41,13 +54,29 @@
         }
       };
     },
-    computed: {},
+    computed: {
+      ...mapGetters({ globalRangeCode: "globalRangeCode" }),
+    },
     components: {
       datetime: Datetime,
       "replace-input": ReplaceInput
     },
-    watch: {},
+    watch: {
+      globalRangeCode(g){
+        if(g){
+          console.log(g)
+          this.form.dept_code = g.dept_code;
+          this.form.nodeid = g.nodeid;
+        }
+      }
+    },
     methods: {
+      resetRange(){
+        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+          dept_code : 1,
+          name : "전사"
+        });
+      },
       dateset(dateTime) {
         this.form.startDate = dateTime.start;
         this.form.endDate = dateTime.end
@@ -72,6 +101,7 @@
     beforeUpdate() {
     },
     updated() {
+      console.log(this.form)
     },
     actvated() {
     },
