@@ -155,8 +155,8 @@
           const data = {
             startDate: this.startDate ? this.startDate : null,
             endDate: this.endDate ? this.endDate : null,
-            dept_code: formData && formData.data ? formData.data.dept_code || "" : null,
-            node_id: formData && formData.data ? formData.data.node_id || "" : null,
+            dept_code: formData && formData.data ? formData.data.dept_code : null,
+            node_id: formData && formData.data ? formData.data.node_id : null,
             order: "time",
             direction: 1,
             q: formData.q,
@@ -184,23 +184,32 @@
       }
     },
     created() {
-//      this.$bus.$on("process-search-data", this.receiveSubmit.bind(this));
-//      this.$bus.$on('process-page-length-change', (item) => {
-//        if (item.page !== this.page || item.length !== this.length) {
-//          this.page = item.page;
-//          this.length = item.length;
-//          this.onSubmit('form');
-//        }
-//      });
-      if (this.$route.query && this.$route.query.psd) {
-        let data = this.$route.query.psd;
-        const defaultData = new Date(data.EventTime);
-        const start = new Date(defaultData.getTime() - 60 * 30 * 1000);
-        const end = new Date(defaultData.getTime() + 60 * 30 * 1000);
+      if (this.$route.query) {
+        let query = this.$route.query;
+        if (query.EventTime || query.InsertTime) {
+          let d = new Date(query.EventTime || query.InsertTime);
+          d.setMinutes(d.getMinutes() - 30);
+          this.startDate = d;
+          d = new Date(query.EventTime || query.InsertTime);
+          d.setMinutes(d.getMinutes() + 30);
+          this.endDate = d;
+        }
+        if (query.ProcessGuid) {
+          console.log('ProcessGuid', query.ProcessGuid);
+        }
+        else if (query.FileHash) {
+          console.log('FileHash', query.FileHash);
+        }
+        if (query.psd) {
+          let data = this.$route.query.psd;
+          const defaultData = new Date(data.EventTime);
+          const start = new Date(defaultData.getTime() - 60 * 30 * 1000);
+          const end = new Date(defaultData.getTime() + 60 * 30 * 1000);
 
-        this.startDate = start;
-        this.endDate = end;
-        this.form.checkType = [data.Type];
+          this.startDate = start;
+          this.endDate = end;
+          this.form.checkType = [data.Type];
+        }
       }
     },
     beforeMounted() {
