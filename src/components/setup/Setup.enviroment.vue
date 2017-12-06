@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      activeName: "first"
+      activeName: "second"
     };
   },
   computed: {},

@@ -130,10 +130,10 @@
 }
 
 // table - resultview
-.result-view {
+[data-enviroment-item] {
   .el-table__header,
   .el-table__body {
     width: 100% !important;
-    table-layout: auto;
+    table-layout: fixed;
   }
 }
