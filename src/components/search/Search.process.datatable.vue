@@ -158,9 +158,7 @@
           for (let j = 0; j < this.$refs.checkedRow.length; j++) {
             for (let i = 0; i < this.definition.field.length - 1; i++) {
               this.$refs.checkedTh[i].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i].hidden = this.$refs.checked[
-                i
-                ].isChecked;
+              this.$refs.checkedRow[j].children[i].hidden = this.$refs.checked[i].isChecked;
             }
           }
         } else {
@@ -172,26 +170,6 @@
       },
       moreRow(row) {
         this.more = this.more ? null : row;
-//        const prcessUrl = "/api/admin/search/process/info/" + row.ProcessGuid;
-//        const fileUrl =
-//          "/api/admin/search/file/info/master/process_guid/" + row.ProcessGuid;
-//        const cehckUrl = "/api/admin/search/process/detect/" + row.ProcessGuid;
-//        if (this.more === row) {
-//          this.more = null;
-//        } else {
-//          this.more = row;
-//          this.$http.get(prcessUrl).then(result => {
-//            this.innerData.processData = result.data.rows;
-//          });
-//          this.$http.get(fileUrl).then(result => {
-//            console.log(result.data);
-//            this.innerData.fileData = result.data;
-//          });
-//          this.$http.get(cehckUrl).then(result => {
-//            console.log(result.data);
-//            this.innerData.checkData = result.data;
-//          });
-//        }
       },
       handleSizeChange(val) {
         this.pagination.length = val;
