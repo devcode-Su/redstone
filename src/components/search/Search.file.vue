@@ -3,9 +3,7 @@
     <h1 data-page-title>
       파일 검색
     </h1>
-    <div class="template-search-pannel template-container">
-      <file-searchform></file-searchform>
-    </div>
+    <file-searchform></file-searchform>
     <searchfiledatatable :definition="definition"></searchfiledatatable>
   </article>
 </template>
@@ -32,25 +30,25 @@
             "파일명",
             "해시값",
             "경로명",
-            "검출시간"
+            "검출시간",
           ],
           url: "/api/admin/search/file",
           rowKey: [
-            "nodeid", "node.info.username"
+            "nodeid", "node.info.username",
           ],
           order: [
             {label: '검출시각', value: 'InsertTime', default: true},
             {label: '파일명', value: 'FileName'},
             {label: '파일경로', value: 'FilePath'},
             {label: '파일해시', value: 'Sha256Hash'},
-          ]
+          ],
         },
       };
     },
     computed: {},
     components: {
-      "file-searchform":FileSearchform,
-      "searchfiledatatable":Searchfiledatatable
+      "file-searchform": FileSearchform,
+      "searchfiledatatable": Searchfiledatatable,
     },
     watch: {},
     methods: {},
@@ -74,7 +72,7 @@
     beforeDestroy() {
     },
     destroyed() {
-    }
+    },
   };
 </script>
 <style lang='scss' scoped>

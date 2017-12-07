@@ -1,9 +1,9 @@
 <template>
   <article data-layout="Route-article">
-    <h1 class="page-title">
+    <h1 data-page-title>
       프로세스 검색
     </h1>
-    <div class="template-search-pannel template-container">
+    <div data-search-pannel>
       <el-form ref="form" :model="form" :label-width="'180px'" :label-position="'left'">
         <fieldset>
           <div class="form-align-box">

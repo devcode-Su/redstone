@@ -1,10 +1,10 @@
 <template>
 
   <article data-layout="Route-article">
-    <h1 class="page-title">
+    <h1 data-page-title>
       네트워크 검색
     </h1>
-    <div class="template-search-pannel template-container">
+    <div data-search-pannel>
       <el-form ref="form" :model="form" :label-width="'180px'" :label-position="'left'">
         <fieldset>
           <div class="form-align-box">
@@ -48,20 +48,19 @@
               </el-form-item>
             </div>
             <div class="btn-wrap">
-              <el-button size="small" type="primary" @click="onSubmit()">검색</el-button>
+              <el-button size="small" type="primary" @click="onSubmit">검색</el-button>
             </div>
           </div>
         </fieldset>
       </el-form>
     </div>
-    <templatetablerouter :propData="search"></templatetablerouter>
+    <search-network-data-table :definition="definition"></search-network-data-table>
   </article>
 </template>
 <script>
-  import TemplateSearchpannel from "../template/Template.searchpannel";
-  import Templatetablerouter from "../template/Template.tablerouter.vue";
   import TypeRadioBox from '../form/Type.radiobox.vue';
   import Datetime from '../form/Datetime.vue';
+  import SearchNetworkDataTable from './Search.network.datatable.vue';
 
   export default {
     name: "Searchnetwork",
@@ -84,12 +83,12 @@
               {label: '전체', value: ''},
               {label: '내부', value: 'Internal'},
               {label: '외부', value: 'External'},
-            ]
+            ],
           ],
           labels: [
             {label: '목적지', width: '80', name: 'RemoteFilter'},
-            {label: '출발지', width: '80', name: 'LocalFilter'}
-          ]
+            {label: '출발지', width: '80', name: 'LocalFilter'},
+          ],
         },
         form: {
           startDate: '',
@@ -104,7 +103,7 @@
           RemoteFilter: '',
           q: '',
         },
-        search: {
+        definition: {
           field: [
             "",
             "센서 ID",
@@ -116,20 +115,18 @@
             "원격 IP 주소",
             "포트",
             "프로토콜",
-            "검출 시간"
+            "검출 시간",
           ],
-          data: [],
-          search: [],
-          url: ""
-        }
+          order: [],
+          url: '',
+        },
       };
     },
     computed: {},
     components: {
-      "template-searchpannel":TemplateSearchpannel,
-      "templatetablerouter":Templatetablerouter,
-      "type-radio-box":TypeRadioBox,
-      "datetime":Datetime,
+      "type-radio-box": TypeRadioBox,
+      "datetime": Datetime,
+      'search-network-data-table': SearchNetworkDataTable,
     },
     watch: {},
     methods: {
@@ -141,15 +138,15 @@
         }
       },
       setDatetime(d) {
-        this.form.startDate = d.start
+        this.form.startDate = d.start;
         this.form.endDate = d.end;
       },
       onSubmit() {
         if (this.form.startDate === "" || this.form.endDate === "") {
           this.$notify.error({
-            title: "Error",
-            message: "검색 조건을 입력하세요."
-          });
+                               title: "Error",
+                               message: "검색 조건을 입력하세요.",
+                             });
         } else {
           let sendData = {};
           for (let key in this.form) {
@@ -159,7 +156,7 @@
           }
           this.$bus.$emit('network-search-data', sendData);
         }
-      }
+      },
     },
     beforeCreate() {
     },
@@ -180,10 +177,11 @@
     beforeDestroy() {
     },
     destroyed() {
-    }
+    },
   };
 </script>
 <style lang='scss' scoped>
+  //noinspection CssUnknownTarget
   @import "~styles/variables";
 
   .btn-date-wrap,
