@@ -177,7 +177,7 @@
     beforeMounted() {
     },
     mounted() {
-      if (this.$route.query) {
+      if (this.$route.query && Object.keys(this.$route.query).length > 0) {
         let query = this.$route.query;
         if (query.EventTime || query.InsertTime) {
           let date = query.EventTime || query.InsertTime;

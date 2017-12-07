@@ -8,7 +8,7 @@
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
         <el-select v-model="selectedOrder" placeholder="정렬" size="small"
-                   :disabled="!definition.order.length" @change="handleOrderChange">
+                   :disabled="!definition.order.length" @change="handleOrderChange" @input="handleOrderChange">
           <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
@@ -19,7 +19,7 @@
           </el-button>
           <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
             <el-checkbox v-for="(check,i) in definition.field" :label="check" :key="check" :ref="'checked'"
-                         v-if="i !== definition.field.length -1">
+                         v-if="i !== 0">
               {{check}}
             </el-checkbox>
           </el-checkbox-group>

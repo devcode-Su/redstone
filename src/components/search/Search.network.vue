@@ -5,50 +5,52 @@
       네트워크 검색
     </h1>
     <div data-search-pannel>
-      <el-form ref="form" :model="form" :label-width="'180px'" :label-position="'left'">
+      <el-form ref="form" :model="form" :label-width="'120px'" :label-position="'left'">
         <fieldset>
           <div class="form-align-box">
             <div class="form-item-wrap">
               <datetime @dateTime="setDatetime"></datetime>
               <type-radio-box :listList="radioInfo.list" :label="radioInfo.labels" @change="setFilter"></type-radio-box>
               <el-form-item label="검색 조건" size="small">
-                <el-input type="text" v-model="form.q"></el-input>
-                <el-button class="detail-search" size="smll" @click="showDetail = true">상세검색
+                <el-input type="text" v-model="form.q" placeholder="IP or Domain"></el-input>
+                <el-button class="detail-search" size="smll" @click="showDetail = !showDetail">상세검색
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
-                <div class="detail" v-if="showDetail">
-                  <el-form-item label="PC IP 주소" prop="LocalIP" size="small">
-                    <el-input type="text" v-model="form.LocalIP" placeholder="ANY"></el-input>
-                  </el-form-item>
-                  <el-form-item label="PC 포트" prop="LocalPort" size="small">
-                    <el-input type="number" v-model="form.LocalPort" placeholder="ANY"></el-input>
-                  </el-form-item>
-                  <el-form-item label="방향" prop="Direction" size="small">
-                    <el-select v-model="form.Direction" placeholder="ANY">
-                      <el-option label="IN" value="IN"></el-option>
-                      <el-option label="OUT" value="OUT"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="원격 IP 주소" prop="RemoteIP" size="small">
-                    <el-input type="text" v-model="form.RemoteIP" placeholder="ANY"></el-input>
-                  </el-form-item>
-                  <el-form-item label="원격 포트" prop="RemotePort" size="small">
-                    <el-input type="number" v-model="form.RemotePort" placeholder="ANY"></el-input>
-                  </el-form-item>
-                  <el-form-item label="프로토콜" prop="Protocol" size="small">
-                    <el-select v-model="form.Protocol" placeholder="ANY">
-                      <el-option label="TCP" value="TCP"></el-option>
-                      <el-option label="UDP" value="UDP"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item class="btn-wrap" size="small">
-                    <el-button @click="showDetail = false">닫기</el-button>
-                  </el-form-item>
-                </div>
+              <div class="btn-wrap">
+                <el-button size="small" type="primary" @click="onSubmit">검색</el-button>
+              </div>
               </el-form-item>
             </div>
-            <div class="btn-wrap">
-              <el-button size="small" type="primary" @click="onSubmit">검색</el-button>
+            <div class="detail" v-if="showDetail">
+              <el-form-item label="PC IP 주소" prop="LocalIP" size="small">
+                <el-input type="text" v-model="form.LocalIP" placeholder="ANY"></el-input>
+              </el-form-item>
+              <el-form-item label="PC 포트" prop="LocalPort" size="small">
+                <el-input type="number" v-model="form.LocalPort" placeholder="ANY"></el-input>
+              </el-form-item>
+              <el-form-item label="방향" prop="Direction" size="small">
+                <el-select v-model="form.Direction">
+                  <el-option label="ANY" value=""></el-option>
+                  <el-option label="IN" value="IN"></el-option>
+                  <el-option label="OUT" value="OUT"></el-option>
+                </el-select>
+              </el-form-item>z
+              <el-form-item label="원격 IP 주소" prop="RemoteIP" size="small">
+                <el-input type="text" v-model="form.RemoteIP" placeholder="ANY"></el-input>
+              </el-form-item>
+              <el-form-item label="원격 포트" prop="RemotePort" size="small">
+                <el-input type="number" v-model="form.RemotePort" placeholder="ANY"></el-input>
+              </el-form-item>
+              <el-form-item label="프로토콜" prop="Protocol" size="small">
+                <el-select v-model="form.Protocol">
+                  <el-option label="ANY" value=""></el-option>
+                  <el-option label="TCP" value="TCP"></el-option>
+                  <el-option label="UDP" value="UDP"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item class="btn-wrap" size="small">
+                <el-button @click="showDetail = false">닫기</el-button>
+              </el-form-item>
             </div>
           </div>
         </fieldset>
@@ -61,6 +63,7 @@
   import TypeRadioBox from '../form/Type.radiobox.vue';
   import Datetime from '../form/Datetime.vue';
   import SearchNetworkDataTable from './Search.network.datatable.vue';
+  import ElOption from '../../../node_modules/element-ui/packages/select/src/option.vue';
 
   export default {
     name: "Searchnetwork",
@@ -101,6 +104,7 @@
           Direction: '',
           LocalFilter: '',
           RemoteFilter: '',
+          Protocol: '',
           q: '',
         },
         definition: {
@@ -112,18 +116,25 @@
             "PC 명",
             "방향",
             "PC IP 주소",
+            "PC Port",
             "원격 IP 주소",
-            "포트",
+            "원격 포트",
             "프로토콜",
             "검출 시간",
           ],
-          order: [],
-          url: '',
+          order: [
+            {value: 'time', label: '시각'},
+            {value: 'RemoteIP', label: '원격 IP'},
+            {value: 'RemotePort', label: '원격 Port'},
+            {value: 'Direction', label: '방향'},
+          ],
+          url: '/api/admin/search/network',
         },
       };
     },
     computed: {},
     components: {
+      ElOption,
       "type-radio-box": TypeRadioBox,
       "datetime": Datetime,
       'search-network-data-table': SearchNetworkDataTable,
