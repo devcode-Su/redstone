@@ -31,30 +31,31 @@
           <div data-form-item>
             <label data-form-label="required">이름</label>
             <div data-form-tag>
-              <el-input type="text" v-model="form.name" size="small" :class="{ 'is-error' : required}" id="name" clearable @blur="requiredChcek"></el-input>
-              <span data-required-msg>빈칸을 채워주세요.</span>
+              <el-input id="name" type="text" v-model="form.name" size="small" :class="{ 'is-error' : required.name}" clearable @blur="requiredCheck"></el-input>
+              <span data-required-msg v-if="required.name">빈칸을 채워주세요.</span>
             </div>
           </div>
           <div data-form-item>
             <label data-form-label="required">IP 주소</label>
             <div data-form-tag>
-              <el-input type="text" v-model="form.ipAddress" :class="{ 'is-error' : required}" placeholder="#.#.#.#" size="small" clearable @blur="requiredChcek"></el-input>
+              <el-input id="ip_start" type="text" v-model="form.ip_start" :class="{ 'is-error' : required.ip_start}" placeholder="#.#.#.#" size="small" clearable @blur="requiredCheck"></el-input>
               <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-              <el-input type="text" v-model="form.ipAddress" placeholder="#.#.#.#" size="small" clearable></el-input>
+              <el-input id="ip_end" type="text" v-model="form.ip_end" :class="{ 'is-error' : required.ip_end}" placeholder="#.#.#.#" size="small" clearable @blur="requiredCheck"></el-input>
+              <span data-required-msg v-if="required.ip_start || required.ip_end">빈칸을 채워주세요.</span>
             </div>
           </div>
           <div data-form-item>
             <label data-form-label="required">설명</label>
             <div data-form-tag>
-              <el-input type="text" v-model="form.explain" size="small" clearable></el-input>
+              <el-input id="description" :class="{ 'is-error' : required.description}" type="text" v-model="form.description" size="small" clearable @blur="requiredCheck"></el-input>
+              <span data-required-msg v-if="required.description">빈칸을 채워주세요.</span>
             </div>
           </div>
           <div data-form-item>
-            <label data-form-label="required">탐지적용그룹</label>
+            <label>탐지적용그룹</label>
             <div data-form-tag>
-              <el-select v-model="form.group" multiple filterable allow-create placeholder="Choose group" size="small">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
+              <el-select id="select" v-model="form.dept_code" multiple filterable allow-create placeholder="Choose group" size="small">
+                <el-option v-for="item in options" :key="item.dept_code" :label="item.name" :value="item.dept_code"></el-option>
               </el-select>
             </div>
           </div>
@@ -95,23 +96,21 @@ export default {
   },
   data() {
     return {
-      required: false,
-      options: [
-        { value: "연구소", label: "연구소" },
-        { value: "영업1팀", label: "영업1팀" },
-        { value: "개발1팀", label: "개발1팀" },
-        { value: "기획1팀", label: "기획1팀" },
-        { value: "개발2팀", label: "개발2팀" },
-        { value: "경영지원팀", label: "경영지원팀" },
-        { value: "영업2팀", label: "영업2팀" },
-        { value: "기획2팀", label: "기획2팀" },
-        { value: "개발2팀", label: "개발2팀" }
-      ],
+      required: {
+        name : false,
+        ip_start : false,
+        ip_end : false,
+        description : false,
+        select : false
+      },
+      options: [],
+      selectOption : [],
       form: {
-        type: "",
-        ipAddress: "",
-        explain: "",
-        group: ""
+        name : "",
+        ip_start : "",
+        ip_end : "",
+        description : "",
+        dept_code : []
       },
       tableData: [
         {
@@ -139,26 +138,22 @@ export default {
     };
   },
   computed: {
-    // required() {
-    //   console.log(this.form.name)
-    //   if(this.form.name === "") return { "is-error" : true }
-    // }
+
   },
   components: {},
-  watch: {},
+  watch: {
+    options(o){
+      if(o){
+        console.log(o)
+      }
+    }
+  },
   methods: {
-    submitForm(v) {
-      console.log(v)
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-      //     console.log(valid);
-      //     alert("submit!");
-      //   } else {
-      //     console.log(valid);
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+    submitForm(form) {
+      console.log(form);
+
+
+
     },
     removeData() {
       let num = this.multipleSelection.length;
@@ -175,23 +170,37 @@ export default {
       //console.log(val);
       this.multipleSelection = val;
     },
-    requiredChcek(val){
-      console.log(val)
-      console.log(val.target.value)
-      console.log("???")
-      if(val.target.value === "") {
-        return this.required = true
+    requiredCheck(val){
+      if(val.target.id === "name"){
+        if(val.target.value === "") this.required.name = true;
+        else this.required.name = false
+      }else if(val.target.id === "ip_start"){
+        if(val.target.value === "") this.required.ip_start = true;
+        else this.required.ip_start = false
+      }else if(val.target.id === "ip_end"){
+        if(val.target.value === "") this.required.ip_end = true;
+        else this.required.ip_end = false
+      }else if(val.target.id === "description"){
+        if(val.target.value === "") this.required.description = true;
+        else this.required.description = false
       }
     }
   },
   beforeCreate() {},
   created() {
-    console.log(this);
+    const url = "/api/admin/group/list";
+    this.$http.get(url).then( response => {
+      console.log(response);
+      this.options = response.data
+    })
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+
+    console.log(this.form.dept_code)
+  },
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

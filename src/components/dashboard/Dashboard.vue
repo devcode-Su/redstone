@@ -3,7 +3,7 @@
     <h1 data-page-title>
       Dashboard 기본정보
     </h1>
-    <dashboardSensor></dashboardSensor>
+    <dashboard-sensor></dashboard-sensor>
     <dashboard-sensorchart></dashboard-sensorchart>
     <dashboard-detectiontable></dashboard-detectiontable>
     <dashboard-thumbcomponents class="dashboard-componets"></dashboard-thumbcomponents>

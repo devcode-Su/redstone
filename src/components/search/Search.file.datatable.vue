@@ -220,6 +220,7 @@
         this.selectedOrder = this.definition.order[0].value;
       }
       this.$bus.$on('search-option', (data) => {
+        console.log(data)
         this.pagination.currentPage = 1;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {

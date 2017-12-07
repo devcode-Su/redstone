@@ -136,4 +136,9 @@
     width: 100% !important;
     table-layout: fixed;
   }
+  [data-form-item]{
+    .el-select{
+      width:100%;
+    }
+  }
 }
