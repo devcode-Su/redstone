@@ -8,7 +8,8 @@
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
         <el-select v-model="selectedOrder" placeholder="정렬" size="small"
-                   :disabled="!definition.order.length" @change="handleOrderChange" @input="handleOrderChange">
+                   :disabled="!definition.order.length" @change="handleOrderChange('change', $event)"
+                   @input="handleOrderChange('input', $event)">
           <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
@@ -76,7 +77,6 @@
 </template>
 <script>
 
-  //import { EventBus } from "@/main"
   export default {
     name: "NetworkDataTable",
     extends: {},
@@ -111,6 +111,9 @@
         data: null,
         searchOption: {},
         selectedOrder: null,
+        selectedDirection: 1,
+        lastOrder: null,
+        hasSearchOption: false,
       };
     },
     computed: {},
@@ -118,6 +121,9 @@
     watch: {},
     methods: {
       getData(page = null, length = null) {
+        if (!this.hasSearchOption) {
+          return false;
+        }
         if (page) {
           this.pagination.page = page;
         }
@@ -128,12 +134,14 @@
         this.searchOption.page = this.pagination.page;
         this.searchOption.legnth = this.pagination.length;
         this.searchOption.order = this.selectedOrder ? this.selectedOrder : null;
+        this.searchOption.direction = this.selectedDirection;
+        this.lastOrder = this.searchOption.order;
 
         this.$http.get(this.definition.url, {params: this.searchOption})
             .then((result) => {
               if (result.data) {
-                if (result.data.metrics && result.data.metrics.resultCount) {
-                  this.pagination.total = result.data.metrics.resultCount;
+                if (result.data.total) {
+                  this.pagination.total = result.data.total;
                 }
                 else {
                   this.pagination.total = 0;
@@ -165,8 +173,19 @@
         this.pagination.page = val;
         this.getData();
       },
-      handleOrderChange(val) {
-        this.getData();
+      handleOrderChange(type, val) {
+        switch (type) {
+          case 'change':
+            this.selectedDirection = 1;
+            this.getData();
+            break;
+          case 'input':
+            if (val === this.lastOrder) {
+              this.selectedDirection = (this.selectedDirection - 1) * -1;
+              this.getData();
+            }
+            break;
+        }
       },
     },
     beforeCreate() {
@@ -180,7 +199,7 @@
       }
 
       this.$bus.$on('network-search-data', (data) => {
-        console.log('network-search-data', data);
+        this.hasSearchOption = true;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {
             this.searchOption[key] = data[key] ? data[key] : null;

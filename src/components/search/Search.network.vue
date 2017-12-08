@@ -16,9 +16,9 @@
                 <el-button class="detail-search" size="smll" @click="showDetail = !showDetail">상세검색
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
-              <div class="btn-wrap">
-                <el-button size="small" type="primary" @click="onSubmit">검색</el-button>
-              </div>
+                <div class="btn-wrap">
+                  <el-button size="small" type="primary" @click="onSubmit">검색</el-button>
+                </div>
               </el-form-item>
             </div>
             <div class="detail" v-if="showDetail">
@@ -34,7 +34,7 @@
                   <el-option label="IN" value="IN"></el-option>
                   <el-option label="OUT" value="OUT"></el-option>
                 </el-select>
-              </el-form-item>z
+              </el-form-item>
               <el-form-item label="원격 IP 주소" prop="RemoteIP" size="small">
                 <el-input type="text" v-model="form.RemoteIP" placeholder="ANY"></el-input>
               </el-form-item>
@@ -63,7 +63,6 @@
   import TypeRadioBox from '../form/Type.radiobox.vue';
   import Datetime from '../form/Datetime.vue';
   import SearchNetworkDataTable from './Search.network.datatable.vue';
-  import ElOption from '../../../node_modules/element-ui/packages/select/src/option.vue';
 
   export default {
     name: "Searchnetwork",
@@ -134,7 +133,6 @@
     },
     computed: {},
     components: {
-      ElOption,
       "type-radio-box": TypeRadioBox,
       "datetime": Datetime,
       'search-network-data-table': SearchNetworkDataTable,
@@ -149,8 +147,8 @@
         }
       },
       setDatetime(d) {
-        this.form.startDate = d.start;
-        this.form.endDate = d.end;
+        this.form.startDate = d.start ? d.start : this.form.startDate;
+        this.form.endDate = d.end ? d.end : this.form.endDate;
       },
       onSubmit() {
         if (this.form.startDate === "" || this.form.endDate === "") {
