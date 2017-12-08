@@ -62,7 +62,7 @@ export default {
       console.log("created : " + new Date());
       this.$store.dispatch(Constant.LOADING_STATE, false);
       console.log(this.isLoading);
-    }, 3000);
+    }, 3300);
   },
   mounted() {},
   destroyed() {}
