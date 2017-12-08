@@ -19,6 +19,7 @@
   </header>
 </template>
 <script>
+  import Constant from "@/constant";
 export default {
   name: "RedHeader",
   extends: {},
@@ -49,6 +50,7 @@ export default {
     signOut() {
       const apiURL = "/api/admin/logout";
       this.$http.get(apiURL).then(() => {
+        this.$store.dispatch(Constant.LOADING_STATE, true);
         this.$router.replace("/");
       });
       //
