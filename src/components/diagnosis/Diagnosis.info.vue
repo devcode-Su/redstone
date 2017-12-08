@@ -6,24 +6,23 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
         <date-searchform @form="receive"></date-searchform>
-        <datatable :prop-data="propData"></datatable>
+        <diagnosis-datatable :form-data="formData" :local-data="localFile"></diagnosis-datatable>
         <!--<templatetableinsert class="diagosis-info-table" :propData="infofile" @reorder="reorder"></templatetableinsert>-->
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
         <date-searchform></date-searchform>
-        <templatetableinsert class="diagosis-info-table" :propData="infoip" @reorder="reorder"></templatetableinsert>
+        <!--<templatetableinsert class="diagosis-info-table" :propData="infoip" @reorder="reorder"></templatetableinsert>-->
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
         <date-searchform></date-searchform>
-        <templatetableinsert class="diagosis-info-table" :propData="inforsc" @reorder="reorder"></templatetableinsert>
+        <!--<templatetableinsert class="diagosis-info-table" :propData="inforsc" @reorder="reorder"></templatetableinsert>-->
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
 import DateSearchform from "../form/Date.search.form";
-import Datatable from "../template/Datatable";
-import Templatetableinsert from "../template/Template.tableinsert.vue";
+import DiagnosisDatatable from "./Diagnosis.datatable";
 export default {
   name: "Diagnosisinfo",
   extends: {},
@@ -33,48 +32,26 @@ export default {
   data() {
     return {
       activeName: "first",
-      propData : {
-        url : "",
-        startDate:"",
-        endDate: "",
-        dept_code: "",
-        node_id: "",
-        local : {}
+      formData : {},
+      localFile: {
+        fields : {
+          FileHash : "악성파일",
+          count : "진단건수",
+          firstSeenTime : "첫 유입일",
+          lastSeenTime : "마지막 유입일"
+        },
+        moreData: {
+          EventTime : "날짜",
+          nodeid : "센서 ID",
+          username : "사용자명",
+          userdept : "부서명",
+          userpc : "PC 명",
+          userip : "IP 주소",
+          ProcessName : "실행 파일명",
+          ProcessImagePath : "실행 경로"
+        }
       },
-      infofile: {
-        field: ["악성 파일", "진단 건수", "첫 유입일", "마지막 유입일", ""],
-        innerField: [
-          "날짜",
-          "센서 ID",
-          "사용자명",
-          "부서명",
-          "PC 명",
-          "IP 주소",
-          "실행 파일명",
-          "실행 경로"
-        ],
-        innerKey: [
-          "EventTime",
-          "nodeid",
-          "username",
-          "userdept",
-          "userpc",
-          "userip",
-          "ProcessName",
-          "ProcessImagePath"
-        ],
-        orderOption: [
-          { value: "count", label: "진단건수" },
-          { value: "FileHash", label: "위험도" },
-          { value: "firstSeenTime", label: "첫 유입일" },
-          { value: "lastSeenTime", label: "마지막 유입일" }
-        ],
-        search: [],
-        url: "",
-        data: [],
-        order: "count"
-      },
-      infoip: {
+      ip: {
         field: ["URL/IP 주소", "진단 건수", "첫 유입일", "마지막 유입일", ""],
         innerField: [
           "날짜",
@@ -107,7 +84,7 @@ export default {
         data: [],
         order: "count"
       },
-      inforsc: {
+      rsc: {
         field: ["RSC 엔진 명", "진단 건수", "첫 유입일", "마지막 유입일", ""],
         innerField: [
           "날짜",
@@ -145,35 +122,26 @@ export default {
   computed: {},
   components: {
     "date-searchform":DateSearchform,
-    "datatable":Datatable,
-    "templatetableinsert":Templatetableinsert
+    "diagnosis-datatable":DiagnosisDatatable
   },
   watch: {},
   methods: {
     receive(form) {
-      console.log(form)
+      console.log(form);
       if (this.activeName === "first") {
-        this.mixData(this.infofile, form, "file");
+        this.mixData(this.file, form, "file");
       } else if (this.activeName === "second") {
         this.mixData(this.infoip, form, "ip");
       } else if (this.activeName === "third") {
         this.mixData(this.inforsc, form, "rsc");
       }
     },
-    mixData(local, form, apiurl) {
-      this.propData = {
-        url : "/api/admin/search/detect/summary/" + apiurl,
-        startDate : form.startDate ? form.startDate.getTime() : null,
-        endDate : form.endDate ? form.endDate.getTime() : null,
-        dept_code : form.dept_code ? form.dept_code : 1,
-        node_id : form.nodeid  ? form.nodeid : null,
-        local : local
+    mixData(local, form, apiUrl) {
+      return this.formData = {
+        url : "/api/admin/search/detect/summary/" + apiUrl,
+        form : form,
+        order: "count"
       }
-      // this.propData.url = "/api/admin/search/detect/summary/" + apiurl;
-      // this.propData.startDate = form.startDate ? form.startDate.getTime() : null;
-      //  this.propData.endDate = form.endDate ? form.endDate.getTime() : null;
-      // this.propData.dept_code = form.dept_code;
-      // this.propData.node_id = form.node_id;
     },
     reorder(val) {
       //console.log(val)
@@ -220,7 +188,7 @@ export default {
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}
-};
+}
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";

@@ -7,11 +7,11 @@
     <dashboard-sensorchart></dashboard-sensorchart>
     <dashboard-detectiontable></dashboard-detectiontable>
     <dashboard-thumbcomponents class="dashboard-componets"></dashboard-thumbcomponents>
-    <div data-tooltip-wrap>
+    <div data-tooltip-wrap="setup">
       <button data-icon="set" class="dashboard-setbtn spin" type="button" @click="showModal = true">
         <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
       </button>
-      <span data-tooltip="category">대쉬보드 설정</span>
+      <span data-tooltip="setup">대쉬보드 설정</span>
     </div>
 
     <templatemodal v-if="showModal" :target="'user-custom'" @close="showModal = false" :title="'대시보드 설정'" :compSelect="'dashboard-thumb'">
@@ -33,8 +33,6 @@ export default {
   data() {
     return {
       showModal: false,
-      //userSet: [],
-
       resourceList: []
     };
   },
@@ -69,11 +67,10 @@ export default {
     font-size: 18px;
   }
 }
+
 [data-icon="set"] {
   width: 24px;
   height: 24px;
-  position: absolute;
-  top: 25px;
-  right: 35px;
 }
+
 </style>

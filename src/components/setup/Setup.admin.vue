@@ -6,10 +6,13 @@
     <div>
       comming soon
     </div>
-    <el-button class="detail-set icon-btn tooltip-wrap" type="text" @click="showModal = true">
-      <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
-      <span class="tooltip-detaile-set">관리자 추가</span>
-    </el-button>
+    <div data-tooltip-wrap="setup">
+      <button data-icon type="text" @click="showModal = true">
+        <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
+        <span data-tooltip="setup">관리자 추가</span>
+      </button>
+    </div>
+
     <templatemodal v-if="showModal" @close="showModal = false" :target="'user-custom'" :compSelect="'systemadminadd'" :title="'관리자 추가 등록'"></templatemodal>
   </article>
 </template>
@@ -47,4 +50,8 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+[data-icon] {
+  width: 24px;
+  height: 24px;
+}
 </style>

@@ -5,10 +5,10 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="내부 IP 대역 설정" name="first">
-        <enviroment-template :inputTitle="'내부 IP 대역 추가'" :viewTitle="'내부 IP 대역 목록'"></enviroment-template>
+        <enviroment-template :prop-data="internal"></enviroment-template>
       </el-tab-pane>
       <el-tab-pane label="주요 IP 대역 설정" name="second">
-        <enviroment-template :inputTitle="'주요 IP 대역 추가'" :viewTitle="'주요 IP 대역 목록'" :addList="true"></enviroment-template>
+        <enviroment-template :prop-data="major"></enviroment-template>
       </el-tab-pane>
     </el-tabs>
   </article>
@@ -23,7 +23,20 @@ export default {
   },
   data() {
     return {
-      activeName: "first"
+      activeName: "first",
+      data : [],
+      internal :{
+        inputTitle : "내부 IP 대역 추가",
+        viewTitle : "내부 IP 대역 목록",
+        api : "internal",
+        select : false
+      },
+      major :{
+        inputTitle : "내부 IP 대역 추가",
+        viewTitle : "내부 IP 대역 목록",
+        api : "major",
+        select: true
+      }
     };
   },
   computed: {},
@@ -33,11 +46,19 @@ export default {
   watch: {},
   methods: {},
   beforeCreate() {},
-  created() {},
+  created() {
+    this.data = this.internal;
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+    // if(this.activeName === "first"){
+    //   this.data = this.internal;
+    // }else{
+    //   this.data = this.major;
+    // }
+  },
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

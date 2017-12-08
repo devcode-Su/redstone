@@ -3,7 +3,7 @@
     <form @submit.prevent="signCheck">
       <div class="input-area">
         <md-input-container md-clearable :class="{ 'md-input-invalid':isIdRequired }">
-          <label for="username">User ID</label>
+          <label>User ID</label>
           <md-input ref="username" type="text" v-model="userName"></md-input>
           <span class="md-error">{{idErrorMsg}}</span>
         </md-input-container>
@@ -14,10 +14,10 @@
         </md-input-container>
       </div>
       <div class="btn-area">
-        <md-button :disabled="submitBtn" type="submit" class="md-raised md-primary">
-          <span v-if="isLoading">Loading...</span>
-          <span v-else>sign</span>
-        </md-button>
+        <el-button v-if="isLoading" type="primary" :loading="true">Loading</el-button>
+        <md-button v-else :disabled="submitBtn" type="submit" class="md-raised md-primary">Sign
+      </md-button>
+
         <span class="sign-failed-msg" v-if="signFailedMsg">{{signFailedMsg}}</span>
       </div>
     </form>
@@ -131,7 +131,8 @@ export default {
 @import "~styles/variables";
 
 .sign-form {
-  width: 320px;
+  margin-top:50px;
+  width: 420px;
   padding: 5px;
   position: relative;
   .md-input-invalid {
@@ -148,6 +149,14 @@ export default {
     align-items: center;
     justify-content: flex-end;
     posiiton: relative;
+    .el-button{
+      margin: 6px 8px;
+      height:36px;
+      background-color:#000;
+      border-color:#000;
+      border-radius:2px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
+    }
   }
   .sign-failed-msg {
     position: absolute;

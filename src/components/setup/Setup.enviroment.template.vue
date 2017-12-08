@@ -1,33 +1,8 @@
 <template>
-  <section data-system="enviroment">
-    <!--<el-form data-system-form :model="form" :rules="rules" ref="form" :label-position="'left'" label-width="110px" @selection-change="handleSelectionChange">-->
-      <!--<fieldset>-->
-        <!--<legend data-item-title>{{inputTitle}}</legend>-->
-        <!--<el-form-item label="종류" prop="type">-->
-          <!--<el-select v-model="form.type">-->
-            <!--<el-option label="단일" value="단일"></el-option>-->
-            <!--<el-option label="대역" value="대역"></el-option>-->
-          <!--</el-select>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="IP 주소" prop="ipAddress">-->
-          <!--<el-input type="text" v-model="form.ipAddress" placeholder="#.#.#.#"></el-input>-->
-          <!--&lt;!&ndash; <el-input v-else type="text" v-model="form.ipAddress" placeholder="#.#.#.#,#.#.#.#"></el-input> &ndash;&gt;-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="설명" prop="explain">-->
-          <!--<el-input type="text" v-model="form.explain"></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item v-if="addList" label="탐지적용그룹" prop="group">-->
-          <!--<el-select v-model="form.group" multiple filterable allow-create placeholder="Choose group">-->
-            <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
-            <!--</el-option>-->
-          <!--</el-select>-->
-        <!--</el-form-item>-->
-        <!--<el-button size="small" class="view-btn type-submit" @click="submitForm('form')">저장</el-button>-->
-      <!--</fieldset>-->
-    <!--</el-form>-->
-      <form data-system-form data-enviroment-item @submit.prevent="submitForm(form)">
+  <section data-form-setup="enviroment">
+      <form data-setup-item="enviroment-from" @submit.prevent="submitForm(form)">
         <fieldset>
-          <legend data-item-title>{{inputTitle}}</legend>
+          <legend data-item-title>{{propData.inputTitle}}</legend>
           <div data-form-item>
             <label data-form-label="required">이름</label>
             <div data-form-tag>
@@ -51,7 +26,7 @@
               <span data-required-msg v-if="required.description">빈칸을 채워주세요.</span>
             </div>
           </div>
-          <div data-form-item>
+          <div data-form-item v-if="propData.select">
             <label>탐지적용그룹</label>
             <div data-form-tag>
               <el-select id="select" v-model="form.dept_code" multiple filterable allow-create placeholder="Choose group" size="small">
@@ -59,25 +34,39 @@
               </el-select>
             </div>
           </div>
-          <el-button data-eviroment-button size="small" native-type="submit">저장</el-button>
+          <div data-eviroment-button v-if="btnType" >
+            <el-button size="small" native-type="submit">저장</el-button>
+          </div>
+          <div data-eviroment-button v-else>
+            <el-button  size="small" native-type="submit">수정</el-button>
+            <el-button type="info" size="small" plain @click="formClear">취소</el-button>
+          </div>
         </fieldset>
       </form>
-    <div data-enviroment-item>
+    <div data-setup-item="enviroment-table">
       <p data-item-title>
-        {{viewTitle}}
+        {{propData.viewTitle}}
       </p>
-      <el-table class="view-table" ref="multipleTable" height="650" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
-        <caption>{{viewTitle}}</caption>
-        <el-table-column type="selection" width="55">
+      <el-table class="view-table" ref="multipleTable" height="650" :data="tableData" style="width: 100%" @selection-change="selectionChange">
+        <caption>{{propData.viewTitle}}</caption>
+        <el-table-column type="selection" width="50">
         </el-table-column>
-        <el-table-column property="ipAddress" label="IP 대역">
+        <el-table-column property="name" label="이름" width="143">
         </el-table-column>
-        <el-table-column property="notice" label="설명">
+        <el-table-column property="ip" label="IP 대역" width="240">
         </el-table-column>
-        <el-table-column v-if="addList" property="group" label="탐지 적용 그룹" :show-overflow-tooltip="true">
+        <el-table-column property="description" label="설명">
+        </el-table-column>
+        <el-table-column v-if="propData.select" property="except_dept" label="탐지 적용 그룹" :show-overflow-tooltip="true">
         </el-table-column>
       </el-table>
-      <el-button data-eviroment-button size="small" @click="removeData()">삭제</el-button>
+      <div data-eviroment-button>
+        <el-button  size="small" @click="modifyData()">
+          수정
+          <span v-if="btnError" class="btn-error">수정할 대상은 1개만 선택하십시요.</span>
+        </el-button>
+        <el-button type="warning" plain size="small" @click="removeData()">삭제</el-button>
+      </div>
     </div>
   </section>
 </template>
@@ -87,15 +76,17 @@ export default {
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
-    inputTitle: String,
-    viewTitle: String,
-    addList: {
-      type: Boolean,
-      default: false
+    propData:{
+      type : Object,
+      default(){
+        return { massage : "No data" }
+      }
     }
   },
   data() {
     return {
+      btnType : true,
+      btnError : false,
       required: {
         name : false,
         ip_start : false,
@@ -106,33 +97,15 @@ export default {
       options: [],
       selectOption : [],
       form: {
+        no : '',
         name : "",
         ip_start : "",
         ip_end : "",
         description : "",
         dept_code : []
       },
+      receiveData : [],
       tableData: [
-        {
-          ipAddress: "172.16.10.3 ~ 172.16.10.8",
-          notice: "연구소",
-          group: "연구소, 영업1팀, 개발1팀, 기획1팀, 개발2팀, 경영지원팀, 영업2팀, 기획2팀, 개발2팀"
-        },
-        {
-          ipAddress: "172.16.11.3 ~ 172.16.11.8",
-          notice: "서울사무소",
-          group: "연구소, 영업1팀, 개발1팀, 기획1팀, 개발2팀, 경영지원팀, 영업2팀, 기획2팀, 개발2팀"
-        },
-        {
-          ipAddress: "172.17.12.3 ~ 172.16.12.8",
-          notice: "부산사무소",
-          group: "연구소, 영업1팀, 개발1팀, 기획1팀, 개발2팀, 경영지원팀, 영업2팀, 기획2팀, 개발2팀"
-        },
-        {
-          ipAddress: "172.18.13.3 ~ 172.16.13.8",
-          notice: "전사",
-          group: "연구소, 영업1팀, 개발1팀, 기획1팀, 개발2팀, 경영지원팀, 영업2팀, 기획2팀, 개발2팀"
-        }
       ],
       multipleSelection: []
     };
@@ -142,34 +115,37 @@ export default {
   },
   components: {},
   watch: {
-    options(o){
-      if(o){
-        console.log(o)
+    receiveData(r){
+      if(r){
+        let newArr = [];
+        for(var i =0; i < r.data.length; i ++){
+          let deptName = [];
+          let deptCode = [];
+          if(r.data[i].except_dept){
+            let self = r.data[i].except_dept;
+            for(var j =0; j < self.length; j++){
+              deptName.push(self[j].dept.name);
+              deptCode.push(self[j].dept.dept_code);
+            }
+          }
+          newArr.push({
+            no : r.data[i].no,
+            name : r.data[i].name,
+            ip_start : r.data[i].ip_start,
+            ip_end : r.data[i].ip_end,
+            ip : r.data[i].ip_start + " ~ " + r.data[i].ip_end,
+            description : r.data[i].description,
+            except_dept : deptName.toString(),
+            dept_code : deptCode
+          })
+        }
+        this.tableData =  newArr;
+        return r;
       }
     }
+
   },
   methods: {
-    submitForm(form) {
-      console.log(form);
-
-
-
-    },
-    removeData() {
-      let num = this.multipleSelection.length;
-      const arr = this.$refs.multipleTable.data;
-      for (var i = 0; i < num; i++) {
-        console.log(i);
-        arr.splice(arr.indexOf(this.multipleSelection[i]), 1);
-      }
-      this.$refs.multipleTable.clearSelection();
-      console.log(this.$refs.multipleTable.data);
-      console.log("submit :" + this.$refs.multipleTable.data);
-    },
-    handleSelectionChange(val) {
-      //console.log(val);
-      this.multipleSelection = val;
-    },
     requiredCheck(val){
       if(val.target.id === "name"){
         if(val.target.value === "") this.required.name = true;
@@ -184,22 +160,106 @@ export default {
         if(val.target.value === "") this.required.description = true;
         else this.required.description = false
       }
+    },
+    submitForm(form) {
+      console.log(form);
+      if(form.name === "" || form.ip_start === "" || form.ip_end === "" || form.description === ""){
+        if(form.name === "") this.required.name = true;
+        if(form.ip_start === "") this.required.ip_start = true;
+        if(form.ip_end === "") this.required.ip_end = true;
+        if(form.description === "") this.required.description = true;
+      }else{
+        if(this.btnType){
+          const url = "/api/admin/setting/ip/"+this.propData.api;
+          this.$http.post(url, form).then(() => {
+            this.getIpData();
+            this.formClear();
+          });
+        }else{
+          const url = "/api/admin/setting/ip/"+this.propData.api+"/"+form.no;
+          this.$http.put(url, form).then(() => {
+            this.getIpData();
+            this.formClear();
+          });
+        }
+      }
+    },
+    formClear(){
+      this.form.no = "";
+      this.form.name = "";
+      this.form.ip_start = "";
+      this.form.ip_end = "";
+      this.form.description = "";
+      this.form.dept_code = [];
+      this.btnType = true;
+      this.$refs.multipleTable.clearSelection();
+    },
+    modifyData(){
+      if(this.multipleSelection.length > 1 || this.multipleSelection.length === 0){
+        console.log("slime");
+        this.btnError = true;
+      }else{
+        let form = this.multipleSelection[0];
+
+        this.btnError = false;
+        this.btnType = false;
+
+        this.form.no = form.no;
+        this.form.name = form.name;
+        this.form.ip_start = form.ip_start;
+        this.form.ip_end = form.ip_end;
+        this.form.description = form.description;
+        this.form.dept_code = form.dept_code;
+      }
+    },
+    removeData() {
+      console.log(this.multipleSelection);
+      this.$confirm('선택한 항목을 삭제합니까?', '주의', {
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소',
+        type: 'warning'
+      }).then(() => {
+        let item = this.multipleSelection;
+        this.$message({
+          type: 'success',
+          message: '삭제가 완료됐습니다.'
+        });
+        for(var i=0; i < item.length; i++){
+          const url = "/api/admin/setting/ip/"+this.propData.api+"/"+item[i].no;
+          this.$http.delete(url);
+        }
+        this.getIpData();
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '삭제가 취소됐습니다.'
+        });
+        this.$refs.multipleTable.clearSelection();
+        console.log(this.multipleSelection);
+      });
+    },
+    selectionChange(val) {
+      this.multipleSelection = val;
+    },
+    getIpData(){
+      const ipUrl = "/api/admin/setting/ip/"+this.propData.api;
+      this.$http.get(ipUrl).then( response => {
+        this.receiveData = response.data;
+      });
     }
   },
   beforeCreate() {},
   created() {
     const url = "/api/admin/group/list";
     this.$http.get(url).then( response => {
-      console.log(response);
       this.options = response.data
-    })
+    });
+    this.getIpData();
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
   updated() {
-
-    console.log(this.form.dept_code)
   },
   actvated() {},
   deactivated() {},
@@ -209,36 +269,34 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
-[data-system="enviroment"]{
-  display:flex;
-  justify-content: space-between;
-}
-[data-enviroment-item]{
-  position:relative;
-  width:100%;
-  min-width:750px;
-  max-width:750px;
-  height:650px;
-  padding:45px 0 20px;
-  fieldset{
-    padding:20px;
-    border:1px solid color(border)
-  }
+[data-setup-item]{
   .el-table{
     border-top:1px solid color(border)
   }
 }
 [data-item-title]{
-  position:absolute;
   top:10px;
   left:0;
-  margin-bottom:0;
-  font-size:16px;
+}
+[data-setup-item="enviroment-form"]{
+  width:600px;
+}
+[data-setup-item="enviroment-table"]{;
+  flex:1;
+  max-width:900px;
+  height:650px
 }
 [data-eviroment-button]{
   position:absolute;
   top:10px;
   right:0;
-  padding:6px 15px;
+  button{
+    padding:6px 15px;
+  }
+  .btn-error{
+    position:absolute;
+    left:-195px;
+    color:#fa5555;
+  }
 }
 </style>

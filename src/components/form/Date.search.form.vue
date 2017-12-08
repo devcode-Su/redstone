@@ -10,12 +10,12 @@
       </span>
       에서 검색
     </p>
-    <form>
+    <form @submit.prevent="send">
       <fieldset>
-        <datetime @dateTime="dateset"></datetime>
+        <datetime @dateTime="dateSet"></datetime>
       </fieldset>
       <div data-search-submit>
-        <el-button type="primary" plain size="small" @click="send">
+        <el-button type="primary" plain size="small" native-type="submit">
           검색
         </el-button>
       </div>
@@ -47,8 +47,8 @@ export default {
       form: {
         dept_code: 1,
         nodeid: "",
-        startDate: "",
-        endDate: "",
+        startDate: null,
+        endDate: null,
       }
     };
   },
@@ -75,17 +75,20 @@ export default {
         name: "전사"
       });
     },
-    dateset(dateTime) {
+    dateSet(dateTime) {
       this.form.startDate = dateTime.start;
       this.form.endDate = dateTime.end;
     },
-    inputset(replace) {
-      console.log("inputset", replace);
-      this.form.q = replace.q;
-      this.form.partial_match = replace.partial_match;
-    },
     send() {
-      this.$emit("form", this.form);
+      console.log(this.form)
+      if(this.form.startDate == null || this.form.endDate == null ){
+        this.$notify.error({
+          title: 'Error',
+          message: '조사기간을 입력해야 합니다.'
+        });
+      }else{
+        this.$emit("form", this.form);
+      }
     }
   },
   beforeCreate() {},
