@@ -6,23 +6,22 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
         <date-searchform @form="receive"></date-searchform>
-        <diagnosis-datatable :form-data="formData" :local-data="localFile"></diagnosis-datatable>
-        <!--<templatetableinsert class="diagosis-info-table" :propData="infofile" @reorder="reorder"></templatetableinsert>-->
+        <diagnosis-info-datatable :form-data="infoFile.formData" :local-data="infoFile.local"></diagnosis-info-datatable>
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
-        <date-searchform></date-searchform>
-        <!--<templatetableinsert class="diagosis-info-table" :propData="infoip" @reorder="reorder"></templatetableinsert>-->
+        <date-searchform @form="receive"></date-searchform>
+        <diagnosis-info-datatable :form-data="infoIp.formData" :local-data="infoIp.local"></diagnosis-info-datatable>
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
-        <date-searchform></date-searchform>
-        <!--<templatetableinsert class="diagosis-info-table" :propData="inforsc" @reorder="reorder"></templatetableinsert>-->
+        <date-searchform @form="receive"></date-searchform>
+        <diagnosis-info-datatable :form-data="infoRsc.formData" :local-data="infoRsc.local"></diagnosis-info-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
 import DateSearchform from "../form/Date.search.form";
-import DiagnosisDatatable from "./Diagnosis.datatable";
+import DiagnosisInfoDatatable from "./Diagnosis.info.datatable";
 export default {
   name: "Diagnosisinfo",
   extends: {},
@@ -32,112 +31,95 @@ export default {
   data() {
     return {
       activeName: "first",
-      formData : {},
-      localFile: {
-        fields : {
-          FileHash : "악성파일",
-          count : "진단건수",
-          firstSeenTime : "첫 유입일",
-          lastSeenTime : "마지막 유입일"
-        },
-        moreData: {
-          EventTime : "날짜",
-          nodeid : "센서 ID",
-          username : "사용자명",
-          userdept : "부서명",
-          userpc : "PC 명",
-          userip : "IP 주소",
-          ProcessName : "실행 파일명",
-          ProcessImagePath : "실행 경로"
+      infoFile: {
+        formData : {},
+        local: {
+          name : "file",
+          apiCondition : "FileHash",
+          fields : {
+            FileHash : "악성파일",
+            count : "진단건수",
+            firstSeenTime : "첫 유입일",
+            lastSeenTime : "마지막 유입일"
+          },
+          insertFields: {
+            EventTime : "날짜",
+            nodeid : "센서 ID",
+            username : "사용자명",
+            userdept : "부서명",
+            userpc : "PC 명",
+            userip : "IP 주소",
+            ProcessName : "실행 파일명",
+            ProcessImagePath : "실행 경로"
+          }
         }
       },
-      ip: {
-        field: ["URL/IP 주소", "진단 건수", "첫 유입일", "마지막 유입일", ""],
-        innerField: [
-          "날짜",
-          "센서 ID",
-          "사용자명",
-          "부서명",
-          "PC 명",
-          "IP 주소",
-          "실행 파일명",
-          "실행 경로"
-        ],
-        innerKey: [
-          "EventTime",
-          "nodeid",
-          "username",
-          "userdept",
-          "userpc",
-          "userip",
-          "ProcessName",
-          "ProcessImagePath"
-        ],
-        orderOption: [
-          { value: "count", label: "진단건수" },
-          { value: "FileHash", label: "위험도" },
-          { value: "firstSeenTime", label: "첫 유입일" },
-          { value: "lastSeenTime", label: "마지막 유입일" }
-        ],
-        search: [],
-        url: "",
-        data: [],
-        order: "count"
+      infoIp: {
+        formData : {},
+        local:{
+          name : "ip",
+          apiCondition : "ip",
+          fields : {
+            ip : "URL/IP 주소",
+            count : "진단건수",
+            firstSeenTime : "첫 유입일",
+            lastSeenTime : "마지막 유입일"
+          },
+          insertFields: {
+            EventTime : "날짜",
+            nodeid : "센서 ID",
+            username : "사용자명",
+            userdept : "부서명",
+            userpc : "PC 명",
+            userip : "IP 주소",
+            ProcessName : "실행 파일명",
+            ProcessImagePath : "실행 경로"
+          }
+        }
       },
-      rsc: {
-        field: ["RSC 엔진 명", "진단 건수", "첫 유입일", "마지막 유입일", ""],
-        innerField: [
-          "날짜",
-          "센서 ID",
-          "사용자명",
-          "부서명",
-          "PC 명",
-          "PC IP 주소",
-          "실행 경로",
-          "연관 파일"
-        ],
-        innerKey: [
-          "EventTime",
-          "nodeid",
-          "username",
-          "userdept",
-          "userpc",
-          "userip",
-          "ProcessName",
-          "ProcessImagePath"
-        ],
-        orderOption: [
-          { value: "count", label: "진단건수" },
-          { value: "FileHash", label: "위험도" },
-          { value: "firstSeenTime", label: "첫 유입일" },
-          { value: "lastSeenTime", label: "마지막 유입일" }
-        ],
-        search: [],
-        url: "",
-        data: [],
-        order: "count"
-      }
+      infoRsc: {
+        formData : {},
+        local:{
+          name: "rsc",
+          apiCondition : "name",
+          fields : {
+            name : "RSC 엔진 명",
+            count : "진단건수",
+            firstSeenTime : "첫 유입일",
+            lastSeenTime : "마지막 유입일"
+          },
+          insertFields: {
+            EventTime : "날짜",
+            nodeid : "센서 ID",
+            username : "사용자명",
+            userdept : "부서명",
+            userpc : "PC 명",
+            userip : "IP 주소",
+            ProcessName : "실행 파일명",
+            ProcessImagePath : "실행 경로"
+          }
+        }
+      },
     };
   },
   computed: {},
   components: {
     "date-searchform":DateSearchform,
-    "diagnosis-datatable":DiagnosisDatatable
+    "diagnosis-info-datatable":DiagnosisInfoDatatable,
   },
   watch: {},
   methods: {
     receive(form) {
-      console.log(form);
       if (this.activeName === "first") {
-        this.mixData(this.file, form, "file");
+        this.mixData(this.infoFile, form, "file");
       } else if (this.activeName === "second") {
-        this.mixData(this.infoip, form, "ip");
+        this.mixData(this.infoIp, form, "ip");
       } else if (this.activeName === "third") {
-        this.mixData(this.inforsc, form, "rsc");
+        this.mixData(this.infoRsc, form, "rsc");
       }
     },
-    mixData(local, form, apiUrl) {
-      return this.formData = {
+    mixData(select, form, apiUrl) {
+      return select.formData = {
         url : "/api/admin/search/detect/summary/" + apiUrl,
         form : form,
         order: "count"

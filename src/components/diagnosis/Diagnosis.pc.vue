@@ -5,23 +5,23 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
-        <date-searchform></date-searchform>
-        <templatetableinsert class="diagosis-pc-table" :propData="pcfile" @reorder="reorder"></templatetableinsert>
+        <date-searchform @form="receive"></date-searchform>
+        <diagnosis-datatable :form-data="pcFile.formData" :local-data="pcFile.local"></diagnosis-datatable>
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
-        <date-searchform></date-searchform>
-        <templatetableinsert class="diagosis-pc-table" :propData="pcip" @reorder="reorder"></templatetableinsert>
+        <date-searchform @form="receive"></date-searchform>
+        <diagnosis-datatable :form-data="pcFile.formData" :local-data="pcFile.local"></diagnosis-datatable>
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
-        <date-searchform></date-searchform>
-        <templatetableinsert class="diagosis-pc-table" :propData="pcrsc" @reorder="reorder"></templatetableinsert>
+        <date-searchform @form="receive"></date-searchform>
+        <diagnosis-datatable :form-data="pcFile.formData" :local-data="pcFile.local"></diagnosis-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
 import DateSearchform from "../form/Date.search.form";
-import Templatetableinsert from "../template/Template.tableinsert.vue";
+import DiagnosisDatatable from "./Diagnosis.info.datatable";
 export default {
   name: "Diagnosisinfo",
   extends: {},
@@ -34,7 +34,28 @@ export default {
         datetime: true
       },
       activeName: "first",
-      pcfile: {
+      pcFile: {
+        formData : {},
+        local: {
+          name : "file",
+          apiCondition : "FileHash",
+          fields : {
+            FileHash : "악성파일",
+            count : "진단건수",
+            firstSeenTime : "첫 유입일",
+            lastSeenTime : "마지막 유입일"
+          },
+          insertFields: {
+            EventTime : "날짜",
+            nodeid : "센서 ID",
+            username : "사용자명",
+            userdept : "부서명",
+            userpc : "PC 명",
+            userip : "IP 주소",
+            ProcessName : "실행 파일명",
+            ProcessImagePath : "실행 경로"
+          }
+        },
         field: ["센서 ID", "사용자명", "부서명", "PC명", "PC IP 주소", "진단개수", ""],
         innerField: [
           "날짜",
@@ -51,13 +72,9 @@ export default {
           { value: "FileHash", label: "위험도" },
           { value: "firstSeenTime", label: "첫 유입일" },
           { value: "lastSeenTime", label: "마지막 유입일" }
-        ],
-        search: [],
-        url: "",
-        data: [],
-        order: "count"
+        ]
       },
-      pcip: {
+      pcIp: {
         field: ["센서 ID", "사용자명", "부서명", "PC명", "PC IP 주소", "접근 횟수", ""],
         innerField: [
           "날짜",
@@ -74,13 +91,9 @@ export default {
           { value: "FileHash", label: "위험도" },
           { value: "firstSeenTime", label: "첫 유입일" },
           { value: "lastSeenTime", label: "마지막 유입일" }
-        ],
-        search: [],
-        url: "",
-        data: [],
-        order: "count"
+        ]
       },
-      pcrsc: {
+      pcRsc: {
         field: ["센서 ID", "사용자명", "부서명", "PC명", "PC IP 주소", "진단개수", ""],
         innerField: [
           "날짜",
@@ -97,53 +110,32 @@ export default {
           { value: "FileHash", label: "위험도" },
           { value: "firstSeenTime", label: "첫 유입일" },
           { value: "lastSeenTime", label: "마지막 유입일" }
-        ],
-        search: [],
-        url: "",
-        data: [],
-        order: "count"
+        ]
       }
     };
   },
   computed: {},
   components: {
     "date-searchform":DateSearchform,
-    "templatetableinsert":Templatetableinsert
+    "diagnosis-datatable":DiagnosisDatatable
   },
   watch: {},
   methods: {
-    receiveData(form) {
-      console.log(form);
+    receive(form) {
       if (this.activeName === "first") {
-        this.mixData(this.pcfile, form, "file");
+        this.mixData(this.pcFile, form, "file");
       } else if (this.activeName === "second") {
-        this.mixData(this.pcip, form, "ip");
+        this.mixData(this.pcIp, form, "ip");
       } else if (this.activeName === "third") {
-        this.mixData(this.pcrsc, form, "rsc");
+        this.mixData(this.pcRsc, form, "rsc");
       }
     },
-    mixData(local, receive, apiurl) {
-      const url = "/api/admin/search/detect/summary/pc/" + apiurl;
-      let data = {
-        page: 1,
-        length: 50,
-        startDate: receive.startDate ? receive.startDate.getTime() : null,
-        endDate: receive.endDate ? receive.endDate.getTime() : null,
-        dept_code: receive.dept_code,
-        node_id: receive.node_id,
-        order: local.order,
-        direction: 1
-      };
-      this.$http
-        .get(url, {
-          params: data
-        })
-        .then(result => {
-          local.data = result.data.data;
-          console.log(data);
-        });
-      local.search = data;
-      local.url = url;
+    mixData(select, form, apiUrl){
+      return select.formData = {
+        url : "/api/admin/search/detect/summary/pc/" + apiUrl,
+        form : form,
+        order: "count"
+      }
     },
     reorder(val) {
       console.log(this.activeName);
