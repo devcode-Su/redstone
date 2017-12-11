@@ -1,5 +1,5 @@
 <template>
-  <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[25, 50, 100, 200, 500]" :page-size="25" layout="sizes, prev, pager, next" :total="1000">
+  <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[50, 100, 200, 500]" :page-size="50" layout="sizes, prev, pager, next" :total="total">
   </el-pagination>
 </template>
 <script>
@@ -7,21 +7,33 @@ export default {
   name: "Templatepaginations",
   extends: {},
   props: {
-    propData: {
+    paging: {
       type: Array | Object
     }
   },
   data() {
     return {
-      currentPage: 10
+      currentPage: 1,
+      total : 1
     };
   },
   computed: {},
   components: {},
-  watch: {},
+  watch: {
+    paging(p){
+      if(p){
+        console.log(p);
+        this.currentPage = p.current_page;
+        this.total = p.total;
+        return p;
+      }
+    }
+  },
   methods: {
     handleSizeChange(val) {
-      console.log(`${val} items per page`);
+      //console.log(val)
+      //console.log(`${val} items per page`);
+      this.$emit("pageLength", val);
     },
     handleCurrentChange(val) {
       console.log(`current page: ${val}`);
@@ -43,4 +55,8 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+  .el-pagination{
+    display:flex;
+    justify-content: flex-end;
+  }
 </style>

@@ -1,12 +1,12 @@
 <template>
   <transition name="modal">
     <section data-modal>
-      <div data-modal-container :class="target">
+      <div data-modal-container>
         <h1 data-modal-title>
           {{title}}
         </h1>
         <component :is="compSelect"></component>
-        <button data-icon data-modal-close @click="$emit('close')">
+        <button data-icon data-modal-close @click="$emit('close')" v-if="target">
           <i class="el-icon-close" aria-hidden="true"></i>
         </button>
       </div>
@@ -16,7 +16,7 @@
 <script>
 import DashboardThumb from "../dashboard/Dashboard.thumb";
 import GroupManagement from "../group/Group.management";
-import Systemadminadd from "../setup/Setup.adminadd";
+import Systemadminadd from "../setup/Setup.adminForm";
 import Systemresponsecutoff from "../system/System.response.cutoff";
 import Propertypannel from "../property/Property.pannel.vue";
 //import Processtree from "../search/Search.process.tree.vue"
@@ -26,7 +26,8 @@ export default {
   props: {
     //알파벳 순으로 정렬할 것.
     target: {
-      type: String
+      type: Boolean,
+      default:true
     },
     title: {
       type: String
@@ -101,6 +102,9 @@ export default {
   color: #fff;
   i {
     color: #fff;
+  }
+  &:hover i{
+    color:color(highlight-color)
   }
 }
 
