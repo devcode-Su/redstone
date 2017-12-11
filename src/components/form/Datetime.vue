@@ -2,12 +2,10 @@
   <div data-form-item>
     <label data-form-label="required">조사기간 설정</label>
     <div data-form-tag>
-      <el-date-picker v-model="startDate" type="datetime" placeholder="Select Start date and time" size="small"
-                      @change="valueChanged('start', $event)" @input="valueChanged('start', $event)">
+      <el-date-picker v-model="startDate" type="datetime" placeholder="Select Start date and time" size="small" >
       </el-date-picker>
       <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-      <el-date-picker v-model="endDate" type="datetime" placeholder="Select End date and time" size="small"
-                      @change="valueChanged('end', $event)" @input="valueChanged('end', $event)">
+      <el-date-picker v-model="endDate" type="datetime" placeholder="Select End date and time" size="small">
       </el-date-picker>
     </div>
     <div data-dateset-btn>
@@ -36,17 +34,6 @@
     components: {},
     watch: {},
     methods: {
-      valueChanged(obj, value) {
-        let data = {};
-        data[obj] = value;
-        this.$emit('dateTime', data);
-      },
-      // setDatetime() {
-      //   this.$emit('dateTime', {
-      //     start: this.startDate,
-      //     end: this.endDate,
-      //   });
-      // },
     },
     beforeCreate() {
     },
@@ -59,6 +46,10 @@
     beforeUpdate() {
     },
     updated() {
+      this.$emit('dateTime', {
+        start: this.startDate,
+        end: this.endDate,
+      });
     },
     actvated() {
     },

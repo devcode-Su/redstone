@@ -76,6 +76,7 @@ export default {
       });
     },
     dateSet(dateTime) {
+      console.log(dateTime)
       this.form.startDate = dateTime.start;
       this.form.endDate = dateTime.end;
     },
@@ -97,7 +98,7 @@ export default {
   mounted() {},
   beforeUpdate() {},
   updated() {
-    console.log(this.form);
+    console.log(this.form.startDate);
   },
   actvated() {},
   deactivated() {},
