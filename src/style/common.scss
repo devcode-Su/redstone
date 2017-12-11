@@ -160,7 +160,15 @@
       height:500px;
       border: 1px solid color(border);
       border-top: 0 none;
+      [data-none-data="screen"]{
+        height:499px;
+      }
     }
+  }
+  [data-none-data]{
+    display:flex;
+    justify-content: center;
+    align-items: center;
   }
   [data-tbody="row"] {
     border-bottom: 1px solid #e6ebf5;
@@ -175,6 +183,7 @@
     }
     border-bottom:1px solid #e6ebf5;
   }
+  .col-nodeid,
   .col-count,
   .col-score,
   .col-Score {
@@ -184,15 +193,20 @@
   .col-time,
   .col-EventTime,
   .col-firstSeenTime,
-  .col-lastSeenTime{
+  .col-lastSeenTime,
+  .col-username,
+  .col-userdept{
     width: 170px;
   }
-  .col-ip,
-  .col-userip{
+  .col-userip,
+  .col-userpc{
     width: 115px;
   }
   .col-version{
     width:110px;
+  }
+  .col-ProcessName{
+    width:200px;
   }
   .col-moreBtn{
     width:30px;
