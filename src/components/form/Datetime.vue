@@ -11,7 +11,7 @@
       </el-date-picker>
     </div>
     <div data-dateset-btn>
-      <el-button v-for="(settime,i) in datelabel" :key="settime.i" @click="setDateTime(i)" size="small">
+      <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDateTime(i)" size="small">
         {{settime}}
       </el-button>
     </div>
@@ -29,7 +29,7 @@
       return {
         startDate: null,
         endDate: null,
-        datelabel: ["1시간", "일일", "주간", "월간"],
+        dateLabel: ["1시간", "일일", "주간", "월간"],
       };
     },
     computed: {},
