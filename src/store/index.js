@@ -5,7 +5,8 @@ import mutations from "./mutations";
 import actions from "./actions";
 import loading from "./modules/loading";
 import thumbCompList from "./modules/thumbCompAll";
-import groupManagement from "./modules/groupMangement"
+import groupManagement from "./modules/groupMangement";
+import setupAdmin from "./modules/setupAdmin"
 
 Vue.use(Vuex);
 
@@ -17,7 +18,8 @@ const store = new Vuex.Store({
     namespaced: true,
     load: loading,
     thumbComp: thumbCompList,
-    groupManagements : groupManagement
+    groupManagements : groupManagement,
+    setupAdmins : setupAdmin
   }
 });
 

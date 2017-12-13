@@ -4,7 +4,7 @@
       <table>
         <thead>
         <tr>
-          <th>head</th>
+          <th v-for="(th, k) in fields" :key="k" :class="'col-'+k">{{th}}</th>
         </tr>
         </thead>
       </table>
@@ -12,8 +12,11 @@
     <div data-tbody="tbody">
       <table>
         <tbody>
-        <tr data-tbody="row">
-          <td>td</td>
+        <tr v-if="stateReorder">
+          <td data-none-data>검색된 데이터가 없습니다.</td>
+        </tr>
+        <tr v-else data-tbody="row" v-for="row in propData" @click="sendData(row)">
+          <td v-for="(td, k) in fields" :key="td.id" :class="'col-'+k">{{row[k]}}</td>
         </tr>
         </tbody>
       </table>
@@ -21,7 +24,6 @@
   </div>
 </template>
 <script>
-  //import _ from "lodash";
   export default {
     name: "InsertDatatable",
     extends: {},
@@ -38,10 +40,6 @@
         default() {
           return { message: "wait receive data" };
         }
-      },
-      reorder: {
-        type: Boolean,
-        default: false
       }
     },
     data() {
@@ -52,27 +50,21 @@
       };
     },
     computed: {
-      // tableData() {
-      //   return this.propData.length > 1 ? this.propData : console.log("delay~~");
-      // }
+      stateReorder(){
+        return this.propData.length ? false : true
+      }
     },
     components: {},
     watch: {
       propData(data) {
         if (data) {
-          this.fieldKeys = Object.keys(this.fields);
-          if (!data.data.indexOf(null)) {
-            this.rowCheck = true;
-          }
-          this.rowData = data.data;
           return data;
         }
       }
     },
     methods: {
-      rowClick(val) {
-        console.log('"this clicked row"');
-        console.log(val);
+      sendData(row) {
+        console.log(row);
       }
     },
     beforeCreate() {},
@@ -80,7 +72,8 @@
     beforeMounted() {},
     mounted() {},
     beforeUpdate() {},
-    updated() {},
+    updated() {
+    },
     actvated() {},
     deactivated() {},
     beforeDestroy() {},
