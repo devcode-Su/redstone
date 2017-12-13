@@ -107,7 +107,7 @@
     },
     computed: {
       stateReorder(){
-        return this.tableData.length ? false : true
+        return !this.tableData.length
       }
     },
     components: {
@@ -117,7 +117,7 @@
     watch: {
       formData(d) {
         if(d){
-          console.log(d)
+          //console.log(d)
           this.form.dept_code = d.form.dept_code;
           this.form.nodeid = d.form.nodeid;
           this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
@@ -130,7 +130,7 @@
       },
       responseData(t){
         if(t){
-          console.log(t);
+          //console.log(t);
           this.tableData = t.data;
           this.pagingData = {
             current_page : t.current_page,
@@ -142,19 +142,19 @@
     },
     methods: {
       receiveSearch(){
-        console.log(this.form);
+        //console.log(this.form);
         const url = this.apiUrl;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
-          console.log(response);
+          //console.log(response);
           this.responseData = response.data
         })
       },
       reorder(v){
-        console.log(v);
+        //console.log(v);
         this.form.order = v;
-        console.log(this.form);
+        //console.log(this.form);
         this.receiveSearch();
       },
       colView(val){
@@ -180,26 +180,26 @@
         }else{
           this.more = row;
           const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
-          console.log(url)
+          //console.log(url)
           this.$http.get(url, {
             params : this.form
           }).then(response => {
-            console.log(response);
+            //console.log(response);
             this.insertTable = response.data.data;
           });
         }
       },
       pageLength(p){
-        console.log(p)
+        //console.log(p)
         this.form.length = p.length ? p.length : this.form.length ;
         this.form.page = p.current ? p.current : this.form.page;
-;        this.receiveSearch();
+        this.receiveSearch();
       }
     },
     beforeCreate() {
     },
     created() {
-      console.log(this.localData)
+      //console.log(this.localData)
     },
     beforeMounted() {
     },
