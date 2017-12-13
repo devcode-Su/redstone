@@ -24,13 +24,13 @@
               <span data-required-msg v-if="required.host">Host IP 를 입력하세요.</span>
             </div>
           </div>
-          <div data-form-item>
-            <label data-form-label="required">이메일</label>
-            <div data-form-tag>
-              <el-input id="email" type="email" v-model="form.email" size="small" :class="{ 'is-error' : required.email}" clearable @blur="requiredCheck" required></el-input>
-              <span data-required-msg v-if="required.email">이메일을 입력하세요.</span>
-            </div>
-          </div>
+          <!--<div data-form-item>-->
+            <!--<label data-form-label="required">이메일</label>-->
+            <!--<div data-form-tag>-->
+              <!--<el-input id="email" type="email" v-model="form.email" size="small" :class="{ 'is-error' : required.email}" clearable @blur="requiredCheck" required></el-input>-->
+              <!--<span data-required-msg v-if="required.email">이메일을 입력하세요.</span>-->
+            <!--</div>-->
+          <!--</div>-->
           <div data-form-item>
             <label data-form-label="required">비밀번호</label>
             <div data-form-tag>
@@ -73,14 +73,14 @@ export default {
         id: false,
         name : false,
         host : false,
-        email : false,
+        //email : false,
         passwd : false
       },
       form: {
         id: "",
         name:"",
         host: "",
-        email: "",
+        //email: "",
         passwd: "",
         description: ""
       },
@@ -107,21 +107,23 @@ export default {
       }else if(val.target.id === "host"){
         if(val.target.value === "") this.required.host = true;
         else this.required.host = false
-      }else if(val.target.id === "email"){
-        if(val.target.value === "") this.required.email = true;
-        else this.required.email = false
-      }else if(val.target.id === "passwd"){
+      }
+      // else if(val.target.id === "email"){
+      //   if(val.target.value === "") this.required.email = true;
+      //   else this.required.email = false
+      // }
+      else if(val.target.id === "passwd"){
         if(val.target.value === "") this.required.passwd = true;
         else this.required.passwd = false
       }
     },
     submitForm(form) {
       console.log(form);
-      if(form.id === "" || form.name === "" || form.host === "" || form.email === "" || form.passwd === ""){
+      if(form.id === "" || form.name === "" || form.host === "" || form.passwd === ""){
         if(form.id === "") this.required.id = true;
         if(form.name === "") this.required.name = true;
         if(form.host === "") this.required.host = true;
-        if(form.email === "") this.required.email = true;
+        //if(form.email === "") this.required.email = true;
         if(form.passwd === "") this.required.passwd = true;
       }else {
         if (this.formBtnType) {

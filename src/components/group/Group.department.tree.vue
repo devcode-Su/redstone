@@ -78,6 +78,7 @@ export default {
         this.$bus.$emit("userto", this.model.dept_code);
       } else if (page === "user") {
         console.log("aaa");
+        this.$store.dispatch(Constant.EDITUSER_CODE, this.model);
       } else {
         this.$store.dispatch(Constant.GLOBAL_RANGECODE, this.model);
       }

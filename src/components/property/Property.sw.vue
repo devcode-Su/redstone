@@ -3,27 +3,21 @@
     <h1 data-page-title>
       SW 정보
     </h1>
-    <el-tabs v-model="activeName">
-      <el-tab-pane label="운영체제" name="first">
-        <span class="search-id">{{searchNavi}}에서 검색</span>
-        <!--<propertypannel></propertypannel>-->
-        <propertydatatable :propData="propertyOS"></propertydatatable>
+    <el-tabs v-model="activeName" @tab-click="tabs">
+      <el-tab-pane label="운영체제" name="os">
+        <property-datatable :from-data="propertyOS.formData" :local-data="propertyOS.local"></property-datatable>
       </el-tab-pane>
       <el-tab-pane label="브라우저" name="second">
-        <span class="search-id">{{searchNavi}}에서 검색</span>
-        <propertydatatable :propData="propertyBR"></propertydatatable>
+        <property-datatable :from-data="propertyBR.formData" :local-data="propertyBR.local"></property-datatable>
       </el-tab-pane>
       <el-tab-pane label="소프트웨어" name="third">
-        <searchpannel :pannelType="pannelset"></searchpannel>
-        <propertydatatable :propData="propertySW"></propertydatatable>
+        <property-datatable :from-data="propertySW.formData" :local-data="propertySW.local"></property-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
-import Propertypannel from "./Property.pannel.vue";
-import Propertydatatable from "./Property.datatable.vue";
-import Searchpannel from "../template/Template.searchpannel.vue";
+import PropertyDatatable from "./Property.datatable";
 export default {
   name: "Propertysw",
   extends: {},
@@ -32,49 +26,49 @@ export default {
   },
   data() {
     return {
-      searchNavi: "전사",
-      pannelset: {
-        programs: true
-      },
       activeName: "first",
-      infofile: {
-        field: ["악성 파일", "진단 건수", "첫 유입일", "마지막 유입일", ""],
-        orderOption: [
-          { value: "count", label: "진단건수" },
-          { value: "FileHash", label: "위험도" },
-          { value: "firstSeenTime", label: "첫 유입일" },
-          { value: "lastSeenTime", label: "마지막 유입일" }
-        ],
-        search: [],
-        url: "",
-        data: [],
-        order: "count"
-      },
       propertyOS: {
-        field: ["운영체제", "서비스팩", "PC 대수"],
-        data: [],
-        orderOption: ["1", "2", "3"]
+        formData: {},
+        local : {
+          fields: {
+            name :"운영체제",
+            sp :"서비스팩",
+            count:"PC 대수"
+          }
+        }
       },
       propertyBR: {
-        field: ["소프트웨어", "버전", "설치 PC 대수"],
-        data: [],
-        orderOption: ["1", "2", "3"]
+        formData: {},
+        local:{
+          fields: {
+            name:"소프트웨어",
+            version:"버전",
+            count:"설치 PC 대수"
+          }
+        }
       },
       propertySW: {
-        field: ["소프트웨어", "버전", "설치 PC 대수"],
-        data: [],
-        orderOption: ["1", "2", "3"]
+        formData: {},
+        local:{
+          fields: {
+            name:"소프트웨어",
+            version:"버전",
+            count:"설치 PC 대수"
+          }
+        }
       }
     };
   },
   computed: {},
   components: {
-    "propertydatatable":Propertydatatable,
-    "propertypannel":Propertypannel,
-    "searchpannel":Searchpannel
+    "property-datatable" : PropertyDatatable
   },
   watch: {},
-  methods: {},
+  methods: {
+    tabs(tab){
+      console.log(tab)
+    }
+  },
   beforeCreate() {},
   created() {},
   beforeMounted() {},

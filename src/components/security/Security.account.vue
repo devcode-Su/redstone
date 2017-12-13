@@ -5,19 +5,20 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="계정비밀번호" name="first">
-        <template-searchpannel :pannelType="pannelaccount" @searchData="receiveData"></template-searchpannel>
-        <templatetablerouter :propData="pass"></templatetablerouter>
+        <security-passwordform @form="receive"></security-passwordform>
+        <security-password-datatable :form-data="account.formData" :local-data="account.local"></security-password-datatable>
       </el-tab-pane>
       <el-tab-pane label="화면보호기" name="second">
-        <template-searchpannel :pannelType="pannelmonitor" @searchData="receiveData"></template-searchpannel>
-        <templatetablerouter :propData="monitor"></templatetablerouter>
+        <security-screenform @form="receive"></security-screenform>
+        <security-password-datatable :form-data="screen.formData" :local-data="screen.local"></security-password-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
-import TemplateSearchpannel from "../template/Template.searchpannel";
-import Templatetablerouter from "../template/Template.tablerouter.vue";
+import SecurityPasswordform from "../form/Security.password.form";
+import SecurityScreenform from "../form/Security.screen.form";
+import SecurityPasswordDatatable from "./Security.account.datatable";
 export default {
   name: "Securitymedia",
   extends: {},
@@ -27,35 +28,50 @@ export default {
   data() {
     return {
       activeName: "first",
-      pannelaccount: {
-        datelast: true
+      account: {
+        formData : {},
+        local: {
+          fields: {
+            nodeid :"센서 ID",
+            userdept: "부서명",
+            username : "사용자명",
+            userip: "IP 주소",
+            userid :"윈도우 계정",
+            passwd_changed_date : "최종 변경일시"
+          }
+        }
+
       },
-      pannelmonitor: {
-        check: "oneline"
-      },
-      pass: {
-        field: ["", "센서 ID", "부서명", "사용자명", "IP 주소", "윈도우 계정", "최종 변경일시"],
-        search: [],
-        url: "",
-        data: [],
-        order: "count"
-      },
-      monitor: {
-        field: ["", "센서 ID", "부서명", "사용자명", "IP 주소", "윈도우 계정", "종류", "최근 변경일시"],
-        search: [],
-        url: "",
-        data: [],
-        order: "count"
+      screen: {
+        formData : {},
+        local:{
+          fields: {
+            nodeid :"센서 ID",
+            userdept: "부서명",
+            username : "사용자명",
+            userip: "IP 주소",
+            userid :"윈도우 계정",
+            passwd_changed_date : "최종 변경일시"
+          }
+        }
       }
     };
   },
   computed: {},
   components: {
-    "template-searchpannel":TemplateSearchpannel,
-    "templatetablerouter":Templatetablerouter
+    "security-passwordform" :SecurityPasswordform,
+    "security-password-datatable":SecurityPasswordDatatable,
+    "security-screenform":SecurityScreenform,
   },
   watch: {},
   methods: {
+    receive(form){
+      console.log(form)
+      //return form
+      this.formData = {
+        url : "/api/admin/volume/"
+      }
+    },
     receiveData(form) {
       if (form.datetime === "") {
         this.$notify.error({

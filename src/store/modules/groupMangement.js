@@ -64,6 +64,9 @@ export default {
     },
     [Constant.FETCH_GLOBALUSER]: (state) => {
       return state.globalRange.user;
+    },
+    [Constant.FETCH_EDITUSER] : (state) => {
+      return state.editUser.user
     }
   },
   mutations: {
@@ -75,6 +78,12 @@ export default {
     },
     [Constant.FETCH_GLOBALUSER]: (state, payload) => {
       state.globalRange.user = payload;
+    },
+    [Constant.EDITUSER_CODE]: (state, payload) => {
+      state.editUser.code = payload;
+    },
+    [Constant.FETCH_EDITUSER] : (state, payload) => {
+      state.editUser.user = payload
     }
   },
   actions: {
@@ -106,6 +115,12 @@ export default {
         //console.log(response.data.data);
         //store.commit(Constant.FETCH_USER, response.data.data)
       });
-    }
+    },
+    [Constant.EDITUSER_CODE]: (store, payload) => {
+      store.commit(Constant.EDITUSER_CODE, payload);
+      ContantApi.fetchEditUser(payload.dept_code).then(response => {
+        store.commit(Constant.FETCH_EDITUSER, response.data.data);
+      });
+    },
   }
 }

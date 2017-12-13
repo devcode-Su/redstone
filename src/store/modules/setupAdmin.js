@@ -47,11 +47,11 @@ export default {
     },
     [Constant.DELETE_ADMIN] : (store, payload) => {
       console.log(payload)
-      //ContantApi.deleteAdmin(payload).then( () => {
-      //     ContantApi.setupAdmin().then(response => {
-      //       store.commit(Constant.SETUP_ADMIN, response.data);
-      //     });
-      //});
+      ContantApi.deleteAdmin(payload).then( () => {
+          ContantApi.setupAdmin().then(response => {
+            store.commit(Constant.SETUP_ADMIN, response.data);
+          });
+      });
     },
     [Constant.UPDATE_ADMIN]: (store, payload) => {
       console.log(payload)

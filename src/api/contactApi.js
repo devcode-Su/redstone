@@ -15,6 +15,9 @@ export default {
   fetchGlobalUser(dept){
     return axios.get(CONF.FETCH_GLOBALUSER.replace("${no}", dept));
   },
+  fetchEditUser(dept){
+    return axios.get(CONF.FETCH_EDITEUSR.replace("${no}", dept));
+  },
   setupAdmin(){
     return axios.get(CONF.SETUP_ADMIN);
   },

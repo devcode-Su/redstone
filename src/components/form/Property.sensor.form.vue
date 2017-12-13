@@ -1,0 +1,101 @@
+<template>
+  <div data-search-pannel>
+    <p data-range>
+      <span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>
+      <span v-else>
+        {{globalRangeCode.dept.name}} / {{globalRangeCode.username}}
+        <button data-icon @click="resetRange">
+          <i class="fa fa-times-circle"></i>
+        </button>
+      </span>
+      에서 검색
+    </p>
+    <form @submit.prevent="send">
+      <fieldset>
+        <div data-form-item>
+          <div data-form-tag>
+            <el-input v-model="form.q" type="text" placeholder="version" size="small"></el-input>
+          </div>
+        </div>
+        <div data-form-item>
+          <div data-form-tag>
+            <el-checkbox v-model="form.all" true-label="1" false-label="0">일주일 이상 미로그인 센서</el-checkbox>
+          </div>
+        </div>
+      </fieldset>
+      <div data-search-submit>
+        <el-button type="primary" plain size="small" native-type="submit">
+          검색
+        </el-button>
+      </div>
+    </form>
+  </div>
+</template>
+<script>
+  import Constant from "@/constant";
+  import { mapGetters } from "vuex";
+
+  export default {
+    name: "SecurityMediaform",
+    extends: {},
+    props: {
+      //알파벳 순으로 정렬할 것.
+    },
+    data() {
+      return {
+        form: {
+          dept_code: 1,
+          nodeid: "",
+          q:'',
+          all:0,
+        }
+      };
+    },
+    computed: {
+      ...mapGetters({ globalRangeCode: "globalRangeCode" })
+    },
+    components: {
+    },
+    watch: {
+      globalRangeCode(g) {
+        if (g) {
+          this.form.dept_code = g.dept_code;
+          this.form.nodeid = g.nodeid;
+        }
+      }
+    },
+    methods: {
+      resetRange() {
+        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+          dept_code: 1,
+          name: "전사"
+        });
+      },
+      send() {
+        console.log(this.form);
+        this.$emit("form", this.form);
+      }
+    },
+    beforeCreate() {},
+    created() {},
+    beforeMounted() {},
+    mounted() {},
+    beforeUpdate() {},
+    updated() {
+    },
+    actvated() {},
+    deactivated() {},
+    beforeDestroy() {},
+    destroyed() {}
+  };
+</script>
+<style lang='scss' scoped>
+  @import "~styles/variables";
+  [data-form-tag]{
+    width:500px;
+    height:32px;
+    label{
+      width:auto;
+    }
+  }
+</style>

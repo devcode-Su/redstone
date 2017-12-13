@@ -124,40 +124,6 @@ export default {
         form : form,
         order: "count"
       }
-    },
-    reorder(val) {
-      //console.log(val)
-      console.log(this.activeName);
-      if (this.activeName === "first") {
-        val.form.order = val.order;
-        this.$http
-          .get(val.url, {
-            params: val.form
-          })
-          .then(result => {
-            console.log(result.data);
-            this.infofile.data = result.data.data;
-          });
-      } else if (this.activeName === "second") {
-        val.form.order = val.order;
-        this.$http
-          .get(val.url, {
-            params: val.form
-          })
-          .then(result => {
-            this.infoip.data = result.data.data;
-          });
-      } else if (this.activeName === "third") {
-        val.form.order = val.order;
-        this.$http
-          .get(val.url, {
-            params: val.form
-          })
-          .then(result => {
-            console.log(result.data);
-            this.inforsc.data = result.data.data;
-          });
-      }
     }
   },
   beforeCreate() {},

@@ -13,7 +13,7 @@
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
           부서원 정보
         </h2>
-        <groupmembersmove data-component="member" :members="membersData"></groupmembersmove>
+        <groupmembersmove data-component="member" :members="editUser"></groupmembersmove>
       </div>
     </div>
     <div data-management data-btn="confirm">
@@ -24,7 +24,7 @@
 <script>
 import Groupdepartment from "./Group.department";
 import Groupmembersmove from "./Group.membersmove";
-//import { EventBus } from "@/main";
+import { mapGetters } from "vuex";
 export default {
   name: "Grounpdetartmentset",
   extends: {},
@@ -36,7 +36,9 @@ export default {
       membersData: []
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({ editUser: "fetchEditUser" })
+  },
   components: {
     "groupdepartment":Groupdepartment,
     "groupmembersmove":Groupmembersmove

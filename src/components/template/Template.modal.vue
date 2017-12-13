@@ -27,7 +27,7 @@ export default {
     //알파벳 순으로 정렬할 것.
     target: {
       type: Boolean,
-      default:true
+      default:false
     },
     title: {
       type: String

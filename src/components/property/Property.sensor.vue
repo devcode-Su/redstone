@@ -3,11 +3,11 @@
     <h1 data-page-title>
       센서 정보
     </h1>
-    <template-searchpannel :pannelType="pannelset"></template-searchpannel>
+    <proserty-sensorform @form="receive"></proserty-sensorform>
   </article>
 </template>
 <script>
-import TemplateSearchpannel from "../template/Template.searchpannel";
+  import ProsertySensorform from "../form/Property.sensor.form"
 export default {
   name: "Propertysensor",
   extends: {},
@@ -25,10 +25,14 @@ export default {
   },
   computed: {},
   components: {
-    "template-searchpannel":TemplateSearchpannel
+    "proserty-sensorform":ProsertySensorform
   },
   watch: {},
-  methods: {},
+  methods: {
+    receive(form){
+      console.log(form)
+    }
+  },
   beforeCreate() {},
   created() {},
   beforeMounted() {},

@@ -3,13 +3,13 @@
     <h1 data-page-title>
       매체접근
     </h1>
-    <template-searchpannel :pannelType="pannelset" @searchData="receiveData"></template-searchpannel>
-    <templatetablerouter class="security-media-table" :propData="search"></templatetablerouter>
+    <security-mediaform @form="receive"></security-mediaform>
+    <security-datatable :from-data="formData" :local-data="media"></security-datatable>
   </article>
 </template>
 <script>
-import TemplateSearchpannel from "../template/Template.searchpannel";
-import Templatetablerouter from "../template/Template.tablerouter.vue";
+import SecurityMediaform from "../form/Security.media.form";
+import SecurityDatatable from "./Security.media.datatable";
 export default {
   name: "Securitymedia",
   extends: {},
@@ -18,42 +18,40 @@ export default {
   },
   data() {
     return {
-      pannelset: {
-        datetime: true,
-        check: "single"
-      },
-      search: {
-        field: [
-          "",
-          "장착시간",
-          "탈착시간",
-          "센서 ID",
-          "사용자명",
-          "부서명",
-          "PC IP 주소",
-          "종류",
-          "연결방식",
-          "진단개수",
-          "종류",
-          "연결방식",
-          "경로",
-          "장치명",
-          "용량",
-          "발생이벤트"
-        ],
-        data: [],
-        search: [],
-        url: ""
+      formData: {},
+      media : {
+        fields: {
+          InsertTime: "장착시간",
+          UnmountTime: "탈착시간",
+          nodeid: "센서 ID",
+          username: "사용자명",
+          userdept: "부서명",
+          userip: "PC IP 주소",
+          RuntimeMount: "진단개수",
+          FileSystem: "종류",
+          BusType: "연결방식",
+          VolumePath: "경로",
+          VolumeName: "장치명",
+          TotalNumberOfBytes: "용량",
+          VolumeGuid: "발생이벤트"
+        },
       }
     };
   },
   computed: {},
   components: {
-    "template-searchpannel":TemplateSearchpannel,
-    "templatetablerouter":Templatetablerouter
+    "security-mediaform" :SecurityMediaform,
+    "security-datatable" :SecurityDatatable
   },
   watch: {},
   methods: {
+    receive(form){
+      console.log(form)
+      //return form
+      this.formData = {
+        url : "/api/admin/volume/"
+      }
+    },
     receiveData(form) {
       console.log("file");
       const url = "/api/admin/volume/TYPE/CODE";

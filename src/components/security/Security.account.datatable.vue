@@ -1,16 +1,6 @@
 <template>
   <section data-table-wrap>
     <header data-table="header">
-      <p data-range>
-        <span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>
-        <span v-else>
-        {{globalRangeCode.dept.name}} / {{globalRangeCode.username}}
-        <button data-icon @click="resetRange">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      </span>
-        에서 검색
-      </p>
       <div data-table-option>
         <el-button size="small">
           파일로 저장
@@ -64,7 +54,6 @@
   </section>
 </template>
 <script>
-  import { mapGetters } from "vuex";
   import Paginations from "../template/Template.paginations"
   export default {
     name: "DatatableTable",
@@ -109,8 +98,7 @@
     computed: {
       stateReorder(){
         return this.tableData.length ? false : true
-      },
-      ...mapGetters({ globalRangeCode: "globalRangeCode" })
+      }
     },
     components: {
       "paginations" :Paginations
@@ -222,7 +210,7 @@
 <style lang='scss' scoped>
   @import "~styles/variables";
   [data-table-wrap]{
-    margin-top:50px;
+    margin-top:30px;
     .fade-enter-active,
     .fade-leave-active {
       transition: opacity 0.3s;
@@ -242,19 +230,8 @@
       background-color: transparent;
     }
   }
-  [data-table="header"]{
-    padding-top:5px;
-    border-top:1px solid color(border)
-  }
-  [data-range] {
-    margin-bottom:0;
-    padding-right:5px;
-    top:-25px;
-  }
-  [data-tbody="tbody"]{
-    height:645px !important;
-  }
-  [data-none-data="screen"]{
-    height:644px !important;
+
+  [data-tbody] {
+
   }
 </style>

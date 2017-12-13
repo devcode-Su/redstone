@@ -19,7 +19,8 @@ export default {
   FETCH_GROUP : BASE_URL + "/group/list",
   MANAGEMENT_GROUP : BASE_URL + "/group",
   FETCH_GLOBALUSER : BASE_URL + "/group/recurse/${no}",
-  FETCH_EDITUSER : BASE_URL + "/node/${no}",
+  FETCH_EDITEUSR : BASE_URL + "/group/node/${no}",
+  UPDATE_EDITUSER : BASE_URL + "/node/${no}",
 
   //관리자 관리
   SETUP_ADMIN : BASE_URL,
