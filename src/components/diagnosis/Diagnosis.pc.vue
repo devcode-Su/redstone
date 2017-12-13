@@ -10,18 +10,18 @@
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
         <date-searchform @form="receive"></date-searchform>
-        <diagnosis-datatable :form-data="pcFile.formData" :local-data="pcFile.local"></diagnosis-datatable>
+        <diagnosis-datatable :form-data="pcIp.formData" :local-data="pcIp.local"></diagnosis-datatable>
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
         <date-searchform @form="receive"></date-searchform>
-        <diagnosis-datatable :form-data="pcFile.formData" :local-data="pcFile.local"></diagnosis-datatable>
+        <diagnosis-datatable :form-data="pcRsc.formData" :local-data="pcRsc.local"></diagnosis-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
 import DateSearchform from "../form/Date.search.form";
-import DiagnosisDatatable from "./Diagnosis.info.datatable";
+import DiagnosisDatatable from "./Diagnosis.pc.datatable";
 export default {
   name: "Diagnosisinfo",
   extends: {},
@@ -38,79 +38,61 @@ export default {
         formData : {},
         local: {
           name : "file",
-          apiCondition : "FileHash",
           fields : {
-            FileHash : "악성파일",
-            count : "진단건수",
-            firstSeenTime : "첫 유입일",
-            lastSeenTime : "마지막 유입일"
-          },
-          insertFields: {
-            EventTime : "날짜",
             nodeid : "센서 ID",
             username : "사용자명",
             userdept : "부서명",
-            userpc : "PC 명",
-            userip : "IP 주소",
+            userpc : "PC명",
+            userip : "PC IP 주소",
+            count : "진단건수"
+          },
+          insertFields: {
+            EventTime : "날짜",
             ProcessName : "실행 파일명",
             ProcessImagePath : "실행 경로"
           }
-        },
-        field: ["센서 ID", "사용자명", "부서명", "PC명", "PC IP 주소", "진단개수", ""],
-        innerField: [
-          "날짜",
-          "센서 ID",
-          "사용자명",
-          "부서명",
-          "PC 명",
-          "IP 주소",
-          "실행 파일명",
-          "실행 경로"
-        ],
-        orderOption: [
-          { value: "count", label: "진단건수" },
-          { value: "FileHash", label: "위험도" },
-          { value: "firstSeenTime", label: "첫 유입일" },
-          { value: "lastSeenTime", label: "마지막 유입일" }
-        ]
+        }
       },
       pcIp: {
-        field: ["센서 ID", "사용자명", "부서명", "PC명", "PC IP 주소", "접근 횟수", ""],
-        innerField: [
-          "날짜",
-          "센서 ID",
-          "사용자명",
-          "부서명",
-          "PC 명",
-          "IP 주소",
-          "실행 파일명",
-          "실행 경로"
-        ],
-        orderOption: [
-          { value: "count", label: "진단건수" },
-          { value: "FileHash", label: "위험도" },
-          { value: "firstSeenTime", label: "첫 유입일" },
-          { value: "lastSeenTime", label: "마지막 유입일" }
-        ]
+        formData : {},
+        local: {
+          name : "ip",
+          fields : {
+            nodeid : "센서 ID",
+            username : "사용자명",
+            userdept : "부서명",
+            userpc : "PC명",
+            userip : "PC IP 주소",
+            count : "접근 횟수"
+          },
+          insertFields: {
+            EventTime : "날짜",
+            PathInfo1 : "악성 URL/IP",
+            ProcessName : "실행 파일명",
+            ProcessImagePath : "실행 경로"
+          }
+        }
       },
       pcRsc: {
-        field: ["센서 ID", "사용자명", "부서명", "PC명", "PC IP 주소", "진단개수", ""],
-        innerField: [
-          "날짜",
-          "센서 ID",
-          "사용자명",
-          "부서명",
-          "PC 명",
-          "PC IP 주소",
-          "실행 경로",
-          "연관 파일"
-        ],
-        orderOption: [
-          { value: "count", label: "진단건수" },
-          { value: "FileHash", label: "위험도" },
-          { value: "firstSeenTime", label: "첫 유입일" },
-          { value: "lastSeenTime", label: "마지막 유입일" }
-        ]
+        formData : {},
+        local: {
+          name : "rsc",
+          fields : {
+            nodeid : "센서 ID",
+            username : "사용자명",
+            userdept : "부서명",
+            userpc : "PC명",
+            userip : "PC IP 주소",
+            count : "진단건수"
+          },
+          insertFields: {
+            EventTime : "날짜",
+            RuleId : "RSC 엔진 명",
+            ProcessImagePath : "실행 경로",
+            AdditionalInfo: "연관 파일",
+            Score : "위험도"
+          }
+        }
       }
     };
   },

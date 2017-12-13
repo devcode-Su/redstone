@@ -2,10 +2,10 @@
   <div data-form-item>
     <div data-form-tag>
       <el-checkbox v-model="all" :true-label="1" :false-label="0">비밀번호 미 변경자 조회</el-checkbox>
-      <el-date-picker v-model="startDate" type="date" placeholder="Start date" size="small" >
+      <el-date-picker v-model="startDate" type="date" placeholder="Start date" size="small" @change="valueChanged('start', $event)" @input="valueChanged('start', $event)">
       </el-date-picker>
       <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-      <el-date-picker v-model="endDate" type="date" placeholder="End date" size="small">
+      <el-date-picker v-model="endDate" type="date" placeholder="End date" size="small" @change="valueChanged('end', $event)" @input="valueChanged('end', $event)">
       </el-date-picker>
     </div>
     <div data-dateset-btn>
@@ -34,18 +34,27 @@ export default {
   computed: {},
   components: {},
   watch: {},
-  methods: {},
+  methods: {
+    valueChanged(obj, value) {
+      console.log('valueChanged', obj, value);
+      let data = {};
+      data[obj] = value;
+      this.$emit('dateTime', data);
+    },
+    setDateTime(i) {
+      this.setDatetime(i);
+      this.$emit('dateTime', {
+        start: this.startDate,
+        end: this.endDate,
+      });
+    },
+  },
   beforeCreate() {},
   created() {},
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
   updated() {
-    this.$emit('pass', {
-      all : this.all,
-      start: this.startDate,
-      end: this.endDate,
-    });
   },
   actvated() {},
   deactivated() {},
