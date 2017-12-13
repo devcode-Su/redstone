@@ -38,8 +38,8 @@ export default {
         formData: {},
         local : {
           fields: {
-            value :"CPU",
-            count:"개수"
+            value :"CPU 종류",
+            count:"사용 PC 대수"
           }
         }
       },
@@ -48,7 +48,7 @@ export default {
         local : {
           fields: {
             value :"Memory",
-            count:"개수"
+            count:"사용 PC 대수"
           }
         }
       },
@@ -57,7 +57,7 @@ export default {
         local : {
           fields: {
             value :"HDD",
-            count:"개수"
+            count:"사용 PC 대수"
           }
         }
       },
@@ -66,7 +66,8 @@ export default {
         local : {
           fields: {
             value :"Display",
-            count:"개수"
+            version : "버전",
+            count:"사용 PC 대수"
           }
         }
       },
@@ -75,7 +76,7 @@ export default {
         local : {
           fields: {
             value :"Bios",
-            count:"개수"
+            count:"사용 PC 대수"
           }
         }
       }

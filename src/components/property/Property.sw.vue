@@ -34,7 +34,7 @@ export default {
           fields: {
             name :"운영체제",
             sp :"서비스팩",
-            count:"PC 대수"
+            count:"설치 PC 대수"
           }
         }
       },

@@ -26,7 +26,7 @@
         <table>
           <thead>
           <tr>
-            <th v-for="(th,k) in localData.fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
+            <th v-for="(th,k,i) in localData.fields" :key="k" :class="['col-'+k,{'th-end' : i === viewChecked.length - 1}]" :ref="k">{{th}}</th>
             <th class="col-moreBtn"><span>더보기</span></th>
           </tr>
           </thead>

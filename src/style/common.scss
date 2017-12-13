@@ -142,6 +142,9 @@
   th {
     height: 36px;
     line-height: 36px;
+    &.th-end{
+      padding-right:20px;
+    }
   }
   td {
     height: 28px;
