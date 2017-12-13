@@ -98,7 +98,7 @@
           length : 50,
           dept_code : 1,
           nodeid : '',
-          order : 'name',
+          order : '',
           direction : 0
         },
         apiUrl : ''
@@ -125,6 +125,7 @@
         if(d){
           console.log("alive?");
           this.apiUrl = d.url;
+          this.form.order = d.order;
           this.receiveSearch();
           return d;
         }

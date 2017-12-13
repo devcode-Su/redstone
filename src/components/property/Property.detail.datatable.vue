@@ -86,7 +86,7 @@
           length : 50,
           dept_code : 1,
           nodeid : '',
-          order : 'name',
+          order : '',
           direction : 0
         },
         apiUrl : ''
@@ -105,6 +105,7 @@
         if(d){
           console.log("alive?");
           this.apiUrl = d.url;
+          this.form.order = d.order;
           this.receiveSearch();
           return d;
         }
@@ -213,10 +214,10 @@
     }
   }
   [data-tbody="tbody"]{
-    height:645px !important;
+    height:606px !important;
   }
   [data-none-data="screen"]{
-    height:644px !important;
+    height:605px !important;
   }
   .col-username,
   .col-userdept,

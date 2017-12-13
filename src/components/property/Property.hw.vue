@@ -3,30 +3,27 @@
     <h1 data-page-title>
       HW 정보
     </h1>
-    <el-tabs v-model="activeName">
+    <el-tabs v-model="activeName" @tab-click="tabs">
       <el-tab-pane label="CPU" name="first">
-        CPU content
+        <property-datatable :form-data="propertyCPU.formData" :local-data="propertyCPU.local"></property-datatable>
       </el-tab-pane>
       <el-tab-pane label="Memory" name="second">
-        Memory content
+        <property-datatable :form-data="propertyMemory.formData" :local-data="propertyMemory.local"></property-datatable>
       </el-tab-pane>
       <el-tab-pane label="HDD" name="third">
-        HDD content
+        <property-datatable :form-data="propertyHDD.formData" :local-data="propertyHDD.local"></property-datatable>
       </el-tab-pane>
       <el-tab-pane label="Display" name="four">
-        Display content
+        <property-datatable :form-data="propertyDisplay.formData" :local-data="propertyDisplay.local"></property-datatable>
       </el-tab-pane>
       <el-tab-pane label="Bios" name="five">
-        Bios content
-        <templatebaranimation></templatebaranimation>
+        <property-datatable :form-data="propertyBios.formData" :local-data="propertyBios.local"></property-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
-import TemplateSearchpannel from "../template/Template.searchpannel";
-import Templatetablerouter from "../template/Template.tablerouter.vue";
-import Templatebaranimation from "../template/Template.bar.animation.vue";
+  import PropertyDatatable from "./Property.datatable";
 
 export default {
   name: "Propertyhw",
@@ -36,21 +33,90 @@ export default {
   },
   data() {
     return {
-      activeName: "first"
+      activeName: "first",
+      propertyCPU: {
+        formData: {},
+        local : {
+          fields: {
+            value :"CPU",
+            count:"개수"
+          }
+        }
+      },
+      propertyMemory: {
+        formData: {},
+        local : {
+          fields: {
+            value :"Memory",
+            count:"개수"
+          }
+        }
+      },
+      propertyHDD: {
+        formData: {},
+        local : {
+          fields: {
+            value :"HDD",
+            count:"개수"
+          }
+        }
+      },
+      propertyDisplay: {
+        formData: {},
+        local : {
+          fields: {
+            value :"Display",
+            count:"개수"
+          }
+        }
+      },
+      propertyBios: {
+        formData: {},
+        local : {
+          fields: {
+            value :"Bios",
+            count:"개수"
+          }
+        }
+      }
     };
   },
   computed: {},
   components: {
-    "template-searchpannel":TemplateSearchpannel,
-    "templatetablerouter":Templatetablerouter,
-    "templatebaranimation":Templatebaranimation
+    "property-datatable" : PropertyDatatable,
   },
   watch: {},
-  methods: {},
+  methods: {
+    receive(){
+      console.log(this.activeName)
+      if (this.activeName === "first") {
+        this.mixData(this.propertyCPU, "processor");
+      } else if (this.activeName === "second") {
+        this.mixData(this.propertyMemory, "memory");
+      } else if (this.activeName === "third") {
+        this.mixData(this.propertyHDD, "diskdrive");
+      } else if (this.activeName === "third") {
+        this.mixData(this.propertyDisplay, "display");
+      } else if (this.activeName === "third") {
+        this.mixData(this.propertyBios, "bios");
+      }
+    },
+    mixData(select, apiUrl) {
+      return select.formData = {
+        url : "/api/admin/node/summary/hardware/" + apiUrl + "/",
+        order : "value"
+      }
+    },
+    tabs(){
+      this.receive();
+    }
+  },
   beforeCreate() {},
   created() {},
   beforeMounted() {},
-  mounted() {},
+  mounted() {
+    this.receive()
+  },
   beforeUpdate() {},
   updated() {},
   actvated() {},

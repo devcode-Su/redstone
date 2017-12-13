@@ -79,7 +79,8 @@ export default {
     },
     mixData(select, apiUrl) {
       return select.formData = {
-        url : "/api/admin/node/summary/" + apiUrl + "/"
+        url : "/api/admin/node/summary/" + apiUrl + "/",
+        order : "name"
       }
     },
     tabs(){

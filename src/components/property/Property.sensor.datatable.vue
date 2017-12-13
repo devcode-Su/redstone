@@ -1,23 +1,13 @@
 <template>
   <section data-table-wrap>
     <header data-table="header">
-      <p data-range>
-        <span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>
-        <span v-else>
-        {{globalRangeCode.dept.name}} / {{globalRangeCode.username}}
-        <button data-icon @click="resetRange">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      </span>
-        에서 검색
-      </p>
       <div data-table-option>
         <el-button size="small">
           파일로 저장
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
         <el-select v-model="form.order"  placeholder="정렬" size="small" :disabled="stateReorder" @change="reorder">
-          <el-option v-for="(option, k, i) in localData.fields" :key="option" :label="option" :value="k"></el-option>
+          <el-option v-for="(option, k) in localData.fields" :key="option" :label="option" :value="k"></el-option>
         </el-select>
         <div class="view-check">
           <el-button @click="moreBtn = !moreBtn" size="small">
@@ -49,11 +39,11 @@
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
           <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id">
-            <td class="col-connected" >
-              <span class="icon">
-                <i class="fa fa-power-off" aria-hidden="true"></i>
-              </span>
-            </td>
+            <th class="col-connected" >
+                <span class="icon">
+                  <i class="fa fa-power-off" aria-hidden="true"></i>
+                </span>
+            </th>
             <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
           </tr>
           </tbody>
@@ -64,11 +54,9 @@
   </section>
 </template>
 <script>
-  import Constant from "@/constant";
-  import { mapGetters } from "vuex";
   import Paginations from "../template/Template.paginations"
   export default {
-    name: "PropertyDatatable",
+    name: "SensorDatatable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
@@ -91,41 +79,40 @@
         moreBtn : false,
         responseData : [],
         tableData: [],
+        insertTable:[],
         pagingData:[],
         viewChecked: Object.keys(this.localData.fields),
+        apiUrl : "",
         form: {
           page : 1,
           length : 50,
-          dept_code : 1,
+          dept_code : '',
+          endDate : '',
           nodeid : '',
+          startDate : '',
           order : '',
-          direction : 0
-        },
-        apiUrl : ''
+          direction : 1
+        }
       };
     },
     computed: {
       stateReorder(){
         return !this.tableData.length
-      },
-      ...mapGetters({ globalRangeCode: "globalRangeCode" })
+      }
     },
     components: {
       "paginations" :Paginations
     },
     watch: {
-      globalRangeCode(c){
-        if(c){
-          console.log(c);
-          this.form.dept_code = c.dept_code;
-          this.form.nodeid = c.nodeid ? c.nodeid : '';
-        }
-      },
       formData(d) {
         if(d){
           console.log("alive?");
+          this.form.dept_code = d.form.dept_code;
+          this.form.nodeid = d.form.nodeid;
+          this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
+          this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
+          this.form.order = d.form.order;
           this.apiUrl = d.url;
-          this.form.order = d.order;
           this.receiveSearch();
           return d;
         }
@@ -143,17 +130,9 @@
       },
     },
     methods: {
-      resetRange() {
-        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
-          dept_code: 1,
-          name: "전사"
-        });
-      },
       receiveSearch(){
         console.log(this.form);
-        const type = this.form.nodeid ? "node" : "group";
-        const code = this.form.nodeid ? this.form.nodeid : this.form.dept_code;
-        const url =  this.apiUrl + type + "/" + code;
+        const url = this.apiUrl;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
@@ -190,6 +169,7 @@
         }else{
           this.more = row;
           const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
+          console.log(url)
           this.$http.get(url, {
             params : this.form
           }).then(response => {
@@ -207,7 +187,7 @@
     beforeCreate() {
     },
     created() {
-      console.log(this.apiUrl)
+      console.log(this.localData)
     },
     beforeMounted() {
     },
@@ -216,7 +196,7 @@
     beforeUpdate() {
     },
     updated() {
-      console.log(this.formData)
+
     },
     actvated() {
     },
@@ -231,29 +211,10 @@
 <style lang='scss' scoped>
   @import "~styles/variables";
   [data-table-wrap]{
-    margin-top:50px;
-    .col-count,
-    .col-sp{
-      width:100px;
-      text-align:center;
-    }
-    .col-version{
-      width:300px;
-    }
+    margin-top:30px;
   }
-  [data-table="header"]{
-    padding-top:5px;
-    border-top:1px solid color(border)
+
+  [data-tbody] {
+
   }
-  [data-range] {
-    margin-bottom:0;
-    padding-right:5px;
-    top:-25px;
-  }
-  /*[data-tbody="tbody"]{*/
-    /*height:645px !important;*/
-  /*}*/
-  /*[data-none-data="screen"]{*/
-    /*height:644px !important;*/
-  /*}*/
 </style>

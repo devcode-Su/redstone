@@ -1,13 +1,14 @@
 <template>
   <article data-layout="Route-article">
-    디테일
     <property-pannel></property-pannel>
     <detail-datatable :form-data="formData" :local-data="local"></detail-datatable>
+    <property-modal v-if="showModal" @close="showModal = false"></property-modal>
   </article>
 </template>
 <script>
   import PropertyPannel from "./Property.pannel"
 import DetailDatatable from "./Property.detail.datatable"
+  import PropertyModal from "./Property.modal";
 export default {
   name: "Diagnosisinfo",
   extends: {},
@@ -16,6 +17,7 @@ export default {
   },
   data() {
     return {
+      showModal: false,
       formData: {},
       local : {
         fields: {
@@ -31,7 +33,8 @@ export default {
   computed: {},
   components: {
     "property-pannel" : PropertyPannel,
-    "detail-datatable" :DetailDatatable
+    "detail-datatable" :DetailDatatable,
+    "property-modal" : PropertyModal
   },
   watch: {},
   methods: {
