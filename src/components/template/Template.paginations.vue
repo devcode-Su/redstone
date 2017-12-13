@@ -33,10 +33,15 @@ export default {
     handleSizeChange(val) {
       //console.log(val)
       //console.log(`${val} items per page`);
-      this.$emit("pageLength", val);
+      this.$emit("pageLength", {
+        'length' : val
+      });
     },
     handleCurrentChange(val) {
-      console.log(`current page: ${val}`);
+      //console.log(`current page: ${val}`);
+      this.$emit("pageLength", {
+        'current' : val
+      });
     }
   },
   beforeCreate() {},

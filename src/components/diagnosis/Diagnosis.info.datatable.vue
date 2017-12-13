@@ -190,8 +190,10 @@
         }
       },
       pageLength(p){
-        this.form.length = p;
-        this.receiveSearch();
+        console.log(p)
+        this.form.length = p.length ? p.length : this.form.length ;
+        this.form.page = p.current ? p.current : this.form.page;
+;        this.receiveSearch();
       }
     },
     beforeCreate() {
