@@ -14,7 +14,7 @@
       <span data-tooltip="setup">대쉬보드 설정</span>
     </div>
 
-    <templatemodal v-if="showModal" :target="'user-custom'" @close="showModal = false" :title="'대시보드 설정'" :compSelect="'dashboard-thumb'">
+    <templatemodal v-if="showModal" :target="true" @close="showModal = false" :title="'대시보드 설정'" :compSelect="'dashboard-thumb'">
     </templatemodal>
   </article>
 </template>

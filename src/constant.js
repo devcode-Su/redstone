@@ -19,4 +19,5 @@ export default {
   UPDATE_ADMIN : "updateAdmin",
   PICK_ADMIN : "pickAdmin",
   DELETE_ADMIN : "deleteAdmin",
+  ADD_ADMIN : "addAdmin"
 }

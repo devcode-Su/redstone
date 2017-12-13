@@ -142,6 +142,9 @@
   th {
     height: 36px;
     line-height: 36px;
+    &.th-end{
+      padding-right:20px;
+    }
   }
   td {
     height: 28px;
@@ -186,7 +189,7 @@
   .col-nodeid,
   .col-count,
   .col-score,
-  .col-Score {
+  .col-Score{
     width: 75px;
     text-align: center;
   }
@@ -203,7 +206,7 @@
     width: 115px;
   }
   .col-version{
-    width:110px;
+    width:150px;
   }
   .col-RuleId{
     width:250px;

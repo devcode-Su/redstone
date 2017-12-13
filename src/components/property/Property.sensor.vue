@@ -4,10 +4,12 @@
       센서 정보
     </h1>
     <proserty-sensorform @form="receive"></proserty-sensorform>
+    <sensor-datatable :form-data="formData" :local-data="local"></sensor-datatable>
   </article>
 </template>
 <script>
   import ProsertySensorform from "../form/Property.sensor.form"
+  import SensorDatatable from "./Property.sensor.datatable"
 export default {
   name: "Propertysensor",
   extends: {},
@@ -16,16 +18,19 @@ export default {
   },
   data() {
     return {
-      pannelset: {
-        version: true,
-        placeholder: "버전 번호",
-        check: "sensor"
+      formData:{},
+      local:{
+        name:"",
+        fields:{
+
+        }
       }
     };
   },
   computed: {},
   components: {
-    "proserty-sensorform":ProsertySensorform
+    "proserty-sensorform":ProsertySensorform,
+    "sensor-datatable" :SensorDatatable
   },
   watch: {},
   methods: {

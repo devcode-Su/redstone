@@ -7,7 +7,7 @@
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
         <el-select v-model="form.order"  placeholder="정렬" size="small" :disabled="stateReorder" @change="reorder">
-          <el-option v-for="(option, k, i) in localData.fields" :key="option" :label="option" :value="k"></el-option>
+          <el-option v-for="(option, k) in localData.fields" :key="option" :label="option" :value="k"></el-option>
         </el-select>
         <div class="view-check">
           <el-button @click="moreBtn = !moreBtn" size="small">
@@ -28,7 +28,6 @@
           <tr>
             <th class="col-connected"><span>접속</span></th>
             <th v-for="(th,k,i) in localData.fields" :key="k" :class="['col-'+k,{'th-end' : i === viewChecked.length - 1}]" :ref="k">{{th}}</th>
-            <th class="col-moreBtn"><span>더보기</span></th>
           </tr>
           </thead>
         </table>
@@ -39,28 +38,14 @@
           <tr v-if="stateReorder">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
-          <template v-else v-for="row in tableData">
-            <tr data-tbody="row" :key="row.id">
-              <td class="col-connected" :class="'turn-'+row.node.node_connected.connected" >
+          <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id">
+            <th class="col-connected" >
                 <span class="icon">
                   <i class="fa fa-power-off" aria-hidden="true"></i>
                 </span>
-              </td>
-              <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
-              <td class="col-moreBtn">
-                <button class="icon-btn icon-wrap" @click="rowSearch(row)" :class="{on : row === more}">
-                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
-                </button>
-              </td>
-            </tr>
-            <transition name="fade">
-              <tr data-tboy="hide-row" v-if="row === more">
-                <td :colspan="Object.keys(localData.fields).length +2">
-                  <diagnosis-inserttable :fields="localData.insertFields" :prop-data="insertTable"></diagnosis-inserttable>
-                </td>
-              </tr>
-            </transition>
-          </template>
+            </th>
+            <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -69,10 +54,9 @@
   </section>
 </template>
 <script>
-  import DiagnosisInserttable from "./Diagnosis.pc.insert.table"
   import Paginations from "../template/Template.paginations"
   export default {
-    name: "DatatableTable",
+    name: "SensorDatatable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
@@ -117,18 +101,17 @@
       }
     },
     components: {
-      "diagnosis-inserttable":DiagnosisInserttable,
       "paginations" :Paginations
     },
     watch: {
       formData(d) {
         if(d){
-          //console.log("alive?");
+          console.log("alive?");
           this.form.dept_code = d.form.dept_code;
           this.form.nodeid = d.form.nodeid;
           this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
           this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
-          this.form.order = d.order;
+          this.form.order = d.form.order;
           this.apiUrl = d.url;
           this.receiveSearch();
           return d;
@@ -136,7 +119,7 @@
       },
       responseData(t){
         if(t){
-          //console.log(t);
+          console.log(t);
           this.tableData = t.data;
           this.pagingData = {
             current_page : t.current_page,
@@ -148,19 +131,19 @@
     },
     methods: {
       receiveSearch(){
-        //console.log(this.form);
+        console.log(this.form);
         const url = this.apiUrl;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
-          //console.log(response);
+          console.log(response);
           this.responseData = response.data
         })
       },
       reorder(v){
-        //console.log(v);
+        console.log(v);
         this.form.order = v;
-        //console.log(this.form);
+        console.log(this.form);
         this.receiveSearch();
       },
       colView(val){
@@ -185,18 +168,17 @@
           this.more = null;
         }else{
           this.more = row;
-          const url = "/api/admin/search/detect/list/pc/" + this.localData.name + "/"+ row.nodeid;
-          //console.log(url)
+          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
+          console.log(url)
           this.$http.get(url, {
             params : this.form
           }).then(response => {
-            //console.log(response);
+            console.log(response);
             this.insertTable = response.data.data;
           });
         }
       },
       pageLength(p){
-        //console.log(p)
         this.form.length = p.length ? p.length : this.form.length ;
         this.form.page = p.current_page ? p.current_page : this.form.page;
         this.receiveSearch();
@@ -230,31 +212,9 @@
   @import "~styles/variables";
   [data-table-wrap]{
     margin-top:30px;
-    .fade-enter-active,
-    .fade-leave-active {
-      transition: opacity 0.3s;
-    }
-    .fade-enter,
-    .fade-leave-to {
-      opacity: 0;
-    }
-    .fa {
-      transition: all 0.3s ease;
-      &.rotate {
-        transform: rotateZ(-180deg);
-        transform-origin: 44% 50%;
-      }
-    }
-    .show-row:hover {
-      background-color: transparent;
-    }
   }
 
-  [data-table] {
-    .col-userdept,
-    .col-userpc,
-    .col-userip{
-      width:auto;
-    }
+  [data-tbody] {
+
   }
 </style>

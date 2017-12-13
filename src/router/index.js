@@ -21,7 +21,7 @@ import Securitywirelesslan from '@/components/security/Security.wirelesslan.vue'
 import Propertysw from '@/components/property/Property.sw'
 import Propertyhw from '@/components/property/Property.hw'
 import Propertysensor from '@/components/property/Property.sensor'
-
+import Propertydetail from '@/components/property/Property.detail'
 import Systemsensorlog from '@/components/system/System.sensor.log'
 import Systemsadminlog from '@/components/system/System.admin.log'
 
@@ -104,6 +104,10 @@ export default new Router({
         {
           path: 'Property-sensor',
           component: Propertysensor
+        },
+        {
+          path: 'Property-detail',
+          component: Propertydetail
         },
         {
           path: 'System-sensor-log',

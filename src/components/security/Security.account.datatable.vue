@@ -27,7 +27,7 @@
           <thead>
           <tr>
             <th class="col-connected"><span>접속</span></th>
-            <th v-for="(th,k) in localData.fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
+            <th v-for="(th,k,i) in localData.fields" :key="k" :class="['col-'+k,{'th-end' : i === viewChecked.length - 1}]" :ref="k">{{th}}</th>
           </tr>
           </thead>
         </table>
@@ -179,7 +179,8 @@
         }
       },
       pageLength(p){
-        this.form.length = p;
+        this.form.length = p.length ? p.length : this.form.length ;
+        this.form.page = p.current_page ? p.current_page : this.form.page;
         this.receiveSearch();
       }
     },

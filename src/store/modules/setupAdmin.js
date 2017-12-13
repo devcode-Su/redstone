@@ -45,19 +45,29 @@ export default {
         store.commit(Constant.SETUP_ADMIN, response.data);
       });
     },
+    [Constant.ADD_ADMIN] : (store, payload) => {
+      //console.log(payload);
+      ContantApi.addAdmin(payload).then( () => {
+        ContantApi.setupAdmin().then(response => {
+          store.commit(Constant.SETUP_ADMIN, response.data);
+        });
+      });
+    },
     [Constant.DELETE_ADMIN] : (store, payload) => {
-      console.log(payload)
+      //console.log(payload);
       ContantApi.deleteAdmin(payload).then( () => {
-          ContantApi.setupAdmin().then(response => {
-            store.commit(Constant.SETUP_ADMIN, response.data);
-          });
+        ContantApi.setupAdmin().then(response => {
+          store.commit(Constant.SETUP_ADMIN, response.data);
+        });
       });
     },
     [Constant.UPDATE_ADMIN]: (store, payload) => {
-      console.log(payload)
-      // ContantApi.setupAdmin(payload).then(response => {
-      //   //store.commit(Constant.SETUP_ADMIN, response.data);
-      // });
+      //console.log(payload)
+      ContantApi.updateAdmin(payload).then(() => {
+        ContantApi.setupAdmin().then(response => {
+          store.commit(Constant.SETUP_ADMIN, response.data);
+        });
+      });
     }
   }
 }

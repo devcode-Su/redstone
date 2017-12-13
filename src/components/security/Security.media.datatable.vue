@@ -1,4 +1,5 @@
 <template>
+
   <section data-table-wrap v-if="definition">
     <header data-table="header">
       <div data-table-option>
@@ -18,6 +19,7 @@
             <i class="fa fa-angle-down" :class="{ rotate : moreBtn }"></i>
           </el-button>
           <el-checkbox-group v-model="viewChecked" v-if="moreBtn" @change="colView">
+
             <el-checkbox v-for="(check,k,i) in definition.field" :label="k" :key="k" :disabled="i === 0">{{check}}
             </el-checkbox>
           </el-checkbox-group>
@@ -39,6 +41,7 @@
       <div data-tbody="tbody" class="screen">
         <table>
           <tbody>
+
           <tr v-if="!data || !data.data || !data.data.length">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
@@ -66,6 +69,7 @@
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
+
       definition: {
         type: Object,
         required: true,
