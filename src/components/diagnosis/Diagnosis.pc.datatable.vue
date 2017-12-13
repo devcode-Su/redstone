@@ -113,7 +113,7 @@
     },
     computed: {
       stateReorder(){
-        return this.tableData.length ? false : true
+        return !this.tableData.length
       }
     },
     components: {
@@ -123,7 +123,7 @@
     watch: {
       formData(d) {
         if(d){
-          console.log("alive?");
+          //console.log("alive?");
           this.form.dept_code = d.form.dept_code;
           this.form.nodeid = d.form.nodeid;
           this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
@@ -136,7 +136,7 @@
       },
       responseData(t){
         if(t){
-          console.log(t);
+          //console.log(t);
           this.tableData = t.data;
           this.pagingData = {
             current_page : t.current_page,
@@ -148,19 +148,19 @@
     },
     methods: {
       receiveSearch(){
-        console.log(this.form);
+        //console.log(this.form);
         const url = this.apiUrl;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
-          console.log(response);
+          //console.log(response);
           this.responseData = response.data
         })
       },
       reorder(v){
-        console.log(v);
+        //console.log(v);
         this.form.order = v;
-        console.log(this.form);
+        //console.log(this.form);
         this.receiveSearch();
       },
       colView(val){
@@ -186,11 +186,11 @@
         }else{
           this.more = row;
           const url = "/api/admin/search/detect/list/pc/" + this.localData.name + "/"+ row.nodeid;
-          console.log(url)
+          //console.log(url)
           this.$http.get(url, {
             params : this.form
           }).then(response => {
-            console.log(response);
+            //console.log(response);
             this.insertTable = response.data.data;
           });
         }
