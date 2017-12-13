@@ -53,7 +53,7 @@
     watch: {
       globalRangeCode(g) {
         if (g) {
-          console.log(g);
+          //console.log(g);
           this.form.dept_code = g.dept_code;
           this.form.nodeid = g.nodeid;
         }
@@ -68,12 +68,12 @@
       },
       passSet(p) {
         //console.log(dateTime);
-        this.form.all = p.all
+        this.form.all = p.all;
         this.form.startDate = p.start ? p.start : this.form.startDate;
         this.form.endDate = p.end ? p.end : this.form.endDate;
       },
       send() {
-        console.log(this.form);
+        //console.log(this.form);
         if(this.form.startDate == null || this.form.endDate == null ){
           this.$notify.error({
             title: 'Error',
