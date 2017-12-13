@@ -164,6 +164,7 @@
         selectedOrder: null,
         selectedDirection: 1,
         lastOrder: null,
+        hasSearchOption: false,
       };
     },
     computed: {},
@@ -219,7 +220,6 @@
         this.getData($event, null);
       },
       orderChange(type, val) {
-        console.log('orderChange', type, val);
         switch (type) {
           case 'change':
             this.selectedDirection = 1;
