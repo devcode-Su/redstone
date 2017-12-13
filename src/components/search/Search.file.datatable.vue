@@ -242,7 +242,6 @@
       }
       this.$bus.$on('search-option', (data) => {
         this.hasSearchOption = true;
-        console.log('search-option', this.hasSearchOption);
         this.pagination.currentPage = 1;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {
@@ -278,6 +277,7 @@
 </script>
 <style lang='scss' scoped>
 
+  //noinspection CssUnknownTarget
   @import "~styles/variables";
 
   .file-data-table {

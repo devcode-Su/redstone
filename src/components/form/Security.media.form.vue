@@ -13,7 +13,7 @@
     <form @submit.prevent="send">
       <fieldset>
         <datetime @dateTime="dateSet"></datetime>
-        <media-checked @typeCheck="typeChecked"></media-checked>
+        <media-checked @change="change"></media-checked>
       </fieldset>
       <div data-search-submit>
         <el-button type="primary" plain size="small" native-type="submit">
@@ -25,7 +25,7 @@
 </template>
 <script>
   import Constant from "@/constant";
-  import { mapGetters } from "vuex";
+  import {mapGetters} from "vuex";
   import Datetime from "./Datetime";
   import MediaChecked from "./Media.checked";
 
@@ -44,16 +44,16 @@
           endDate: null,
           REMOVABLE: null,
           EXTERNAL: null,
-          CDROM: null
-        }
+          CDROM: null,
+        },
       };
     },
     computed: {
-      ...mapGetters({ globalRangeCode: "globalRangeCode" })
+      ...mapGetters({globalRangeCode: "globalRangeCode"})
     },
     components: {
       "datetime": Datetime,
-      "media-checked":MediaChecked
+      "media-checked": MediaChecked,
     },
     watch: {
       globalRangeCode(g) {
@@ -62,56 +62,66 @@
           this.form.dept_code = g.dept_code;
           this.form.nodeid = g.nodeid;
         }
-      }
+      },
     },
     methods: {
       resetRange() {
         this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
           dept_code: 1,
-          name: "전사"
+          name: "전사",
         });
       },
       dateSet(dateTime) {
         //console.log(dateTime);
-        this.form.startDate = dateTime.start;
-        this.form.endDate = dateTime.end;
+        this.form.startDate = dateTime.start ? dateTime.start : this.form.startDate;
+        this.form.endDate = dateTime.end ? dateTime.end : this.form.endDate;
       },
-      typeChecked(check){
-        //console.log(check);
+      change(check) {
         this.form.REMOVABLE = check.removable;
         this.form.EXTERNAL = check.external;
-        this.form.CDROM =  check.cdRom;
+        this.form.CDROM = check.cdRom;
       },
       send() {
         //console.log(this.form);
-        if(this.form.startDate == null || this.form.endDate == null ){
+        if (!this.form.startDate || !this.form.endDate) {
           this.$notify.error({
-            title: 'Error',
-            message: '조사기간을 설정하세요.'
-          });
-        }else if(this.form.REMOVABLE == null && this.form.EXTERNAL == null && this.form.CDROM == null ){
+                               title: 'Error',
+                               message: '조사기간을 설정하세요.',
+                             });
+        }
+        else if (!this.form.REMOVABLE && !this.form.EXTERNAL && !this.form.CDROM) {
           this.$notify.error({
-            title: 'Error',
-            message: '검색 항목을 선택해주세요.'
-          });
-        }else{
+                               title: 'Error',
+                               message: '검색 항목을 선택해주세요.',
+                             });
+        } else {
           this.$emit("form", this.form);
         }
-      }
+      },
     },
-    beforeCreate() {},
-    created() {},
-    beforeMounted() {},
-    mounted() {},
-    beforeUpdate() {},
+    beforeCreate() {
+    },
+    created() {
+    },
+    beforeMounted() {
+    },
+    mounted() {
+    },
+    beforeUpdate() {
+    },
     updated() {
     },
-    actvated() {},
-    deactivated() {},
-    beforeDestroy() {},
-    destroyed() {}
+    actvated() {
+    },
+    deactivated() {
+    },
+    beforeDestroy() {
+    },
+    destroyed() {
+    },
   };
 </script>
 <style lang='scss' scoped>
+  //noinspection CssUnknownTarget
   @import "~styles/variables";
 </style>
