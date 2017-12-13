@@ -196,7 +196,9 @@
         }
       },
       pageLength(p){
-        this.form.length = p;
+        //console.log(p)
+        this.form.length = p.length ? p.length : this.form.length ;
+        this.form.page = p.current ? p.current : this.form.page;
         this.receiveSearch();
       }
     },
