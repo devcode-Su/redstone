@@ -98,8 +98,8 @@
           order: [],
           field: [],
           url: '',
-        }
-      }
+        },
+      },
     },
     data() {
       return {
@@ -107,24 +107,19 @@
         more: null,
         view: [],
         morebtn: false,
-        innerData: {
-          processData: [],
-          fileData: [],
-          checkData: []
-        },
         pagination: {
           page: 1,
           length: 50,
-          total: 0
+          total: 0,
         },
         data: null,
         searchOption: {},
-        selectedOrder: null
+        selectedOrder: null,
       };
     },
     computed: {},
     components: {
-      "processinnerview":Processinnerview
+      "processinnerview": Processinnerview,
     },
     watch: {},
     methods: {
@@ -141,17 +136,17 @@
         this.searchOption.order = this.selectedOrder ? this.selectedOrder : null;
 
         this.$http.get(this.definition.url, {params: this.searchOption})
-          .then((result) => {
-            if (result.data) {
-              if (result.data.metrics && result.data.metrics.resultCount) {
-                this.pagination.total = result.data.metrics.resultCount;
+            .then((result) => {
+              if (result.data) {
+                if (result.data.metrics && result.data.metrics.resultCount) {
+                  this.pagination.total = result.data.metrics.resultCount;
+                }
+                else {
+                  this.pagination.total = 0;
+                }
+                this.data = result.data;
               }
-              else {
-                this.pagination.total = 0;
-              }
-              this.data = result.data;
-            }
-          });
+            });
       },
       viewCheck() {
         if (this.$refs.checkedRow !== undefined) {
@@ -181,7 +176,7 @@
       },
       handleOrderChange(val) {
         this.getData();
-      }
+      },
     },
     beforeCreate() {
     },
@@ -218,7 +213,7 @@
       this.$bus.$off('process-search-data');
     },
     destroyed() {
-    }
+    },
   };
 </script>
 <style lang='scss' scoped>

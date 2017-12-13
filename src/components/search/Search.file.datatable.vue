@@ -7,7 +7,9 @@
           파일로 저장
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
-        <el-select v-model="selectedOrder" placeholder="정렬" size="small" @change="orderChange"
+        <el-select v-model="selectedOrder" placeholder="정렬" size="small"
+                   @change="orderChange('change', $event)"
+                   @input="orderChange('input', $event)"
                    :disabled="!definition.order.length">
           <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -144,8 +146,8 @@
           order: [],
           field: [],
           url: '',
-        }
-      }
+        },
+      },
     },
     data() {
       return {
@@ -155,16 +157,18 @@
         pagination: {
           total: 0,
           size: 50,
-          currentPage: 1
+          currentPage: 1,
         },
         searchOption: {},
         data: [],
-        selectedOrder: null
+        selectedOrder: null,
+        selectedDirection: 1,
+        lastOrder: null,
       };
     },
     computed: {},
     components: {
-      "templatepaginations":Templatepaginations
+      "templatepaginations": Templatepaginations,
     },
     watch: {},
     methods: {
@@ -172,8 +176,8 @@
         if (this.$refs.checkedRow !== undefined) {
           for (let j = 0; j < this.$refs.checkedRow.length; j++) {
             for (let i = 0; i < this.definition.field.length - 1; i++) {
-              this.$refs.checkedTh[i+1].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i+1].hidden = this.$refs.checked[i].isChecked;
+              this.$refs.checkedTh[i + 1].hidden = this.$refs.checked[i].isChecked;
+              this.$refs.checkedRow[j].children[i + 1].hidden = this.$refs.checked[i].isChecked;
             }
           }
         } else {
@@ -184,6 +188,9 @@
         this.$router.push({path: "Search-process", query: data});
       },
       getData(page = null, size = null) {
+        if (!this.hasSearchOption) {
+          return false;
+        }
         if (page) {
           this.pagination.currentPage = page;
         }
@@ -194,14 +201,16 @@
         this.searchOption.page = this.pagination.currentPage;
         this.searchOption.length = this.pagination.size;
         this.searchOption.order = this.selectedOrder ? this.selectedOrder : null;
+        this.searchOption.direction = this.selectedDirection;
+        this.lastOrder = this.searchOption.order;
 
         this.$http.get(this.definition.url, {params: this.searchOption})
-          .then((result) => {
-            if (result.data && result.data.data) {
-              this.pagination.total = result.data.total;
-              this.data = plunk(result.data.data);
-            }
-          });
+            .then((result) => {
+              if (result.data && result.data.data) {
+                this.pagination.total = result.data.total;
+                this.data = plunk(result.data.data);
+              }
+            });
       },
       sizeChange($event) {
         this.getData(null, $event);
@@ -209,9 +218,21 @@
       currentChange($event) {
         this.getData($event, null);
       },
-      orderChange($event) {
-        this.getData();
-      }
+      orderChange(type, val) {
+        console.log('orderChange', type, val);
+        switch (type) {
+          case 'change':
+            this.selectedDirection = 1;
+            this.getData();
+            break;
+          case 'input':
+            if (val === this.lastOrder) {
+              this.selectedDirection = (this.selectedDirection - 1) * -1;
+              this.getData();
+            }
+            break;
+        }
+      },
     },
     beforeCreate() {
     },
@@ -220,7 +241,8 @@
         this.selectedOrder = this.definition.order[0].value;
       }
       this.$bus.$on('search-option', (data) => {
-        console.log(data)
+        this.hasSearchOption = true;
+        console.log('search-option', this.hasSearchOption);
         this.pagination.currentPage = 1;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {
@@ -251,12 +273,13 @@
       this.$bus.$off('search-option');
     },
     destroyed() {
-    }
+    },
   };
 </script>
 <style lang='scss' scoped>
 
   @import "~styles/variables";
+
   .file-data-table {
     .table-body-wrap {
       max-height: 600px;
