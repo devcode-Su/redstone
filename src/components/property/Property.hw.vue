@@ -47,7 +47,9 @@ export default {
         formData: {},
         local : {
           fields: {
-            value :"Memory",
+            manufacturer : "제조사",
+            partnumber : "모델명",
+            size: "용량",
             count:"사용 PC 대수"
           }
         }
@@ -56,7 +58,8 @@ export default {
         formData: {},
         local : {
           fields: {
-            value :"HDD",
+            name :"모델명",
+            size : "용량",
             count:"사용 PC 대수"
           }
         }
@@ -66,7 +69,6 @@ export default {
         local : {
           fields: {
             value :"Display",
-            version : "버전",
             count:"사용 PC 대수"
           }
         }
@@ -75,7 +77,8 @@ export default {
         formData: {},
         local : {
           fields: {
-            value :"Bios",
+            manufacturer :"제조사",
+            biosversion : "버전",
             count:"사용 PC 대수"
           }
         }
@@ -89,23 +92,23 @@ export default {
   watch: {},
   methods: {
     receive(){
-      console.log(this.activeName)
+      console.log(this.activeName);
       if (this.activeName === "first") {
-        this.mixData(this.propertyCPU, "processor");
+        this.mixData(this.propertyCPU, "processor", "value");
       } else if (this.activeName === "second") {
-        this.mixData(this.propertyMemory, "memory");
+        this.mixData(this.propertyMemory, "memory", "manufacturer");
       } else if (this.activeName === "third") {
-        this.mixData(this.propertyHDD, "diskdrive");
-      } else if (this.activeName === "third") {
-        this.mixData(this.propertyDisplay, "display");
-      } else if (this.activeName === "third") {
-        this.mixData(this.propertyBios, "bios");
+        this.mixData(this.propertyHDD, "diskdrive", "name");
+      } else if (this.activeName === "four") {
+        this.mixData(this.propertyDisplay, "display", "value");
+      } else if (this.activeName === "five") {
+        this.mixData(this.propertyBios, "bios", "manufacturer");
       }
     },
-    mixData(select, apiUrl) {
+    mixData(select, apiUrl, order) {
       return select.formData = {
         url : "/api/admin/node/summary/hardware/" + apiUrl + "/",
-        order : "value"
+        order : order
       }
     },
     tabs(){

@@ -54,7 +54,7 @@
                 <i class="fa fa-power-off" aria-hidden="true"></i>
               </span>
             </td>
-            <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
+            <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}} <span v-if="k === 'size'">GB</span></td>
           </tr>
           </tbody>
         </table>
