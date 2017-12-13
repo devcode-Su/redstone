@@ -67,10 +67,9 @@ export default {
         name: "전사"
       });
     },
-    dateSet(dateTime) {
-      console.log(dateTime)
-      this.form.startDate = dateTime.start;
-      this.form.endDate = dateTime.end;
+    dateSet(d) {
+      this.form.startDate = d.start ? d.start : this.form.startDate;
+      this.form.endDate = d.end ? d.end : this.form.endDate;
     },
     send() {
       console.log(this.form)
