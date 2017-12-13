@@ -66,11 +66,11 @@
           name: "전사"
         });
       },
-      passSet(pass) {
+      passSet(p) {
         //console.log(dateTime);
-        this.form.all = pass.all
-        this.form.startDate = pass.start;
-        this.form.endDate = pass.end;
+        this.form.all = p.all
+        this.form.startDate = p.start ? p.start : this.form.startDate;
+        this.form.endDate = p.end ? p.end : this.form.endDate;
       },
       send() {
         console.log(this.form);
