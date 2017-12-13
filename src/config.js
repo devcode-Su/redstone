@@ -24,6 +24,7 @@ export default {
 
   //관리자 관리
   SETUP_ADMIN : BASE_URL,
+  ADD_ADMIN : BASE_URL,
   UPDATE_ADMIN : BASE_URL,
   DELETE_ADMIN : BASE_URL + "/${no}"
 }

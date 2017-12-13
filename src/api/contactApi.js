@@ -21,8 +21,11 @@ export default {
   setupAdmin(){
     return axios.get(CONF.SETUP_ADMIN);
   },
-  updateAdmin(form){
+  addAdmin(form){
     return axios.post(CONF.SETUP_ADMIN, form);
+  },
+  updateAdmin(form){
+    return axios.put(CONF.SETUP_ADMIN, form);
   },
   deleteAdmin(id){
     return axios.delete(CONF.DELETE_ADMIN.replace("${no}", id));

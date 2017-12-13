@@ -26,8 +26,8 @@
         <table>
           <thead>
           <tr>
+            <th class="col-connected"><span>접속</span></th>
             <th v-for="(th,k) in localData.fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
-            <th class="col-moreBtn"><span>더보기</span></th>
           </tr>
           </thead>
         </table>
@@ -38,23 +38,14 @@
           <tr v-if="stateReorder">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
-          <template v-else v-for="row in tableData">
-            <tr data-tbody="row"  :key="row.id">
-              <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
-              <td class="col-moreBtn">
-                <button class="icon-btn icon-wrap" @click="rowSearch(row)" :class="{on : row === more}">
-                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
-                </button>
-              </td>
-            </tr>
-            <transition name="fade">
-              <tr data-tboy="hide-row" v-if="row === more">
-                <td :colspan="Object.keys(localData.fields).length +1">
-                  <diagnosis-inserttable :fields="localData.insertFields" :prop-data="insertTable"></diagnosis-inserttable>
-                </td>
-              </tr>
-            </transition>
-          </template>
+          <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id">
+            <td class="col-connected" >
+              <span class="icon">
+                <i class="fa fa-power-off" aria-hidden="true"></i>
+              </span>
+            </td>
+            <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -63,10 +54,9 @@
   </section>
 </template>
 <script>
-  import DiagnosisInserttable from "./Diagnosis.info.insert.table"
   import Paginations from "../template/Template.paginations"
   export default {
-    name: "DatatableTable",
+    name: "PropertyDatatable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
@@ -89,40 +79,31 @@
         moreBtn : false,
         responseData : [],
         tableData: [],
-        insertTable:[],
         pagingData:[],
         viewChecked: Object.keys(this.localData.fields),
-        apiUrl : "",
         form: {
           page : 1,
           length : 50,
-          dept_code : '',
-          endDate : '',
+          dept_code : 1,
           nodeid : '',
-          startDate : '',
-          order : '',
-          direction : 1
-        }
+          order : 'name',
+          direction : 0
+        },
+        apiUrl : ''
       };
     },
     computed: {
       stateReorder(){
         return !this.tableData.length
-      }
+      },
     },
     components: {
-      "diagnosis-inserttable":DiagnosisInserttable,
       "paginations" :Paginations
     },
     watch: {
       formData(d) {
         if(d){
-          //console.log(d)
-          this.form.dept_code = d.form.dept_code;
-          this.form.nodeid = d.form.nodeid;
-          this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
-          this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
-          this.form.order = d.order;
+          console.log("alive?");
           this.apiUrl = d.url;
           this.receiveSearch();
           return d;
@@ -130,7 +111,7 @@
       },
       responseData(t){
         if(t){
-          //console.log(t);
+          console.log(t);
           this.tableData = t.data;
           this.pagingData = {
             current_page : t.current_page,
@@ -142,19 +123,19 @@
     },
     methods: {
       receiveSearch(){
-        //console.log(this.form);
-        const url = this.apiUrl;
+        console.log(this.form);
+        const url =  this.apiUrl;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
-          //console.log(response);
+          console.log(response);
           this.responseData = response.data
-        })
+        });
       },
       reorder(v){
-        //console.log(v);
+        console.log(v);
         this.form.order = v;
-        //console.log(this.form);
+        console.log(this.form);
         this.receiveSearch();
       },
       colView(val){
@@ -180,17 +161,15 @@
         }else{
           this.more = row;
           const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
-          //console.log(url)
           this.$http.get(url, {
             params : this.form
           }).then(response => {
-            //console.log(response);
+            console.log(response);
             this.insertTable = response.data.data;
           });
         }
       },
       pageLength(p){
-        //console.log(p)
         this.form.length = p.length ? p.length : this.form.length ;
         this.form.page = p.current_page ? p.current_page : this.form.page;
         this.receiveSearch();
@@ -199,7 +178,7 @@
     beforeCreate() {
     },
     created() {
-      //console.log(this.localData)
+      console.log(this.apiUrl)
     },
     beforeMounted() {
     },
@@ -208,7 +187,7 @@
     beforeUpdate() {
     },
     updated() {
-
+      console.log(this.formData)
     },
     actvated() {
     },
@@ -223,28 +202,28 @@
 <style lang='scss' scoped>
   @import "~styles/variables";
   [data-table-wrap]{
-    margin-top:30px;
-    .fade-enter-active,
-    .fade-leave-active {
-      transition: opacity 0.3s;
+    margin-top:20px;
+    .col-count,
+    .col-sp{
+      width:100px;
+      text-align:center;
     }
-    .fade-enter,
-    .fade-leave-to {
-      opacity: 0;
-    }
-    .fa {
-      transition: all 0.3s ease;
-      &.rotate {
-        transform: rotateZ(-180deg);
-        transform-origin: 44% 50%;
-      }
-    }
-    .show-row:hover {
-      background-color: transparent;
+    .col-version{
+      width:300px;
     }
   }
-
-  [data-tbody] {
-
+  [data-tbody="tbody"]{
+    height:645px !important;
+  }
+  [data-none-data="screen"]{
+    height:644px !important;
+  }
+  .col-username,
+  .col-userdept,
+  .col-userpc{
+    width:auto;
+  }
+  .col-userip{
+    width:200px;
   }
 </style>

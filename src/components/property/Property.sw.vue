@@ -4,20 +4,21 @@
       SW 정보
     </h1>
     <el-tabs v-model="activeName" @tab-click="tabs">
-      <el-tab-pane label="운영체제" name="os">
-        <property-datatable :from-data="propertyOS.formData" :local-data="propertyOS.local"></property-datatable>
+      <el-tab-pane label="운영체제" name="first">
+        <property-datatable :form-data="propertyOS.formData" :local-data="propertyOS.local"></property-datatable>
       </el-tab-pane>
       <el-tab-pane label="브라우저" name="second">
-        <property-datatable :from-data="propertyBR.formData" :local-data="propertyBR.local"></property-datatable>
+        <property-datatable :form-data="propertyBR.formData" :local-data="propertyBR.local"></property-datatable>
       </el-tab-pane>
       <el-tab-pane label="소프트웨어" name="third">
-        <property-datatable :from-data="propertySW.formData" :local-data="propertySW.local"></property-datatable>
+        <software-datatable :form-data="propertySW.formData" :local-data="propertySW.local"></software-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
 import PropertyDatatable from "./Property.datatable";
+import SoftwareDatatable from "./Property.software.datatable"
 export default {
   name: "Propertysw",
   extends: {},
@@ -61,20 +62,41 @@ export default {
   },
   computed: {},
   components: {
-    "property-datatable" : PropertyDatatable
+    "property-datatable" : PropertyDatatable,
+    "software-datatable" : SoftwareDatatable
   },
   watch: {},
   methods: {
-    tabs(tab){
-      console.log(tab)
+    receive(){
+      console.log(this.activeName)
+      if (this.activeName === "first") {
+        this.mixData(this.propertyOS, "os");
+      } else if (this.activeName === "second") {
+        this.mixData(this.propertyBR, "browser");
+      } else if (this.activeName === "third") {
+        this.mixData(this.propertySW, "software");
+      }
+    },
+    mixData(select, apiUrl) {
+      return select.formData = {
+        url : "/api/admin/node/summary/" + apiUrl + "/"
+      }
+    },
+    tabs(){
+      this.receive();
     }
   },
   beforeCreate() {},
-  created() {},
+  created() {
+  },
   beforeMounted() {},
-  mounted() {},
+  mounted() {
+    this.receive()
+  },
   beforeUpdate() {},
-  updated() {},
+  updated() {
+    console.log()
+  },
   actvated() {},
   deactivated() {},
   beforeDestroy() {},

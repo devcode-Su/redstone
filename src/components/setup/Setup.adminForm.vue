@@ -20,7 +20,7 @@
           <div data-form-item>
             <label data-form-label="required">Host</label>
             <div data-form-tag>
-              <el-input id="host" type="text" v-model="form.host" size="small" :class="{ 'is-error' : required.host}" clearable @blur="requiredCheck"></el-input>
+              <el-input id="host" type="text" v-model="form.host" size="small" :class="{ 'is-error' : required.host}" clearable multiple @blur="requiredCheck"></el-input>
               <span data-required-msg v-if="required.host">Host IP 를 입력하세요.</span>
             </div>
           </div>
@@ -31,7 +31,7 @@
               <!--<span data-required-msg v-if="required.email">이메일을 입력하세요.</span>-->
             <!--</div>-->
           <!--</div>-->
-          <div data-form-item>
+          <div data-form-item v-if="formBtnType">
             <label data-form-label="required">비밀번호</label>
             <div data-form-tag>
               <el-input id="passwd" type="password" v-model="form.passwd" size="small" :class="{ 'is-error' : required.passwd}" clearable @blur="requiredCheck"></el-input>
@@ -45,7 +45,7 @@
             </div>
           </div>
           <div data-button v-if="formBtnType" >
-            <el-button size="small" native-type="submit">저장</el-button>
+            <el-button size="small" native-type="submit">등록</el-button>
             <el-button type="info" size="small" plain @click="setCancel">취소</el-button>
           </div>
           <div data-button v-else>
@@ -127,13 +127,19 @@ export default {
         if(form.passwd === "") this.required.passwd = true;
       }else {
         if (this.formBtnType) {
-          console.log("등록");
+          //console.log("등록");
           //const url = "/api/admin";
           // this.$http.post(url, this.form);
           // this.$bus.$emit("admin");
           // this.$bus.$emit("modalClose", false);
+          this.$store.dispatch(Constant.ADD_ADMIN, form);
+          this.$store.commit(Constant.SETUP_MODAL, false);
+          this.$store.commit(Constant.SETUP_FORMTYPE, true);
         } else {
-          console.log("수정")
+          //console.log("수정");
+          this.$store.dispatch(Constant.UPDATE_ADMIN, form);
+          this.$store.commit(Constant.SETUP_MODAL, false);
+          this.$store.commit(Constant.SETUP_FORMTYPE, true);
         }
       }
     },

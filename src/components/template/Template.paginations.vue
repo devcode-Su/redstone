@@ -40,7 +40,7 @@ export default {
     handleCurrentChange(val) {
       //console.log(`current page: ${val}`);
       this.$emit("pageLength", {
-        'current' : val
+        'current_page' : val
       });
     }
   },

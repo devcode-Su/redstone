@@ -49,11 +49,11 @@
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
           <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id">
-            <th class="col-connected" >
-                <span class="icon">
-                  <i class="fa fa-power-off" aria-hidden="true"></i>
-                </span>
-            </th>
+            <td class="col-connected" >
+              <span class="icon">
+                <i class="fa fa-power-off" aria-hidden="true"></i>
+              </span>
+            </td>
             <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
           </tr>
           </tbody>
@@ -64,10 +64,11 @@
   </section>
 </template>
 <script>
+  import Constant from "@/constant";
   import { mapGetters } from "vuex";
   import Paginations from "../template/Template.paginations"
   export default {
-    name: "DatatableTable",
+    name: "PropertyDatatable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
@@ -90,25 +91,22 @@
         moreBtn : false,
         responseData : [],
         tableData: [],
-        insertTable:[],
         pagingData:[],
         viewChecked: Object.keys(this.localData.fields),
-        apiUrl : "",
         form: {
           page : 1,
           length : 50,
-          dept_code : '',
-          endDate : '',
+          dept_code : 1,
           nodeid : '',
-          startDate : '',
-          order : '',
-          direction : 1
-        }
+          order : 'name',
+          direction : 0
+        },
+        apiUrl : ''
       };
     },
     computed: {
       stateReorder(){
-        return this.tableData.length ? false : true
+        return !this.tableData.length
       },
       ...mapGetters({ globalRangeCode: "globalRangeCode" })
     },
@@ -116,14 +114,16 @@
       "paginations" :Paginations
     },
     watch: {
+      globalRangeCode(c){
+        if(c){
+          console.log(c);
+          this.form.dept_code = c.dept_code;
+          this.form.nodeid = c.nodeid ? c.nodeid : '';
+        }
+      },
       formData(d) {
         if(d){
           console.log("alive?");
-          this.form.dept_code = d.form.dept_code;
-          this.form.nodeid = d.form.nodeid;
-          this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
-          this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
-          this.form.order = d.form.order;
           this.apiUrl = d.url;
           this.receiveSearch();
           return d;
@@ -142,9 +142,17 @@
       },
     },
     methods: {
+      resetRange() {
+        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+          dept_code: 1,
+          name: "전사"
+        });
+      },
       receiveSearch(){
         console.log(this.form);
-        const url = this.apiUrl;
+        const type = this.form.nodeid ? "node" : "group";
+        const code = this.form.nodeid ? this.form.nodeid : this.form.dept_code;
+        const url =  this.apiUrl + type + "/" + code;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
@@ -181,7 +189,6 @@
         }else{
           this.more = row;
           const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
-          console.log(url)
           this.$http.get(url, {
             params : this.form
           }).then(response => {
@@ -191,14 +198,15 @@
         }
       },
       pageLength(p){
-        this.form.length = p;
+        this.form.length = p.length ? p.length : this.form.length ;
+        this.form.page = p.current_page ? p.current_page : this.form.page;
         this.receiveSearch();
       }
     },
     beforeCreate() {
     },
     created() {
-      console.log(this.localData)
+      console.log(this.apiUrl)
     },
     beforeMounted() {
     },
@@ -207,7 +215,7 @@
     beforeUpdate() {
     },
     updated() {
-
+      console.log(this.formData)
     },
     actvated() {
     },
@@ -223,23 +231,13 @@
   @import "~styles/variables";
   [data-table-wrap]{
     margin-top:50px;
-    .fade-enter-active,
-    .fade-leave-active {
-      transition: opacity 0.3s;
+    .col-count,
+    .col-sp{
+      width:100px;
+      text-align:center;
     }
-    .fade-enter,
-    .fade-leave-to {
-      opacity: 0;
-    }
-    .fa {
-      transition: all 0.3s ease;
-      &.rotate {
-        transform: rotateZ(-180deg);
-        transform-origin: 44% 50%;
-      }
-    }
-    .show-row:hover {
-      background-color: transparent;
+    .col-version{
+      width:300px;
     }
   }
   [data-table="header"]{

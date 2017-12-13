@@ -13,7 +13,6 @@
         <span>PC 정보</span>
       </span>
     </h1>
-    <span class="pannel small">{{searchNavi}}에서 검색 </span>
     <div class="property-info-wrap">
       <div class="property-detail">
         <dl class="property-detail-contents" v-for="dl in info" :key="dl.id">

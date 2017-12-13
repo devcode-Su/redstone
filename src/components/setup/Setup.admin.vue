@@ -93,10 +93,6 @@ export default {
   beforeCreate() {},
   created() {
     this.getList();
-    this.$bus.$on("admin", this.getList);
-    this.$bus.$on("modalClose", data => {
-      this.showModal = data;
-    });
   },
   beforeMounted() {},
   mounted() {},
@@ -105,8 +101,6 @@ export default {
   actvated() {},
   deactivated() {},
   beforeDestroy() {
-    this.$bus.$off("admin");
-    this.$bus.$off("modalClose");
   },
   destroyed() {}
 };
@@ -126,13 +120,13 @@ export default {
     border-bottom:1px solid color(border)
   }
   .col-id{
-    width:100px;
-  }
-  .col-name{
     width:150px;
   }
-  .col-host{
+  .col-name{
     width:200px;
+  }
+  .col-host{
+    width:400px;
   }
   .col-last_login_time{
     width:170px;
