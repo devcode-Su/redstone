@@ -66,18 +66,6 @@
     }]
   },
   {
-    "title": "시스템",
-    "name": "System",
-    "icon": "subject",
-    "page": [{
-      "title": "센서로그",
-      "path": "System-sensor-log"
-    }, {
-      "title": "관리자 로그",
-      "path": "System-admin-log"
-    }]
-  },
-  {
     "title": "설정",
     "name": "Setup",
     "icon": "settings_applications",
