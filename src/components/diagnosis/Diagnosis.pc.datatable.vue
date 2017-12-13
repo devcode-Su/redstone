@@ -26,6 +26,7 @@
         <table>
           <thead>
           <tr>
+            <th class="col-connected"><span>접속</span></th>
             <th v-for="(th,k) in localData.fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
             <th class="col-moreBtn"><span>더보기</span></th>
           </tr>
@@ -39,7 +40,12 @@
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
           <template v-else v-for="row in tableData">
-            <tr data-tbody="row"  :key="row.id">
+            <tr data-tbody="row" :key="row.id">
+              <td class="col-connected" :class="'turn-'+row.node.node_connected.connected" >
+                <span class="icon">
+                  <i class="fa fa-power-off" aria-hidden="true"></i>
+                </span>
+              </td>
               <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
               <td class="col-moreBtn">
                 <button class="icon-btn icon-wrap" @click="rowSearch(row)" :class="{on : row === more}">
@@ -49,7 +55,7 @@
             </tr>
             <transition name="fade">
               <tr data-tboy="hide-row" v-if="row === more">
-                <td :colspan="Object.keys(localData.fields).length +1">
+                <td :colspan="Object.keys(localData.fields).length +2">
                   <diagnosis-inserttable :fields="localData.insertFields" :prop-data="insertTable"></diagnosis-inserttable>
                 </td>
               </tr>
@@ -63,7 +69,7 @@
   </section>
 </template>
 <script>
-  import DiagnosisInserttable from "./Diagnosis.info.insert.table"
+  import DiagnosisInserttable from "./Diagnosis.pc.insert.table"
   import Paginations from "../template/Template.paginations"
   export default {
     name: "DatatableTable",
@@ -122,7 +128,7 @@
           this.form.nodeid = d.form.nodeid;
           this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
           this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
-          this.form.order = d.form.order;
+          this.form.order = d.order;
           this.apiUrl = d.url;
           this.receiveSearch();
           return d;
@@ -179,7 +185,7 @@
           this.more = null;
         }else{
           this.more = row;
-          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
+          const url = "/api/admin/search/detect/list/pc/" + this.localData.name + "/"+ row.nodeid;
           console.log(url)
           this.$http.get(url, {
             params : this.form
@@ -242,7 +248,11 @@
     }
   }
 
-  [data-tbody] {
-
+  [data-table] {
+    .col-userdept,
+    .col-userpc,
+    .col-userip{
+      width:auto;
+    }
   }
 </style>
