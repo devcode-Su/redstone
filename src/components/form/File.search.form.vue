@@ -79,8 +79,8 @@ export default {
       });
     },
     dateset(dateTime) {
-      this.form.startDate = dateTime.start;
-      this.form.endDate = dateTime.end;
+      this.form.startDate = dateTime.start ? dateTime.start : this.form.startDate;
+      this.form.endDate = dateTime.end ? dateTime.end : this.form.endDate;
     },
     inputset(replace) {
       console.log("inputset", replace);
