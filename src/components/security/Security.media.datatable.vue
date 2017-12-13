@@ -87,16 +87,14 @@
         pagination: {page: 1, length: 50, total: 0},
         viewChecked: Object.keys(this.definition.field),
         form: {
-          page: 1,
-          length: 50,
-          dept_code: '',
-          endDate: '',
-          nodeid: '',
-          startDate: '',
-          order: '',
-          direction: 1,
+          dept_code: null,
+          endDate: null,
+          nodeid: null,
+          startDate: null,
         },
         selectedOrder: null,
+        selectedDirection: 1,
+        lastOrder: null,
       };
     },
     computed: {},
@@ -112,13 +110,31 @@
           url += `/dept/${this.form.dept_code}`;
         }
 
-        this.$http.get(url, {params: this.formData,})
+        this.form.page = page || this.form.page;
+        this.form.length = length || this.form.length;
+        this.form.order = this.selectedOrder;
+        this.form.direction= this.selectedDirection;
+        this.lastOrder = this.form.order;
+
+        this.$http.get(url, {params: this.form})
             .then((response) => {
               this.data = response.data;
+              this.pagination.total = response.data.total;
             });
       },
       handleOrderChange(type, val) {
-        console.log(type, val);
+        switch (type) {
+          case 'change':
+            this.selectedOrder = val;
+            this.getData();
+            break;
+          case 'input':
+            if (val === this.lastOrder) {
+              this.selectedDirection = (this.selectedDirection - 1) * -1;
+              this.getData();
+            }
+            break;
+        }
       },
       colView(val) {
         const checkArr = Object.keys(this.definition.field);
@@ -138,17 +154,22 @@
         }
       },
       handleSizeChange(p) {
-        console.log(p);
+        this.getData(null, p);
       },
       handleCurrentChange(p) {
-        console.log(p);
+        this.getData(p);
       },
     },
     beforeCreate() {
     },
     created() {
       this.$bus.$on('search-option', (d) => {
-        console.log('recv', d, this.definition);
+        for (let key in d) {
+          if (d.hasOwnProperty(key)) {
+            this.form[key] = d[key];
+          }
+        }
+        this.getData(1);
       });
     },
     beforeMounted() {

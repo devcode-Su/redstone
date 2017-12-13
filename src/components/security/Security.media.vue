@@ -3,8 +3,8 @@
     <h1 data-page-title>
       매체접근
     </h1>
-    <security-mediaform @form="receive"></security-mediaform>
-    <security-datatable :definition="definition"></security-datatable>
+    <security-media-form @form="receive"></security-media-form>
+    <security-data-table :definition="definition"></security-data-table>
   </article>
 </template>
 <script>
@@ -48,8 +48,8 @@
     },
     computed: {},
     components: {
-      "security-mediaform": SecurityMediaform,
-      "security-datatable": SecurityDatatable,
+      "security-media-form": SecurityMediaform,
+      "security-data-table": SecurityDatatable,
     },
     watch: {},
     methods: {
