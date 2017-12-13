@@ -88,7 +88,6 @@ export default {
       this.form.partial_match = replace.partial_match;
     },
     submit(form) {
-      console.log(form)
       this.$bus.$emit("search-option", form);
     }
   },
