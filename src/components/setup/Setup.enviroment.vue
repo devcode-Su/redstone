@@ -59,7 +59,7 @@ export default {
     //   this.data = this.major;
     // }
   },
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}

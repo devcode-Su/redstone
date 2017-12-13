@@ -179,7 +179,7 @@
     },
     updated() {
     },
-    actvated() {
+    activated() {
     },
     deactivated() {
     },

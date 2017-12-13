@@ -120,7 +120,7 @@ export default {
   updated() {
     console.log(this.propData);
   },
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}

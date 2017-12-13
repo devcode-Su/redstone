@@ -346,7 +346,7 @@
     updated() {
       console.log(this.propData);
     },
-    actvated() {
+    activated() {
     },
     deactivated() {
     },

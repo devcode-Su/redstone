@@ -227,7 +227,7 @@
     },
     updated() {
     },
-    actvated() {
+    activated() {
     },
     deactivated() {
     },

@@ -91,7 +91,7 @@ export default {
   updated() {
     console.log(this.form.startDate);
   },
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}

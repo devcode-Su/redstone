@@ -76,7 +76,7 @@ export default {
   updated() {
     //console.log(this.selectNum);
   },
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}

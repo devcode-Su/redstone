@@ -54,7 +54,7 @@
     },
     computed: {
       stateReorder(){
-        return this.propData.length ? false : true
+        return !this.propData.length;
       }
     },
     components: {},
@@ -67,7 +67,7 @@
     },
     methods: {
       sendData(row) {
-        console.log(row);
+        this.$router.push({path: "Search-process", query: row});
       }
     },
     beforeCreate() {},
@@ -77,7 +77,7 @@
     beforeUpdate() {},
     updated() {
     },
-    actvated() {},
+    activated() {},
     deactivated() {},
     beforeDestroy() {},
     destroyed() {}
