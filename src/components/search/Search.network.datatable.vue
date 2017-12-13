@@ -154,8 +154,8 @@
         if (this.$refs.checkedRow !== undefined) {
           for (let j = 0; j < this.$refs.checkedRow.length; j++) {
             for (let i = 0; i < this.definition.field.length - 1; i++) {
-              this.$refs.checkedTh[i].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i].hidden = this.$refs.checked[i].isChecked;
+              this.$refs.checkedTh[i+1].hidden = this.$refs.checked[i].isChecked;
+              this.$refs.checkedRow[j].children[i+1].hidden = this.$refs.checked[i].isChecked;
             }
           }
         } else {

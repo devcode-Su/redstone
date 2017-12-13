@@ -11,7 +11,7 @@
       </el-date-picker>
     </div>
     <div data-dateset-btn>
-      <el-button v-for="(settime,i) in datelabel" :key="settime.i" @click="setDatetime(i)" size="small">
+      <el-button v-for="(settime,i) in datelabel" :key="settime.i" @click="setDateTime(i)" size="small">
         {{settime}}
       </el-button>
     </div>
@@ -37,16 +37,18 @@
     watch: {},
     methods: {
       valueChanged(obj, value) {
+        console.log('valueChanged', obj, value);
         let data = {};
         data[obj] = value;
         this.$emit('dateTime', data);
       },
-      // setDatetime() {
-      //   this.$emit('dateTime', {
-      //     start: this.startDate,
-      //     end: this.endDate,
-      //   });
-      // },
+      setDateTime(i) {
+        this.setDatetime(i);
+        this.$emit('dateTime', {
+          start: this.startDate,
+          end: this.endDate,
+        });
+      },
     },
     beforeCreate() {
     },
