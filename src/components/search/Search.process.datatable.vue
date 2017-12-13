@@ -8,7 +8,9 @@
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
         <el-select v-model="selectedOrder" placeholder="정렬" size="small"
-                   :disabled="!definition.order.length" @change="handleOrderChange">
+                   @change="handleOrderChange('change', $event)"
+                   @input="handleOrderChange('input', $event)"
+                   :disabled="!definition.order.length">
           <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
@@ -98,8 +100,8 @@
           order: [],
           field: [],
           url: '',
-        }
-      }
+        },
+      },
     },
     data() {
       return {
@@ -107,28 +109,29 @@
         more: null,
         view: [],
         morebtn: false,
-        innerData: {
-          processData: [],
-          fileData: [],
-          checkData: []
-        },
         pagination: {
           page: 1,
           length: 50,
-          total: 0
+          total: 0,
         },
         data: null,
         searchOption: {},
-        selectedOrder: null
+        selectedOrder: null,
+        selectedDirection: 1,
+        lastOrder: null,
+        hasSearchOption: false,
       };
     },
     computed: {},
     components: {
-      "processinnerview":Processinnerview
+      "processinnerview": Processinnerview,
     },
     watch: {},
     methods: {
       getData(page = null, length = null) {
+        if (!this.hasSearchOption) {
+          return false;
+        }
         if (page) {
           this.pagination.page = page;
         }
@@ -139,19 +142,21 @@
         this.searchOption.page = this.pagination.page;
         this.searchOption.legnth = this.pagination.length;
         this.searchOption.order = this.selectedOrder ? this.selectedOrder : null;
+        this.searchOption.direction = this.selectedDirection;
+        this.lastOrder = this.searchOption.order;
 
         this.$http.get(this.definition.url, {params: this.searchOption})
-          .then((result) => {
-            if (result.data) {
-              if (result.data.metrics && result.data.metrics.resultCount) {
-                this.pagination.total = result.data.metrics.resultCount;
+            .then((result) => {
+              if (result.data) {
+                if (result.data.metrics && result.data.metrics.resultCount) {
+                  this.pagination.total = result.data.metrics.resultCount;
+                }
+                else {
+                  this.pagination.total = 0;
+                }
+                this.data = result.data;
               }
-              else {
-                this.pagination.total = 0;
-              }
-              this.data = result.data;
-            }
-          });
+            });
       },
       viewCheck() {
         if (this.$refs.checkedRow !== undefined) {
@@ -179,9 +184,20 @@
         this.pagination.page = val;
         this.getData();
       },
-      handleOrderChange(val) {
-        this.getData();
-      }
+      handleOrderChange(type, val) {
+        switch (type) {
+          case 'change':
+            this.selectedDirection = 1;
+            this.getData();
+            break;
+          case 'input':
+            if (val === this.lastOrder) {
+              this.selectedDirection = (this.selectedDirection - 1) * -1;
+              this.getData();
+            }
+            break;
+        }
+      },
     },
     beforeCreate() {
     },
@@ -194,6 +210,7 @@
       }
 
       this.$bus.$on('process-search-data', (data) => {
+        this.hasSearchOption = true;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {
             this.searchOption[key] = data[key] ? data[key] : null;
@@ -218,7 +235,7 @@
       this.$bus.$off('process-search-data');
     },
     destroyed() {
-    }
+    },
   };
 </script>
 <style lang='scss' scoped>

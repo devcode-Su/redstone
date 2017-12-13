@@ -8,8 +8,9 @@
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
         <el-select v-model="selectedOrder" placeholder="정렬" size="small"
-                   :disabled="!definition.order.length" @change="handleOrderChange('change', $event)"
-                   @input="handleOrderChange('input', $event)">
+                   @change="handleOrderChange('change', $event)"
+                   @input="handleOrderChange('input', $event)"
+                   :disabled="!definition.order.length">
           <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
@@ -154,8 +155,8 @@
         if (this.$refs.checkedRow !== undefined) {
           for (let j = 0; j < this.$refs.checkedRow.length; j++) {
             for (let i = 0; i < this.definition.field.length - 1; i++) {
-              this.$refs.checkedTh[i].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i].hidden = this.$refs.checked[i].isChecked;
+              this.$refs.checkedTh[i+1].hidden = this.$refs.checked[i].isChecked;
+              this.$refs.checkedRow[j].children[i+1].hidden = this.$refs.checked[i].isChecked;
             }
           }
         } else {
