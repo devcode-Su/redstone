@@ -214,10 +214,10 @@
     }
   }
   [data-tbody="tbody"]{
-    height:606px !important;
+    height:598px !important;
   }
   [data-none-data="screen"]{
-    height:605px !important;
+    height:597px !important;
   }
   .col-username,
   .col-userdept,

@@ -11,14 +11,19 @@
         <property-datatable :form-data="propertyBR.formData" :local-data="propertyBR.local"></property-datatable>
       </el-tab-pane>
       <el-tab-pane label="소프트웨어" name="third">
-        <software-datatable :form-data="propertySW.formData" :local-data="propertySW.local"></software-datatable>
+        <property-datatable :form-data="propertySW.formData" :local-data="propertySW.local"></property-datatable>
+      </el-tab-pane>
+      <el-tab-pane label="설치된 S/W" name="four">
+        <install-software @form="receiveSW"></install-software>
+        <software-datatable :form-data="installSW.formData" :local-data="installSW.local"></software-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
 import PropertyDatatable from "./Property.datatable";
-import SoftwareDatatable from "./Property.software.datatable"
+import SoftwareDatatable from "./Property.software.datatable";
+import InstallSoftware from "../form/Install.software.form"
 export default {
   name: "Propertysw",
   extends: {},
@@ -57,30 +62,54 @@ export default {
             count:"설치 PC 대수"
           }
         }
+      },
+      installSW:{
+        formData:{},
+        local:{
+          fields: {
+            nodeid : "센서ID",
+            username : "사용자명",
+            userdept : "부서명",
+            userpc : "PC 명",
+            userip : "PC IP 주소",
+            name : "소프트웨어"
+          }
+        }
       }
     };
   },
   computed: {},
   components: {
     "property-datatable" : PropertyDatatable,
-    "software-datatable" : SoftwareDatatable
+    "software-datatable" : SoftwareDatatable,
+    "install-software" : InstallSoftware
   },
   watch: {},
   methods: {
     receive(){
-      console.log(this.activeName)
+      console.log(this.activeName);
       if (this.activeName === "first") {
-        this.mixData(this.propertyOS, "os");
+        this.mixData(this.propertyOS, "os" ,"name");
       } else if (this.activeName === "second") {
-        this.mixData(this.propertyBR, "browser");
+        this.mixData(this.propertyBR, "browser", "name");
       } else if (this.activeName === "third") {
-        this.mixData(this.propertySW, "software");
+        this.mixData(this.propertySW, "software", "name");
+      } else if (this.activeName === "four") {
+        this.receiveSW();
       }
     },
-    mixData(select, apiUrl) {
+    mixData(select, apiUrl, order) {
       return select.formData = {
-        url : "/api/admin/node/summary/" + apiUrl + "/",
-        order : "name"
+        url : `/api/admin/node/summary/${apiUrl}/`,
+        order : order
+      }
+    },
+    receiveSW(form){
+      console.log(form);
+      return this.installSW.formData = {
+        url : `/api/admin/node/list/software/${form.name}`,
+        order : "nodeid",
+        form : form
       }
     },
     tabs(){
