@@ -114,7 +114,7 @@ export default {
     // console.log(this.hideList);
     // console.log(this.viewList);
   },
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}

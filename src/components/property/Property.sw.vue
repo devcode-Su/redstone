@@ -127,7 +127,7 @@ export default {
   updated() {
     console.log()
   },
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}

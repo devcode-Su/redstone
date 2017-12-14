@@ -216,7 +216,7 @@
     updated() {
 
     },
-    actvated() {
+    activated() {
     },
     deactivated() {
     },

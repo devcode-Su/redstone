@@ -37,7 +37,7 @@ export default {
   mounted() {},
   beforeUpdate() {},
   updated() {},
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}

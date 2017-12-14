@@ -1,5 +1,4 @@
 <template>
-
   <section data-table-wrap v-if="definition">
     <header data-table="header">
       <div data-table-option>
@@ -8,17 +7,17 @@
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
         <el-select v-if="definition.order" v-model="selectedOrder" placeholder="정렬" size="small"
-                   @change="changeOrder('change', $event)"
-                   @input="changeOrder('input', $event)">
+                   @change="handleOrderChange('change', $event)"
+                   @input="handleOrderChange('input', $event)">
           <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
         <div class="view-check">
-          <el-button @click="moreBtn = !moreBtn" size="small">
+          <el-button @click="isOrderListOpen = !isOrderListOpen" size="small">
             보기
-            <i class="fa fa-angle-down" :class="{ rotate : moreBtn }"></i>
+            <i class="fa fa-angle-down" :class="{ rotate : isOrderListOpen }"></i>
           </el-button>
-          <el-checkbox-group v-model="viewChecked" v-if="moreBtn" @change="colView">
+          <el-checkbox-group v-model="viewChecked" v-if="isOrderListOpen" @change="colView">
 
             <el-checkbox v-for="(check,k,i) in definition.field" :label="k" :key="k" :disabled="i === 0">{{check}}
             </el-checkbox>
@@ -27,7 +26,7 @@
       </div>
     </header>
     <div data-table="table">
-      <span data-table="total">전체 : {{pagingData.total || "-"}} 건</span>
+      <span data-table="total">전체 : {{pagination.total || "-"}} 건</span>
       <div data-thead="thead">
         <table>
           <thead>
@@ -41,7 +40,6 @@
       <div data-tbody="tbody" class="screen">
         <table>
           <tbody>
-
           <tr v-if="!data || !data.data || !data.data.length">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
@@ -57,13 +55,13 @@
         </table>
       </div>
     </div>
-    <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
-    <input v-model="pagingData.current_page">
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                   :current-page.sync="pagination.page" :page-sizes="[25, 50, 100, 200]" :page-size="pagination.length"
+                   layout="sizes, prev, pager, next" :total="pagination.total">
+    </el-pagination>
   </section>
 </template>
 <script>
-  import Paginations from "../template/Template.paginations"
-
   export default {
     name: "DatatableTable",
     extends: {},
@@ -84,56 +82,26 @@
     },
     data() {
       return {
-        moreBtn: false,
-        insertTable: [],
+        isOrderListOpen: false,
         data: null,
-        pagingData: {current_page: 1, total: 0},
+        pagination: {page: 1, length: 50, total: 0},
         viewChecked: Object.keys(this.definition.field),
-        apiUrl: "",
         form: {
-          page: 1,
-          length: 50,
-          dept_code: '',
-          endDate: '',
-          nodeid: '',
-          startDate: '',
-          order: '',
-          direction: 1,
+          dept_code: null,
+          endDate: null,
+          nodeid: null,
+          startDate: null,
         },
         selectedOrder: null,
+        selectedDirection: 1,
+        lastOrder: null,
       };
     },
     computed: {},
-    components: {
-      "paginations": Paginations,
-    },
-    watch: {
-      formData(d) {
-        if (d) {
-          this.form.dept_code = d.form.dept_code;
-          this.form.nodeid = d.form.nodeid;
-          this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
-          this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
-          this.form.order = d.form.order;
-          this.apiUrl = d.url;
-          this.receiveSearch();
-          return d;
-        }
-      },
-    },
+    components: {},
+    watch: {},
     methods: {
-      receiveSearch() {
-        const url = this.definition.url;
-        this.$http.get(url, {
-          params: this.form,
-        }).then(response => {
-          console.log(response);
-          this.responseData = response.data
-        })
-      },
       getData(page = null, length = null) {
-
-
         let url = this.definition.url;
         if (this.form.nodeid) {
           url += `/node/${this.form.nodeid}`;
@@ -142,13 +110,31 @@
           url += `/dept/${this.form.dept_code}`;
         }
 
-        this.$http.get(url, {params: this.formData,})
+        this.form.page = page || this.form.page;
+        this.form.length = length || this.form.length;
+        this.form.order = this.selectedOrder;
+        this.form.direction= this.selectedDirection;
+        this.lastOrder = this.form.order;
+
+        this.$http.get(url, {params: this.form})
             .then((response) => {
               this.data = response.data;
+              this.pagination.total = response.data.total;
             });
       },
-      changeOrder(type, val) {
-
+      handleOrderChange(type, val) {
+        switch (type) {
+          case 'change':
+            this.selectedOrder = val;
+            this.getData();
+            break;
+          case 'input':
+            if (val === this.lastOrder) {
+              this.selectedDirection = (this.selectedDirection - 1) * -1;
+              this.getData();
+            }
+            break;
+        }
       },
       colView(val) {
         const checkArr = Object.keys(this.definition.field);
@@ -167,17 +153,23 @@
           }
         }
       },
-      pageLength(p) {
-        this.form.length = p.length;
-        this.form.page = p.current_page;
-        this.receiveSearch();
+      handleSizeChange(p) {
+        this.getData(null, p);
+      },
+      handleCurrentChange(p) {
+        this.getData(p);
       },
     },
     beforeCreate() {
     },
     created() {
       this.$bus.$on('search-option', (d) => {
-        console.log('recv', d, this.definition);
+        for (let key in d) {
+          if (d.hasOwnProperty(key)) {
+            this.form[key] = d[key];
+          }
+        }
+        this.getData(1);
       });
     },
     beforeMounted() {
@@ -187,9 +179,8 @@
     beforeUpdate() {
     },
     updated() {
-
     },
-    actvated() {
+    activated() {
     },
     deactivated() {
     },
@@ -227,5 +218,10 @@
 
   [data-tbody] {
 
+  }
+
+  .el-pagination {
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

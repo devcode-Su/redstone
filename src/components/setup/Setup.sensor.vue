@@ -69,7 +69,7 @@ export default {
   updated() {
     console.log(this.radioDidabled);
   },
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}

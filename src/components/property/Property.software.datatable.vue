@@ -197,7 +197,7 @@
     updated() {
       console.log(this.formData)
     },
-    actvated() {
+    activated() {
     },
     deactivated() {
     },

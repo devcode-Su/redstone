@@ -77,7 +77,7 @@ export default {
   updated() {
     //console.log(this.compAll)
   },
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {
     this.$bus.$off("thumb-data");

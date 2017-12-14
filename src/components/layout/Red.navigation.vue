@@ -74,7 +74,7 @@ export default {
       if (u !== null) this.selectNum = i;
     }
   },
-  actvated() {},
+  activated() {},
   deactivated() {},
   beforeDestroy() {},
   destroyed() {}
