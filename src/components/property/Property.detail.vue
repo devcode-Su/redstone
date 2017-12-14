@@ -1,5 +1,8 @@
 <template>
   <article data-layout="Route-article">
+    <h1 data-page-title>
+      HW 정보
+    </h1>
     <property-pannel></property-pannel>
     <detail-datatable :form-data="formData" :local-data="local"></detail-datatable>
     <property-modal v-if="showModal" @close="showModal = false"></property-modal>
@@ -53,4 +56,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "~styles/variables";
+  [data-search-pannel="property"]{
+    margin-top:30px !important;
+  }
 </style>

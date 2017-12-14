@@ -1,16 +1,6 @@
 <template>
   <section data-table-wrap>
     <header data-table="header">
-      <p data-range>
-        <span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>
-        <span v-else>
-        {{globalRangeCode.dept.name}} / {{globalRangeCode.username}}
-        <button data-icon @click="resetRange">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      </span>
-        에서 검색
-      </p>
       <div data-table-option>
         <el-button size="small">
           파일로 저장
@@ -65,7 +55,6 @@
 </template>
 <script>
   import Constant from "@/constant";
-  import { mapGetters } from "vuex";
   import Paginations from "../template/Template.paginations"
   export default {
     name: "PropertyDatatable",
@@ -101,30 +90,25 @@
           order : '',
           direction : 0
         },
-        apiUrl : ''
+        apiUrl : '',
       };
     },
     computed: {
       stateReorder(){
         return !this.tableData.length
-      },
-      ...mapGetters({ globalRangeCode: "globalRangeCode" })
+      }
     },
     components: {
       "paginations" :Paginations
     },
     watch: {
-      globalRangeCode(c){
-        if(c){
-          console.log(c);
-          this.form.dept_code = c.dept_code;
-          this.form.nodeid = c.nodeid ? c.nodeid : '';
-        }
-      },
       formData(d) {
         if(d){
           console.log("alive?");
+          console.log(d);
           this.apiUrl = d.url;
+          this.form.dept_code = d.form ? d.form.dept_code : this.form.dept_code;
+          this.form.nodeid = d.form ? d.form.nodeid : this.form.nodeid;
           this.form.order = d.order;
           this.receiveSearch();
           return d;
@@ -143,17 +127,12 @@
       },
     },
     methods: {
-      resetRange() {
-        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
-          dept_code: 1,
-          name: "전사"
-        });
-      },
       receiveSearch(){
         console.log(this.form);
         const type = this.form.nodeid ? "node" : "group";
         const code = this.form.nodeid ? this.form.nodeid : this.form.dept_code;
-        const url =  this.apiUrl + type + "/" + code;
+        const url =  this.apiUrl + type + "/" + code
+        console.log(url);
         this.$http.get(url, {
           params: this.form
         }).then( response => {
@@ -231,7 +210,7 @@
 <style lang='scss' scoped>
   @import "~styles/variables";
   [data-table-wrap]{
-    margin-top:50px;
+    margin-top:20px;
     .col-count,
     .col-sp{
       width:100px;
@@ -241,19 +220,10 @@
       width:300px;
     }
   }
-  [data-table="header"]{
-    padding-top:5px;
-    border-top:1px solid color(border)
+  [data-tbody="tbody"]{
+    height:522px !important;
   }
-  [data-range] {
-    margin-bottom:0;
-    padding-right:5px;
-    top:-25px;
+  [data-none-data="screen"]{
+    height:521px !important;
   }
-  /*[data-tbody="tbody"]{*/
-    /*height:645px !important;*/
-  /*}*/
-  /*[data-none-data="screen"]{*/
-    /*height:644px !important;*/
-  /*}*/
 </style>
