@@ -36,7 +36,6 @@
         <table>
           <thead>
           <tr>
-            <th class="col-connected"><span>접속</span></th>
             <th v-for="(th,k) in localData.fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
           </tr>
           </thead>
@@ -48,12 +47,7 @@
           <tr v-if="stateReorder">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
-          <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id">
-            <td class="col-connected" >
-              <span class="icon">
-                <i class="fa fa-power-off" aria-hidden="true"></i>
-              </span>
-            </td>
+          <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id" @click.stop="rowSearch(row)">
             <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}} <span v-if="k === 'size'">GB</span></td>
           </tr>
           </tbody>
@@ -144,6 +138,7 @@
     },
     methods: {
       resetRange() {
+        this.$bus.$emit("update");
         this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
           dept_code: 1,
           name: "전사"
@@ -185,18 +180,16 @@
         }
       },
       rowSearch(row){
-        if(this.more === row){
-          this.more = null;
-        }else{
-          this.more = row;
-          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
-          this.$http.get(url, {
-            params : this.form
-          }).then(response => {
-            console.log(response);
-            this.insertTable = response.data.data;
-          });
-        }
+        console.log(row)
+        console.log(this.formData);
+
+        this.$store.commit(Constant.DETAIL_INFO, {
+          api : this.formData.api,
+          title : this.formData.title,
+          name : row.name,
+          version: row.sp ? row.sp : row.version
+        });
+        this.$router.push("Property-detail");
       },
       pageLength(p){
         this.form.length = p.length ? p.length : this.form.length ;
@@ -239,6 +232,12 @@
     }
     .col-version{
       width:auto;
+    }
+    .col-manufacturer{
+      width:400px;
+    }
+    .col-size{
+      width:100px;
     }
   }
   [data-table="header"]{

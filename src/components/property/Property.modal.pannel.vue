@@ -4,9 +4,6 @@
       <span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>
       <span v-else>
         {{globalRangeCode.dept.name}} / {{globalRangeCode.username}}
-        <button data-icon @click="resetRange">
-          <i class="fa fa-times-circle"></i>
-        </button>
       </span>
       에서 검색
     </p>
@@ -17,15 +14,15 @@
       <span>PC 정보</span>
     </h1>
     <div class="property-detail">
-      <dl class="property-detail-contents" v-for="dl in info" :key="dl.id">
-        <dt>{{dl.dt}}</dt>
-        <dd>{{dl.dd}}</dd>
+      <dl class="property-detail-contents" v-for="(dl,k) in fields" :key="dl.id">
+        <dt>{{dl}}</dt>
+        <dd>{{infoData[k]}}</dd>
       </dl>
     </div>
   </div>
 </template>
 <script>
-  import Constant from "@/constant";
+  //import Constant from "@/constant";
   import { mapGetters } from "vuex";
   export default {
     name: "TemplatePropertypannel",
@@ -35,50 +32,56 @@
     },
     data() {
       return {
-        searchNavi: "전사",
-        info: [
-          {
-            dt: "센서 ID",
-            dd: "22"
-          },
-          {
-            dt: "컴퓨터명",
-            dd: "USERPC"
-          },
-          {
-            dt: "IP",
-            dd: "192.168.100.14"
-          },
-          {
-            dt: "로그인 계정",
-            dd: "김수홍대표"
-          },
-          {
-            dt: "부서",
-            dd: "전사"
-          },
-          {
-            dt: "OS",
-            dd: "Microsoft Windows 10 Home 64비트"
-          }
-        ]
+        fields: {
+          nodeid: "센서 ID",
+          os: "운영체재",
+          username: "사용자명",
+          userip: "IP 주소",
+          userdept: "부서명",
+          computer: "컴퓨터명",
+        },
+        infoData: [],
+        urlNum : "",
+        responseData : []
       };
     },
-    computed: {},
+    computed: {
+      ...mapGetters({
+        globalRangeCode: "globalRangeCode",
+        propertyDetail : "propertyDetailPc"
+      })
+    },
     components: {},
-    watch: {},
-    methods: {
-      resetRange() {
-        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
-          dept_code: 1,
-          name: "전사"
-        });
+    watch: {
+      propertyDetailCode(p){
+        if(p){
+          this.receiveSearch();
+          return p;
+        }
       },
+      responseData(d){
+        if(d){
+          console.log(d);
+          return this.infoData = d;
+        }
+      }
+    },
+    methods: {
+      receiveSearch(){
+        const url = `/api/admin/node/info/${this.urlNum}`;
+        console.log(url);
+        this.$http.get(url).then( response => {
+          this.responseData = response.data;
+        });
+      }
     },
     created() {
+      this.urlNum = this.propertyDetail.nodeid;
+      this.receiveSearch();
     },
     beforeMounted() {},
-    mounted() {},
+    mounted() {
+    },
     beforeUpdate() {},
     updated() {},
     activated() {},
@@ -92,7 +95,7 @@
   @import "~styles/variables";
   [data-search-pannel="property"] {
     display: flex;
-    margin-top: 65px;
+    margin-top:20px;
     padding: 15px 15px;
     background:0 none;
     h1 {
@@ -100,7 +103,7 @@
       justify-content: center;
       align-items: center;
       margin-bottom: 0;
-      padding: 0 15px;
+      padding: 0 35px 0 15px;
       span {
         display: flex;
         align-items: center;
@@ -127,6 +130,7 @@
       }
     }
     .property-detail {
+      flex:1;
       display: flex;
       flex-wrap: wrap;
       padding: 10px 30px;

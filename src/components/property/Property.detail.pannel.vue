@@ -16,9 +16,9 @@
       </span>
     </h1>
     <div class="property-detail">
-      <dl class="property-detail-contents" v-for="dl in info" :key="dl.id">
-        <dt>{{dl.dt}}</dt>
-        <dd>{{dl.dd}}</dd>
+      <dl class="property-detail-contents">
+        <dt>{{fields[api]}}</dt>
+        <dd>{{name}}</dd>
       </dl>
     </div>
   </div>
@@ -34,33 +34,74 @@ export default {
   },
   data() {
     return {
-      info: [
-        {
-          dt: "센서 ID",
-          dd: "22"
-        }
-      ]
+      fields: {
+        os : "운영체재",
+        browser : "브라우저",
+        software : "소프트웨어"
+      },
+      api : "",
+      dept_code: 1,
+      nodeid : "",
+      version:"",
+      name : "",
     };
   },
   computed: {
-    ...mapGetters({ globalRangeCode: "globalRangeCode" })
+    ...mapGetters({
+      globalRangeCode: "globalRangeCode",
+      propertyDetail : "propertyDetailInfo"
+    })
   },
   components: {},
-  watch: {},
+  watch: {
+    globalRangeCode(g) {
+      if (g) {
+        this.dept_code = g.dept_code;
+        this.nodeid = g.nodeid;
+      }
+    },
+    propertyDetail(p){
+      if(p){
+        this.name = p.name;
+        this.version = p.version;
+        this.api = p.api;
+      }
+    }
+  },
   methods: {
     resetRange() {
+      this.$bus.$emit("update");
       this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
         dept_code: 1,
         name: "전사"
       });
     },
+    receiveSearch(){
+      const type = this.nodeid ? "node" : "group";
+      const code = this.nodeid ? this.nodeid : this.dept_code;
+      const url = `/api/admin/node/list/${this.api}/${this.name}/${this.version}/${type}/${code}`;
+      console.log(url);
+      this.$http.get(url).then( response => {
+        this.responseData = response.data
+      });
+    },
+    defaultSet(){
+      this.dept_code = this.globalRangeCode.dept_code;
+      this.nodeid = this.globalRangeCode.nodeid;
+      this.name = this.propertyDetail.name;
+      this.version = this.propertyDetail.version;
+      this.api = this.propertyDetail.api;
+    }
   },
   created() {
+    this.defaultSet();
   },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+
+  },
   activated() {},
   deactivated() {},
   beforeDestroy() {
@@ -100,21 +141,18 @@ export default {
     }
   }
   .property-detail {
+    flex:1;
     display: flex;
     flex-wrap: wrap;
     padding: 10px 30px;
     &-contents {
       display: flex;
       align-items: center;
-      width: 440px;
       margin: 5px 0;
-      dl {
-        flex: 1;
-        margin: 10px 0;
-      }
+      font-size:14px;
       dt {
         font-weight: bold;
-        width: 150px;
+        width: 120px;
         &:before {
           content: "";
           display: inline-block;

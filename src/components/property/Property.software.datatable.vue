@@ -38,8 +38,8 @@
           <tr v-if="stateReorder">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
-          <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id">
-            <td class="col-connected" >
+          <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id" @click="rowDetail(row)">
+            <td class="col-connected" :class="'turn'+ row.connected" >
               <span class="icon">
                 <i class="fa fa-power-off" aria-hidden="true"></i>
               </span>
@@ -131,7 +131,7 @@
         console.log(this.form);
         const type = this.form.nodeid ? "node" : "group";
         const code = this.form.nodeid ? this.form.nodeid : this.form.dept_code;
-        const url =  this.apiUrl + type + "/" + code
+        const url =  `${this.apiUrl}/${type}/${code}`;
         console.log(url);
         this.$http.get(url, {
           params: this.form
@@ -163,19 +163,15 @@
           }
         }
       },
-      rowSearch(row){
-        if(this.more === row){
-          this.more = null;
-        }else{
-          this.more = row;
-          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
-          this.$http.get(url, {
-            params : this.form
-          }).then(response => {
-            console.log(response);
-            this.insertTable = response.data.data;
-          });
-        }
+      rowDetail(row){
+        //console.log(row);
+        console.log(row)
+        this.$store.commit(Constant.DETAIL_INFO, {
+          api : this.formData.api,
+          title : this.formData.title,
+          name : row.name,
+        });
+        this.$router.push("Property-detail");
       },
       pageLength(p){
         this.form.length = p.length ? p.length : this.form.length ;
@@ -216,8 +212,13 @@
       width:100px;
       text-align:center;
     }
-    .col-version{
-      width:300px;
+    .col-usergroup,
+    .col-computer,
+    .col-ip{
+      width:170px;
+    }
+    .col-name{
+      width:auto;
     }
   }
   [data-tbody="tbody"]{

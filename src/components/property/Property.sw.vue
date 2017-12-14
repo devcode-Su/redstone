@@ -69,9 +69,9 @@ export default {
           fields: {
             nodeid : "센서ID",
             username : "사용자명",
-            userdept : "부서명",
-            userpc : "PC 명",
-            userip : "PC IP 주소",
+            usergroup : "부서명",
+            computer : "PC 명",
+            ip : "PC IP 주소",
             name : "소프트웨어"
           }
         }
@@ -84,32 +84,40 @@ export default {
     "software-datatable" : SoftwareDatatable,
     "install-software" : InstallSoftware
   },
-  watch: {},
+  watch: {
+
+  },
   methods: {
     receive(){
       console.log(this.activeName);
       if (this.activeName === "first") {
-        this.mixData(this.propertyOS, "os" ,"name");
+        this.mixData(this.propertyOS, "os" ,"name", "운영체제 정보");
       } else if (this.activeName === "second") {
-        this.mixData(this.propertyBR, "browser", "name");
+        this.mixData(this.propertyBR, "browser", "name", "브라우저 정보");
       } else if (this.activeName === "third") {
-        this.mixData(this.propertySW, "software", "name");
+        this.mixData(this.propertySW, "software", "name", "소프트웨어 정보");
       } else if (this.activeName === "four") {
         this.receiveSW();
       }
     },
-    mixData(select, apiUrl, order) {
+    mixData(select, apiUrl, order, title) {
       return select.formData = {
         url : `/api/admin/node/summary/${apiUrl}/`,
-        order : order
+        order : order,
+        api : apiUrl,
+        title : title
       }
     },
     receiveSW(form){
       console.log(form);
-      return this.installSW.formData = {
-        url : `/api/admin/node/list/software/${form.name}`,
-        order : "nodeid",
-        form : form
+      if(form){
+        return this.installSW.formData = {
+          url : `/api/admin/node/search/software/${form.name}`,
+          order : "nodeid",
+          form : form,
+          api : "software",
+          title : "소프트웨어 정보"
+        }
       }
     },
     tabs(){
@@ -118,6 +126,7 @@ export default {
   },
   beforeCreate() {},
   created() {
+    this.$bus.$on("update", this.receive);
   },
   beforeMounted() {},
   mounted() {
@@ -129,7 +138,9 @@ export default {
   },
   activated() {},
   deactivated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    this.$bus.$off("update");
+  },
   destroyed() {}
 };
 </script>

@@ -13,6 +13,10 @@ export default {
   FETCH_EDITUSER : "fetchEditUser",
   UPDATE_EDITUSER : "updateEditUser",
 
+  DETAIL_INFO : "propertyDetailInfo",
+  DETAIL_PC : "propertyDetailPc",
+
+
   SETUP_ADMIN : "setupAdmin",
   SETUP_FORMTYPE : "setupFormType",
   SETUP_MODAL : "setupModal",

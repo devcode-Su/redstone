@@ -80,6 +80,7 @@ export default {
         console.log("aaa");
         this.$store.dispatch(Constant.EDITUSER_CODE, this.model);
       } else {
+        this.$bus.$emit("update");
         this.$store.dispatch(Constant.GLOBAL_RANGECODE, this.model);
       }
     },

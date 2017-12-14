@@ -1,15 +1,16 @@
 <template>
   <article data-layout="Route-article">
     <h1 data-page-title>
-      HW 정보
+      {{title}}
     </h1>
-    <property-pannel></property-pannel>
-    <detail-datatable :form-data="formData" :local-data="local"></detail-datatable>
+    <detail-pannel></detail-pannel>
+    <detail-datatable @modal="showModal = true"></detail-datatable>
     <property-modal v-if="showModal" @close="showModal = false"></property-modal>
   </article>
 </template>
 <script>
-  import PropertyPannel from "./Property.pannel"
+  import { mapGetters } from "vuex";
+import DetailPannel from "./Property.detail.pannel"
 import DetailDatatable from "./Property.detail.datatable"
   import PropertyModal from "./Property.modal";
 export default {
@@ -21,21 +22,14 @@ export default {
   data() {
     return {
       showModal: false,
-      formData: {},
-      local : {
-        fields: {
-          nodeid : "센서 ID",
-          username : "사용자명",
-          userdept : "부서명",
-          userpc : "PC 명",
-          userip : "PC IP 주소",
-        }
-      }
+      title : "자산 상세 정보",
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({ detailTitle: "propertyDetailInfo" })
+  },
   components: {
-    "property-pannel" : PropertyPannel,
+    "detail-pannel" : DetailPannel,
     "detail-datatable" :DetailDatatable,
     "property-modal" : PropertyModal
   },
@@ -43,7 +37,9 @@ export default {
   methods: {
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.title = this.detailTitle.title
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},

@@ -27,7 +27,7 @@
 </template>
 <script>
 import Templatemodal from "../template/Template.modal";
-import Propertypannel from "./Property.pannel.vue";
+import Propertypannel from "./Property.detail.pannel.vue";
 import Propertydatatable from "./Property.datatable.vue";
 
 export default {

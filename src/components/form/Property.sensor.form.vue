@@ -14,12 +14,12 @@
       <fieldset>
         <div data-form-item>
           <div data-form-tag>
-            <el-input v-model="form.q" type="text" placeholder="version" size="small"></el-input>
+            <el-input v-model="form.version" type="text" placeholder="version" size="small"></el-input>
           </div>
         </div>
         <div data-form-item>
           <div data-form-tag>
-            <el-checkbox v-model="form.all" true-label="1" false-label="0">일주일 이상 미로그인 센서</el-checkbox>
+            <el-checkbox v-model="form.all" true-label="1" false-label="0" @change="checked">일주일 이상 미로그인 센서</el-checkbox>
           </div>
         </div>
       </fieldset>
@@ -46,8 +46,8 @@
         form: {
           dept_code: 1,
           nodeid: "",
-          q:'',
-          all:0,
+          version:'',
+          OnlyNoLoginLong:0,
         }
       };
     },
@@ -70,6 +70,9 @@
           dept_code: 1,
           name: "전사"
         });
+      },
+      checked(val){
+        this.form.OnlyNoLoginLong = val;
       },
       send() {
         console.log(this.form);

@@ -94,6 +94,7 @@ export default {
     selectRow(member) {
       //console.log(member);
       this.$store.dispatch(Constant.GLOBAL_RANGEUSER, member);
+      this.$bus.$emit("update");
     }
   },
   beforeCreate() {},

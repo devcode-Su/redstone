@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     resetRange() {
+      this.$bus.$emit("update");
       this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
         dept_code: 1,
         name: "전사"

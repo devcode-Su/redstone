@@ -13,6 +13,9 @@ import elementLocale from 'element-ui/lib/locale/lang/en';
 import VueMaterial from 'vue-material';
 import materialIcons from 'material-design-icons-iconfont/dist/material-design-icons.css';
 
+import InfiniteScroll from 'v-infinite-scroll';
+import 'v-infinite-scroll/dist/v-infinite-scroll.css'
+
 import 'babel-polyfill';
 import 'es6-promise/auto';
 import 'element-ui/lib/theme-chalk/index.css'
@@ -64,6 +67,7 @@ Vue.filter('thumbSnippet', value => {
 Vue.use(Vuex);
 Vue.use(VueMasonry);
 Vue.use(VueMaterial);
+Vue.use(InfiniteScroll);
 
 Vue.material.registerTheme({
   default: {

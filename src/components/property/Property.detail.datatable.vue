@@ -7,7 +7,7 @@
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
         <el-select v-model="form.order"  placeholder="정렬" size="small" :disabled="stateReorder" @change="reorder">
-          <el-option v-for="(option, k, i) in localData.fields" :key="option" :label="option" :value="k"></el-option>
+          <el-option v-for="(option, k, i) in fields" :key="option" :label="option" :value="k"></el-option>
         </el-select>
         <div class="view-check">
           <el-button @click="moreBtn = !moreBtn" size="small">
@@ -15,7 +15,7 @@
             <i class="fa fa-angle-down" :class="{ rotate : moreBtn }"></i>
           </el-button>
           <el-checkbox-group v-model="viewChecked" v-if="moreBtn" @change="colView">
-            <el-checkbox v-for="(check,k,i) in localData.fields" :label="k" :key="k" :disabled="i === 0">{{check}}</el-checkbox>
+            <el-checkbox v-for="(check,k,i) in fields" :label="k" :key="k" :disabled="i === 0">{{check}}</el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
@@ -27,7 +27,7 @@
           <thead>
           <tr>
             <th class="col-connected"><span>접속</span></th>
-            <th v-for="(th,k) in localData.fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
+            <th v-for="(th,k) in fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
           </tr>
           </thead>
         </table>
@@ -38,13 +38,13 @@
           <tr v-if="stateReorder">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
-          <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id">
-            <td class="col-connected" >
+          <tr data-tbody="row" v-else v-for="row in tableData" :key="row.id" @click="rowDetail(row)">
+            <td class="col-connected" :class="'turn'+row.connected">
               <span class="icon">
                 <i class="fa fa-power-off" aria-hidden="true"></i>
               </span>
             </td>
-            <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
+            <td v-for="(td,k) in fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
           </tr>
           </tbody>
         </table>
@@ -54,6 +54,8 @@
   </section>
 </template>
 <script>
+  import Constant from "@/constant";
+  import { mapGetters } from "vuex";
   import Paginations from "../template/Template.paginations"
   export default {
     name: "PropertyDatatable",
@@ -75,18 +77,35 @@
     },
     data() {
       return {
-        more: null,
         moreBtn : false,
+        fields: {
+          nodeid : "센서 ID",
+          username : "사용자명",
+          usergroup : "부서명",
+          computer : "PC 명",
+          ip : "PC IP 주소",
+        },
+        orderOption : {
+          nodeid : "센서 ID",
+          username : "사용자명",
+          usergroup : "부서명",
+          ip : "PC IP 주소",
+          computer : "컴퓨터명",
+          connected : "접속"
+        },
         responseData : [],
         tableData: [],
         pagingData:[],
-        viewChecked: Object.keys(this.localData.fields),
+        viewChecked: null,
+        api : "",
+        dept_code: 1,
+        nodeid : "",
+        version:"",
+        name : "",
         form: {
           page : 1,
           length : 50,
-          dept_code : 1,
-          nodeid : '',
-          order : '',
+          order : 'nodeid',
           direction : 0
         },
         apiUrl : ''
@@ -96,6 +115,10 @@
       stateReorder(){
         return !this.tableData.length
       },
+      ...mapGetters({
+        globalRangeCode: "globalRangeCode",
+        propertyDetail : "propertyDetailInfo"
+      })
     },
     components: {
       "paginations" :Paginations
@@ -123,13 +146,26 @@
       },
     },
     methods: {
+      defaultSet(){
+        this.dept_code = this.globalRangeCode.dept_code;
+        this.nodeid = this.globalRangeCode.nodeid;
+        this.name = this.propertyDetail.name;
+        this.version = this.propertyDetail.version;
+        this.api = this.propertyDetail.api;
+      },
       receiveSearch(){
-        console.log(this.form);
-        const url =  this.apiUrl;
+        const type = this.nodeid ? "node" : "group";
+        const code = this.nodeid ? this.nodeid : this.dept_code;
+        let url;
+        if(this.api === "os"){
+          url = `/api/admin/node/list/${this.api}/${this.name}/${this.version}/${type}/${code}`;
+        }else{
+          url = `/api/admin/node/list/${this.api}/${type}/${code}/${this.name}/${this.version}`;
+        }
+        console.log(url);
         this.$http.get(url, {
-          params: this.form
+          params : this.form
         }).then( response => {
-          console.log(response);
           this.responseData = response.data
         });
       },
@@ -156,19 +192,10 @@
           }
         }
       },
-      rowSearch(row){
-        if(this.more === row){
-          this.more = null;
-        }else{
-          this.more = row;
-          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
-          this.$http.get(url, {
-            params : this.form
-          }).then(response => {
-            console.log(response);
-            this.insertTable = response.data.data;
-          });
-        }
+      rowDetail(row){
+        //console.log(row);
+        this.$store.commit(Constant.DETAIL_PC, row);
+        this.$emit("modal");
       },
       pageLength(p){
         this.form.length = p.length ? p.length : this.form.length ;
@@ -179,7 +206,9 @@
     beforeCreate() {
     },
     created() {
-      console.log(this.apiUrl)
+      this.viewChecked = Object.keys(this.fields);
+      this.defaultSet();
+      this.receiveSearch();
     },
     beforeMounted() {
     },
@@ -188,7 +217,6 @@
     beforeUpdate() {
     },
     updated() {
-      console.log(this.formData)
     },
     activated() {
     },

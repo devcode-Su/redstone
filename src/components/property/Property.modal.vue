@@ -2,10 +2,10 @@
   <transition name="modal">
     <section data-modal>
       <div data-modal-container>
-        <h1 data-modal-title>
-          {{title}}
-        </h1>
-        <button data-icon data-modal-close @click="$emit('close')" v-if="target">
+        <pannel></pannel>
+        <sw-datatable></sw-datatable>
+        <hw-datatable></hw-datatable>
+        <button data-icon data-modal-close @click="$emit('close')">
           <i class="el-icon-close" aria-hidden="true"></i>
         </button>
       </div>
@@ -13,27 +13,23 @@
   </transition>
 </template>
 <script>
+  import Pannel from "./Property.modal.pannel";
+  import SwDatatable from "./Property.modal.sw.datatable";
+  import HwDatatable from "./Property.modal.hw.datatable";
   export default {
     name: "Templatemodal",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
-      target: {
-        type: Boolean,
-        default:false
-      },
-      title: {
-        type: String
-      },
-      compSelect: {
-        type: String
-      }
     },
     data() {
       return {};
     },
     computed: {},
     components: {
+      "Pannel" :Pannel,
+      "SwDatatable" : SwDatatable,
+      "HwDatatable" :HwDatatable
     },
     watch: {},
     methods: {},
@@ -67,7 +63,8 @@
   }
   [data-modal-container] {
     position: relative;
-    width: 800px;
+    width: 1400px;
+    padding:15px;
     background-color: #fff;
   }
   [data-modal-title] {
@@ -82,10 +79,10 @@
   }
   [data-modal-close] {
     position: absolute;
-    top: 0;
-    right: 15px;
+    top: -44px;
+    right: 0;
     width: 44px;
-    height: 72px;
+    height: 44px;
     font-size: 32px;
     color: #fff;
     i {

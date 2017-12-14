@@ -22,6 +22,7 @@ export default {
   FETCH_EDITEUSR : BASE_URL + "/group/node/${no}",
   UPDATE_EDITUSER : BASE_URL + "/node/${no}",
 
+
   //관리자 관리
   SETUP_ADMIN : BASE_URL,
   ADD_ADMIN : BASE_URL,
