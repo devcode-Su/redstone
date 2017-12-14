@@ -163,7 +163,7 @@
     beforeCreate() {
     },
     created() {
-      this.$bus.$on('search-option', (d) => {
+      this.$bus.$on('security-media', (d) => {
         for (let key in d) {
           if (d.hasOwnProperty(key)) {
             this.form[key] = d[key];
@@ -185,13 +185,14 @@
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off('search-option');
+      this.$bus.$off('security-media');
     },
     destroyed() {
     },
   };
 </script>
 <style lang='scss' scoped>
+  //noinspection CssUnknownTarget
   @import "~styles/variables";
 
   [data-table-wrap] {

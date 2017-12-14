@@ -240,7 +240,7 @@
       if (this.definition && this.definition.order && this.definition.order.length > 0) {
         this.selectedOrder = this.definition.order[0].value;
       }
-      this.$bus.$on('search-option', (data) => {
+      this.$bus.$on('search-file-form', (data) => {
         this.hasSearchOption = true;
         this.pagination.currentPage = 1;
         for (let key in data) {
@@ -269,7 +269,7 @@
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off('search-option');
+      this.$bus.$off('search-file-form');
     },
     destroyed() {
     },

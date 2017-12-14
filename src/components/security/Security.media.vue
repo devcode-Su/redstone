@@ -54,7 +54,7 @@
     watch: {},
     methods: {
       receive(form) {
-        this.$bus.$emit('search-option', form);
+        this.$bus.$emit('security-media', form);
       },
     },
     beforeCreate() {
