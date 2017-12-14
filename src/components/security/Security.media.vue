@@ -34,31 +34,40 @@
             VolumePath: "경로",
             VolumeName: "장치명",
             TotalNumberOfBytes: {
-              label: "크기", data: (data, key) => {
+              label: "크기",
+              data: (data, key) => {
                 let ret = data[key];
                 let sizeArr = ['', 'KB', 'MB', 'GB', 'TB'];
                 let idx = 0;
                 while (ret >= 1024) {
                   ret /= 1024;
                   idx++;
+                  if ( idx === sizeArr.length ) {
+                    break;
+                  }
                 }
                 return `${Math.floor(ret * 10) / 10}${sizeArr[idx]}`;
               },
             },
             FreeBytesAvailable: {
-              label: "사용가능", data: (data, key) => {
+              label: "사용가능",
+              data: (data, key) => {
                 let ret = data[key];
                 let sizeArr = ['', 'KB', 'MB', 'GB', 'TB'];
                 let idx = 0;
                 while (ret >= 1024) {
                   ret /= 1024;
                   idx++;
+                  if ( idx === sizeArr.length ) {
+                    break;
+                  }
                 }
                 return `${Math.floor(ret * 10) / 10}${sizeArr[idx]}`;
               },
             },
             EventsCount: {
-              label: '발생이벤트', data: (data, key) => {
+              label: '발생이벤트',
+              data: (data, key) => {
                 let dataArr = {
                   ProcessCreate : '프로세스 실행',
                   FileRead: '파일읽기',
