@@ -19,7 +19,8 @@
           </el-button>
           <el-checkbox-group v-model="viewChecked" v-if="isOrderListOpen" @change="colView">
 
-            <el-checkbox v-for="(check,k,i) in definition.field" :label="k" :key="k" :disabled="i === 0">{{check}}
+            <el-checkbox v-for="(check,k,i) in definition.field" :label="k" :key="k" :disabled="i === 0">
+              {{check.label ? check.label : check}}
             </el-checkbox>
           </el-checkbox-group>
         </div>
@@ -32,7 +33,9 @@
           <thead>
           <tr>
             <th class="col-connected"><span>접속</span></th>
-            <th v-for="(th,k) in definition.field" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
+            <th v-for="(th,k) in definition.field" :key="k" :class="'col-'+k" :ref="k">
+              {{th.label ? th.label : th}}
+            </th>
           </tr>
           </thead>
         </table>
@@ -43,13 +46,15 @@
           <tr v-if="!data || !data.data || !data.data.length">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
-          <tr data-tbody="row" v-else v-for="row in data.data" :key="row.id">
+          <tr data-tbody="row" v-else v-for="row in data.data" :key="row.id" @click="click(row)">
             <th class="col-connected">
                 <span class="icon">
                   <i class="fa fa-power-off" aria-hidden="true"></i>
                 </span>
             </th>
-            <td v-for="(td,k) in definition.field" :key="td.id" :class="'col-'+k" :ref="k">{{row[k]}}</td>
+            <td v-for="(td,k) in definition.field" :key="td.id" :class="'col-'+k" :ref="k">
+              {{td.data ? td.data(row, k) : row[k]}}
+            </td>
           </tr>
           </tbody>
         </table>
@@ -113,7 +118,7 @@
         this.form.page = page || this.form.page;
         this.form.length = length || this.form.length;
         this.form.order = this.selectedOrder;
-        this.form.direction= this.selectedDirection;
+        this.form.direction = this.selectedDirection;
         this.lastOrder = this.form.order;
 
         this.$http.get(url, {params: this.form})
@@ -158,6 +163,9 @@
       },
       handleCurrentChange(p) {
         this.getData(p);
+      },
+      click(data) {
+        this.$router.push({path: "Search-process", query: data});
       },
     },
     beforeCreate() {
@@ -218,6 +226,10 @@
   }
 
   [data-tbody] {
+    td {
+      white-space: normal;
+      word-break: keep-all;
+    }
 
   }
 
