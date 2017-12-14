@@ -199,7 +199,7 @@
         this.selectedOrder = this.definition.order[0].value;
       }
 
-      this.$bus.$on('network-search-data', (data) => {
+      this.$bus.$on('network-search-form', (data) => {
         this.hasSearchOption = true;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {
@@ -222,7 +222,7 @@
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off('network-search-data');
+      this.$bus.$off('network-search-form');
     },
     destroyed() {
     },

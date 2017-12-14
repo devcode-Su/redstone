@@ -55,7 +55,6 @@
     beforeCreate() {
     },
     created() {
-
     },
     beforeMounted() {
     },

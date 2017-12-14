@@ -54,7 +54,7 @@
         this.form.partial_match = replace.partial_match;
       },
       submit() {
-        this.$bus.$emit('search-option', this.form);
+        this.$bus.$emit('network-search-form', this.form);
       }
     },
     beforeCreate() {

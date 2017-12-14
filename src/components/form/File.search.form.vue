@@ -88,7 +88,7 @@ export default {
       this.form.partial_match = replace.partial_match;
     },
     submit(form) {
-      this.$bus.$emit("search-option", form);
+      this.$bus.$emit("search-file-form", form);
     }
   },
   beforeCreate() {},
