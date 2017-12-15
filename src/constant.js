@@ -3,6 +3,7 @@ export default {
   LOADING_STATE: "loadingState",
 
   FETCH_THUMBALL: "fetchThumbAll",
+  DASHBOARD_DATA : "dashboardData",
 
   FETCH_GROUP : "fetchGroup",
   ADD_GROUP : "addGroup",

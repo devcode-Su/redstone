@@ -5,22 +5,25 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
-        <date-searchform @form="receive"></date-searchform>
+        <info-file @form="receive"></info-file>
         <diagnosis-info-datatable :form-data="infoFile.formData" :local-data="infoFile.local"></diagnosis-info-datatable>
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
-        <date-searchform @form="receive"></date-searchform>
+        <info-ip @form="receive"></info-ip>
         <diagnosis-info-datatable :form-data="infoIp.formData" :local-data="infoIp.local"></diagnosis-info-datatable>
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
-        <date-searchform @form="receive"></date-searchform>
+        <info-rsc @form="receive"></info-rsc>
         <diagnosis-info-datatable :form-data="infoRsc.formData" :local-data="infoRsc.local"></diagnosis-info-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
-import DateSearchform from "../form/Date.search.form";
+  import { mapGetters } from "vuex";
+import InfoFile from "../form/Diagnosis.info.file";
+  import InfoIp from "../form/Diagnosis.info.ip";
+  import InfoRsc from "../form/Diagnosis.info.rsc";
 import DiagnosisInfoDatatable from "./Diagnosis.info.datatable";
 export default {
   name: "Diagnosisinfo",
@@ -102,9 +105,15 @@ export default {
       },
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      selectData : "dashboardData"
+    })
+  },
   components: {
-    "date-searchform":DateSearchform,
+    "info-file": InfoFile,
+    "info-ip": InfoIp,
+    "info-rsc": InfoRsc,
     "diagnosis-info-datatable":DiagnosisInfoDatatable,
   },
   watch: {},
@@ -129,6 +138,11 @@ export default {
   beforeCreate() {},
   created() {
     this.$bus.$on("update", this.receive);
+    if(this.selectData.name === "badurlip"){
+      this.activeName = "second";
+    }else if(this.selectData.name === "rsc"){
+      this.activeName = "third";
+    }
   },
   beforeMounted() {},
   mounted() {},

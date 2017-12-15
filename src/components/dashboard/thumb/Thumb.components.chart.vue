@@ -6,7 +6,7 @@
     <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick.self="periodNumber"></dashboard-periodbtn>
     <div data-chart-none v-if="dataCheck">{{indexDate}} 검출된 내역이 없습니다.</div>
     <chart-horizontalbar v-else :chart-data="datacollection" :width="500" :height="216"></chart-horizontalbar>
-    <button data-icon class="more-link">
+    <button data-icon class="more-link" @click.stop="link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
     </button>
@@ -38,17 +38,17 @@ export default {
       datacollection: {},
       responseData: [],
       chartData: [],
-      num : 0,
+      btnNum : 0,
       arr: ["ip", "count"]
     };
   },
   computed : {
     selecNum(){
-      return this.num;
+      return this.btnNum;
     },
     indexDate() {
-      if(this.num === 0) return "일일";
-      else if(this.num === 1) return "주간";
+      if(this.btnNum === 0) return "일일";
+      else if(this.btnNum === 1) return "주간";
       else return "월간";
     }
   },
@@ -105,7 +105,7 @@ export default {
     // }
     periodNumber(periodNum) {
       //console.log(periodNum);
-      this.num = periodNum;
+      this.btnNum = periodNum;
     },
     fillData() {
       this.datacollection = {
@@ -120,6 +120,13 @@ export default {
           }
         ]
       };
+    },
+    link(){
+      this.$store.commit(Constant.DASHBOARD_DATA, {
+        name : this.propData.resource,
+        num : this.btnNum + 1
+      });
+      this.$router.push(this.propData.link);
     },
     itemRemove(comNum) {
       this.$store.dispatch(Constant.DELETE_THUMBLIST, { index: comNum });

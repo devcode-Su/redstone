@@ -5,22 +5,25 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
-        <date-searchform @form="receive"></date-searchform>
+        <pc-file @form="receive"></pc-file>
         <diagnosis-datatable :form-data="pcFile.formData" :local-data="pcFile.local"></diagnosis-datatable>
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
-        <date-searchform @form="receive"></date-searchform>
+        <pc-ip @form="receive"></pc-ip>
         <diagnosis-datatable :form-data="pcIp.formData" :local-data="pcIp.local"></diagnosis-datatable>
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
-        <date-searchform @form="receive"></date-searchform>
+        <pc-rsc @form="receive"></pc-rsc>
         <diagnosis-datatable :form-data="pcRsc.formData" :local-data="pcRsc.local"></diagnosis-datatable>
       </el-tab-pane>
     </el-tabs>
   </article>
 </template>
 <script>
-import DateSearchform from "../form/Date.search.form";
+  import { mapGetters } from "vuex";
+  import PcFile from "../form/Diagnosis.pc.file";
+  import PcIp from "../form/Diagnosis.pc.ip";
+  import PcRsc from "../form/Diagnosis.pc.rsc";
 import DiagnosisDatatable from "./Diagnosis.pc.datatable";
 export default {
   name: "Diagnosisinfo",
@@ -96,9 +99,15 @@ export default {
       }
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      selectData : "dashboardData"
+    })
+  },
   components: {
-    "date-searchform":DateSearchform,
+    "pc-file": PcFile,
+    "pc-ip": PcIp,
+    "pc-rsc": PcRsc,
     "diagnosis-datatable":DiagnosisDatatable
   },
   watch: {},
@@ -123,6 +132,11 @@ export default {
   beforeCreate() {},
   created() {
     this.$bus.$on("update", this.receive);
+    if(this.selectData.name === "badurlippc"){
+      this.activeName = "second";
+    }else if(this.selectData.name === "rscpc"){
+      this.activeName = "third";
+    }
   },
   beforeMounted() {},
   mounted() {},

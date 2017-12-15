@@ -17,7 +17,7 @@
               {{indexDate}} 검출된 내역이 없습니다.
             </td>
           </tr>
-          <tr data-tbody="row" v-else v-for="(tr, h) in rowData" :key="tr.h" @click.stop="rowClick(tr)">
+          <tr data-tbody="row" v-else v-for="(tr, h) in rowData" :key="h" @click.stop="rowClick(tr, h)">
             <td data-tbody="column" v-for="(td, j) in fieldKeys" :key="td.j" :class="['col-'+td,{'col-end' : fields.length-1 === j }]">
               {{ tr[td] }}
             </td>
@@ -90,9 +90,11 @@ export default {
     }
   },
   methods: {
-    rowClick(val) {
-      console.log('"this clicked row"');
-      console.log(val);
+    rowClick(row, num) {
+      this.$emit("rowRouter",{
+        row : row,
+        rowNum : num
+      })
     }
   },
   beforeCreate() {},

@@ -77,9 +77,11 @@ export default {
     }
   },
   methods: {
-    rowClick(val) {
+    rowClick(row) {
       console.log('"this clicked row"');
-      console.log(val);
+      this.$emit("rowRouter",{
+        row : row
+      })
     }
   },
   beforeCreate() {},

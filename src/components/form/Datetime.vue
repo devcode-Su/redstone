@@ -30,9 +30,16 @@
         dateLabel: ["1시간", "일일", "주간", "월간"],
       };
     },
-    computed: {},
+    computed: {
+    },
     components: {},
-    watch: {},
+    watch: {
+      selectDate(d){
+        if(d){
+          console.log(d)
+        }
+      }
+    },
     methods: {
       valueChanged(obj, value) {
         console.log('valueChanged', obj, value);

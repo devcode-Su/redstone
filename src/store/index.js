@@ -7,7 +7,8 @@ import loading from "./modules/loading";
 import thumbCompList from "./modules/thumbCompAll";
 import groupManagement from "./modules/groupMangement";
 import setupAdmin from "./modules/setupAdmin";
-import Property from "./modules/propertyDetail"
+import Property from "./modules/propertyDetail";
+import DashboardData from "./modules/dashboardDateRoute";
 
 Vue.use(Vuex);
 
@@ -21,7 +22,8 @@ const store = new Vuex.Store({
     thumbComp: thumbCompList,
     groupManagements : groupManagement,
     setupAdmins : setupAdmin,
-    Propertys : Property
+    Propertys : Property,
+    DashboardDataRoute : DashboardData
   }
 });
 

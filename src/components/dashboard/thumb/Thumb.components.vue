@@ -4,9 +4,9 @@
       {{propData.title}}
     </h1>
     <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick.self="periodNumber"></dashboard-periodbtn>
-    <thumb-datatable-select v-if="propData.button_type === '1'" :fields="propData.column" :prop-data="compData" :prop-index="selectNum"></thumb-datatable-select>
-    <thumb-datatable v-else :fields="propData.column" :prop-data="compData"></thumb-datatable>
-    <button data-icon class="more-link">
+    <thumb-datatable-select v-if="propData.button_type === '1'" :fields="propData.column" :prop-data="compData" :prop-index="selectNum" @rowRouter="rowRouter"></thumb-datatable-select>
+    <thumb-datatable v-else :fields="propData.column" :prop-data="compData" @rowRouter="rowRouter2"></thumb-datatable>
+     <button data-icon class="more-link" @click.stop="link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
     </button>
@@ -43,7 +43,7 @@ export default {
   computed: {
     selectNum() {
       return this.btnNum;
-    }
+    },
   },
   components: {
     "dashboard-periodbtn":DashboardPeriodbtn,
@@ -53,13 +53,37 @@ export default {
   watch: {},
   methods: {
     periodNumber(periodNum) {
-      //console.log(btnNum);
       this.btnNum = periodNum;
-      //console.log(this.btnNum);
-      //console.log(this.compData)
+    },
+    link(){
+      this.$store.commit(Constant.DASHBOARD_DATA, {
+        name : this.propData.resource,
+        num : this.btnNum + 1
+      });
+      this.$router.push(this.propData.link);
+    },
+    rowRouter(data){
+      this.$store.commit(Constant.DASHBOARD_DATA, {
+        name : this.propData.resource,
+        num : this.btnNum + 1,
+        rowNum : data.rowNum
+      });
+      this.$router.push(this.propData.link);
+    },
+    rowRouter2(data){
+
     },
     itemRemove(comNum) {
-      this.$store.dispatch(Constant.DELETE_THUMBLIST, { index: comNum });
+      console.log(comNum)
+      // this.$store.dispatch(Constant.DELETE_THUMBLIST, { index: comNum });
+      // const getHide =
+      //   "/dashboard/?method=set&resource=config&from=&to=&name=hidelist&time=";
+      // const getView =
+      //   "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
+      //
+      // this.$http.post(getHide, JSON.stringify(this.hideList));
+      // this.$http.post(getView, JSON.stringify(this.viewList));
+      // this.$bus.$emit("thumb-data");
     }
   },
   beforeCreate() {},

@@ -21,6 +21,7 @@
   </article>
 </template>
 <script>
+  import { mapGetters } from "vuex";
 import PropertyDatatable from "./Property.datatable";
 import SoftwareDatatable from "./Property.software.datatable";
 import InstallSoftware from "../form/Install.software.form"
@@ -78,7 +79,11 @@ export default {
       }
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      selectData : "dashboardData"
+    })
+  },
   components: {
     "property-datatable" : PropertyDatatable,
     "software-datatable" : SoftwareDatatable,
@@ -129,6 +134,9 @@ export default {
   beforeCreate() {},
   created() {
     this.$bus.$on("update", this.receive);
+    if(this.selectData.name === "program"){
+      this.activeName = "third";
+    }
   },
   beforeMounted() {},
   mounted() {

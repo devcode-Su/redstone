@@ -41,6 +41,7 @@
   </div>
 </template>
 <script>
+  import GlobalRange from "../form/Global.range";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
   import MixinsSearchAreaClose from "@/components/mixins/setDatetime.mixin";
 
@@ -84,7 +85,9 @@
         text: "",
       };
     },
-    computed: {},
+    computed: {
+      "global-range" : GlobalRange,
+    },
     components: {
       // ElRadio,
       // ElRadioGroup

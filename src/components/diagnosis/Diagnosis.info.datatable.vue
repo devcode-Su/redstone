@@ -38,17 +38,17 @@
           <tr v-if="stateReorder">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
-          <template v-else v-for="row in tableData">
+          <template v-else v-for="(row, i) in tableData" >
             <tr data-tbody="row"  :key="row.id">
               <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
               <td class="col-moreBtn">
-                <button class="icon-btn icon-wrap" @click="rowSearch(row)" :class="{on : row === more}">
-                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
+                <button class="icon-btn icon-wrap" @click="rowSearch(i)" :class="{on : i === more}">
+                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : i === more}"></i>
                 </button>
               </td>
             </tr>
             <transition name="fade">
-              <tr data-tboy="hide-row" v-if="row === more">
+              <tr data-tboy="hide-row" v-if="i === more">
                 <td :colspan="Object.keys(localData.fields).length +1">
                   <diagnosis-inserttable :fields="localData.insertFields" :prop-data="insertTable"></diagnosis-inserttable>
                 </td>
@@ -63,6 +63,7 @@
   </section>
 </template>
 <script>
+  import { mapGetters } from "vuex";
   import DiagnosisInserttable from "./Diagnosis.info.insert.table"
   import Paginations from "../template/Template.paginations"
   export default {
@@ -108,7 +109,10 @@
     computed: {
       stateReorder(){
         return !this.tableData.length
-      }
+      },
+      ...mapGetters({
+        selectData : "dashboardData"
+      })
     },
     components: {
       "diagnosis-inserttable":DiagnosisInserttable,
@@ -139,6 +143,14 @@
           return t
         }
       },
+      tableData(t){
+        if(t){
+          if(!this.selectData.rowNum){
+            console.log("ready!");
+            this.rowSearch(this.selectData.rowNum);
+          }
+        }
+      }
     },
     methods: {
       receiveSearch(){
@@ -174,11 +186,15 @@
           }
         }
       },
-      rowSearch(row){
-        if(this.more === row){
+      rowSearch(num){
+        console.log(num);
+        console.log(this.localData.name );
+        if(this.more === num){
           this.more = null;
         }else{
-          this.more = row;
+          this.more = num;
+          let row = this.tableData[num];
+          console.log(row[this.localData.apiCondition]);
           const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
           //console.log(url)
           this.$http.get(url, {
@@ -199,16 +215,20 @@
     beforeCreate() {
     },
     created() {
-      //console.log(this.localData)
+      if(!this.selectData.rowNum){
+        console.log("ok");
+        //this.rowSearch(this.selectData.rowNum);
+      }
     },
     beforeMounted() {
     },
     mounted() {
+      //this.rowSearch(this.selectData.rowNum);
     },
     beforeUpdate() {
     },
     updated() {
-
+      //this.rowSearch(this.selectData.rowNum);
     },
     activated() {
     },

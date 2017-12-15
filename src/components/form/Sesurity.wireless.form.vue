@@ -86,6 +86,10 @@
       }
     },
     methods: {
+      dateSet(d) {
+        this.form.startDate = d.start ? d.start : this.form.startDate;
+        this.form.endDate = d.end ? d.end : this.form.endDate;
+      },
       handleCheckAllChange(val) {
         console.log(val);
         this.form.checkType = val ? this.checklistAll : [];
