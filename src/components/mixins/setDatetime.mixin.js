@@ -36,21 +36,26 @@ export default {
     setDatelast(num) {
       switch (num) {
         case 0:
-          this.startDate = new Date(new Date().getTime() - 3600 * 1000 * 24 * 7);
+          this.date = new Date(new Date().getTime() - 3600 * 1000 * 24 * 7);
           break;
         case 1:
-          this.startDate = new Date(new Date().getTime() - 3600 * 1000 * 24 * 30);
+          this.date = new Date(new Date().getTime() - 3600 * 1000 * 24 * 30);
           break;
         case 2:
-          this.startDate = new Date(new Date().getTime() - 3600 * 1000 * 24 * 90);
+          this.date = new Date(new Date().getTime() - 3600 * 1000 * 24 * 90);
           break;
         case 3:
-          this.startDate = new Date(new Date().getTime() - 3600 * 1000 * 24 * 180);
+          this.date = new Date(new Date().getTime() - 3600 * 1000 * 24 * 180);
           break;
         default:
           break;
       }
-      this.endDate = new Date();
-    }
-  }
+      if (this.date) {
+        this.date.setHours(0);
+        this.date.setMinutes(0);
+        this.date.setSeconds(0);
+        this.date.setMilliseconds(0);
+      }
+    },
+  },
 }

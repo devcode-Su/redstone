@@ -12,7 +12,7 @@
     </p>
     <form @submit.prevent="send">
       <fieldset>
-        <datelast @pass="passSet"></datelast>
+        <datelast @change="passSet"></datelast>
       </fieldset>
       <div data-search-submit>
         <el-button type="primary" plain size="small" native-type="submit">
@@ -24,7 +24,7 @@
 </template>
 <script>
   import Constant from "@/constant";
-  import { mapGetters } from "vuex";
+  import {mapGetters} from "vuex";
   import Datelast from "./Datelast";
 
   export default {
@@ -38,14 +38,13 @@
         form: {
           dept_code: 1,
           nodeid: "",
-          all:"",
-          startDate: null,
-          endDate: null,
-        }
+          all: "",
+          date: null,
+        },
       };
     },
     computed: {
-      ...mapGetters({ globalRangeCode: "globalRangeCode" })
+      ...mapGetters({globalRangeCode: "globalRangeCode"})
     },
     components: {
       "datelast": Datelast,
@@ -57,46 +56,57 @@
           this.form.dept_code = g.dept_code;
           this.form.nodeid = g.nodeid;
         }
-      }
+      },
     },
     methods: {
       resetRange() {
         this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
           dept_code: 1,
-          name: "전사"
+          name: "전사",
         });
       },
       passSet(p) {
-        //console.log(dateTime);
-        this.form.all = p.all;
-        this.form.startDate = p.start ? p.start : this.form.startDate;
-        this.form.endDate = p.end ? p.end : this.form.endDate;
+        for ( let key in p ) {
+          if ( p.hasOwnProperty(key) && p[key] ) {
+            this.form[key] = p[key];
+          }
+        }
+//        this.send();
       },
       send() {
-        //console.log(this.form);
-        if(this.form.startDate == null || this.form.endDate == null ){
+        if (!this.form.date) {
           this.$notify.error({
-            title: 'Error',
-            message: '조사기간을 설정하세요.'
-          });
-        }else{
-          this.$emit("form", this.form);
+                               title: 'Error',
+                               message: '조사기간을 설정하세요.',
+                             });
+        } else {
+          this.$emit("submit", this.form);
         }
-      }
+      },
     },
-    beforeCreate() {},
-    created() {},
-    beforeMounted() {},
-    mounted() {},
-    beforeUpdate() {},
+    beforeCreate() {
+    },
+    created() {
+    },
+    beforeMounted() {
+    },
+    mounted() {
+    },
+    beforeUpdate() {
+    },
     updated() {
     },
-    activated() {},
-    deactivated() {},
-    beforeDestroy() {},
-    destroyed() {}
+    activated() {
+    },
+    deactivated() {
+    },
+    beforeDestroy() {
+    },
+    destroyed() {
+    },
   };
 </script>
 <style lang='scss' scoped>
+  //noinspection CssUnknownTarget
   @import "~styles/variables";
 </style>

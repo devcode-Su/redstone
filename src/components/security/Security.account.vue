@@ -4,16 +4,13 @@
       사용자 계정
     </h1>
     <el-tabs v-model="activeName">
-      <el-tab-pane label="계정비밀번호" name="first">
-        <security-passwordform @form="receive"></security-passwordform>
-        <security-password-datatable :form-data="account.formData"
-                                     :local-data="account.local"></security-password-datatable>
+      <el-tab-pane label="계정비밀번호" name="0">
+        <security-passwordform @submit="receive"></security-passwordform>
       </el-tab-pane>
-      <el-tab-pane label="화면보호기" name="second">
-        <security-screenform @form="receive"></security-screenform>
-        <security-password-datatable :form-data="screen.formData"
-                                     :local-data="screen.local"></security-password-datatable>
+      <el-tab-pane label="화면보호기" name="1">
+        <security-screenform @submit="receive"></security-screenform>
       </el-tab-pane>
+      <security-password-datatable :definition="definitions[activeName].definition"></security-password-datatable>
     </el-tabs>
   </article>
 </template>
@@ -30,42 +27,109 @@
     },
     data() {
       return {
-        activeName: "first",
-        account: {
-          formData: {},
-          local: {
-            fields: {
-              nodeid: "센서 ID",
-              userdept: "부서명",
-              username: "사용자명",
-              userip: "IP 주소",
-              userid: "윈도우 계정",
-              passwd_changed_date: "최종 변경일시",
+        activeName: 0,
+        definitions: [
+          {
+            definition: {
+              url: '/api/admin/account/password/expired',
+              field: {
+                connected: {
+                  label: ' ',
+                  data: (data, key) => {
+                    return data.node_connected.connected;
+                  },
+                },
+                nodeid: '센서ID',
+                deptName: {
+                  label: '부서명',
+                  data: (data, key) => {
+                    return data.dept.name;
+                  },
+                },
+                username: {
+                  label: '사용자명',
+                  data: (data, key) => {
+                    return data.info.username;
+                  },
+                },
+                ip: {
+                  label: 'IP 주소',
+                  data: (data, key) => {
+                    return data.info.ip;
+                  },
+                },
+                userid: '윈도우 계정',
+                passwd_changed_date: '최종 변경일시',
+              },
+              order: [
+                {value: 'nodeid', label: '센서ID'},
+                {value: 'userid', label: '윈도우 계정'},
+                {value: 'passwd_changed_date', label: '최종 변경일시'},
+              ],
             },
           },
-          definition: {
-            url: '',
-            field: [
-
-            ],
-            order: [
-
-            ]
-          }
-        },
-        screen: {
-          formData: {},
-          local: {
-            fields: {
-              nodeid: "센서 ID",
-              userdept: "부서명",
-              username: "사용자명",
-              userip: "IP 주소",
-              userid: "윈도우 계정",
-              passwd_changed_date: "최종 변경일시",
+          {
+            definition: {
+              url: '/api/admin/account/screen-saver',
+              field: {
+                connected: '',
+                nodeid: '센서ID',
+                deptName: {
+                  label: '부서명',
+                  data: (data, key) => {
+                    return data.dept.name;
+                  }
+                },
+                username: {
+                  label: '사용자명',
+                  data: (data, key) => {
+                    return data.info.username;
+                  }
+                },
+                ip: {
+                  label: 'PC IP 주소',
+                  data: (data, key) => {
+                    return data.info.ip;
+                  }
+                },
+                userid: '윈도우 계정',
+                screen_saver: {
+                  label: '화면보호기 적용',
+                  data: (data, key) => {
+                    if ( null === data[key] ) {
+                      return '(unknown)';
+                    }
+                    else {
+                      if ( data[key] ) {
+                        return `대기 ${data['screen_saver_time']}초`;
+                      }
+                      else {
+                        return '미적용';
+                      }
+                    }
+                  }
+                },
+                passwd: {
+                  label: '비밀번호 적용',
+                  data: (data, key) => {
+                    if ( null === data[key] ) {
+                      return '(unknown)';
+                    }
+                    else {
+                      if ( data[key] ) {
+                        return `적용`;
+                      }
+                      else {
+                        return '미적용';
+                      }
+                    }
+                  }
+                },
+              },
+              order: [],
             },
           },
-        },
+        ],
       };
     },
     computed: {},
@@ -77,66 +141,7 @@
     watch: {},
     methods: {
       receive(form) {
-        console.log(form)
-        //return form
-        this.formData = {
-          url: "/api/admin/volume/",
-        }
-      },
-      receiveData(form) {
-        if (form.datetime === "") {
-          this.$notify.error({
-                               title: "Error",
-                               message: "검색 조건을 입력하세요.",
-                             });
-        } else {
-          if (this.activeName === "first") {
-            this.mixData(this.infofile, form, "file");
-          } else {
-            this.mixData(this.infoip, form, "ip");
-          }
-        }
-      },
-      mixData(local, receive, apiurl) {
-        const url = "/api/admin/account/password/expired/TYPE/CODE";
-        let data = {
-          page: 1,
-          length: 50,
-          startDate: receive.datetime[0].getTime(),
-          endDate: receive.datetime[1].getTime(),
-          dept_code: receive.data.dept_code || "",
-          node_id: receive.data.node_id || "",
-          order: local.order,
-          direction: 1,
-        };
-        this.$http.get(url, data).then(result => {
-          local.data = result.data.data;
-        });
-        local.search = data;
-        local.url = url;
-      },
-      reorder(val) {
-        console.log(this.activeName);
-        if (this.activeName === "first") {
-          val.form.order = val.order;
-          this.$http
-              .get(val.url, {
-                params: val.form,
-              })
-              .then(result => {
-                console.log(result.data.data);
-                this.infofile.data = result.data.data;
-              });
-        } else {
-          val.form.order = val.order;
-          this.$http
-              .get(val.url, {
-                params: val.form,
-              })
-              .then(result => {
-                this.infoip.data = result.data.data;
-              });
-        }
+        this.$bus.$emit('security-account', form);
       },
     },
     beforeCreate() {
@@ -162,5 +167,6 @@
   };
 </script>
 <style lang='scss' scoped>
+  //noinspection CssUnknownTarget
   @import "~styles/variables";
 </style>
