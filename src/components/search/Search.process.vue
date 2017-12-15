@@ -4,51 +4,62 @@
       프로세스 검색
     </h1>
     <div data-search-pannel>
-      <el-form ref="form" :model="form" :label-width="'180px'" :label-position="'left'">
+      <global-range></global-range>
+      <form @submit.prevent="onSubmit">
         <fieldset>
-          <div class="form-align-box">
-            <div class="form-item-wrap">
-              <el-form-item label="조사기간 설정" size="small">
-                <el-date-picker v-model="startDate" type="datetime">
-                </el-date-picker>
-                <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-                <el-date-picker v-model="endDate" type="datetime">
-                </el-date-picker>
-                <div class="btn-date-wrap">
-                  <el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
-                    {{settime}}
-                  </el-button>
-                </div>
-              </el-form-item>
-              <el-form-item label="검색 항목" size="small">
-                <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
-                  전체
-                </el-checkbox>
-                <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
-                  <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">{{search}}
-                  </el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
-              <el-form-item label="검색 조건" size="small">
-                <el-input type="text" v-model="form.q">
-                </el-input>
-                <el-checkbox class="agreement" v-model="form.partial_match">
-                  부분 일치
-                </el-checkbox>
-              </el-form-item>
-            </div>
-            <div class="btn-wrap">
-              <el-button size="small" type="primary" @click="onSubmit('form')">검색</el-button>
+          <div data-form-item>
+            <label data-form-label="required">조사기간 설정</label>
+            <div data-form-tag>
+              <el-date-picker v-model="form.startDate" type="datetime" placeholder="Select Start date and time" size="small">
+              </el-date-picker>
+              <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+              <el-date-picker v-model="form.endDate" type="datetime" placeholder="Select End date and time" size="small">
+              </el-date-picker>
+              <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDateTime(i)" size="small">
+                {{settime}}
+              </el-button>
             </div>
           </div>
+          <div data-form-item>
+            <div data-form-tag>
+            <label class="check">검색 항목</label>
+              <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
+                전체
+              </el-checkbox>
+              <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
+                <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">{{search}}
+                </el-checkbox>
+              </el-checkbox-group>
+              <!--<el-checkbox :indeterminate="isIndeterminate" v-model="form.all" true-label="on" :false-label="null" @change="checkAll">전체</el-checkbox>-->
+              <!--<div class="check-groups">-->
+                <!--<el-checkbox v-model="form.ti_event" @change="checkBox">TI 진단 이벤트</el-checkbox>-->
+                <!--<el-checkbox v-model="form.url_ip_event" @change="checkBox">악성 URL/IP 접근 이벤트</el-checkbox>-->
+                <!--<el-checkbox class="rsc" v-model="form.engine_event" @change="checkBox">RSC 엔진 진단 이벤트</el-checkbox>-->
+                <!--<el-checkbox v-model="form.process_event" @change="checkBox">프로세스</el-checkbox>-->
+                <!--<el-checkbox v-model="form.network_event" @change="checkBox">네트워크</el-checkbox>-->
+                <!--<el-checkbox v-model="form.file_event" @change="checkBox">파일</el-checkbox>-->
+                <!--<el-checkbox v-model="form.registry_event" @change="checkBox">레지스트리</el-checkbox>-->
+              <!--</div>-->
+            </div>
+          </div>
+          <replace-input @replace="inputText"></replace-input>
         </fieldset>
-      </el-form>
+        <div data-search-submit>
+          <el-button type="primary" plain size="small" native-type="onSubmit">
+            검색
+          </el-button>
+        </div>
+      </form>
     </div>
     <processdatatable v-if="definition" :definition="definition"></processdatatable>
   </article>
 </template>
 <script>
-
+  //import Constant from "@/constant";
+  import { mapGetters } from "vuex";
+  import GlobalRange from "../form/Global.range";
+  import Datetime from "../form/Datetime";
+  import ReplaceInput from "../form/Replace.input";
   import Processdatatable from "./Search.process.datatable.vue";
   import MixinsSetDatetime from "../mixins/setDatetime.mixin"
 
@@ -63,8 +74,7 @@
 
     data() {
       return {
-        datebtn:         ["1시간", "일일", "주간", "월간"],
-        searchNavi:      "전사",
+        dateLabel: ["1시간", "일일", "주간", "월간"],
         isIndeterminate: false,
         checklistAll:    [
           "FILE", "IP", "RSC", "process", "network", "files", "registry",
@@ -78,16 +88,18 @@
           files:    "파일",
           registry: "레지스트리",
         },
-        form:            {
+        form: {
+          dept_code: 1,
+          nodeid: "",
+          startDate: null,
+          endDate: null,
+          all : "on",
           checkType:     [
             "FILE", "IP", "RSC", "process", "network", "files", "registry",
           ],
-          checkAll:      true,
-          q:             "",
-          partial_match: false,
+          q:"",
+          partial_match: "",
         },
-        startDate:       null,
-        endDate:         null,
         definition:      {
           field: [
             "프로세스 시작 시각",
@@ -96,8 +108,7 @@
             "부서",
             "센서 ID",
             "검색된 이벤트 수",
-            "위협 정보",
-            "",
+            "위협 정보"
           ],
           url:   "/api/admin/search/event",
           order: [
@@ -114,12 +125,28 @@
       recieveData() {
         return this.$store.state.processSearchData
       },
+      ...mapGetters({ globalRangeCode: "globalRangeCode" })
     },
     components: {
+      "global-range" : GlobalRange,
+      "datetime": Datetime,
+      "replace-input": ReplaceInput,
       "processdatatable": Processdatatable,
     },
-    watch:      {},
+    watch: {
+      globalRangeCode(g) {
+        if (g) {
+          //console.log(g);
+          this.form.dept_code = g.dept_code;
+          this.form.nodeid = g.nodeid;
+        }
+      }
+    },
     methods:    {
+      dateSet(d) {
+        this.form.startDate = d.start ? d.start : this.form.startDate;
+        this.form.endDate = d.end ? d.end : this.form.endDate;
+      },
       handleCheckAllChange(val) {
         console.log(val);
         this.form.checkType = val ? this.checklistAll : [];
@@ -131,25 +158,28 @@
         this.isIndeterminate =
           checkedCount > 0 && checkedCount < this.checklistAll.length;
       },
-      onSubmit(form) {
-        const formData = this.$refs[form].model;
-
-        if (this.startDate === "" || this.endDate === "") {
+      inputText(t){
+        this.form.q = t.q;
+        this.form.partial_match = t.partial_match;
+      },
+      onSubmit() {
+        console.log(this.form);
+        if(this.form.startDate == null || this.form.endDate == null ){
           this.$notify.error({
             title:   "Error",
-            message: "검색 조건을 입력하세요.",
+            message: "조사기간을 입력하세요.",
           });
         } else {
           const data = {
-            startDate:      this.startDate ? this.startDate : null,
-            endDate:        this.endDate ? this.endDate : null,
-            dept_code:      formData && formData.data ? formData.data.dept_code : null,
-            node_id:        formData && formData.data ? formData.data.node_id : null,
+            startDate:      this.form.startDate ? this.form.startDate : null,
+            endDate:        this.form.endDate ? this.form.endDate : null,
+            dept_code:      this.form.dept_code ? this.form.dept_code : null,
+            node_id:        this.form.nodeid ? this.form.nodeid : null,
             order:          "time",
             direction:      1,
-            q:              formData.q,
+            q:              this.form.q,
             all:            this.form.checkAll,
-            partial_match:  formData.partial_match ? formData.partial_match : null,
+            partial_match:  this.form.partial_match ? this.form.partial_match : null,
             ti_event:       this.$refs.check[0].isChecked,
             url_ip_event:   this.$refs.check[1].isChecked,
             engine_event:   this.$refs.check[2].isChecked,
@@ -157,7 +187,7 @@
             network_event:  this.$refs.check[4].isChecked,
             file_event:     this.$refs.check[5].isChecked,
             registry_event: this.$refs.check[6].isChecked,
-            ProcessGuid:    formData && formData.ProcessGuid ? formData.ProcessGuid : null,
+            ProcessGuid:    this.form.ProcessGuid ? this.form.ProcessGuid : null,
           };
           this.$bus.$emit('process-search-data', data);
         }
@@ -173,6 +203,7 @@
       },
     },
     created() {
+      this.$bus.$on("update", this.onSubmit);
     },
     beforeMounted() {
     },
@@ -181,13 +212,13 @@
         let query = this.$route.query;
         if (query.EventTime || query.InsertTime) {
           let date = query.EventTime || query.InsertTime;
-
+          console.log(date);
           let d = new Date(this.timeToUTC(date));
           d.setMinutes(d.getMinutes() - 30);
-          this.startDate = d;
+          this.form.startDate = d;
           d = new Date(query.EventTime || query.InsertTime);
           d.setMinutes(d.getMinutes() + 30);
-          this.endDate = d;
+          this.form.endDate = d;
         }
         for (let i in this.queryList) {
           if (query.hasOwnProperty(this.queryList[i])) {
@@ -203,7 +234,7 @@
           this.form.ProcessGuid = query.ProcessGuid;
         }
 
-        this.onSubmit('form');
+        this.onSubmit();
 
         if (query.ProcessGuid) {
           this.form.ProcessGuid = null;
@@ -233,5 +264,25 @@
 
   .btn-date-wrap {
     margin-left: 5px;
+  }
+  .check {
+    align-self: flex-start;
+  }
+
+  [ data-form-tag] {
+    align-items: flex-start;
+    .el-checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      width: 800px;
+      .el-checkbox {
+        width: 25%;
+        margin: 0;
+        padding: 0;
+        &:nth-child(3) {
+          width: 50%;
+        }
+      }
+    }
   }
 </style>

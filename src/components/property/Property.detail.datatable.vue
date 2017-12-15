@@ -97,6 +97,7 @@
         tableData: [],
         pagingData:[],
         viewChecked: null,
+        urlType : "",
         api : "",
         dept_code: 1,
         nodeid : "",
@@ -149,7 +150,8 @@
       defaultSet(){
         this.dept_code = this.globalRangeCode.dept_code;
         this.nodeid = this.globalRangeCode.nodeid;
-        this.name = this.propertyDetail.name;
+        this.urlType = this.propertyDetail.urlType;
+        this.name = encodeURIComponent(this.propertyDetail.name);
         this.version = this.propertyDetail.version;
         this.api = this.propertyDetail.api;
       },
@@ -157,11 +159,16 @@
         const type = this.nodeid ? "node" : "group";
         const code = this.nodeid ? this.nodeid : this.dept_code;
         let url;
-        if(this.api === "os"){
-          url = `/api/admin/node/list/${this.api}/${this.name}/${this.version}/${type}/${code}`;
+        if(this.urlType === "software"){
+          if(this.api === "os"){
+            url = `/api/admin/node/list/${this.api}/${this.name}/${this.version}/${type}/${code}`;
+          }else{
+            url = `/api/admin/node/list/software/${type}/${code}/${this.name}/${this.version}`;
+          }
         }else{
-          url = `/api/admin/node/list/${this.api}/${type}/${code}/${this.name}/${this.version}`;
+          url = `/api/admin/node/list/hardware/${this.api}/${type}/${code}/${this.name}`;
         }
+
         console.log(url);
         this.$http.get(url, {
           params : this.form

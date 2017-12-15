@@ -24,6 +24,7 @@
   </div>
 </template>
 <script>
+  import Constant from "@/constant";
   export default {
     name: "InsertDatatable",
     extends: {},
@@ -64,6 +65,10 @@
     },
     methods: {
       sendData(row) {
+        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+          nodeid: row.nodeid,
+          username: row.username
+        });
         this.$router.push({path: "Search-process", query: row});
       }
     },

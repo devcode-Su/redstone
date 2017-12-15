@@ -1,5 +1,5 @@
 <template>
-  <section class="inner-view inner-view-box">
+  <section id="inner-view-box" class="inner-view">
     <information-process-create :ProcessGuid="ProcessGuid"></information-process-create>
     <information-file-master :ProcessGuid="ProcessGuid"></information-file-master>
     <information-detect :ProcessGuid="ProcessGuid"></information-detect>
@@ -53,15 +53,16 @@
     }
   };
 </script>
-<style lang='scss' scoped>
+<style lang='scss'>
   @import "~styles/variables";
 
   tr {
     cursor: pointer;
   }
 
-  .inner-view-box {
+  #inner-view-box {
     margin: 10px 0;
+    padding:15px 20px;
     border: 1px solid color(default);
     h1 {
       margin-bottom: 0;
@@ -74,7 +75,7 @@
       padding: 15px 20px;
     }
     h2 {
-      margin-bottom: 0;
+      margin-bottom: 5px;
       font-size: 14px;
       color: color(default);
     }
@@ -86,7 +87,7 @@
         margin: 0;
       }
       dt {
-        width: 130px;
+        width: 150px;
         font-size: 14px;
         font-weight: bold;
         color: color(default);
@@ -101,13 +102,18 @@
         }
       }
       dd {
-        flex: 1;
+        flex:1;
         margin-left: 0;
         color: #5d5d5d;
+        word-break: keep-all;
+        white-space: normal;
       }
       dt,
       dd {
         line-height: 24px !important;
+      }
+      &-column{
+        margin-bottom:15px;
       }
     }
     .info-list {

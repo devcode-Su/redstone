@@ -1,5 +1,5 @@
 <template>
-  <section class="process-tree">
+  <section class="process-tree" data-process-tree>
     <div class="process-tree-area">
       <svg id="process-tree" ref="svg" :width="tree.viewer.w" :height="tree.viewer.h">
         <g :transform="`translate(${tree.zoom.x},${tree.zoom.y}) scale(${tree.zoom.k})`"></g>
@@ -9,192 +9,194 @@
       <transition-group tag="ul" class="info-list-wrap" name="infolist">
         <li class="infolist" v-for="(list, index) in list" :key="index" ref="infoMenu"
             :class="{'on' : index === selected}">
-          <template v-if="list.name === '요약 정보'">
-            <span @click="infoList(index)" class="title">{{list.name}}</span>
-            <div class="info-wrap" v-if="list.info.nodeInformation">
-              <span>PC 정보</span>
-              <dl>
-                <dt>
-                  <md-icon class="dot">fiber_manual_record</md-icon>
-                  사용자명
-                </dt>
-                <dd>{{list.info.nodeInformation.username}}/{{list.info.nodeInformation.userdept}}</dd>
-              </dl>
-              <dl>
-                <dt>
-                  <md-icon class="dot">fiber_manual_record</md-icon>
-                  사용자 IP
-                </dt>
-                <dd>{{list.info.nodeInformation.userip}}</dd>
-              </dl>
-            </div>
-            <div class="info-wrap" v-if="list.info.processInformation">
-              <span>프로세스 정보</span>
-              <dl>
-                <dt>
-                  <md-icon class="dot">fiber_manual_record</md-icon>
-                  프로세스명
-                </dt>
-                <dd>{{list.info.processInformation.rows[0].ProcessName}}</dd>
-              </dl>
-              <dl v-if="list.info.processInformation.rows.IsSystem">
-                <dt>
-                  <md-icon class="dot">fiber_manual_record</md-icon>
-                  시스템파일
-                </dt>
-                <dd>TRUE</dd>
-              </dl>
-              <template v-if="list.info.fileInformation">
+            <template v-if="list.name === '요약 정보'">
+              <span @click="infoList(index)" class="title">{{list.name}}</span>
+              <div class="info-wrap-group">
+              <div class="info-wrap" v-if="list.info.nodeInformation">
+                <span>PC 정보</span>
                 <dl>
                   <dt>
                     <md-icon class="dot">fiber_manual_record</md-icon>
-                    서명
+                    사용자명
                   </dt>
-                  <dd :class="{'red': list.info.fileInformation.sign_status !== 'signed'}">
-                    {{list.info.fileInformation.sign_status}}
-                  </dd>
-                </dl>
-                <dl v-if="list.info.fileInformation.sign_status === 'signed'">
-                  <dt>
-                    <md-icon class="dot">fiber_manual_record</md-icon>
-                    서명자
-                  </dt>
-                  <dd>{{list.info.fileInformation.sign_publisher}}</dd>
-                </dl>
-                <dl v-if="list.info.fileInformation.sign_validity === 'invalid'">
-                  <dt>
-                    <md-icon class="dot">fiber_manual_record</md-icon>
-                    검증
-                  </dt>
-                  <dd>{{list.info.fileInformation.sign_validity}}</dd>
+                  <dd>{{list.info.nodeInformation.username}}/{{list.info.nodeInformation.userdept}}</dd>
                 </dl>
                 <dl>
                   <dt>
                     <md-icon class="dot">fiber_manual_record</md-icon>
-                    회사명
+                    사용자 IP
                   </dt>
-                  <dd>{{list.info.fileInformation.company_name}}</dd>
+                  <dd>{{list.info.nodeInformation.userip}}</dd>
                 </dl>
+              </div>
+              <div class="info-wrap" v-if="list.info.processInformation">
+                <span>프로세스 정보</span>
                 <dl>
                   <dt>
                     <md-icon class="dot">fiber_manual_record</md-icon>
-                    제품명
+                    프로세스명
                   </dt>
-                  <dd>{{list.info.fileInformation.product_name}}</dd>
+                  <dd>{{list.info.processInformation.rows[0].ProcessName}}</dd>
                 </dl>
-                <dl>
+                <dl v-if="list.info.processInformation.rows.IsSystem">
                   <dt>
                     <md-icon class="dot">fiber_manual_record</md-icon>
-                    설명
+                    시스템파일
                   </dt>
-                  <dd>{{list.info.fileInformation.description || 'N/A'}}</dd>
+                  <dd>TRUE</dd>
                 </dl>
-              </template>
-            </div>
-            <div class="info-wrap" v-if="list.info.detectInformation">
-              <span>진단 정보</span>
-              <template v-for="(detect, idx) in list.info.detectInformation">
-                <template v-if="detect.Type === 'RSC'">
+                <template v-if="list.info.fileInformation">
                   <dl>
                     <dt>
                       <md-icon class="dot">fiber_manual_record</md-icon>
-                      진단명
+                      서명
                     </dt>
-                    <dd>{{detect.RuleId}}</dd>
+                    <dd :class="{'red': list.info.fileInformation.sign_status !== 'signed'}">
+                      {{list.info.fileInformation.sign_status}}
+                    </dd>
+                  </dl>
+                  <dl v-if="list.info.fileInformation.sign_status === 'signed'">
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      서명자
+                    </dt>
+                    <dd>{{list.info.fileInformation.sign_publisher}}</dd>
+                  </dl>
+                  <dl v-if="list.info.fileInformation.sign_validity === 'invalid'">
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      검증
+                    </dt>
+                    <dd>{{list.info.fileInformation.sign_validity}}</dd>
                   </dl>
                   <dl>
                     <dt>
                       <md-icon class="dot">fiber_manual_record</md-icon>
-                      위험도
+                      회사명
                     </dt>
-                    <dd>{{detect.Score}}</dd>
+                    <dd>{{list.info.fileInformation.company_name}}</dd>
                   </dl>
-                  <dl v-if="detect.rule">
+                  <dl>
                     <dt>
                       <md-icon class="dot">fiber_manual_record</md-icon>
-                      진단사유
+                      제품명
                     </dt>
-                    <dd v-html="detect.rule.reason"></dd>
+                    <dd>{{list.info.fileInformation.product_name}}</dd>
+                  </dl>
+                  <dl>
+                    <dt>
+                      <md-icon class="dot">fiber_manual_record</md-icon>
+                      설명
+                    </dt>
+                    <dd>{{list.info.fileInformation.description || 'N/A'}}</dd>
                   </dl>
                 </template>
-                <template v-else-if="detect.Type === 'FILE'">
-                  <dl>
-                    <dt>
-                      <md-icon class="dot">fiber_manual_record</md-icon>
-                      진단명
-                    </dt>
-                    <dd>TI 엔진</dd>
-                  </dl>
-                  <dl>
-                    <dt>
-                      <md-icon class="dot">fiber_manual_record</md-icon>
-                      위험도
-                    </dt>
-                    <dd>{{detect.Score}}</dd>
-                  </dl>
-                  <dl v-if="detect.malware">
-                    <dt>
-                      <md-icon class="dot">fiber_manual_record</md-icon>
-                      TI 엔진 스코어
-                    </dt>
-                    <dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
-                  </dl>
-                  <dl>
-                    <dt>
-                      <md-icon class="dot">fiber_manual_record</md-icon>
-                      진단파일
-                    </dt>
-                    <dd>{{detect.PathInfo1}}</dd>
-                  </dl>
+              </div>
+              <div class="info-wrap" v-if="list.info.detectInformation">
+                <span>진단 정보</span>
+                <template v-for="(detect, idx) in list.info.detectInformation">
+                  <template v-if="detect.Type === 'RSC'">
+                    <dl>
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        진단명
+                      </dt>
+                      <dd>{{detect.RuleId}}</dd>
+                    </dl>
+                    <dl>
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        위험도
+                      </dt>
+                      <dd>{{detect.Score}}</dd>
+                    </dl>
+                    <dl v-if="detect.rule">
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        진단사유
+                      </dt>
+                      <dd v-html="detect.rule.reason"></dd>
+                    </dl>
+                  </template>
+                  <template v-else-if="detect.Type === 'FILE'">
+                    <dl>
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        진단명
+                      </dt>
+                      <dd>TI 엔진</dd>
+                    </dl>
+                    <dl>
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        위험도
+                      </dt>
+                      <dd>{{detect.Score}}</dd>
+                    </dl>
+                    <dl v-if="detect.malware">
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        TI 엔진 스코어
+                      </dt>
+                      <dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
+                    </dl>
+                    <dl>
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        진단파일
+                      </dt>
+                      <dd>{{detect.PathInfo1}}</dd>
+                    </dl>
+                  </template>
+                  <template v-else-if="detect.Type === 'IP'">
+                    <dl>
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        진단엔진
+                      </dt>
+                      <dd>TI 엔진</dd>
+                    </dl>
+                    <dl>
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        위험도
+                      </dt>
+                      <dd>{{detect.Score}}</dd>
+                    </dl>
+                    <dl v-if="detect.malware">
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        TI 엔진 스코어
+                      </dt>
+                      <dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
+                    </dl>
+                    <dl>
+                      <dt>
+                        <md-icon class="dot">fiber_manual_record</md-icon>
+                        진단 IP
+                      </dt>
+                      <dd>{{detect.PathInfo1}}</dd>
+                    </dl>
+                  </template>
                 </template>
-                <template v-else-if="detect.Type === 'IP'">
-                  <dl>
-                    <dt>
-                      <md-icon class="dot">fiber_manual_record</md-icon>
-                      진단엔진
-                    </dt>
-                    <dd>TI 엔진</dd>
-                  </dl>
-                  <dl>
-                    <dt>
-                      <md-icon class="dot">fiber_manual_record</md-icon>
-                      위험도
-                    </dt>
-                    <dd>{{detect.Score}}</dd>
-                  </dl>
-                  <dl v-if="detect.malware">
-                    <dt>
-                      <md-icon class="dot">fiber_manual_record</md-icon>
-                      TI 엔진 스코어
-                    </dt>
-                    <dd>{{detect.malware.positives}} / {{detect.malware.total}}</dd>
-                  </dl>
-                  <dl>
-                    <dt>
-                      <md-icon class="dot">fiber_manual_record</md-icon>
-                      진단 IP
-                    </dt>
-                    <dd>{{detect.PathInfo1}}</dd>
-                  </dl>
-                </template>
-              </template>
-            </div>
-            <div class="info-wrap" v-if="list.info.inflowInformation">
-              <span>유입 정보</span>
-              <dl>
-                <dt>
-                  <md-icon class="dot">fiber_manual_record</md-icon>
-                  유입타입
-                </dt>
-                <dd>{{list.info.inflowInformation.SrcType}}</dd>
-              </dl>
-              <dl>
-                <dt>
-                  <md-icon class="dot">fiber_manual_record</md-icon>
-                  유입경로
-                </dt>
-                <dd>{{list.info.inflowInformation.SrcInfo}}</dd>
-              </dl>
+              </div>
+              <div class="info-wrap" v-if="list.info.inflowInformation">
+                <span>유입 정보</span>
+                <dl>
+                  <dt>
+                    <md-icon class="dot">fiber_manual_record</md-icon>
+                    유입타입
+                  </dt>
+                  <dd>{{list.info.inflowInformation.SrcType}}</dd>
+                </dl>
+                <dl>
+                  <dt>
+                    <md-icon class="dot">fiber_manual_record</md-icon>
+                    유입경로
+                  </dt>
+                  <dd>{{list.info.inflowInformation.SrcInfo}}</dd>
+                </dl>
+              </div>
             </div>
           </template>
           <template v-else>
@@ -984,52 +986,52 @@
     },
   };
 </script>
-<style lang="scss">
-  #process-tree {
-    max-width: none;
-    .node {
-      cursor: pointer;
-      .circle {
-        fill: #fff;
-        stroke: steelblue;
+<style lang='scss'>
+  @import "~styles/variables.scss";
+  [data-process-tree]{
+    #process-tree {
+      max-width: none;
+      .node {
+        cursor: pointer;
+        .circle {
+          fill: #fff;
+          stroke: steelblue;
+          stroke-width: 1.5px;
+        }
+        text {
+          font: 10px sans-serif;
+        }
+
+        &.warning {
+          .text {
+            fill: red;
+          }
+        }
+
+        &.has-child {
+          .circle {
+            fill: steelblue;
+          }
+        }
+
+        &.selected {
+          .circle {
+            fill: rgb(32, 32, 32);
+          }
+          > text {
+            font-weight: bold;
+          }
+        }
+      }
+
+      .link {
+        fill: none;
+        stroke: #ccc;
         stroke-width: 1.5px;
       }
-      text {
-        font: 10px sans-serif;
-      }
-
-      &.warning {
-        .text {
-          fill: red;
-        }
-      }
-
-      &.has-child {
-        .circle {
-          fill: steelblue;
-        }
-      }
-
-      &.selected {
-        .circle {
-          fill: rgb(32, 32, 32);
-        }
-        > text {
-          font-weight: bold;
-        }
-      }
-    }
-
-    .link {
-      fill: none;
-      stroke: #ccc;
-      stroke-width: 1.5px;
     }
   }
-</style>
-<style lang='scss' scoped>
-  //noinspection CssUnknownTarget
-  @import "~styles/variables.scss";
+
 
   .process-tree {
     display: flex;
@@ -1056,7 +1058,7 @@
       margin-right: 10px;
     }
     .pc-info {
-      width: 360px;
+      width: 330px;
       position: relative;
       overflow: hidden;
       li {
@@ -1077,6 +1079,11 @@
           border-top: 0 none;
           &.on {
             height: 450px;
+            .info-wrap-group{
+              .info-wrap{
+                height:auto;
+              }
+            }
           }
           span {
             font-size: 18px;
@@ -1093,7 +1100,9 @@
         }
       }
       div {
-        padding: 25px;
+        height:406px;
+        padding: 5px 10px;
+        overflow-y:auto;
       }
       dl {
         display: flex;
@@ -1103,11 +1112,10 @@
       }
       dt,
       dd {
-        padding: 10px 0;
+        padding: 5px 0;
       }
       dt {
-        min-width: 130px;
-        padding-left: 10px;
+        min-width: 120px;
         position: relative;
         .md-icon.dot {
           width: 14px;
@@ -1119,7 +1127,8 @@
         }
       }
       dd {
-        margin: 0;
+        margin:0 0 0 5px;
+        word-break: break-all;
       }
     }
   }

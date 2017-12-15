@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       q: "",
-      partial_match: false
+      partial_match: true
     };
   },
   computed: {},

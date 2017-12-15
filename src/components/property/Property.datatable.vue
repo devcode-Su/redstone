@@ -180,15 +180,24 @@
         }
       },
       rowSearch(row){
-        console.log(row)
-        console.log(this.formData);
-
-        this.$store.commit(Constant.DETAIL_INFO, {
-          api : this.formData.api,
-          title : this.formData.title,
-          name : row.name,
-          version: row.sp ? row.sp : row.version
-        });
+        console.log(row);
+        //console.log(this.formData);
+        if(this.formData.urlType === "software"){
+          this.$store.commit(Constant.DETAIL_INFO, {
+            urlType : this.formData.urlType,
+            api : this.formData.api,
+            title : this.formData.title,
+            name : row.name,
+            version: row.sp || row.version
+          });
+        }else{
+          this.$store.commit(Constant.DETAIL_INFO, {
+            urlType : this.formData.urlType,
+            api : this.formData.api,
+            title : this.formData.title,
+            name : row.value || row.partnumber || row.name || row.biosversion,
+          });
+        }
         this.$router.push("Property-detail");
       },
       pageLength(p){

@@ -1,0 +1,228 @@
+<template>
+  <article data-layout="Route-article">
+    <h1 data-page-title>
+      프로세스 검색
+    </h1>
+    <div data-search-pannel>
+      <el-form ref="form" :model="form" :label-width="'180px'" :label-position="'left'">
+        <fieldset>
+          <div class="form-align-box">
+            <div class="form-item-wrap">
+              <el-form-item label="조사기간 설정" size="small">
+                <el-date-picker v-model="startDate" type="datetime">
+                </el-date-picker>
+                <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+                <el-date-picker v-model="endDate" type="datetime">
+                </el-date-picker>
+                <div class="btn-date-wrap">
+                  <el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
+                    {{settime}}
+                  </el-button>
+                </div>
+              </el-form-item>
+              <el-form-item label="검색 항목" size="small">
+                <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
+                  전체
+                </el-checkbox>
+                <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
+                  <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">{{search}}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </el-form-item>
+              <el-form-item label="검색 조건" size="small">
+                <el-input type="text" v-model="form.q">
+                </el-input>
+                <el-checkbox class="agreement" v-model="form.partial_match">
+                  부분 일치
+                </el-checkbox>
+              </el-form-item>
+            </div>
+            <div class="btn-wrap">
+              <el-button size="small" type="primary" @click="onSubmit('form')">검색</el-button>
+            </div>
+          </div>
+        </fieldset>
+      </el-form>
+    </div>
+    <processdatatable v-if="definition" :definition="definition"></processdatatable>
+  </article>
+</template>
+<script>
+  import Processdatatable from "./Search.process.datatable.vue";
+  import MixinsSetDatetime from "../mixins/setDatetime.mixin"
+  export default {
+    name:    "Searchprocess",
+    extends: {},
+    props:   {
+      psd: {
+        type: Object | Array,
+      },
+    },
+    data() {
+      return {
+        datebtn:         ["1시간", "일일", "주간", "월간"],
+        searchNavi:      "전사",
+        isIndeterminate: false,
+        checklistAll:    [
+          "FILE", "IP", "RSC", "process", "network", "files", "registry",
+        ],
+        checklist:       {
+          FILE:     "TI진단 이벤트",
+          IP:       "악성 URL/IP 접근 이벤트",
+          RSC:      "RSC 엔진 진단 이벤트",
+          process:  "프로세스",
+          network:  "네트워크",
+          files:    "파일",
+          registry: "레지스트리",
+        },
+        form:            {
+          checkType:     [
+            "FILE", "IP", "RSC", "process", "network", "files", "registry",
+          ],
+          checkAll:      true,
+          q:             "",
+          partial_match: false,
+        },
+        startDate:       null,
+        endDate:         null,
+        definition:      {
+          field: [
+            "프로세스 시작 시각",
+            "프로세스 이름",
+            "이름",
+            "부서",
+            "센서 ID",
+            "검색된 이벤트 수",
+            "위협 정보",
+            "",
+          ],
+          url:   "/api/admin/search/event",
+          order: [
+            {label: '프로세스 시작 시각', value: 'time', default: true},
+            {label: '프로세스 이름', value: 'process_name'},
+          ],
+        },
+        queryList:       [
+          'Sha256Hash', 'Md5Hash', 'FileName', 'Domain', 'RemoteIp', 'VolumeGuid',
+        ],
+      };
+    },
+    computed:   {
+      recieveData() {
+        return this.$store.state.processSearchData
+      },
+    },
+    components: {
+      "processdatatable": Processdatatable,
+    },
+    watch:      {},
+    methods:    {
+      handleCheckAllChange(val) {
+        console.log(val);
+        this.form.checkType = val ? this.checklistAll : [];
+        this.isIndeterminate = false;
+      },
+      handleCheckedEngineChange(value) {
+        let checkedCount = value.length;
+        this.form.checkAll = checkedCount === this.checklistAll.length;
+        this.isIndeterminate =
+          checkedCount > 0 && checkedCount < this.checklistAll.length;
+      },
+      onSubmit(form) {
+        const formData = this.$refs[form].model;
+        if (this.startDate === "" || this.endDate === "") {
+          this.$notify.error({
+            title:   "Error",
+            message: "검색 조건을 입력하세요.",
+          });
+        } else {
+          const data = {
+            startDate:      this.startDate ? this.startDate : null,
+            endDate:        this.endDate ? this.endDate : null,
+            dept_code:      formData && formData.data ? formData.data.dept_code : null,
+            node_id:        formData && formData.data ? formData.data.node_id : null,
+            order:          "time",
+            direction:      1,
+            q:              formData.q,
+            all:            this.form.checkAll,
+            partial_match:  formData.partial_match ? formData.partial_match : null,
+            ti_event:       this.$refs.check[0].isChecked,
+            url_ip_event:   this.$refs.check[1].isChecked,
+            engine_event:   this.$refs.check[2].isChecked,
+            process_event:  this.$refs.check[3].isChecked,
+            network_event:  this.$refs.check[4].isChecked,
+            file_event:     this.$refs.check[5].isChecked,
+            registry_event: this.$refs.check[6].isChecked,
+            ProcessGuid:    formData && formData.ProcessGuid ? formData.ProcessGuid : null,
+          };
+          this.$bus.$emit('process-search-data', data);
+        }
+      },
+      getData(url, data) {
+        return this.$http.get(url, {params: data})
+          .then(result => {
+            this.process.data = result.data;
+          });
+      },
+      receiveSubmit(data) {
+        console.log('receiveSubmit');
+      },
+    },
+    created() {
+    },
+    beforeMounted() {
+    },
+    mounted() {
+      if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+        let query = this.$route.query;
+        if (query.EventTime || query.InsertTime) {
+          let date = query.EventTime || query.InsertTime;
+          let d = new Date(this.timeToUTC(date));
+          d.setMinutes(d.getMinutes() - 30);
+          this.startDate = d;
+          d = new Date(query.EventTime || query.InsertTime);
+          d.setMinutes(d.getMinutes() + 30);
+          this.endDate = d;
+        }
+        for (let i in this.queryList) {
+          if (query.hasOwnProperty(this.queryList[i])) {
+            this.form.q = query[this.queryList[i]];
+            break;
+          }
+        }
+        if (query.Type) {
+          this.form.checkType = [query.Type];
+        }
+        if (query.ProcessGuid) {
+          this.form.ProcessGuid = query.ProcessGuid;
+        }
+        this.onSubmit('form');
+        if (query.ProcessGuid) {
+          this.form.ProcessGuid = null;
+        }
+      }
+    },
+    beforeUpdate() {
+    },
+    updated() {
+    },
+    activated() {
+    },
+    deactivated() {
+    },
+    beforeDestroy() {
+    },
+    destroyed() {
+    },
+    mixins:     [
+      MixinsSetDatetime,
+    ],
+  };
+</script>
+<style lang='scss' scoped>
+  //noinspection CssUnknownTarget
+  @import "~styles/variables";
+  .btn-date-wrap {
+    margin-left: 5px;
+  }
+</style>

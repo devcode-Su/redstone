@@ -29,6 +29,7 @@
   </section>
 </template>
 <script>
+  import Constant from "@/constant";
 export default {
   name: "DashboardDetectiontable",
   extends: {},
@@ -64,9 +65,14 @@ export default {
     }
   },
   methods: {
-    moveRow(val) {
+    moveRow(row) {
       console.log("moverow");
-      console.log(val);
+      console.log(row);
+      this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+        nodeid: row.nodeid,
+        username: row.username
+      });
+      this.$router.push({path: "Search-analysis", query: {ProcessGuid: row.ProcessGuid, nodeid: row.nodeid}});
     },
     dataReceive() {}
   },

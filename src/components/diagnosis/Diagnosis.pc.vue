@@ -118,49 +118,21 @@ export default {
         form : form,
         order: "count"
       }
-    },
-    reorder(val) {
-      console.log(this.activeName);
-      if (this.activeName === "first") {
-        val.form.order = val.order;
-        this.$http
-          .get(val.url, {
-            params: val.form
-          })
-          .then(result => {
-            console.log(result.data.data);
-            this.pcfile.data = result.data.data;
-          });
-      } else if (this.activeName === "second") {
-        val.form.order = val.order;
-        this.$http
-          .get(val.url, {
-            params: val.form
-          })
-          .then(result => {
-            this.pcip.data = result.data.data;
-          });
-      } else if (this.activeName === "third") {
-        val.form.order = val.order;
-        this.$http
-          .get(val.url, {
-            params: val.form
-          })
-          .then(result => {
-            this.pcrsc.data = result.data.data;
-          });
-      }
     }
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.$bus.$on("update", this.receive);
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
   updated() {},
   activated() {},
   deactivated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    this.$bus.$off("update");
+  },
   destroyed() {}
 };
 </script>

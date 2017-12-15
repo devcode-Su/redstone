@@ -37,7 +37,12 @@ export default {
       fields: {
         os : "운영체재",
         browser : "브라우저",
-        software : "소프트웨어"
+        software : "소프트웨어",
+        processor : "CPU",
+        memory : "Memory",
+        diskdrive : "HDD",
+        display : "Display",
+        bios : "BIOS"
       },
       api : "",
       dept_code: 1,

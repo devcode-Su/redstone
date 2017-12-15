@@ -427,8 +427,11 @@
     }
     .show-row {
       background-color: #e6ebf5;
-      &:hover .table-head-wrap tr {
-        background-color: color(default)
+      &:hover{
+        background-color: #e6ebf5 !important;
+        .table-head-wrap tr {
+          background-color: color(default)
+        }
       }
     }
   }
@@ -482,7 +485,7 @@
       }
     }
     .dynamic-row {
-      min-height: 500px;
+      min-height: 546px;
       border: 1px solid #d8dce5;
       th,
       td {
@@ -561,7 +564,7 @@
 }
 
 .template-table-wrap {
-  margin-top: 30px;
+  margin-top: 20px;
   &.inner-view {
     margin-top: 0;
   }
@@ -580,9 +583,6 @@
       >div {
         margin-left: 5px;
       }
-    }
-    .el-select {
-      width: 150px;
     }
     .el-checkbox-group {
       position: absolute;

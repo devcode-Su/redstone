@@ -1,39 +1,43 @@
 <template>
-  <div class="template-search-pannel template-container">
-    <el-form @submit.prevent.native="find" ref="form" :label-width="'180px'" :label-position="'left'">
+  <div data-search-pannel>
+    <global-range></global-range>
+    <form @submit.prevent="find">
       <fieldset>
-        <div class="form-align-box">
-          <div class="form-item-wrap">
-            <el-form-item label="검색 항목" size="small">
+        <div data-form-item>
+          <label>검색 조건</label>
+          <div data-form-tag>
               <el-radio-group v-model="form.selectedRadio" @change="radioSelected">
                 <el-radio v-for="(item, k) in radioList" :label="k" :key="k">{{item}}</el-radio>
               </el-radio-group>
-            </el-form-item>
-            <el-form-item size="small">
-              <template v-if="form.selectedRadio === 'EventAll'">
-                <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
-                  전체
-                </el-checkbox>
-                <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
-                  <el-checkbox v-for="(search, k) in checklist" :label="k" :key="k" :ref="'check'">
-                    {{search.name}} ({{search.count}})
-                  </el-checkbox>
-                </el-checkbox-group>
-              </template>
-            </el-form-item>
-            <el-form-item label="검색 조건" size="small">
-              <el-input type="text" v-model="text">
-              </el-input>
-              <el-button size="small" @click="find($event, 0)">▲</el-button>
-              <el-button size="small" @click="find($event, 1)">▼</el-button>
-            </el-form-item>
           </div>
-          <div class="btn-wrap">
-            <el-button size="small" type="primary" @click="find">검색</el-button>
+          <template v-if="form.selectedRadio === 'EventAll'">
+            <div data-form-tag>
+              <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
+                전체
+              </el-checkbox>
+              <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
+                <el-checkbox v-for="(search, k) in checklist" :label="k" :key="k" :ref="'check'">
+                  {{search.name}} ({{search.count}})
+                </el-checkbox>
+              </el-checkbox-group>
+            </div>
+          </template>
+        </div>
+        <div data-form-item>
+          <label>검색 항목</label>
+          <div data-form-tag>
+            <el-input type="text" v-model="text" size="small"></el-input>
+            <el-button size="small" @click="find($event, 0)">▲</el-button>
+            <el-button size="small" @click="find($event, 1)">▼</el-button>
           </div>
         </div>
       </fieldset>
-    </el-form>
+      <div data-search-submit>
+        <el-button type="primary" plain size="small" native-type="find">
+          검색
+        </el-button>
+      </div>
+    </form>
   </div>
 </template>
 <script>

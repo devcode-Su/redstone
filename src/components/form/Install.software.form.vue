@@ -1,15 +1,6 @@
 <template>
   <div data-search-pannel>
-    <p data-range>
-      <span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>
-      <span v-else>
-        {{globalRangeCode.dept.name}} / {{globalRangeCode.username}}
-        <button data-icon @click="resetRange">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      </span>
-      에서 검색
-    </p>
+    <global-range></global-range>
     <form @submit.prevent="send">
       <fieldset>
         <div data-form-item>
@@ -25,8 +16,9 @@
   </div>
 </template>
 <script>
-  import Constant from "@/constant";
+  //import Constant from "@/constant";
   import { mapGetters } from "vuex";
+  import GlobalRange from "./Global.range";
 
   export default {
     name: "InstallSoftwareform",
@@ -47,6 +39,7 @@
       ...mapGetters({ globalRangeCode: "globalRangeCode" })
     },
     components: {
+      "global-range" : GlobalRange,
     },
     watch: {
       globalRangeCode(g) {
@@ -58,12 +51,6 @@
       }
     },
     methods: {
-      resetRange() {
-        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
-          dept_code: 1,
-          name: "전사"
-        });
-      },
       send() {
         console.log(this.form);
         if(this.form.name === ""){
@@ -83,7 +70,7 @@
     beforeUpdate() {},
     updated() {
     },
-    actvated() {},
+    activated() {},
     deactivated() {},
     beforeDestroy() {},
     destroyed() {}

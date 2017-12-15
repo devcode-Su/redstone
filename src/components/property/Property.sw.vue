@@ -91,18 +91,19 @@ export default {
     receive(){
       console.log(this.activeName);
       if (this.activeName === "first") {
-        this.mixData(this.propertyOS, "os" ,"name", "운영체제 정보");
+        this.mixData(this.propertyOS, "os" ,"name", "운영체제 정보", "software");
       } else if (this.activeName === "second") {
-        this.mixData(this.propertyBR, "browser", "name", "브라우저 정보");
+        this.mixData(this.propertyBR, "browser", "name", "브라우저 정보","software");
       } else if (this.activeName === "third") {
-        this.mixData(this.propertySW, "software", "name", "소프트웨어 정보");
+        this.mixData(this.propertySW, "software", "name", "소프트웨어 정보","software");
       } else if (this.activeName === "four") {
         this.receiveSW();
       }
     },
-    mixData(select, apiUrl, order, title) {
+    mixData(select, apiUrl, order, title, urlType) {
       return select.formData = {
         url : `/api/admin/node/summary/${apiUrl}/`,
+        urlType : urlType,
         order : order,
         api : apiUrl,
         title : title
@@ -113,6 +114,7 @@ export default {
       if(form){
         return this.installSW.formData = {
           url : `/api/admin/node/search/software/${form.name}`,
+          urlType : "software",
           order : "nodeid",
           form : form,
           api : "software",

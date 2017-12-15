@@ -50,7 +50,8 @@ export default {
       return this.form.radio === "" || this.form.radio === "1" ? true : false;
     }
   },
-  components: {},
+  components: {
+  },
   watch: {},
   methods: {
     submitForm(form) {

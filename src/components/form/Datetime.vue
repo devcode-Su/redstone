@@ -9,8 +9,6 @@
       <el-date-picker v-model="endDate" type="datetime" placeholder="Select End date and time" size="small"
                       @change="valueChanged('end', $event)" @input="valueChanged('end', $event)">
       </el-date-picker>
-    </div>
-    <div data-dateset-btn>
       <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDateTime(i)" size="small">
         {{settime}}
       </el-button>
@@ -78,5 +76,8 @@
 
   [data-dateset-btn] {
     display: inline-block;
+  }
+  button{
+    margin-left:5px;
   }
 </style>

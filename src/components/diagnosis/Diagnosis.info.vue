@@ -127,14 +127,18 @@ export default {
     }
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.$bus.$on("update", this.receive);
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},
   updated() {},
   activated() {},
   deactivated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    this.$bus.$off("update")
+  },
   destroyed() {}
 }
 </script>

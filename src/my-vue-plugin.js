@@ -159,6 +159,24 @@ const MyPlugin = {
       });
     };
 
+    vue.prototype.getValueToArr2 = (data, arr) => {
+      let ret = [];
+      if (data) {
+        for (let i = 0; i < arr.length; i++) {
+          ret.push(data.map((item) => {
+            if (item.hasOwnProperty(arr[i])) {
+              return item[arr[i]];
+            }
+            return null;
+          }));
+        }
+      }
+      else {
+        ret.push([]);
+      }
+      return ret;
+    };
+
     vue.prototype.padStart = (str, length, padStr) => {
       str = String(str);
       // noinspection TsLint
@@ -176,7 +194,7 @@ const MyPlugin = {
       }
     };
 
-    vue.prototype.timeToUTC = function(t) {
+    vue.prototype.timeToUTC = function (t) {
       let ret = '';
       let now = new Date();
       let diff = now.getTimezoneOffset();

@@ -1,15 +1,16 @@
 <template>
   <div data-search-pannel>
-    <p data-range>
-      <span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>
-      <span v-else>
-        {{globalRangeCode.dept.name}} / {{globalRangeCode.username}}
-        <button data-icon @click="resetRange">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      </span>
-      에서 검색
-    </p>
+    <!--<p data-range>-->
+      <!--<span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>-->
+      <!--<span v-else>-->
+        <!--{{globalRangeCode.dept.name}} / {{globalRangeCode.username}}-->
+        <!--<button data-icon @click="resetRange">-->
+          <!--<i class="fa fa-times-circle"></i>-->
+        <!--</button>-->
+      <!--</span>-->
+      <!--에서 검색-->
+    <!--</p>-->
+    <global-range></global-range>
     <form @submit.prevent="send">
       <fieldset>
         <datetime @dateTime="dateSet"></datetime>
@@ -23,8 +24,9 @@
   </div>
 </template>
 <script>
-import Constant from "@/constant";
+  //import Constant from "@/constant";
 import { mapGetters } from "vuex";
+import GlobalRange from "./Global.range";
 import Datetime from "./Datetime";
 import ReplaceInput from "./Replace.input";
 
@@ -48,6 +50,7 @@ export default {
     ...mapGetters({ globalRangeCode: "globalRangeCode" })
   },
   components: {
+    "global-range" : GlobalRange,
     "datetime": Datetime,
     "replace-input": ReplaceInput
   },
@@ -61,13 +64,6 @@ export default {
     }
   },
   methods: {
-    resetRange() {
-      this.$bus.$emit("update");
-      this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
-        dept_code: 1,
-        name: "전사"
-      });
-    },
     dateSet(d) {
       this.form.startDate = d.start ? d.start : this.form.startDate;
       this.form.endDate = d.end ? d.end : this.form.endDate;

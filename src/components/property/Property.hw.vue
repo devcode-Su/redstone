@@ -94,21 +94,24 @@ export default {
     receive(){
       console.log(this.activeName);
       if (this.activeName === "first") {
-        this.mixData(this.propertyCPU, "processor", "value");
+        this.mixData(this.propertyCPU, "processor", "value", "CPU 정보", "hardware");
       } else if (this.activeName === "second") {
-        this.mixData(this.propertyMemory, "memory", "manufacturer");
+        this.mixData(this.propertyMemory, "memory", "manufacturer", "Memory 정보","hardware");
       } else if (this.activeName === "third") {
-        this.mixData(this.propertyHDD, "diskdrive", "name");
+        this.mixData(this.propertyHDD, "diskdrive", "name", "HDD 정보","hardware");
       } else if (this.activeName === "four") {
-        this.mixData(this.propertyDisplay, "display", "value");
+        this.mixData(this.propertyDisplay, "display", "value", "Display 정보","hardware");
       } else if (this.activeName === "five") {
-        this.mixData(this.propertyBios, "bios", "manufacturer");
+        this.mixData(this.propertyBios, "bios", "manufacturer", "BIOS 정보","hardware");
       }
     },
-    mixData(select, apiUrl, order) {
+    mixData(select, apiUrl, order, title, urlType) {
       return select.formData = {
         url : "/api/admin/node/summary/hardware/" + apiUrl + "/",
-        order : order
+        urlType : urlType,
+        order : order,
+        api : apiUrl,
+        title : title
       }
     },
     tabs(){

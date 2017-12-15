@@ -4,7 +4,7 @@
       {{propData.title}}
     </h1>
     <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick.self="periodNumber"></dashboard-periodbtn>
-    <div data-chart-none v-if="dataCheck">검출된 내역이 없습니다.</div>
+    <div data-chart-none v-if="dataCheck">{{indexDate}} 검출된 내역이 없습니다.</div>
     <chart-horizontalbar v-else :chart-data="datacollection" :width="500" :height="216"></chart-horizontalbar>
     <button data-icon class="more-link">
       More
@@ -38,8 +38,19 @@ export default {
       datacollection: {},
       responseData: [],
       chartData: [],
+      num : 0,
       arr: ["ip", "count"]
     };
+  },
+  computed : {
+    selecNum(){
+      return this.num;
+    },
+    indexDate() {
+      if(this.num === 0) return "일일";
+      else if(this.num === 1) return "주간";
+      else return "월간";
+    }
   },
   components: {
     "dashboard-periodbtn":DashboardPeriodbtn,
@@ -48,13 +59,26 @@ export default {
   watch: {
     responseData(data) {
       if (data) {
-        //console.log(data);
+        console.log(data);
         if (data.data[0] === null) {
           this.dataCheck = true;
         } else {
+          this.dataCheck = false;
           console.log(data.data[0]);
-          //this.chartData = data.data[0];
+          this.chartData = this.getValueToArr2(this.responseData.data[0],this.arr);
         }
+      }
+    },
+    selecNum(num){
+      console.log(num);
+      if(this.responseData.data[num] === null ){
+        console.log("없음");
+        this.dataCheck = true;
+      }else{
+        console.log("있음");
+        this.dataCheck = false;
+        this.chartData = this.getValueToArr2(this.responseData.data[num],this.arr);
+        this.fillData();
       }
     }
   },
@@ -80,20 +104,18 @@ export default {
     //   }
     // }
     periodNumber(periodNum) {
-      console.log(periodNum);
-      //this.fillData(priodNum);
+      //console.log(periodNum);
+      this.num = periodNum;
     },
-    fillData(n) {
-      const insertData = this.chartData;
-      if (n === undefined) n = 0;
+    fillData() {
       this.datacollection = {
-        labels: insertData[n][1],
+        labels: this.chartData[0],
         datasets: [
           {
             label: "검출 건수",
             backgroundColor: "#b3d8ff",
             borderWidth: 1,
-            data: insertData[n][0],
+            data: this.chartData[1],
             fill: false
           }
         ]
@@ -102,9 +124,6 @@ export default {
     itemRemove(comNum) {
       this.$store.dispatch(Constant.DELETE_THUMBLIST, { index: comNum });
     }
-    //      getRandomInt() {
-    //        return Math.floor(Math.random() * (100 - 5 + 1)) + 5;
-    //      }
   },
   created() {
     const url = "/dashboard/?method=get&resource=" + this.propData.resource;
@@ -114,7 +133,6 @@ export default {
     //this.fillData();
     //console.log(this.propData);
   },
-  computed: {},
   mounted() {},
   update() {}
 };

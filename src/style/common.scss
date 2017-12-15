@@ -334,7 +334,7 @@
 // search form
 [data-search-pannel]{
   position:relative;
-  margin-top:55px;
+  margin-top:35px;
   padding:15px 15px 15px 110px;
   background: url(/src/assets/search-box.jpg) no-repeat 30px center;
   border: 1px solid #ccc;
@@ -379,12 +379,6 @@
   display:flex;
   span{
     display:flex;
-  }
-}
-[data-dateset-btn]{
-  margin-left:5px;
-  button{
-    vertical-align: 1px;
   }
 }
 [data-input]{

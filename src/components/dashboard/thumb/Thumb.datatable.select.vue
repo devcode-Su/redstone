@@ -14,7 +14,7 @@
         <tbody>
           <tr data-tbody="row" v-if="dataCheck">
             <td data-tbody="column" :colspan="fieldKeys.length - 1">
-              검출된 내역이 없습니다. === {{propIndex}}
+              {{indexDate}} 검출된 내역이 없습니다.
             </td>
           </tr>
           <tr data-tbody="row" v-else v-for="(tr, h) in rowData" :key="tr.h" @click.stop="rowClick(tr)">
@@ -56,13 +56,15 @@ export default {
     return {
       fieldKeys: [],
       rowData: [],
-      dataCheck: false
+      dataCheck: false,
     };
   },
   computed: {
-    // tableData() {
-    //   return this.propData.data[this.propIndex] === null ? true : false
-    // }
+    indexDate() {
+      if(this.propIndex === 0) return "일일";
+      else if(this.propIndex === 1) return "주간";
+      else return "월간";
+    }
   },
   components: {},
   watch: {
@@ -70,11 +72,15 @@ export default {
       if (this.propData.data[num] === null) {
         this.dataCheck = true;
       } else {
+        console.log(this.propData.data[num]);
+        this.dataCheck = false;
         this.rowData = this.propData.data[num];
+        console.log(this.rowData);
       }
     },
     propData(data) {
       if (data) {
+        //console.log(data);
         this.fieldKeys = Object.keys(this.fields);
         if (data.data[0] === null) {
           this.dataCheck = true;

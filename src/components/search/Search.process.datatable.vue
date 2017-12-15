@@ -34,7 +34,10 @@
           <thead>
           <tr>
             <th v-for="(th, i) in definition.field" :key="th.id"
-                :class="['col'+i,{ 'col-end' : definition.field.length-1 === i }]" :ref="'checkedTh'">{{th}}
+                :class="'col'+i" :ref="'checkedTh'">{{th}}
+            </th>
+            <th class="col7">
+              <span>더보기</span>
             </th>
           </tr>
           </thead>
@@ -61,7 +64,7 @@
                 <span v-if="row.DetectIP">악성 URL/IP 접근 이벤트 : {{row.DetectIP}}</span>
                 <span v-if="row.DetectRSC">RSC 엔진 진단 이벤트 : {{row.DetectRSC}}</span>
               </td>
-              <td class="col-btn">
+              <td class="col7">
                 <button class="icon-btn icon-wrap" @click.stop="moreRow(row, i)" :class="{on : row === more}">
                   <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
                 </button>
@@ -69,7 +72,7 @@
             </tr>
             <transition name="fade">
               <tr v-if="row === more" class="show-row">
-                <td :colspan="colLength" :key="row.id">
+                <td :colspan="colLength+1" :key="row.id">
                   <processinnerview :ProcessGuid="row.ProcessGuid"></processinnerview>
                 </td>
               </tr>
@@ -87,7 +90,6 @@
 </template>
 <script>
   import Processinnerview from "./Search.process.innerview.vue";
-  //import { EventBus } from "@/main"
   export default {
     name: "Processdatatable",
     extends: {},
@@ -107,7 +109,9 @@
       return {
         colLength: 0,
         more: null,
-        view: [],
+        view: [
+          "프로세스 시작 시각", "프로세스 이름", "이름", "부서", "센서 ID", "검색된 이벤트 수", "위협정보"
+        ],
         morebtn: false,
         pagination: {
           page: 1,
@@ -158,12 +162,13 @@
               }
             });
       },
-      viewCheck() {
+      viewCheck(val) {
+        console.log(val)
         if (this.$refs.checkedRow !== undefined) {
           for (let j = 0; j < this.$refs.checkedRow.length; j++) {
             for (let i = 0; i < this.definition.field.length - 1; i++) {
-              this.$refs.checkedTh[i].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i].hidden = this.$refs.checked[i].isChecked;
+              this.$refs.checkedTh[i].hidden = !this.$refs.checked[i].isChecked;
+              this.$refs.checkedRow[j].children[i].hidden = !this.$refs.checked[i].isChecked;
             }
           }
         } else {
@@ -257,8 +262,48 @@
         transform-origin: 44% 50%;
       }
     }
-    .col-end[hidden] {
-      display: none;
+    th,td{
+      padding:0 10px;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+      overflow:hidden;
+    }
+    .col0{
+      width:175px;
+    }
+    .col1{
+      width:auto;
+    }
+    .col2,
+    .col3{
+      width:170px;
+    }
+    .col4{
+      width:75px;
+    }
+    .col5,
+    .col6{
+      width: auto;
+      span{
+        display:inline;
+      }
+    }
+    .col7{
+      width:30px;
+    }
+    th.col7{
+      span{
+        visibility: hidden;
+      }
+    }
+    td.col7{
+      button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
     }
     .show-row:hover {
       background-color: transparent;
@@ -268,6 +313,12 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
+    }
+    .el-checkbox-group{
+      right:35px;
+    }
+    .template-table.dynamic-row{
+      min-height:496px;
     }
   }
 </style>

@@ -7,8 +7,6 @@
       <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
       <el-date-picker v-model="endDate" type="date" placeholder="End date" size="small" @change="valueChanged('end', $event)" @input="valueChanged('end', $event)">
       </el-date-picker>
-    </div>
-    <div data-dateset-btn>
       <el-button v-for="(setDate,i) in dateLabel" :key="setDate.id" @click="setDatelast(i)" size="small">
         {{setDate}}
       </el-button>
@@ -71,6 +69,9 @@ export default {
   }
   .el-date-editor.el-input{
     width:135px;
+  }
+  button{
+    margin-left:5px;
   }
 }
 </style>
