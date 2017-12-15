@@ -6,7 +6,7 @@
         <datelast @change="passSet"></datelast>
       </fieldset>
       <div data-search-submit>
-        <el-button type="primary" plain size="small" native-type="submit">
+        <el-button type="primary" plain size="small" :native-type="'submit'">
           검색
         </el-button>
       </div>
@@ -30,7 +30,7 @@
         form: {
           dept_code: 1,
           nodeid: "",
-          all: "",
+          all: 0,
           date: null,
         },
       };
@@ -54,14 +54,15 @@
     methods: {
       passSet(p) {
         for ( let key in p ) {
-          if ( p.hasOwnProperty(key) && p[key] ) {
+          if ( p.hasOwnProperty(key) && (p[key] || '0' === p[key] || 0 === p[key]) ) {
             this.form[key] = p[key];
           }
         }
 //        this.send();
       },
       send() {
-        if (!this.form.date) {
+        console.log(this.form);
+        if (!this.form.date && this.form.all === 0) {
           this.$notify.error({
                                title: 'Error',
                                message: '조사기간을 설정하세요.',
@@ -81,11 +82,6 @@
     },
     beforeUpdate() {
     },
-    beforeCreate() {},
-    created() {},
-    beforeMounted() {},
-    mounted() {},
-    beforeUpdate() {},
     updated() {
     },
     activated() {

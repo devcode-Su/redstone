@@ -1,10 +1,13 @@
 <template>
   <div data-form-item>
     <div data-form-tag>
-      <el-checkbox v-model="all" :true-label="1" :false-label="0" @change="valueChanged('all', $event)">비밀번호 미 변경자 조회</el-checkbox>
-      <el-date-picker v-model="date" type="date" placeholder="이전 변경자" size="small" @change="valueChanged('date', $event)">
+      <el-checkbox v-model="all" :true-label="0" :false-label="1" @change="valueChanged('all', $event)">비밀번호 미 변경자 조회
+      </el-checkbox>
+      <el-date-picker v-model="date" type="date" placeholder="이전 변경자" size="small"
+                      @change="valueChanged('date', $event)"
+      :disabled="all === 1">
       </el-date-picker>
-      <el-button v-for="(setDate,i) in dateLabel" :key="setDate.id" @click="setDatelast(i)" size="small">
+      <el-button v-for="(setDate,i) in dateLabel" :key="setDate.id" @click="setDateLast(i)" size="small" :disabled="all === 1">
         {{setDate}}
       </el-button>
     </div>
@@ -12,6 +15,7 @@
 </template>
 <script>
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
+
   export default {
     name: "Datelast",
     extends: {},
@@ -65,16 +69,18 @@
   };
 </script>
 <style lang='scss' scoped>
-@import "~styles/variables";
-[data-form-item] {
-  label{
-    width:auto;
+  //noinspection CssUnknownTarget
+  @import "~styles/variables";
+
+  [data-form-item] {
+    label {
+      width: auto;
+    }
+    .el-date-editor.el-input {
+      width: 135px;
+    }
+    button {
+      margin-left: 5px;
+    }
   }
-  .el-date-editor.el-input{
-    width:135px;
-  }
-  button{
-    margin-left:5px;
-  }
-}
 </style>

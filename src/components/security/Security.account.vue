@@ -58,8 +58,18 @@
                     return data.info.ip;
                   },
                 },
-                userid: '윈도우 계정',
-                passwd_changed_date: '최종 변경일시',
+                userid: {
+                  label: '윈도우 계정',
+                  data: (data, key) => {
+                    return data[key] || '(unknown)';
+                  }
+                },
+                passwd_changed_date: {
+                  label: '최종 변경일시',
+                  data: (data, key) => {
+                    return data[key] || '(unknown)';
+                  }
+                },
               },
               order: [
                 {value: 'nodeid', label: '센서ID'},
