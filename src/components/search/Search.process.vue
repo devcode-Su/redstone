@@ -10,18 +10,18 @@
           <div data-form-item>
             <label data-form-label="required">조사기간 설정</label>
             <div data-form-tag>
-              <el-date-picker v-model="form.startDate" type="datetime" placeholder="Select Start date and time" size="small">
+              <el-date-picker v-model="startDate" type="datetime" placeholder="Select Start date and time" size="small">
               </el-date-picker>
               <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-              <el-date-picker v-model="form.endDate" type="datetime" placeholder="Select End date and time" size="small">
+              <el-date-picker v-model="endDate" type="datetime" placeholder="Select End date and time" size="small">
               </el-date-picker>
-              <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDateTime(i)" size="small">
+              <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDatetime(i)" size="small">
                 {{settime}}
               </el-button>
             </div>
           </div>
           <div data-form-item>
-            <div data-form-tag>
+            <div data-form-tag="check">
             <label class="check">검색 항목</label>
               <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
                 전체
@@ -30,16 +30,6 @@
                 <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">{{search}}
                 </el-checkbox>
               </el-checkbox-group>
-              <!--<el-checkbox :indeterminate="isIndeterminate" v-model="form.all" true-label="on" :false-label="null" @change="checkAll">전체</el-checkbox>-->
-              <!--<div class="check-groups">-->
-                <!--<el-checkbox v-model="form.ti_event" @change="checkBox">TI 진단 이벤트</el-checkbox>-->
-                <!--<el-checkbox v-model="form.url_ip_event" @change="checkBox">악성 URL/IP 접근 이벤트</el-checkbox>-->
-                <!--<el-checkbox class="rsc" v-model="form.engine_event" @change="checkBox">RSC 엔진 진단 이벤트</el-checkbox>-->
-                <!--<el-checkbox v-model="form.process_event" @change="checkBox">프로세스</el-checkbox>-->
-                <!--<el-checkbox v-model="form.network_event" @change="checkBox">네트워크</el-checkbox>-->
-                <!--<el-checkbox v-model="form.file_event" @change="checkBox">파일</el-checkbox>-->
-                <!--<el-checkbox v-model="form.registry_event" @change="checkBox">레지스트리</el-checkbox>-->
-              <!--</div>-->
             </div>
           </div>
           <replace-input @replace="inputText"></replace-input>
@@ -58,7 +48,6 @@
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
   import GlobalRange from "../form/Global.range";
-  import Datetime from "../form/Datetime";
   import ReplaceInput from "../form/Replace.input";
   import Processdatatable from "./Search.process.datatable.vue";
   import MixinsSetDatetime from "../mixins/setDatetime.mixin"
@@ -88,12 +77,12 @@
           files:    "파일",
           registry: "레지스트리",
         },
+        startDate: null,
+        endDate: null,
         form: {
           dept_code: 1,
           nodeid: "",
-          startDate: null,
-          endDate: null,
-          all : "on",
+          checkAll : true,
           checkType:     [
             "FILE", "IP", "RSC", "process", "network", "files", "registry",
           ],
@@ -129,7 +118,6 @@
     },
     components: {
       "global-range" : GlobalRange,
-      "datetime": Datetime,
       "replace-input": ReplaceInput,
       "processdatatable": Processdatatable,
     },
@@ -143,10 +131,6 @@
       }
     },
     methods:    {
-      dateSet(d) {
-        this.form.startDate = d.start ? d.start : this.form.startDate;
-        this.form.endDate = d.end ? d.end : this.form.endDate;
-      },
       handleCheckAllChange(val) {
         console.log(val);
         this.form.checkType = val ? this.checklistAll : [];
@@ -171,8 +155,8 @@
           });
         } else {
           const data = {
-            startDate:      this.form.startDate ? this.form.startDate : null,
-            endDate:        this.form.endDate ? this.form.endDate : null,
+            startDate:      this.startDate ? this.startDate : null,
+            endDate:        this.endDate ? this.endDate : null,
             dept_code:      this.form.dept_code ? this.form.dept_code : null,
             node_id:        this.form.nodeid ? this.form.nodeid : null,
             order:          "time",
@@ -215,10 +199,10 @@
           console.log(date);
           let d = new Date(this.timeToUTC(date));
           d.setMinutes(d.getMinutes() - 30);
-          this.form.startDate = d;
+          this.startDate = d;
           d = new Date(query.EventTime || query.InsertTime);
           d.setMinutes(d.getMinutes() + 30);
-          this.form.endDate = d;
+          this.endDate = d;
         }
         for (let i in this.queryList) {
           if (query.hasOwnProperty(this.queryList[i])) {
@@ -262,14 +246,14 @@
   //noinspection CssUnknownTarget
   @import "~styles/variables";
 
-  .btn-date-wrap {
+  button{
     margin-left: 5px;
   }
   .check {
     align-self: flex-start;
   }
 
-  [ data-form-tag] {
+  [ data-form-tag="check"] {
     align-items: flex-start;
     .el-checkbox-group {
       display: flex;

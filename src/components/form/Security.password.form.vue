@@ -53,6 +53,7 @@
     },
     methods: {
       passSet(p) {
+        console.log(p)
         for ( let key in p ) {
           if ( p.hasOwnProperty(key) && (p[key] || '0' === p[key] || 0 === p[key]) ) {
             this.form[key] = p[key];
@@ -71,27 +72,7 @@
           this.$emit("submit", this.form);
         }
       },
-    },
-    beforeCreate() {
-    },
-    created() {
-    },
-    beforeMounted() {
-    },
-    mounted() {
-    },
-    beforeUpdate() {
-    },
-    updated() {
-    },
-    activated() {
-    },
-    deactivated() {
-    },
-    beforeDestroy() {
-    },
-    destroyed() {
-    },
+    }
   };
 </script>
 <style lang='scss' scoped>
