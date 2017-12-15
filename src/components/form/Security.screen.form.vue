@@ -5,7 +5,7 @@
       <fieldset>
         <div data-form-item>
           <div data-form-tag>
-            <el-checkbox v-model="form.all" true-label="1" false-label="0">화면 보호기 미 적용 PC</el-checkbox>
+            <el-checkbox v-model="form.all" :true-label="'0'" :false-label="'1'" :checked="true">화면 보호기 미 적용 PC</el-checkbox>
           </div>
         </div>
       </fieldset>
@@ -55,7 +55,7 @@
     methods: {
       send() {
         //console.log(this.form);
-        this.$emit("form", this.form);
+        this.$emit("submit", this.form);
       }
     },
     beforeCreate() {},
@@ -72,6 +72,7 @@
   };
 </script>
 <style lang='scss' scoped>
+  //noinspection CssUnknownTarget
   @import "~styles/variables";
   [data-form-tag]{
     height:32px;
