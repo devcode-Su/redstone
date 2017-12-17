@@ -55,27 +55,20 @@ export default {
     "red-group":RedGroup
   },
   methods: {
-    fetchData() {
-      console.log("Aaa");
-      //this.$store.dispatch(Constant.FETCH_COMPONENTS);
-      //this.$bus.$emit("thumblist", this.compLists);
-      // const groupList = "/api/admin/group/list";
-      // this.$http.get(groupList).then(result => {
-      //   this.groupData = this.listToTree(result.data);
-      // });
-    },
     btnToggle() {
-      console.log(this.selected);
-      console.log(this.locationCheck());
+      //console.log(this.selected);
+      //console.log(this.locationCheck());
       this.locationCheck() !== undefined
         ? (this.selected = this.locationCheck())
         : (this.selected = !this.selected);
       //this.selected = !this.selected;
     },
     selectedBoolean(check) {
+      //console.log(check);
       check === undefined
         ? (this.selected = this.selected)
         : (this.selected = check);
+      //console.log(this.selected)
     }
   },
   created() {
@@ -90,6 +83,8 @@ export default {
       .catch(() => {
         this.$router.push("/");
       });
+  },
+  updated(){
   },
   mounted() {},
   mixins: [locationCheckMixin]
