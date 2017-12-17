@@ -79,7 +79,7 @@
 <script>
 
   export default {
-    name: "NetworkDataTable",
+    name: "SearchNetworkDataTable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
@@ -148,6 +148,7 @@
                   this.pagination.total = 0;
                 }
                 this.data = result.data;
+                console.log(result.data)
               }
             });
       },
@@ -199,7 +200,8 @@
         this.selectedOrder = this.definition.order[0].value;
       }
 
-      this.$bus.$on('network-search-form', (data) => {
+      this.$bus.$on('network-search-data', (data) => {
+        console.log(data)
         this.hasSearchOption = true;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {
@@ -222,7 +224,7 @@
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off('network-search-form');
+      this.$bus.$off('network-search-data');
     },
     destroyed() {
     },

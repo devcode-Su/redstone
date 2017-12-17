@@ -215,6 +215,7 @@
       }
 
       this.$bus.$on('process-search-data', (data) => {
+        console.log(data)
         this.hasSearchOption = true;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {

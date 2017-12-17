@@ -5,6 +5,7 @@
       네트워크 검색
     </h1>
     <div data-search-pannel>
+      <global-range></global-range>
       <el-form ref="form" :model="form" :label-width="'120px'" :label-position="'left'">
         <fieldset>
           <div class="form-align-box">
@@ -13,7 +14,7 @@
               <type-radio-box :listList="radioInfo.list" :label="radioInfo.labels" @change="setFilter"></type-radio-box>
               <el-form-item label="검색 조건" size="small">
                 <el-input type="text" v-model="form.q" placeholder="IP or Domain"></el-input>
-                <el-button class="detail-search" size="smll" @click="showDetail = !showDetail">상세검색
+                <el-button class="detail-search" @click="showDetail = !showDetail" size="small">상세검색
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <div class="btn-wrap">
@@ -60,6 +61,8 @@
   </article>
 </template>
 <script>
+  import { mapGetters } from "vuex";
+  import GlobalRange from "../form/Global.range";
   import TypeRadioBox from '../form/Type.radiobox.vue';
   import Datetime from '../form/Datetime.vue';
   import SearchNetworkDataTable from './Search.network.datatable.vue';
@@ -131,8 +134,13 @@
         },
       };
     },
-    computed: {},
+    computed: {
+      ...mapGetters({
+        dashboardData : "dashboardData"
+      })
+    },
     components: {
+      "global-range" : GlobalRange,
       "type-radio-box": TypeRadioBox,
       "datetime": Datetime,
       'search-network-data-table': SearchNetworkDataTable,
@@ -147,11 +155,13 @@
         }
       },
       setDatetime(d) {
-        this.form.startDate = d.start ? d.start : this.form.startDate;
-        this.form.endDate = d.end ? d.end : this.form.endDate;
+        //console.log(d)
+        this.form.startDate = d.start;
+        this.form.endDate = d.end;
       },
       onSubmit() {
-        if (this.form.startDate === "" || this.form.endDate === "") {
+        console.log(this.form);
+        if (this.form.startDate === null || this.form.startDate === "" || this.form.endDate === null || this.form.endDate === "") {
           this.$notify.error({
                                title: "Error",
                                message: "검색 조건을 입력하세요.",
@@ -166,14 +176,33 @@
           this.$bus.$emit('network-search-data', sendData);
         }
       },
+      dataSet(){
+        if(this.dashboardData.data !== undefined){
+          const data = this.dashboardData.data;
+          console.log(data)
+          let d = new Date(this.timeToUTC(data.time));
+          d.setMinutes(d.getMinutes() - 30);
+          this.startDate = d;
+          this.form.startDate = d;
+          d = new Date(this.timeToUTC(data.time));
+          d.setMinutes(d.getMinutes() + 30);
+          this.endDate = d;
+          this.form.endDate = d;
+          this.form.LocalIP = data.ip;
+
+          this.onSubmit();
+        }
+      }
     },
     beforeCreate() {
     },
     created() {
+
     },
     beforeMounted() {
     },
     mounted() {
+      this.dataSet();
     },
     beforeUpdate() {
     },

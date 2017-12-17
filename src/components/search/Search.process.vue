@@ -148,7 +148,7 @@
       },
       onSubmit() {
         console.log(this.form);
-        if(this.form.startDate == null || this.form.endDate == null ){
+        if(this.startDate == null || this.endDate == null ){
           this.$notify.error({
             title:   "Error",
             message: "조사기간을 입력하세요.",

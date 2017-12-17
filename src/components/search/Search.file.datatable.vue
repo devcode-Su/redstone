@@ -177,8 +177,8 @@
         if (this.$refs.checkedRow !== undefined) {
           for (let j = 0; j < this.$refs.checkedRow.length; j++) {
             for (let i = 0; i < this.definition.field.length - 1; i++) {
-              this.$refs.checkedTh[i + 1].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i + 1].hidden = this.$refs.checked[i].isChecked;
+              this.$refs.checkedTh[i + 1].hidden = !this.$refs.checked[i].isChecked;
+              this.$refs.checkedRow[j].children[i + 1].hidden = !this.$refs.checked[i].isChecked;
             }
           }
         } else {
@@ -241,6 +241,7 @@
         this.selectedOrder = this.definition.order[0].value;
       }
       this.$bus.$on('search-file-form', (data) => {
+        console.log(data)
         this.hasSearchOption = true;
         this.pagination.currentPage = 1;
         for (let key in data) {
