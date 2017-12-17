@@ -9,15 +9,15 @@
       <ul class="group-notice">
         <li data-icon>
           <i class="fa fa-circle fa-fw dot-all" aria-hidden="true"></i>
-          전체 AGENT : 15
+          전체 AGENT : {{totalUser}}
         </li>
         <li data-icon>
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
-          현재 접속 : 3
+          현재 접속 : {{connectedUser}}
         </li>
         <li data-icon>
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
-          일주일 이상 미 접속 : 1
+          일주일 이상 미 접속 : {{weekUser}}
         </li>
       </ul>
       <button data-icon="set" class="management-btn" :class="{spin:selected}" @click="showModal = true">
@@ -25,12 +25,13 @@
       </button>
       <slot></slot>
     </div>
-    <templatemodal v-if="showModal" :target="'user-custom'" @close="showModal = false" :title="'그룹관리'" :compSelect="'group-management'">
+    <templatemodal v-if="showModal" :target="true" @close="showModal = false" :title="'그룹관리'" :compSelect="'group-management'">
     </templatemodal>
   </section>
 </template>
 
 <script>
+  import { mapGetters } from "vuex";
 import Groupdepartment from "../group/Group.department";
 import GroupMembers from "../group/Group.members";
 import Templatemodal from "../template/Template.modal";
@@ -57,9 +58,14 @@ export default {
     isLoading() {
       return this.$store.state.loadingState;
     },
-    defaultData() {
-      return this.membersData.length === 0 ? false : true;
-    }
+    ...mapGetters({
+      totalUser : "totalUser",
+      connectedUser: "connectedUser",
+      weekUser:"weekUser"
+    })
+    // defaultData() {
+    //   return this.membersData.length === 0 ? false : true;
+    // }
   },
   // 컴포넌트가 다른 컴포넌트를 사용할 경우
   components: {
