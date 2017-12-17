@@ -88,6 +88,8 @@
     },
     beforeCreate() {},
     created() {
+      this.form.dept_code = this.globalRangeCode.dept_code;
+      this.form.nodeid = this.globalRangeCode.nodeid;
       if(this.selectData.name === "badfilepc"){
         this.setDatetime(this.selectData.num);
         this.send();

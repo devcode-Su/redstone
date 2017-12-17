@@ -3,9 +3,9 @@
     <label data-form-label="required">검색 항목</label>
     <div data-form-tag>
       <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="checkAll">전체</el-checkbox>
-      <el-checkbox v-model="removable" :true-label="'on'" @change="checkBox">이동식 디스크</el-checkbox>
-      <el-checkbox v-model="external" :true-label="'on'" @change="checkBox">외장 디스크</el-checkbox>
-      <el-checkbox v-model="cdRom" :true-label="'on'" @change="checkBox">CD-ROM</el-checkbox>
+      <el-checkbox v-model="removable" true-label="on" @change="checkBox">이동식 디스크</el-checkbox>
+      <el-checkbox v-model="external" true-label="on" @change="checkBox">외장 디스크</el-checkbox>
+      <el-checkbox v-model="cdRom" true-label="on" @change="checkBox">CD-ROM</el-checkbox>
     </div>
   </div>
 </template>
@@ -20,15 +20,16 @@
       return {
         checkedAll: true,
         isIndeterminate: false,
-        removable: null,
-        external: null,
-        cdRom: null,
+        removable: "on",
+        external: "on",
+        cdRom: "on",
       };
     },
     computed: {},
     components: {},
     watch: {},
     methods: {
+
       checkAll(val) {
         if (val) {
           this.removable = 'on';

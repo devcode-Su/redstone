@@ -59,7 +59,10 @@
       }
     },
     beforeCreate() {},
-    created() {},
+    created() {
+      this.form.dept_code = this.globalRangeCode.dept_code;
+      this.form.nodeid = this.globalRangeCode.nodeid;
+    },
     beforeMounted() {},
     mounted() {},
     beforeUpdate() {},

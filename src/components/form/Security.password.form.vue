@@ -72,6 +72,10 @@
           this.$emit("submit", this.form);
         }
       },
+    },
+    created(){
+      this.form.dept_code = this.globalRangeCode.dept_code;
+      this.form.nodeid = this.globalRangeCode.nodeid;
     }
   };
 </script>

@@ -118,6 +118,8 @@
       }
     },
     created() {
+      this.form.dept_code = this.globalRangeCode.dept_code;
+      this.form.nodeid = this.globalRangeCode.nodeid;
       this.all = "???";
       this.form.checked = "cccccc";
       console.log(this.all);
