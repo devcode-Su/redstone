@@ -145,7 +145,8 @@
       },
       tableData(t){
         if(t){
-          if(!this.selectData.rowNum){
+          console.log(this.selectData.rowNum);
+          if(this.selectData.rowNum !== undefined){
             console.log("ready!");
             this.rowSearch(this.selectData.rowNum);
           }
@@ -154,12 +155,12 @@
     },
     methods: {
       receiveSearch(){
-        //console.log(this.form);
+        console.log(this.form);
         const url = this.apiUrl;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
-          //console.log(response);
+          console.log(response);
           this.responseData = response.data
         })
       },
@@ -187,14 +188,14 @@
         }
       },
       rowSearch(num){
-        console.log(num);
-        console.log(this.localData.name );
+        //console.log(num);
+        //console.log(this.localData.name );
         if(this.more === num){
           this.more = null;
         }else{
           this.more = num;
           let row = this.tableData[num];
-          console.log(row[this.localData.apiCondition]);
+          //console.log(row[this.localData.apiCondition]);
           const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
           //console.log(url)
           this.$http.get(url, {
@@ -214,12 +215,7 @@
     },
     beforeCreate() {
     },
-    created() {
-      if(!this.selectData.rowNum){
-        console.log("ok");
-        //this.rowSearch(this.selectData.rowNum);
-      }
-    },
+    created() {},
     beforeMounted() {
     },
     mounted() {
