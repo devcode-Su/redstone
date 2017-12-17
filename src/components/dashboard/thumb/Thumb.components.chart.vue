@@ -5,14 +5,14 @@
     </h1>
     <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick.self="periodNumber"></dashboard-periodbtn>
     <div data-chart-none v-if="dataCheck">{{indexDate}} 검출된 내역이 없습니다.</div>
-    <chart-horizontalbar v-else :chart-data="datacollection" :width="500" :height="216"></chart-horizontalbar>
+    <chart-horizontalbar v-else :chart-data="datacollection" :width="500" :height="206" @click.stop="link"></chart-horizontalbar>
     <button data-icon class="more-link" @click.stop="link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
     </button>
-    <button data-icon class="remove" @click.stop="itemRemove(index)">
-      <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
-    </button>
+    <!--<button data-icon class="remove" @click.stop="itemRemove(index)">-->
+      <!--<i class="fa fa-trash fa-lg" aria-hidden="true"></i>-->
+    <!--</button>-->
   </section>
 </template>
 <script>
@@ -59,23 +59,23 @@ export default {
   watch: {
     responseData(data) {
       if (data) {
-        console.log(data);
+        //console.log(data);
         if (data.data[0] === null) {
           this.dataCheck = true;
         } else {
           this.dataCheck = false;
-          console.log(data.data[0]);
+          //console.log(data.data[0]);
           this.chartData = this.getValueToArr2(this.responseData.data[0],this.arr);
         }
       }
     },
     selecNum(num){
-      console.log(num);
+      //console.log(num);
       if(this.responseData.data[num] === null ){
-        console.log("없음");
+        //console.log("없음");
         this.dataCheck = true;
       }else{
-        console.log("있음");
+        //console.log("있음");
         this.dataCheck = false;
         this.chartData = this.getValueToArr2(this.responseData.data[num],this.arr);
         this.fillData();

@@ -10,9 +10,9 @@
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
     </button>
-    <button data-icon class="remove" @click.stop="itemRemove(index)">
-      <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
-    </button>
+    <!--<button data-icon class="remove" @click.stop="itemRemove(index)">-->
+      <!--<i class="fa fa-trash fa-lg" aria-hidden="true"></i>-->
+    <!--</button>-->
   </section>
 </template>
 <script>
@@ -71,7 +71,45 @@ export default {
       this.$router.push(this.propData.link);
     },
     rowRouter2(data){
-
+      //console.log(this.propData);
+      if(this.propData.link === "Property-sw"){
+        let urlType = "software", api, title;
+        if(this.propData.resource === "os"){
+          api = "os";
+          title = "운영체제 정보"
+        }else{
+          api = "software";
+          title = "소프트웨어 정보"
+        }
+        this.$store.commit(Constant.DETAIL_INFO, {
+          urlType : urlType,
+          api : api,
+          title : title,
+          name : data.row.name,
+          version: data.row.version
+        });
+        this.$router.push("Property-detail");
+      }else if(this.propData.link === "Security-media"){
+        console.log(data);
+        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+          nodeid: data.row.nodeid,
+          name: ""
+        });
+        this.$store.commit(Constant.DASHBOARD_DATA, {
+          media : data.row
+        });
+        this.$router.push(this.propData.link);
+      }else{
+        console.log(data);
+        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+          nodeid: data.row.nodeid,
+          name: ""
+        });
+        this.$store.commit(Constant.DASHBOARD_DATA, {
+          data : data.row
+        });
+        this.$router.push(this.propData.link);
+      }
     },
     itemRemove(comNum) {
       console.log(comNum)

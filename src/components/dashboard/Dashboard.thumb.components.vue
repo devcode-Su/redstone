@@ -38,18 +38,18 @@ export default {
   watch: {},
   methods: {
     fetchList() {
-      console.log("aaa");
+      //console.log("aaa");
       const getView =
         "/dashboard/?method=get&resource=config&from=&to=&name=viewlist&time=";
       this.$http.get(getView).then(response => {
         if (response.data === null) {
-          console.log("null");
+          //console.log("null");
           const setView =
             "/dashboard/?method=set&resource=config&from=&to=&name=viewlist&time=";
           this.$http.post(setView, JSON.stringify(this.compAll)).then(() => {
             this.$http.get(getView).then(response => {
-              console.log("null && get");
-              console.log(response.data);
+              //console.log("null && get");
+              //console.log(response.data);
               this.thumbData = response.data;
             });
           });
@@ -58,12 +58,6 @@ export default {
         }
       });
     }
-    // updateList() {
-    //   this.$store.dispatch(Constant.UPDATE_THUMBLIST, this.thumbData);
-    // }
-    // ...mapMutations({
-    //   compList: "fetchThumbList"
-    // })
   },
   beforeCreate() {},
   created() {
