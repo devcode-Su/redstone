@@ -12,7 +12,7 @@
           </thead>
         </table>
       </div>
-      <div data-tbody="tbody" class="members">
+      <v-infinite-scroll data-tbody="tbody" class="members" :loading="reloading" @bottom="nextPage" style="overflow-y: scroll;">
         <table>
           <tbody>
             <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap" @click="selectRow(member)">
@@ -26,7 +26,7 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </v-infinite-scroll>
     </div>
   </div>
 </template>
@@ -49,28 +49,36 @@ export default {
   },
   data() {
     return {
+      reloading: false,
       filterText: "",
       edited: null,
       orderField: "id",
       direction: "asc",
       reverse: true,
       selected: 0,
+      dept_code : 1,
+      userData : [],
+      responseData : [],
       empty: "검색 된 내용이 없습니다.",
       fields: {
         nodeid: "센서ID",
         name: "이름",
         part: "부서명"
         //ip: "아이피"
+      },
+      form:{
+        page : 1,
+        length : 50
       }
     };
   },
   computed: {
-    ...mapGetters({ fetchUsers: "fetchGlobalUser" }),
+    ...mapGetters({ globalRangeCode: "globalRangeCode" }),
     orderedItems() {
       return _.orderBy(this.filteredMebers, this.orderField, this.direction);
     },
     filteredMebers() {
-      return this.fetchUsers.filter(member => {
+      return this.userData.filter(member => {
         return member.username.match(this.filterText);
       });
     }
@@ -79,7 +87,19 @@ export default {
     //    }
   },
   components: {},
-  watch: {},
+  watch: {
+    globalRangeCode(g){
+      if(g){
+        this.dept_code = g.dept_code;
+        this.userList();
+      }
+    },
+    responseData(r){
+      if(r){
+        this.userData = r.data;
+      }
+    }
+  },
   methods: {
     reOrder(select, index) {
       if (this.orderField === select) {
@@ -95,10 +115,36 @@ export default {
       //console.log(member);
       this.$store.dispatch(Constant.GLOBAL_RANGEUSER, member);
       this.$bus.$emit("update");
+    },
+    userList(){
+      const url = "/api/admin/group/recurse/"+this.dept_code;
+      this.$http.get(url, {
+        params : this.form
+      }).then( response => {
+        this.responseData = response.data;
+      });
+    },
+    nextPage () {
+      ++this.form.page;
+      this.api();
+    },
+    api () {
+      const url = "/api/admin/group/recurse/"+this.dept_code;
+      this.reloading = true;
+      this.$http.get(url, {
+        params : this.form
+      }).then( response => {
+        this.tableData.push(...response.data.data);
+      }).then(() => {
+        this.reloading = false
+      })
     }
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.$store.dispatch(Constant.GLOBAL_RANGECODE, {dept_code : 1});
+    this.userList();
+  },
   beforeMounted() {},
   mounted() {},
   beforeUpdate() {},

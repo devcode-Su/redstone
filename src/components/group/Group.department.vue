@@ -54,7 +54,7 @@ export default {
   beforeCreate() {},
   created() {
     //this.getData();
-    console.log("그룹관리 메뉴");
+    //console.log("그룹관리 메뉴");
     this.$store.dispatch(Constant.FETCH_GROUP);
   },
   beforeMounted() {},

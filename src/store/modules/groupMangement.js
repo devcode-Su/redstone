@@ -21,25 +21,32 @@ const tree =list => {
 
 export default {
   state: {
+    count:{
+      total:"",
+      connected:"",
+      week:""
+    },
     group:{},
     globalRange: {
-      code : {
-        dept_code : 1,
-        name : "전사"
-      },
-      user : []
+      dept_code : 1,
+      name : "전사"
     },
-    editUser : {
-      code : {},
-      user : []
-    },
+    editUser : {},
     editGroup: {
-      code : {},
-      fromUser : [],
-      toUser : []
+      from:{},
+      to:{}
     }
   },
   getters: {
+    [Constant.COUNT_TOTAL]: (state) => {
+      return state.count.total;
+    },
+    [Constant.COUNT_CONNECTED]: (state) => {
+      return state.count.connected;
+    },
+    [Constant.COUNT_WEEK]: (state) => {
+      return state.count.week;
+    },
     [Constant.FETCH_GROUP]: (state) => {
       // var list = state.group, map = {}, node, roots = [], i;
       // for (i = 0; i < list.length; i += 1) {
@@ -60,30 +67,42 @@ export default {
       return state.group;
     },
     [Constant.GLOBAL_RANGECODE]: (state) => {
-      return state.globalRange.code;
+      return state.globalRange;
     },
-    [Constant.FETCH_GLOBALUSER]: (state) => {
-      return state.globalRange.user;
+    [Constant.EDITUSER_CODE] : (state) => {
+      return state.editUser
     },
-    [Constant.FETCH_EDITUSER] : (state) => {
-      return state.editUser.user
+    [Constant.EDITGROUP_CODE_FROM] : (state) => {
+      return state.editGroup.from
+    },
+    [Constant.EDITGROUP_CODE_TO] : (state) => {
+      return state.editGroup.to
     }
   },
   mutations: {
+    [Constant.COUNT_TOTAL]: (state, payload) => {
+      state.count.total = payload;
+    },
+    [Constant.COUNT_CONNECTED]: (state, payload) => {
+      state.count.connected = payload;
+    },
+    [Constant.COUNT_WEEK]: (state, payload) => {
+      state.count.week = payload;
+    },
     [Constant.FETCH_GROUP]: (state, payload) => {
       state.group = payload;
     },
     [Constant.GLOBAL_RANGECODE]: (state, payload) => {
-      state.globalRange.code = payload;
-    },
-    [Constant.FETCH_GLOBALUSER]: (state, payload) => {
-      state.globalRange.user = payload;
+      state.globalRange = payload;
     },
     [Constant.EDITUSER_CODE]: (state, payload) => {
-      state.editUser.code = payload;
+      state.editUser = payload;
     },
-    [Constant.FETCH_EDITUSER] : (state, payload) => {
-      state.editUser.user = payload
+    [Constant.EDITGROUP_CODE_FROM]: (state, payload) => {
+      state.editGroup.from = payload;
+    },
+    [Constant.EDITGROUP_CODE_TO]: (state, payload) => {
+      state.editGroup.to = payload;
     }
   },
   actions: {
@@ -103,24 +122,14 @@ export default {
     [Constant.GLOBAL_RANGECODE]: (store, payload) => {
       store.commit(Constant.GLOBAL_RANGECODE, payload);
       ContantApi.fetchGlobalUser(payload.dept_code).then(response => {
-        store.commit(Constant.FETCH_GLOBALUSER, response.data.data);
+        //store.commit(Constant.FETCH_GLOBALUSER, response.data.data);
+        if(payload.dept_code === 1){
+          store.commit(Constant.COUNT_TOTAL, response.data.data.length);
+        }
       });
     },
     [Constant.GLOBAL_RANGEUSER]: (store, payload) => {
       store.commit(Constant.GLOBAL_RANGECODE, payload);
-    },
-    [Constant.FETCH_GLOBALUSER]: (store) => {
-      console.log(store);
-      ContantApi.fetchGlobalUser(store.state.globalRange.dept_code).then(response => {
-        //console.log(response.data.data);
-        //store.commit(Constant.FETCH_USER, response.data.data)
-      });
-    },
-    [Constant.EDITUSER_CODE]: (store, payload) => {
-      store.commit(Constant.EDITUSER_CODE, payload);
-      ContantApi.fetchEditUser(payload.dept_code).then(response => {
-        store.commit(Constant.FETCH_EDITUSER, response.data.data);
-      });
-    },
+    }
   }
 }

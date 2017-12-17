@@ -7,7 +7,7 @@
           이동할 부서원 선택
         </h2>
         <groupdepartment data-component="tree-top" :page="'from'"></groupdepartment>
-        <groupmembersmove data-component="member-bottom" :movebtn="true" :members="departNow" :moveTo="departChange" @moveitem="moveItem"></groupmembersmove>
+        <groupmembersfrom data-component="member-bottom" :movebtn="true" :members="departNow" :moveTo="departChange" @moveitem="moveItem"></groupmembersfrom>
       </div>
       <div data-management-item>
         <h2 data-icon>
@@ -15,7 +15,7 @@
           이동될 부서 선택
         </h2>
         <groupdepartment data-component="tree-top" :page="'to'"></groupdepartment>
-        <groupmembersmove data-component="member-bottom" :members="departChange" :moveTo="departNow" :icon="false" @moveitem="moveItem"></groupmembersmove>
+        <groupmembersto data-component="member-bottom" :members="departChange" :moveTo="departNow" :icon="false" @moveitem="moveItem"></groupmembersto>
       </div>
     </div>
     <div data-management data-btn="confirm">
@@ -25,7 +25,8 @@
 </template>
 <script>
 import Groupdepartment from "./Group.department";
-import Groupmembersmove from "./Group.membersmove";
+import Groupmembersfrom from "./Group.members.from";
+import Groupmembersto from "./Group.members.to";
 //import { EventBus } from "@/main";
 export default {
   name: "GroupMemberset",
@@ -47,11 +48,11 @@ export default {
   computed: {},
   components: {
     "groupdepartment":Groupdepartment,
-    "groupmembersmove":Groupmembersmove
+    "groupmembersfrom":Groupmembersfrom,
+    "groupmembersto":Groupmembersto
   },
   watch: {},
   methods: {
-    setData() {},
     moveItem(setItem) {
       setItem.to.push(setItem.element);
       setItem.from.splice(setItem.from.indexOf(setItem.element), 1);
@@ -59,40 +60,9 @@ export default {
     saveStorage() {
       console.log("save");
     }
-    //    resetStorage() {
-    //      console.log("reset");
-    //      EventBus.$on("userfrom", data => {
-    //        const apiUrl = "/api/admin/group/node/" + data;
-    //        this.$http.get(apiUrl).then(result => {
-    //          this.departNow = result.data.data;
-    //          console.log(result.data);
-    //        });
-    //      });
-    //      EventBus.$on("userto", data => {
-    //        const apiUrl = "/api/admin/group/node/" + data;
-    //        this.$http.get(apiUrl).then(result => {
-    //          this.departChange = result.data.data;
-    //          console.log(result.data);
-    //        });
-    //      });
-    //    }
   },
   beforeCreate() {},
   created() {
-    //    EventBus.$on("userfrom", data => {
-    //      const apiUrl = "/api/admin/group/node/" + data;
-    //      this.$http.get(apiUrl).then(result => {
-    //        this.departNow = result.data.data;
-    //        console.log(result.data);
-    //      });
-    //    });
-    //    EventBus.$on("userto", data => {
-    //      const apiUrl = "/api/admin/group/node/" + data;
-    //      this.$http.get(apiUrl).then(result => {
-    //        this.departChange = result.data.data;
-    //        console.log(result.data);
-    //      });
-    //    });
   },
   beforeMounted() {},
   mounted() {},

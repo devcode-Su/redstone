@@ -63,7 +63,7 @@
   flex-direction: column;
   width: 100%;
   background-color: #f5f7fa;
-  overflow: hidden;
+  overflow-y: auto;
   .wrap {
     position: relative;
     flex: 1;

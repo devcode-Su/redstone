@@ -73,12 +73,11 @@ export default {
         if (this.isOpen) this.$emit("is-open", this.$parent.$children);
       }
       if (page === "from") {
-        this.$bus.$emit("userfrom", this.model.dept_code);
+        this.$store.commit(Constant.EDITGROUP_CODE_FROM, this.model.dept_code);
       } else if (page === "to") {
-        this.$bus.$emit("userto", this.model.dept_code);
+        this.$store.commit(Constant.EDITGROUP_CODE_TO, this.model.dept_code);
       } else if (page === "user") {
-        console.log("aaa");
-        this.$store.dispatch(Constant.EDITUSER_CODE, this.model);
+        this.$store.commit(Constant.EDITUSER_CODE, this.model);
       } else {
         this.$bus.$emit("update");
         this.$store.dispatch(Constant.GLOBAL_RANGECODE, this.model);
