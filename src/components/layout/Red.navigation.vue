@@ -18,7 +18,7 @@
   </nav>
 </template>
 <script>
-//import locationCheckMixin from "../mixins/location.check.mixin";
+import locationCheckMixin from "../mixins/location.check.mixin";
 export default {
   name: "RedNavigation",
   extends: {},
@@ -39,6 +39,7 @@ export default {
       if (this.selectNum !== select) {
         this.selectNum = select;
       }
+      this.$emit("selectedBoolean", this.locationCheck());
     }
   },
   beforeCreate() {},
@@ -77,8 +78,8 @@ export default {
   activated() {},
   deactivated() {},
   beforeDestroy() {},
-  destroyed() {}
-  //mixins: [locationCheckMixin]
+  destroyed() {},
+  mixins: [locationCheckMixin]
 };
 </script>
 <style lang='scss' scoped>
