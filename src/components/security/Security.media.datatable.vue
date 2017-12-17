@@ -68,7 +68,7 @@
 </template>
 <script>
   export default {
-    name: "DatatableTable",
+    name: "SecurityDatatable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
