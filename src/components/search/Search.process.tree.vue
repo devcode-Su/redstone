@@ -6,7 +6,7 @@
           <span @click="isTreeLocked = !isTreeLocked ">
             <i class="fa" :class="{'fa-lock': isTreeLocked, 'fa-unlock': !isTreeLocked}"></i>
           </span>
-          <span>
+          <span @click="initZoom();initPosition();">
             <i class="fa fa-undo"></i>
           </span>
         </div>
@@ -232,8 +232,6 @@
 </template>
 <script>
   import * as d3 from "d3";
-  // import MdList from "../../../node_modules/vue-material/src/components/mdList/mdList.vue";
-  // import MdIcon from "../../../node_modules/vue-material/src/components/mdIcon/mdIcon.vue";
 
   export default {
     name: "Processtree",
