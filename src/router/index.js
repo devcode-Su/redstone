@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
 import Redstone from '@/components/Redstone'
+import Explanation from '@/components/popup/Explanation'
 
 import Dashboard from '@/components/dashboard/Dashboard'
 import Dashboardsystems from '@/components/dashboard/Dashboard.systems'
@@ -40,6 +41,11 @@ export default new Router({
       path: '/',
       name: 'Index',
       component: Index
+    },
+    {
+      path : "/Explanation",
+      name : "Explanation",
+      component : Explanation
     },
     {
       path: '/Redstone',
