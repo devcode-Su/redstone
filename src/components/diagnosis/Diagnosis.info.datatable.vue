@@ -67,7 +67,7 @@
   import DiagnosisInserttable from "./Diagnosis.info.insert.table"
   import Paginations from "../template/Template.paginations"
   export default {
-    name: "DatatableTable",
+    name: "InfoDatatable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
@@ -121,14 +121,15 @@
     watch: {
       formData(d) {
         if(d){
-          //console.log(d)
-          this.form.dept_code = d.form.dept_code;
-          this.form.nodeid = d.form.nodeid;
-          this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
-          this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
-          this.form.order = d.order;
-          this.apiUrl = d.url;
-          this.receiveSearch();
+          if(d.form){
+            this.form.dept_code = d.form.dept_code;
+            this.form.nodeid = d.form.nodeid;
+            this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
+            this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
+            this.form.order = d.order;
+            this.apiUrl = d.url;
+            this.receiveSearch();
+          }
           return d;
         }
       },

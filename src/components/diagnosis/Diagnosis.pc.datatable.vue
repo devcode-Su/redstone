@@ -123,14 +123,15 @@
     watch: {
       formData(d) {
         if(d){
-          //console.log("alive?");
-          this.form.dept_code = d.form.dept_code;
-          this.form.nodeid = d.form.nodeid;
-          this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
-          this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
-          this.form.order = d.order;
-          this.apiUrl = d.url;
-          this.receiveSearch();
+          if(d.form){
+            this.form.dept_code = d.form.dept_code;
+            this.form.nodeid = d.form.nodeid;
+            this.form.startDate = d.form.startDate ? d.form.startDate.getTime() : null;
+            this.form.endDate = d.form.endDate ? d.form.endDate.getTime() : null;
+            this.form.order = d.order;
+            this.apiUrl = d.url;
+            this.receiveSearch();
+          }
           return d;
         }
       },
