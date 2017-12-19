@@ -29,7 +29,7 @@ import Setupadmin from '@/components/setup/Setup.admin'
 import Setupsensor from '@/components/setup/Setup.sensor'
 import Setupenviroment from '@/components/setup/Setup.enviroment'
 
-import TestComponent from '@/components/test/TestComponent'
+import TestComponent from '@/components/test/Test.component'
 
 Vue.use(Router);
 
