@@ -17,7 +17,6 @@
     data() {
       return {
         q: "",
-        partial_match: false
       };
     },
     computed: {},

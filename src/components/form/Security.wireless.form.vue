@@ -6,31 +6,23 @@
         <div data-form-item>
           <label data-form-label="required">조사기간 설정</label>
           <div data-form-tag>
-            <el-date-picker v-model="startDate" type="datetime" placeholder="Select Start date and time" size="small"
-                            @change="valueChanged('start', $event)" @input="valueChanged('start', $event)">
+            <el-date-picker v-model="form.startDate" type="datetime" placeholder="Select Start" size="small">
             </el-date-picker>
             <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-            <el-date-picker v-model="endDate" type="datetime" placeholder="Select End date and time" size="small"
-                            @change="valueChanged('end', $event)" @input="valueChanged('end', $event)">
+            <el-date-picker v-model="form.endDate" type="datetime" placeholder="Select End" size="small">
             </el-date-picker>
-            <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDateTime(i)" size="small">
+            <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setFormDateTime(i)" size="small">
               {{settime}}
             </el-button>
           </div>
         </div>
-        <div data-form-item>
-          <div data-form-tag="check">
-            <label class="check">검색 항목</label>
-            <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" true-label="on" :false-labe="null" @change="handleCheckAllChange">
-              전체
-            </el-checkbox>
-            <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
-              <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">{{search}}
-              </el-checkbox>
-            </el-checkbox-group>
-          </div>
-        </div>
-        <replace-input @replace="inputText"></replace-input>
+        <!--<div data-form-item>-->
+          <!--<label>검색 조건</label>-->
+          <!--<div data-form-tag>-->
+            <!--<el-input type="text" v-model="q" placeholder="AP name" size="small">-->
+            <!--</el-input>-->
+          <!--</div>-->
+        <!--</div>-->
       </fieldset>
       <div data-search-submit>
         <el-button type="primary" plain size="small" native-type="onSubmit">
@@ -44,8 +36,6 @@
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
   import GlobalRange from "./Global.range";
-  import Datetime from "./Datetime";
-  import ReplaceInput from "./Replace.input";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
 
   export default {
@@ -57,28 +47,14 @@
     data() {
       return {
         dateLabel: ["1시간", "일일", "주간", "월간"],
-        isIndeterminate: false,
-        checklistAll:    [
-          "FILE", "IP", "RSC", "process", "network", "files", "registry",
-        ],
-        checklist:       {
-          FILE:     "TI진단 이벤트",
-          IP:       "악성 URL/IP 접근 이벤트",
-          RSC:      "RSC 엔진 진단 이벤트",
-          process:  "프로세스",
-          network:  "네트워크",
-          files:    "파일",
-          registry: "레지스트리",
-        },
         form: {
+          page:1,
+          length:50,
           dept_code: 1,
-          nodeid: "",
+          nodeid: null,
           startDate: null,
           endDate: null,
-          checkAll: "on",
-          checkType: [
-            "FILE", "IP", "RSC", "process", "network", "files", "registry",
-          ],
+          order:"event_time"
         }
       };
     },
@@ -87,8 +63,6 @@
     },
     components: {
       "global-range" : GlobalRange,
-      "datetime" :Datetime,
-      "replace-input": ReplaceInput,
     },
     watch: {
       globalRangeCode(g) {
@@ -100,44 +74,25 @@
       }
     },
     methods: {
-      dateSet(d) {
-        this.form.startDate = d.start ? d.start : this.form.startDate;
-        this.form.endDate = d.end ? d.end : this.form.endDate;
-      },
-      handleCheckAllChange(val) {
-        console.log(val);
-        this.form.checkType = val ? this.checklistAll : [];
-        this.isIndeterminate = false;
-      },
-      handleCheckedEngineChange(value) {
-        let checkedCount = value.length;
-        this.form.checkAll = checkedCount === this.checklistAll.length;
-        this.isIndeterminate =
-          checkedCount > 0 && checkedCount < this.checklistAll.length;
-      },
-      inputText(t){
-        this.form.q = t.q;
-        this.form.partial_match = t.partial_match;
+      dataSet(){
+        this.form.dept_code = this.globalRangeCode.dept_code;
+        this.form.nodeid = this.globalRangeCode.nodeid;
       },
       onSubmit() {
-        console.log(this.form);
+        //console.log(this.form);
         if(this.form.startDate == null || this.form.endDate == null ){
           this.$notify.error({
             title: 'Error',
             message: '조사기간을 입력해야 합니다.'
           });
         }else{
-          this.$emit("form", this.form);
+          this.$bus.$emit("wireless", this.form);
         }
-      }
+      },
+
     },
     created() {
-      this.form.dept_code = this.globalRangeCode.dept_code;
-      this.form.nodeid = this.globalRangeCode.nodeid;
-      this.all = "???";
-      this.form.checked = "cccccc";
-      console.log(this.all);
-      console.log(this.form.checked)
+      this.dataSet();
     },
     beforeMounted() {
     },

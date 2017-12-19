@@ -88,7 +88,6 @@
     },
     beforeCreate() {},
     created() {
-      console.log(this.globalRangeCode.dept_code);
       this.dept_code = this.globalRangeCode.dept_code;
       this.nodeid = this.globalRangeCode.nodeid;
       if(this.selectData.name === "badfile"){
