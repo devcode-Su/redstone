@@ -21,9 +21,9 @@
 </template>
 <script>
   import { mapGetters } from "vuex";
-  import PcFile from "./Diagnosis.pc.file";
-  import PcIp from "./Diagnosis.pc.ip";
-  import PcRsc from "./Diagnosis.pc.rsc";
+  import PcFile from "../form/Diagnosis.pc.file";
+  import PcIp from "../form/Diagnosis.pc.ip";
+  import PcRsc from "../form/Diagnosis.pc.rsc";
 import DiagnosisDatatable from "./Diagnosis.pc.datatable";
 export default {
   name: "Diagnosisinfo",
