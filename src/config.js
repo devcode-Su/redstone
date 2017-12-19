@@ -28,5 +28,11 @@ export default {
   SETUP_ADMIN : BASE_URL,
   ADD_ADMIN : BASE_URL,
   UPDATE_ADMIN : BASE_URL,
-  DELETE_ADMIN : BASE_URL + "/${no}"
+  DELETE_ADMIN : BASE_URL + "/${no}",
+
+  //popup
+  POPUP_INFO_SHA256 : BASE_URL + "/search/file/info/master/sha256/${no}",
+  POPUP_LIST_SHA256 : BASE_URL + "/search/file/list/sha256/${no}",
+  POPUP_MD5 : BASE_URL + "/search/detect/file/${no}",
+  POPUP_RULE_ID : BASE_URL + "/info/rsc/rules/${no}",
 }

@@ -9,6 +9,7 @@ import groupManagement from "./modules/groupMangement";
 import setupAdmin from "./modules/setupAdmin";
 import Property from "./modules/propertyDetail";
 import DashboardData from "./modules/dashboardDateRoute";
+import Popup from "./modules/popup"
 
 Vue.use(Vuex);
 
@@ -23,7 +24,8 @@ const store = new Vuex.Store({
     groupManagements : groupManagement,
     setupAdmins : setupAdmin,
     Propertys : Property,
-    DashboardDataRoute : DashboardData
+    DashboardDataRoute : DashboardData,
+    Popups : Popup
   }
 });
 
