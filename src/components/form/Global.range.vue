@@ -34,7 +34,7 @@
     methods: {
       resetRange() {
         this.$bus.$emit("update");
-        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+        this.$store.dispatch(Constant.GLOBAL_RANGECODE, {
           dept_code: 1,
           name: "전사"
         });
