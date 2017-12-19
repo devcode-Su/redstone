@@ -11,7 +11,7 @@
           </span>
         </div>
       </div>
-      <div class="layer" v-if="isTreeLocked"></div>
+      <div class="layer" v-if="isTreeLocked" @click="isTreeLocked = !isTreeLocked"></div>
       <svg id="process-tree" ref="svg" :width="tree.viewer.w" :height="tree.viewer.h">
         <g :transform="`translate(${tree.zoom.x},${tree.zoom.y}) scale(${tree.zoom.k})`"></g>
       </svg>
