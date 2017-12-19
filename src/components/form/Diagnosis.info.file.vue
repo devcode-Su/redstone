@@ -10,7 +10,7 @@
                             @change="valueChanged" @input="valueChanged">
             </el-date-picker>
             <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-            <el-date-picker v-model="endDate" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select End e" size="small"
+            <el-date-picker v-model="endDate" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select End" size="small"
                             @change="valueChanged" @input="valueChanged">
             </el-date-picker>
             <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDatetime(i)" size="small">
