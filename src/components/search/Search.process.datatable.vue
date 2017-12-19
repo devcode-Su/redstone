@@ -144,7 +144,7 @@
         }
 
         this.searchOption.page = this.pagination.page;
-        this.searchOption.legnth = this.pagination.length;
+        this.searchOption.length = this.pagination.length;
         this.searchOption.order = this.selectedOrder ? this.selectedOrder : null;
         this.searchOption.direction = this.selectedDirection;
         this.lastOrder = this.searchOption.order;
