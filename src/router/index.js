@@ -29,6 +29,8 @@ import Setupadmin from '@/components/setup/Setup.admin'
 import Setupsensor from '@/components/setup/Setup.sensor'
 import Setupenviroment from '@/components/setup/Setup.enviroment'
 
+import TestComponent from '@/components/test/TestComponent'
+
 Vue.use(Router);
 
 export default new Router({
@@ -128,6 +130,10 @@ export default new Router({
         {
           path: 'Setup-enviroment',
           component: Setupenviroment
+        },
+        {
+          path : "Redstone-test",
+          component : TestComponent
         }
       ]
     }

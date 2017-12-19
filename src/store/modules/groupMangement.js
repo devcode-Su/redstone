@@ -95,6 +95,9 @@ export default {
     [Constant.GLOBAL_RANGECODE]: (state, payload) => {
       state.globalRange = payload;
     },
+    [Constant.GLOBAL_RANGEUSER]: (state, payload) => {
+      state.globalRange = payload;
+    },
     [Constant.EDITUSER_CODE]: (state, payload) => {
       state.editUser = payload;
     },
@@ -123,13 +126,19 @@ export default {
       store.commit(Constant.GLOBAL_RANGECODE, payload);
       ContantApi.fetchGlobalUser(payload.dept_code).then(response => {
         //store.commit(Constant.FETCH_GLOBALUSER, response.data.data);
-        if(payload.dept_code === 1){
-          store.commit(Constant.COUNT_TOTAL, response.data.data.length);
-        }
       });
     },
     [Constant.GLOBAL_RANGEUSER]: (store, payload) => {
-      store.commit(Constant.GLOBAL_RANGECODE, payload);
-    }
+      //console.log(payload)
+      ContantApi.globalRangeUser(payload).then(response => {
+        //console.log(response.data)
+        store.commit(Constant.GLOBAL_RANGEUSER, {
+          dept_code : response.data.dept_code,
+          name : response.data.userdept,
+          nodeid : response.data.nodeid,
+          username : response.data.username
+        });
+      });
+    },
   }
 }

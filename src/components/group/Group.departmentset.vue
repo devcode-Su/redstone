@@ -16,9 +16,9 @@
         <groupmembersrename data-component="member"></groupmembersrename>
       </div>
     </div>
-    <div data-management data-btn="confirm">
-      <el-button type="success" plain>Done</el-button>
-    </div>
+    <!--<div data-management data-btn="confirm">-->
+      <!--<el-button type="success" plain>닫기</el-button>-->
+    <!--</div>-->
   </section>
 </template>
 <script>

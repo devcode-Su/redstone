@@ -20,6 +20,7 @@ export default {
   MANAGEMENT_GROUP : BASE_URL + "/group",
   FETCH_GLOBALUSER : BASE_URL + "/group/recurse/${no}",
   FETCH_EDITEUSR : BASE_URL + "/group/node/${no}",
+  GLOBAL_RANGEUSER : BASE_URL + "/node/info/${no}",
   UPDATE_EDITUSER : BASE_URL + "/node/${no}",
 
 

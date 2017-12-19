@@ -36,7 +36,6 @@ export default {
   methods: {
     fullScreen() {
       const element = document.documentElement;
-      //document.documentElement.webkitRequestFullscreen();
       if (element.requestFullScreen) {
         element.requestFullScreen();
       } else if (element.webkitRequestFullScreen) {
