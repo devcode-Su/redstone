@@ -78,6 +78,10 @@
     }, {
       "title": "네트워크 환경설정",
       "path": "Setup-enviroment"
-    }]
+    },{
+      "title" : "test",
+      "path" : "Redstone-test"
+    }
+    ]
   }
 ]
