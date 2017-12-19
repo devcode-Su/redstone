@@ -44,6 +44,7 @@
   import GlobalRange from "../form/Global.range";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
   import MixinsSearchAreaClose from "@/components/mixins/setDatetime.mixin";
+  import { mapGetters } from "vuex";
 
   export default {
     name: "SearchEventPanel",
@@ -86,11 +87,12 @@
       };
     },
     computed: {
-      "global-range" : GlobalRange,
+      ...mapGetters({ globalRangeCode: "globalRangeCode" })
     },
     components: {
       // ElRadio,
       // ElRadioGroup
+      "global-range" : GlobalRange,
     },
     watch: {
       propData: function (n, o) {
