@@ -4,12 +4,12 @@
       파일 검색
     </h1>
     <file-searchform></file-searchform>
-    <searchfiledatatable :definition="definition"></searchfiledatatable>
+    <search-file-datatable :local-data="local"></search-file-datatable>
   </article>
 </template>
 <script>
   import FileSearchform from "../form/File.search.form";
-  import Searchfiledatatable from "./Search.file.datatable.vue";
+  import SearchFileDatatable from "./Search.file.datatable.vue";
 
   export default {
     name: "Searchfile",
@@ -19,36 +19,35 @@
     },
     data() {
       return {
-        definition: {
-          field: [
-            "",
-            "센서 ID",
-            "사용자명",
-            "부서명",
-            "PC 명",
-            "IP",
-            "파일명",
-            "해시값",
-            "경로명",
-            "검출시간",
-          ],
+        local: {
+          fields: {
+            nodeid :"센서 ID",
+            username:"사용자명",
+            name:"부서명",
+            computer:"PC 명",
+            ip:"IP",
+            FileName:"파일명",
+            Md5Hash:"해시값",
+            FilePath:"파일경로",
+            InsertTime:"검출시간",
+          },
           url: "/api/admin/search/file",
           rowKey: [
             "nodeid", "node.info.username",
           ],
-          order: [
-            {label: '검출시각', value: 'InsertTime', default: true},
-            {label: '파일명', value: 'FileName'},
-            {label: '파일경로', value: 'FilePath'},
-            {label: '파일해시', value: 'Sha256Hash'},
-          ],
+          order: {
+            InsertTime:"검출시간",
+            FileName:"파일명",
+            FilePath:"파일경로",
+            Md5Hash:"파일해시",
+          }
         },
       };
     },
     computed: {},
     components: {
       "file-searchform": FileSearchform,
-      "searchfiledatatable": Searchfiledatatable,
+      "search-file-datatable": SearchFileDatatable,
     },
     watch: {},
     methods: {},

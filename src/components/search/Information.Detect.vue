@@ -125,9 +125,10 @@
           });
       },
       windowOpen(){
-        const url = "http://www.naver.com";
-        const op = "top=100, left=500, width=700, height=400, menubar=1, status=1, location=0";
-        window.open(url, "window", op);
+        // const url = "http://www.naver.com";
+        // const op = "top=100, left=500, width=700, height=400, menubar=1, status=1, location=0";
+        // window.open(url, "window", op);
+        console.log("window popup ready");
       }
     },
     beforeCreate() {

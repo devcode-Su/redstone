@@ -1,337 +1,276 @@
 <template>
-  <section class="template-table-wrap file-data-table">
-    <header>
-      <span>전체 : {{pagination.total}}</span>
-      <div class="btn-wrap">
+  <section data-table-wrap>
+    <header data-table="header">
+      <div data-table-option>
         <el-button size="small">
           파일로 저장
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
-        <el-select v-model="selectedOrder" placeholder="정렬" size="small"
-                   @change="orderChange('change', $event)"
-                   @input="orderChange('input', $event)"
-                   :disabled="!definition.order.length">
-          <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
+        <el-select v-model="form.order"  placeholder="정렬" size="small" :disabled="stateReorder" @change="reorder">
+          <el-option v-for="(option, k, i) in localData.order" :key="option" :label="option" :value="k"></el-option>
         </el-select>
         <div class="view-check">
-          <el-button @click="morebtn = !morebtn" size="small">
+          <el-button @click="moreBtn = !moreBtn" size="small">
             보기
-            <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
+            <i class="fa fa-angle-down" :class="{ rotate : moreBtn }"></i>
           </el-button>
-          <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-            <el-checkbox v-for="(check,i) in definition.field" :label="i" :key="check.i" :ref="'checked'"
-                         v-if="i !== 0">
-              {{check}}
-            </el-checkbox>
+          <el-checkbox-group v-model="viewChecked" v-if="moreBtn" @change="colView">
+            <el-checkbox v-for="(check,k,i) in localData.fields" :label="k" :key="k" :disabled="i === 0">{{check}}</el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
     </header>
-    <div class="template-table dynamic-row">
-      <div class="table-head-wrap">
+    <div data-table="table">
+      <span data-table="total">전체 : {{responseData.total || "-"}} 건</span>
+      <div data-thead="thead">
         <table>
           <thead>
           <tr>
-            <th v-for="(th, i) in definition.field" :key="th.id"
-                :class="['col'+i,{ 'col-end' : definition.field.length-1 === i }]" :ref="'checkedTh'">
-              <span>{{th}}</span>
-            </th>
+            <th class="col-connected"><span>접속</span></th>
+            <th v-for="(th,k) in localData.fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
           </tr>
           </thead>
         </table>
       </div>
-      <div class="table-body-wrap">
+      <div data-tbody="tbody" class="screen">
         <table>
           <tbody>
-          <tr v-if="data" v-for="(row,i) in data" :key="i.id" @click="moveRow(row, $event)" :ref="'checkedRow'">
-            <td class="col0">
-              <i class="fa fa-power-off"></i>
-              <!--{{row.connected}}-->
-            </td>
-            <td class="col1">
-              <span>
-                {{row.nodeid}}
-              </span>
-            </td>
-            <td class="col2">
-              <span>
-                {{row.node.info.username}}
-              </span>
-            </td>
-            <td class="col3">
-              <span>
-                {{row.node.dept.name}}
-              </span>
-            </td>
-            <td class="col4">
-              <span>
-                {{row.node.info.computer}}
-              </span>
-            </td>
-            <td class="col5">
-              <span>
-                {{row.node.info.ip}}
-              </span>
-            </td>
-            <td class="col6">
-              <span>
-                {{row.FileName}}
-              </span>
-            </td>
-            <td class="col7">
-              <span>
-                {{row.Md5Hash}}
-              </span>
-            </td>
-            <td class="col8">
-              <span>
-                {{row.FilePath}}
-              </span>
-            </td>
-            <td class="col9">
-              <span>
-                {{row.InsertTime}}
-              </span>
-            </td>
-          </tr>
+            <tr v-if="stateReorder">
+              <td data-none-data="screen">검색된 데이터가 없습니다.</td>
+            </tr>
+            <tr data-tbody="row"  v-for="row in tableData" :key="row.id">
+              <td class="col-connected" :class="'turn'+row.connected">
+                <span class="icon">
+                  <i class="fa fa-power-off" aria-hidden="true"></i>
+                </span>
+              </td>
+              <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
+            </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <el-pagination @size-change="sizeChange"
-                   @current-change="currentChange"
-                   :current-page.sync="pagination.currentPage"
-                   :page-sizes="[25, 50, 100, 200, 500]"
-                   :page-size="pagination.size" layout="sizes, prev, pager, next" :total="pagination.total">
-    </el-pagination>
+    <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
   </section>
 </template>
 <script>
-  import Templatepaginations from "../template/Template.paginations.vue"
-
-  function _plunk(item) {
-    if (item.hasOwnProperty('info') && Array.isArray(item.info)) {
-      item.info = item.info.reduce((p, c) => {
-        p[c.name] = c.value;
-        return p;
-      }, {});
-    }
-    else {
-      for (let k in item) {
-        if (item.hasOwnProperty(k)) {
-          if (typeof item[k] === 'object') {
-            _plunk(item[k]);
-          }
-        }
-      }
-    }
-    return item;
-  }
-
-  function plunk(options) {
-    options = options.map(_plunk);
-    return options;
-  }
-
+  import { mapGetters } from "vuex";
+  import Paginations from "../template/Template.paginations"
   export default {
-    name: "Searchfiledatatable",
+    name: "SearchFileDatatable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
-      definition: {
+      localData : {
         type: Object,
-        required: true,
-        default: {
-          order: [],
-          field: [],
-          url: '',
-        },
-      },
+        default: function () {
+          return {message: 'do not'}
+        }
+      }
     },
     data() {
       return {
         more: null,
-        morebtn: false,
-        view: [],
-        pagination: {
-          total: 0,
-          size: 50,
-          currentPage: 1,
-        },
-        searchOption: {},
-        data: [],
-        selectedOrder: null,
-        selectedDirection: 1,
-        lastOrder: null,
-        hasSearchOption: false,
+        moreBtn : false,
+        responseData : [],
+        tableData: [],
+        insertTable:[],
+        pagingData:[],
+        viewChecked: "",
+        apiUrl : "",
+        form: {
+          page : 1,
+          length : 50,
+          dept_code : 1,
+          nodeid : null,
+          startDate : null,
+          endDate : null,
+          q:null,
+          partial_match:null,
+          order : 'InsertTime',
+          direction : 0
+        }
       };
     },
-    computed: {},
-    components: {
-      "templatepaginations": Templatepaginations,
+    computed: {
+      stateReorder(){
+        return !this.tableData.length
+      },
+      ...mapGetters({
+        selectData : "dashboardData"
+      })
     },
-    watch: {},
+    components: {
+      "paginations" :Paginations
+    },
+    watch: {
+      responseData(t){
+        if(t){
+          console.log(t);
+          let newArr = [];
+          for(var i=0; i < t.data.length; i++){
+            let username = null ,name = null, computer = null, ip = null;
+            if(t.data[i].node){
+              name = t.data[i].node.dept.name;
+            }
+            if(t.data[i].node.info){
+              let self = t.data[i].node.info;
+              for(var u =0; u < self.length; u++){
+                if(self[u].name === "computer") computer = self[u].value;
+                if(self[u].name === "ip") ip = self[u].value;
+                if(self[u].name === "username") username = self[u].value;
+              }
+            }
+            newArr.push({
+              dept_code : t.data[i].node.dept_code,
+              nodeid : t.data[i].nodeid,
+              username : username,
+              name : name,
+              computer : computer,
+              ip : ip,
+            })
+          }
+          let data = [];
+          for(var j=0; j< t.data.length; j++){
+            data.push(Object.assign(t.data[j], newArr[j]))
+          }
+          this.tableData = data;
+          this.pagingData = {
+            current_page : t.current_page,
+            total : t.total,
+          };
+          return t
+        }
+      },
+      tableData(t){
+        if(t){
+          console.log(this.selectData.rowNum);
+          if(this.selectData.rowNum !== undefined){
+            console.log("ready!");
+            this.rowSearch(this.selectData.rowNum);
+          }
+        }
+      }
+    },
     methods: {
-      viewCheck() {
-        if (this.$refs.checkedRow !== undefined) {
-          for (let j = 0; j < this.$refs.checkedRow.length; j++) {
-            for (let i = 0; i < this.definition.field.length - 1; i++) {
-              this.$refs.checkedTh[i + 1].hidden = !this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i + 1].hidden = !this.$refs.checked[i].isChecked;
+      receiveSearch(){
+        console.log(this.form);
+        const url = this.localData.url;
+        this.$http.get(url, {
+          params: this.form
+        }).then( response => {
+          console.log(response);
+          this.responseData = response.data
+        })
+      },
+      reorder(v){
+        //console.log(v);
+        this.form.order = v;
+        //console.log(this.form);
+        this.receiveSearch();
+      },
+      colView(val){
+        const checkArr = Object.keys(this.localData.fields);
+        for(var i=0; i < checkArr.length; i++){
+          let f = val.indexOf(checkArr[i]);
+          if(f === -1){
+            let j = this.$refs[checkArr[i]].length;
+            while(j--){
+              this.$refs[checkArr[i]][j].hidden = true;
             }
           }
-        } else {
-          this.view = [];
-        }
-      },
-      moveRow(data, $event) {
-        this.$router.push({path: "Search-process", query: data});
-      },
-      getData(page = null, size = null) {
-        if (!this.hasSearchOption) {
-          return false;
-        }
-        if (page) {
-          this.pagination.currentPage = page;
-        }
-        if (size) {
-          this.pagination.size = size;
-        }
-
-        this.searchOption.page = this.pagination.currentPage;
-        this.searchOption.length = this.pagination.size;
-        this.searchOption.order = this.selectedOrder ? this.selectedOrder : null;
-        this.searchOption.direction = this.selectedDirection;
-        this.lastOrder = this.searchOption.order;
-
-        this.$http.get(this.definition.url, {params: this.searchOption})
-            .then((result) => {
-              if (result.data && result.data.data) {
-                this.pagination.total = result.data.total;
-                this.data = plunk(result.data.data);
-              }
+          else {
+            this.$refs[checkArr[i]].forEach((item) => {
+              item.hidden = false;
             });
-      },
-      sizeChange($event) {
-        this.getData(null, $event);
-      },
-      currentChange($event) {
-        this.getData($event, null);
-      },
-      orderChange(type, val) {
-        switch (type) {
-          case 'change':
-            this.selectedDirection = 1;
-            this.getData();
-            break;
-          case 'input':
-            if (val === this.lastOrder) {
-              this.selectedDirection = (this.selectedDirection - 1) * -1;
-              this.getData();
-            }
-            break;
+          }
         }
       },
+      rowSearch(num){
+        //console.log(num);
+        //console.log(this.localData.name );
+        if(this.more === num){
+          this.more = null;
+        }else{
+          this.more = num;
+          let row = this.tableData[num];
+          //console.log(row[this.localData.apiCondition]);
+          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
+          //console.log(url)
+          this.$http.get(url, {
+            params : this.form
+          }).then(response => {
+            //console.log(response);
+            this.insertTable = response.data.data;
+          });
+        }
+      },
+      pageLength(p){
+        //console.log(p)
+        this.form.length = p.length ? p.length : this.form.length ;
+        this.form.page = p.current_page ? p.current_page : this.form.page;
+        this.receiveSearch();
+      }
     },
     beforeCreate() {
     },
     created() {
-      if (this.definition && this.definition.order && this.definition.order.length > 0) {
-        this.selectedOrder = this.definition.order[0].value;
-      }
-      this.$bus.$on('search-file-form', (data) => {
-        console.log(data)
-        this.hasSearchOption = true;
-        this.pagination.currentPage = 1;
-        for (let key in data) {
-          if (data.hasOwnProperty(key)) {
-            if (data[key] instanceof Date) {
-              this.searchOption[key] = data[key].getTime();
-            }
-            else {
-              this.searchOption[key] = data[key] ? data[key] : null;
-            }
-          }
-        }
-        this.getData();
+      this.viewChecked = Object.keys(this.localData.fields);
+      this.$bus.$on("search-file-form", form => {
+        console.log(form);
+        this.form.dept_code = form.dept_code;
+        this.form.nodeid = form.nodeid;
+        this.form.startDate = form.startDate ? form.startDate.getTime() : null;
+        this.form.endDate = form.endDate ? form.endDate.getTime() : null;
+        this.receiveSearch();
       });
     },
     beforeMounted() {
     },
     mounted() {
+      //this.rowSearch(this.selectData.rowNum);
     },
     beforeUpdate() {
     },
     updated() {
+      //this.rowSearch(this.selectData.rowNum);
     },
     activated() {
     },
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off('search-file-form');
+      this.$bus.$off("search-file-form")
     },
     destroyed() {
-    },
+    }
   };
 </script>
 <style lang='scss' scoped>
-
-  //noinspection CssUnknownTarget
   @import "~styles/variables";
-
-  .file-data-table {
-    .table-body-wrap {
-      max-height: 600px;
+  [data-table-wrap]{
+    margin-top:30px;
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 0.3s;
     }
-    th, td {
-      padding: 0 10px;
+    .fade-enter,
+    .fade-leave-to {
+      opacity: 0;
     }
-    .col0 {
-      width: 15px;
-      min-width: 15px;
-      padding: 0 7px;
-      span {
-        width: 16px;
+    .fa {
+      transition: all 0.3s ease;
+      &.rotate {
+        transform: rotateZ(-180deg);
+        transform-origin: 44% 50%;
       }
     }
-    .col1 {
-      min-width: 20px;
-      width: 20px;
-    }
-    td.col1 {
-      width: 62px;
-      min-width: 62px;
-      padding-left: 20px;
-    }
-    .col2,
-    .col3,
-    .col4,
-    .col5 {
-      width: 120px;
-      min-width: 120px;
-    }
-    .col2 span,
-    .col3 span,
-    .col4 span,
-    .col5 span {
-      width: 100px;
-      min-width: 100px;
-    }
-    .col6,
-    .col6 span {
-      width: 130px;
-    }
-    .col7,
-    .col7 span {
-      width: 200px;
-      min-width: 200px;
-    }
-    .col8,
-    .col8 span {
-      width: 420px;
+    .show-row:hover {
+      background-color: transparent;
     }
   }
 
+  [data-tbody] {
+
+  }
 </style>
