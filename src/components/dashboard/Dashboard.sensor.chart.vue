@@ -100,7 +100,7 @@ export default {
   },
   created() {
     //this.chartStart();
-    const url = "/static/data/histo.json";
+    const url = "/dashboard/?method=get&resource=events";
     this.$http
       .get(url)
       .then(response => {
