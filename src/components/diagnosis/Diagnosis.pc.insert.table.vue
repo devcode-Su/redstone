@@ -71,7 +71,10 @@
         console.log(row)
         this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
           nodeid: row.nodeid,
-          username: row.username
+          username: row.username,
+          dept : {
+            name : row.userdept
+          }
         });
         this.$router.push({path: "Search-process", query: row});
       }

@@ -65,10 +65,8 @@
     },
     methods: {
       sendData(row) {
-        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
-          nodeid: row.nodeid,
-          username: row.username
-        });
+        console.log(row);
+        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, row.nodeid);
         this.$router.push({path: "Search-process", query: row});
       }
     },
