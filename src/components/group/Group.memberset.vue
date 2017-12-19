@@ -18,9 +18,9 @@
         <groupmembersto data-component="member-bottom" :members="departChange" :moveTo="departNow" :icon="false" @moveitem="moveItem"></groupmembersto>
       </div>
     </div>
-    <div data-management data-btn="confirm">
-      <el-button type="success" plain>Done</el-button>
-    </div>
+    <!--<div data-management data-btn="confirm">-->
+      <!--<el-button type="success" plain>Done</el-button>-->
+    <!--</div>-->
   </section>
 </template>
 <script>

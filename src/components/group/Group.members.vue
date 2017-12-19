@@ -12,7 +12,7 @@
           </thead>
         </table>
       </div>
-      <v-infinite-scroll data-tbody="tbody" class="members" :loading="reloading" @bottom="nextPage" style="overflow-y: scroll;">
+      <v-infinite-scroll data-tbody="tbody" class="members" :loading="reloading" @bottom="nextPage" style="overflow-y: auto;">
         <table>
           <tbody>
             <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap" @click="selectRow(member)">
@@ -113,10 +113,11 @@ export default {
     },
     selectRow(member) {
       //console.log(member);
-      this.$store.dispatch(Constant.GLOBAL_RANGEUSER, member);
+      this.$store.dispatch(Constant.GLOBAL_RANGEUSER, member.nodeid);
       this.$bus.$emit("update");
     },
     userList(){
+      console.log(this.dept_code);
       const url = "/api/admin/group/recurse/"+this.dept_code;
       this.$http.get(url, {
         params : this.form
@@ -138,12 +139,20 @@ export default {
       }).then(() => {
         this.reloading = false
       })
+    },
+    dataSet(){
+      this.$store.dispatch(Constant.GLOBAL_RANGECODE, {
+        dept_code : 1,
+        name : "전사"
+      });
+      this.dept_code = this.globalRangeCode.dept_code;
+      this.userList();
     }
   },
   beforeCreate() {},
   created() {
-    this.$store.dispatch(Constant.GLOBAL_RANGECODE, {dept_code : 1});
-    this.userList();
+    this.dataSet();
+    this.$bus.$on("update", this.userList);
   },
   beforeMounted() {},
   mounted() {},
@@ -151,7 +160,9 @@ export default {
   updated() {},
   activated() {},
   deactivated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    this.$bus.$off("update");
+  },
   destroyed() {}
 };
 </script>

@@ -12,7 +12,7 @@
           </thead>
         </table>
       </div>
-      <v-infinite-scroll data-tbody="tbody" :loading="reloading" @bottom="nextPage" style="overflow-y: scroll;">
+      <v-infinite-scroll data-tbody="tbody" :loading="reloading" @bottom="nextPage">
         <table>
           <tbody>
           <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap">

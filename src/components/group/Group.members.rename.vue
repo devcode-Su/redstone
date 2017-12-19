@@ -12,10 +12,10 @@
           </thead>
         </table>
       </div>
-      <v-infinite-scroll data-tbody="tbody" :loading="reloading" @bottom="nextPage" style="overflow-y: scroll;">
+      <v-infinite-scroll data-tbody="tbody" :loading="reloading" @bottom="nextPage">
         <table>
           <tbody>
-          <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap" :class="{editing : member === edited}" @dblclick.stop="selectRow(member.nodeid)">
+          <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap" :class="{editing : member === edited}">
             <td data-tbody="column" class="col-nodeid">{{member.nodeid}}</td>
             <td data-tbody="column" class="col-username" @dblclick.stop="renameTo(member)">
               <span class="name">
@@ -123,7 +123,6 @@
         this.edited = null;
         model.username = model.username.trim();
         this.$http.post(url, {
-          dept_code : model.dept_code,
           username : model.username
         }).then( () => {
           this.userList();
@@ -144,7 +143,7 @@
         }
       },
       selectRow(member) {
-        console.log(member);
+        //console.log(member);
         this.$confirm('선택 사용자를 삭제합니까?', 'Warning', {
           confirmButtonText: '삭제',
           cancelButtonText: '취소',

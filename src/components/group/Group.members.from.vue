@@ -13,7 +13,7 @@
           </thead>
         </table>
       </div>
-      <v-infinite-scroll data-tbody="tbody" :loading="reloading" @bottom="nextPage" style="overflow-y: scroll;">
+      <v-infinite-scroll data-tbody="tbody" :loading="reloading" @bottom="nextPage">
         <table>
           <tbody>
           <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap">
@@ -39,7 +39,7 @@
 <script>
   import _ from "lodash";
   import { mapGetters } from "vuex";
-  import Constant from "@/constant";
+  //import Constant from "@/constant";
   export default {
     name: "GroupMembersfrom",
     extends: {},
@@ -112,12 +112,12 @@
     },
     methods: {
       moveItem(m) {
-        console.log(m)
+        //console.log(m)
         const url = "/api/admin/node/" + m.nodeid;
         this.$http.post(url, {
-          nodeid : m.nodeid,
-          username : m.username
-        })
+          dept_code : this.editGroupTo
+        });
+        this.userList();
         this.$bus.$emit("user-move");
       },
       userList(){
