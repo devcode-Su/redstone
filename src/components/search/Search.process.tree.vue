@@ -238,12 +238,11 @@
     props: {
       //알파벳 순으로 정렬할 것.
       propData: {
-        ProcessGuid: {
-          type: String,
-        },
-        nodeid: {
-          type: Number,
-        },
+        type: Object,
+        required: true,
+        default: function () {
+          return {ProcessGuid: null, nodeid: null};
+        }
       },
     },
     data() {
