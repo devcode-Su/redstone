@@ -4,20 +4,20 @@
       <h1 class="group-title">
         그룹관리
       </h1>
-      <groupdepartment :propsTree="groupData[0]" class="group-department" :position="false"></groupdepartment>
-      <group-members :members="membersData"></group-members>
+      <groupdepartment class="group-department" :position="false"></groupdepartment>
+      <group-members></group-members>
       <ul class="group-notice">
         <li data-icon>
           <i class="fa fa-circle fa-fw dot-all" aria-hidden="true"></i>
-          전체 AGENT : {{totalUser}}
+          전체 AGENT : {{total}}
         </li>
         <li data-icon>
           <i class="fa fa-circle fa-fw dot-now" aria-hidden="true"></i>
-          현재 접속 : {{connectedUser}}
+          현재 접속 : {{now}}
         </li>
         <li data-icon>
           <i class="fa fa-circle fa-fw dot-not" aria-hidden="true"></i>
-          일주일 이상 미 접속 : {{weekUser}}
+          일주일 이상 미 접속 : {{week}}
         </li>
       </ul>
       <button data-icon="set" class="management-btn" :class="{spin:selected}" @click="showModal = true">
@@ -29,9 +29,7 @@
     </templatemodal>
   </section>
 </template>
-
 <script>
-  import { mapGetters } from "vuex";
 import Groupdepartment from "../group/Group.department";
 import GroupMembers from "../group/Group.members";
 import Templatemodal from "../template/Template.modal";
@@ -48,21 +46,17 @@ export default {
   data() {
     return {
       showModal: false,
-      groupData: [],
-      membersData: [],
-      total: ""
+      responseData:[],
+      total : "",
+      now : "",
+      week: ""
     };
   },
 
   computed: {
     isLoading() {
       return this.$store.state.loadingState;
-    },
-    ...mapGetters({
-      totalUser : "totalUser",
-      connectedUser: "connectedUser",
-      weekUser:"weekUser"
-    })
+    }
     // defaultData() {
     //   return this.membersData.length === 0 ? false : true;
     // }
@@ -74,30 +68,50 @@ export default {
     "templatemodal":Templatemodal
   },
   // 컴포넌트 메서드 그룹
-  watch: {},
+  watch: {
+    responseData(r){
+      if(r){
+        let total = 0, now = 0, week = 0;
+        for(var i =0; i < r.length; i++){
+          total += r[i].count;
+          if(r[i].status === 1){
+            now = r[i].count;
+          }else{
+            now = 0;
+          }
+          if(r[i].status === -1){
+            week = r[i].status
+          }else{
+            week = 0;
+          }
+        }
+        console.log(total, now, week);
+        this.total = total;
+        this.now = now;
+        this.week = week;
+        return r;
+      }
+    }
+  },
   methods: {
-    // getData() {
-    //   const apiGroupUrl = "/api/admin/group/list";
-    //   this.$http.get(apiGroupUrl).then(result => {
-    //     this.groupData = this.listToTree(result.data);
-    //   });
-    // }
+    getConnected() {
+      const url = "/api/admin/node/connectStatus";
+      this.$http.get(url).then(response => {
+        this.responseData = response.data;
+      });
+    }
   },
   // 컴포넌트 라이프사이클 메서드 그룹
   created() {
     //this.isLoading ? console.log("this.$router.push(" / ")") : this.getData();
-    this.$bus.$on("userview", data => {
-      const apiUrl = "/api/admin/group/recurse/" + data;
-      this.$http.get(apiUrl).then(result => {
-        this.membersData = result.data.data;
-      });
-    });
+    this.getConnected();
+    this.$bus.$on("update", this.getConnected);
   },
   mounted() {
     //console.log(typeof this.items);
   },
   beforeDestroy() {
-    this.$bus.$off("userview");
+    this.$bus.$off("update");
   }
 };
 </script>
