@@ -15,6 +15,9 @@ export default {
   fetchGlobalUser(dept){
     return axios.get(CONF.FETCH_GLOBALUSER.replace("${no}", dept));
   },
+  globalRangeUser(nodeid){
+    return axios.get(CONF.GLOBAL_RANGEUSER.replace("${no}", nodeid));
+  },
   setupAdmin(){
     return axios.get(CONF.SETUP_ADMIN);
   },
