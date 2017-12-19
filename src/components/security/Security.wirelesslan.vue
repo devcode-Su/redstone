@@ -3,12 +3,12 @@
     <h1 data-page-title>
       무선 LAN 사용
     </h1>
-    <wireless-forn @submit="receive"></wireless-forn>
-    <wireless-datatable :form-data="formData" :local-data="local"></wireless-datatable>
+    <wireless-form></wireless-form>
+    <wireless-datatable :local-data="local"></wireless-datatable>
   </article>
 </template>
 <script>
-import WirelessForn from "../form/Sesurity.wireless.form";
+import WirelessForm from "../form/Security.wireless.form";
 import WirelessDatatable from "./Security.wireless.datatable";
 export default {
   name: "Securitymedia",
@@ -18,7 +18,6 @@ export default {
   },
   data() {
     return {
-      formData : {},
       local : {},
       search: {
         field: [
@@ -47,15 +46,11 @@ export default {
   },
   computed: {},
   components: {
-    "WirelessForn" :WirelessForn,
+    "wireless-form" :WirelessForm,
     "wireless-datatable" : WirelessDatatable
   },
   watch: {},
-  methods: {
-    receive(form) {
-      this.$bus.$emit('security-account', form);
-    }
-  },
+  methods: {},
   beforeCreate() {},
   created() {},
   beforeMounted() {},
