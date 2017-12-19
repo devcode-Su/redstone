@@ -3,7 +3,21 @@
     <global-range></global-range>
     <form @submit.prevent="onSubmit">
       <fieldset>
-        <datetime @dateTime="dateSet"></datetime>
+        <div data-form-item>
+          <label data-form-label="required">조사기간 설정</label>
+          <div data-form-tag>
+            <el-date-picker v-model="startDate" type="datetime" placeholder="Select Start date and time" size="small"
+                            @change="valueChanged('start', $event)" @input="valueChanged('start', $event)">
+            </el-date-picker>
+            <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+            <el-date-picker v-model="endDate" type="datetime" placeholder="Select End date and time" size="small"
+                            @change="valueChanged('end', $event)" @input="valueChanged('end', $event)">
+            </el-date-picker>
+            <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDateTime(i)" size="small">
+              {{settime}}
+            </el-button>
+          </div>
+        </div>
         <div data-form-item>
           <div data-form-tag="check">
             <label class="check">검색 항목</label>

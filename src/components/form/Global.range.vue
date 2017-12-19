@@ -1,8 +1,8 @@
 <template>
   <p data-range>
-    <span v-if="globalRangeCode.name">{{globalRangeCode.name}}</span>
+    <span v-if="!globalRangeCode.username">{{globalRangeCode.name}}</span>
     <span v-else>
-      <span class="group" v-if="globalRangeCode.dept">{{globalRangeCode.dept.name}} /</span>{{globalRangeCode.username}}
+      {{globalRangeCode.name}} / {{globalRangeCode.username}}
       <button data-icon @click="resetRange">
         <i class="fa fa-times-circle"></i>
       </button>

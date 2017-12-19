@@ -6,11 +6,11 @@
         <div data-form-item>
           <label data-form-label="required">조사기간 설정</label>
           <div data-form-tag>
-            <el-date-picker v-model="startDate" type="datetime" placeholder="Select Start date and time" size="small"
+            <el-date-picker v-model="startDate" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select Start" size="small"
                             @change="valueChanged" @input="valueChanged">
             </el-date-picker>
             <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-            <el-date-picker v-model="endDate" type="datetime" placeholder="Select End date and time" size="small"
+            <el-date-picker v-model="endDate" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select End e" size="small"
                             @change="valueChanged" @input="valueChanged">
             </el-date-picker>
             <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDatetime(i)" size="small">
@@ -30,7 +30,7 @@
 <script>
   import Constant from "@/constant";
   import { mapGetters } from "vuex";
-  import GlobalRange from "./Global.range";
+  import GlobalRange from "../form/Global.range";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
 
   export default {
@@ -88,8 +88,8 @@
     },
     beforeCreate() {},
     created() {
-      this.form.dept_code = this.globalRangeCode.dept_code;
-      this.form.nodeid = this.globalRangeCode.nodeid;
+      this.dept_code = this.globalRangeCode.dept_code;
+      this.nodeid = this.globalRangeCode.nodeid;
       if(this.selectData.name === "badurlippc"){
         this.setDatetime(this.selectData.num);
         this.send();

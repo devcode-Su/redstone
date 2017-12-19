@@ -3,8 +3,29 @@
     <global-range></global-range>
     <form @submit.prevent="submit(form)">
       <fieldset>
-        <datetime @dateTime="dateset"></datetime>
-        <replace-input @replace="inputset"></replace-input>
+        <div data-form-item>
+          <label data-form-label="required">조사기간 설정</label>
+          <div data-form-tag>
+            <el-date-picker v-model="form.startDate" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select Start" size="small">
+            </el-date-picker>
+            <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+            <el-date-picker v-model="form.endDate" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select End e" size="small">
+            </el-date-picker>
+            <el-button class="date-select" v-for="(settime,i) in dateLabel" :key="settime.i" @click="setFormDateTime(i)" size="small">
+              {{settime}}
+            </el-button>
+          </div>
+        </div>
+        <div data-form-item>
+          <label>검색 조건</label>
+          <div data-form-tag>
+            <el-input type="text" v-model="form.q" size="small">
+            </el-input>
+            <el-checkbox style="margin-left:10px" v-model="form.partial_match" true-label="on" :flase-label="null">
+              부분 일치
+            </el-checkbox>
+          </div>
+        </div>
       </fieldset>
       <div data-search-submit>
         <el-button type="primary" plain size="small" native-type="submit" clearable>
@@ -18,8 +39,8 @@
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
   import GlobalRange from "./Global.range";
-import Datetime from "./Datetime";
 import ReplaceInput from "./Replace.input";
+  import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
 
 export default {
   name: "FileSearchform",
@@ -37,13 +58,14 @@ export default {
   },
   data() {
     return {
+      dateLabel: ["1시간", "일일", "주간", "월간"],
       form: {
         dept_code:1,
-        nodeid:'',
-        startDate: "",
-        endDate: "",
-        q: "",
-        partial_match: false
+        nodeid:null,
+        startDate: null,
+        endDate: null,
+        q: null,
+        partial_match: "on"
       }
     };
   },
@@ -52,7 +74,6 @@ export default {
   },
   components: {
     "global-range" : GlobalRange,
-    "datetime": Datetime,
     "replace-input": ReplaceInput
   },
   watch: {
@@ -65,16 +86,8 @@ export default {
     }
   },
   methods: {
-    dateset(dateTime) {
-      this.form.startDate = dateTime.start ? dateTime.start : this.form.startDate;
-      this.form.endDate = dateTime.end ? dateTime.end : this.form.endDate;
-    },
-    inputset(replace) {
-      //console.log("inputset", replace);
-      this.form.q = replace.q;
-      this.form.partial_match = replace.partial_match;
-    },
     submit(form) {
+      console.log(form);
       this.$bus.$emit("search-file-form", form);
     }
   },
@@ -90,7 +103,8 @@ export default {
   activated() {},
   deactivated() {},
   beforeDestroy() {},
-  destroyed() {}
+  destroyed() {},
+  mixins: [MixinsSetDatetime],
 };
 </script>
 <style lang='scss' scoped>
