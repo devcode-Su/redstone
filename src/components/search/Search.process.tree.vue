@@ -1,6 +1,17 @@
 <template>
   <section class="process-tree" data-process-tree>
     <div class="process-tree-area">
+      <div class="full-screen">
+        <div class="icons">
+          <span @click="isTreeLocked = !isTreeLocked ">
+            <i class="fa" :class="{'fa-lock': isTreeLocked, 'fa-unlock': !isTreeLocked}"></i>
+          </span>
+          <span @click="initZoom();initPosition();">
+            <i class="fa fa-undo"></i>
+          </span>
+        </div>
+      </div>
+      <div class="layer" v-if="isTreeLocked"></div>
       <svg id="process-tree" ref="svg" :width="tree.viewer.w" :height="tree.viewer.h">
         <g :transform="`translate(${tree.zoom.x},${tree.zoom.y}) scale(${tree.zoom.k})`"></g>
       </svg>
@@ -9,9 +20,9 @@
       <transition-group tag="ul" class="info-list-wrap" name="infolist">
         <li class="infolist" v-for="(list, index) in list" :key="index" ref="infoMenu"
             :class="{'on' : index === selected}">
-            <template v-if="list.name === '요약 정보'">
-              <span @click="infoList(index)" class="title">{{list.name}}</span>
-              <div class="info-wrap-group">
+          <template v-if="list.name === '요약 정보'">
+            <span @click="infoList(index)" class="title">{{list.name}}</span>
+            <div class="info-wrap-group">
               <div class="info-wrap" v-if="list.info.nodeInformation">
                 <span>PC 정보</span>
                 <dl>
@@ -221,8 +232,6 @@
 </template>
 <script>
   import * as d3 from "d3";
-  // import MdList from "../../../node_modules/vue-material/src/components/mdList/mdList.vue";
-  // import MdIcon from "../../../node_modules/vue-material/src/components/mdIcon/mdIcon.vue";
 
   export default {
     name: "Processtree",
@@ -230,12 +239,12 @@
       //알파벳 순으로 정렬할 것.
       propData: {
         ProcessGuid: {
-          type: String
+          type: String,
         },
         nodeid: {
-          type: Number
-        }
-      }
+          type: Number,
+        },
+      },
     },
     data() {
       return {
@@ -243,27 +252,27 @@
         list: [
           {
             name: '요약 정보',
-            info: {}
+            info: {},
           },
           {
             name: 'PC 정보',
-            info: []
+            info: [],
           },
           {
             name: '프로세스 정보',
-            info: []
+            info: [],
           },
           {
             name: '파일 정보',
-            info: []
+            info: [],
           },
           {
             name: '유입 정보',
-            info: []
+            info: [],
           },
           {
             name: '진단 정보',
-            info: []
+            info: [],
           },
         ],
         columns: [
@@ -291,19 +300,19 @@
                 return this.hasInteractive(data) ?
                   '있음' : '없음';
               }.bind(this),
-              translate: true
+              translate: true,
             },
             {
               title: 'WindowText',
               valueName: function (data) {
                 return this.hasInteractive(data) ? data.WindowText : '';
-              }.bind(this)
+              }.bind(this),
             },
             {
               title: 'WindowClassName',
               valueName: function (data) {
                 return this.hasInteractive(data) ? data.WindowClassName : '';
-              }.bind(this)
+              }.bind(this),
             },
             {title: 'CommandLine', valueName: 'CommandLine'},
             {title: '파일 생성 시각', valueName: 'CreateDate'},
@@ -330,7 +339,7 @@
             {title: '유입시각', valueName: 'EventTime'},
             {title: '유입방식', valueName: 'SrcType'},
             {title: '유입경로', valueName: 'SrcInfo'},
-            {title: '생성 경로', valueName: 'FirstCreatedFilePath'}
+            {title: '생성 경로', valueName: 'FirstCreatedFilePath'},
           ],
           [ // Detect Information
             {title: '발견자', valueName: 'Checker'},
@@ -338,34 +347,35 @@
             {title: '연관정보', valueName: 'PathInfo1'},
             {title: '연관정보', valueName: 'PathInfo2'},
             {title: '위험도', valueName: 'Score'},
-          ]
+          ],
         ],
         tree: {
           viewer: {
             w: 1170,
-            h: 580
+            h: 580,
           },
           zoom: {
             x: 0,
             y: 290,
-            k: 1
+            k: 1,
           },
           margin: {
             top: 10,
             right: 10,
             bottom: 10,
-            left: 10
+            left: 10,
           },
           scaleFactor: 1.2,
         },
         root: null,
-        data: null
+        data: null,
+        isTreeLocked: true,
       };
     },
     components: {
       // MdIcon,
       // MdList,
-      d3
+      d3,
     },
     watch: {
       propData(n, o) {
@@ -389,7 +399,7 @@
             this.getNodeData(this.propData);
           }
         }
-      }
+      },
     },
     methods: {
       getValueEx(a, b, c) {
@@ -410,7 +420,7 @@
           parent: data.ParentProcessGuid,
           children: [],
           _detected: data.IsDetected,
-          FileHash: data.FileHash
+          FileHash: data.FileHash,
         };
       },
       dataToTree(processGuid, data) {
@@ -441,40 +451,40 @@
         const selection = d3.select(this.$refs.svg);
         selection.on('zoom', null).on('wheel.zoom', null).on('dblclick.zoom', null).on('contextmenu', null);
         const zoom = d3.zoom()
-          .scaleExtent([-Infinity, Infinity])
-          .on('zoom', () => {
-            this.tree.zoom.x = d3.event.transform.x;
-            this.tree.zoom.y = d3.event.transform.y;
-            this.tree.zoom.k = d3.event.transform.k;
-          });
+                       .scaleExtent([-Infinity, Infinity])
+                       .on('zoom', () => {
+                         this.tree.zoom.x = d3.event.transform.x;
+                         this.tree.zoom.y = d3.event.transform.y;
+                         this.tree.zoom.k = d3.event.transform.k;
+                       });
         selection.call(zoom)
-          .call(zoom.transform, this.initPosition)
-          .on('wheel.zoom', () => {
-            d3.event.preventDefault();
-            this.tree.zoom.y -= d3.event.deltaY * this.tree.zoom.k;
-            selection.call(zoom.transform, d3.zoomIdentity.translate(this.tree.zoom.x, this.tree.zoom.y)
-              .scale(this.tree.zoom.k));
-          })
-          .on('dblclick.zoom', () => {
-            d3.event.preventDefault();
-            let currentPosition = {x: this.tree.zoom.x, y: this.tree.zoom.y, k: this.tree.zoom.k};
-            this.tree.zoom.k = this.tree.zoom.k * this.tree.scaleFactor;
-            this.tree.zoom.x = d3.event.offsetX - (d3.event.offsetX - this.tree.zoom.x) * currentPosition.k;
-            this.tree.zoom.y = d3.event.offsetY - (d3.event.offsetY - this.tree.zoom.y) * currentPosition.k;
+                 .call(zoom.transform, this.initPosition)
+                 .on('wheel.zoom', () => {
+                   d3.event.preventDefault();
+                   this.tree.zoom.y -= d3.event.deltaY * this.tree.zoom.k;
+                   selection.call(zoom.transform, d3.zoomIdentity.translate(this.tree.zoom.x, this.tree.zoom.y)
+                                                    .scale(this.tree.zoom.k));
+                 })
+                 .on('dblclick.zoom', () => {
+                   d3.event.preventDefault();
+                   let currentPosition = {x: this.tree.zoom.x, y: this.tree.zoom.y, k: this.tree.zoom.k};
+                   this.tree.zoom.k = this.tree.zoom.k * this.tree.scaleFactor;
+                   this.tree.zoom.x = d3.event.offsetX - (d3.event.offsetX - this.tree.zoom.x) * currentPosition.k;
+                   this.tree.zoom.y = d3.event.offsetY - (d3.event.offsetY - this.tree.zoom.y) * currentPosition.k;
 
-            selection.call(zoom.transform, d3.zoomIdentity.translate(this.tree.zoom.x, this.tree.zoom.y)
-              .scale(this.tree.zoom.k));
-          })
-          .on('contextmenu', () => {
-            d3.event.preventDefault();
-            let currentPosition = {x: this.tree.zoom.x, y: this.tree.zoom.y, k: this.tree.zoom.k};
-            this.tree.zoom.k = this.tree.zoom.k / this.tree.scaleFactor;
-            this.tree.zoom.x = d3.event.offsetX - (d3.event.offsetX - this.tree.zoom.x) * this.tree.zoom.k / currentPosition.k;
-            this.tree.zoom.y = d3.event.offsetY - (d3.event.offsetY - this.tree.zoom.y) * this.tree.zoom.k / currentPosition.k;
+                   selection.call(zoom.transform, d3.zoomIdentity.translate(this.tree.zoom.x, this.tree.zoom.y)
+                                                    .scale(this.tree.zoom.k));
+                 })
+                 .on('contextmenu', () => {
+                   d3.event.preventDefault();
+                   let currentPosition = {x: this.tree.zoom.x, y: this.tree.zoom.y, k: this.tree.zoom.k};
+                   this.tree.zoom.k = this.tree.zoom.k / this.tree.scaleFactor;
+                   this.tree.zoom.x = d3.event.offsetX - (d3.event.offsetX - this.tree.zoom.x) * this.tree.zoom.k / currentPosition.k;
+                   this.tree.zoom.y = d3.event.offsetY - (d3.event.offsetY - this.tree.zoom.y) * this.tree.zoom.k / currentPosition.k;
 
-            selection.call(zoom.transform, d3.zoomIdentity.translate(this.tree.zoom.x, this.tree.zoom.y)
-              .scale(this.tree.zoom.k));
-          });
+                   selection.call(zoom.transform, d3.zoomIdentity.translate(this.tree.zoom.x, this.tree.zoom.y)
+                                                    .scale(this.tree.zoom.k));
+                 });
       },
       initD3() {
         this.initZoom();
@@ -649,7 +659,7 @@
           ProcessGuid: $event.data.id,
           ParentProcessGuid: $event.data.parent,
           ProcessName: $event.data.value,
-          sender: this.constructor.name
+          sender: this.constructor.name,
         };
 
         this.root.eachAfter((item) => {
@@ -678,9 +688,9 @@
         const g = svg.select('g');
         const duration = 1500;
         let treeMap = d3.tree().nodeSize([20, this.tree.viewer.h])
-          .separation((a, b) => {
-            return a.parent === b.parent ? 1 : 1.5;
-          });
+                        .separation((a, b) => {
+                          return a.parent === b.parent ? 1 : 1.5;
+                        });
         let root = treeMap(this.root);
         let nodes = root.descendants();
         let links = root.links();
@@ -695,9 +705,9 @@
         });
 
         let node = g.selectAll('g.node')
-          .data(nodes, (d) => {
-            return d.data.id;
-          });
+                    .data(nodes, (d) => {
+                      return d.data.id;
+                    });
 
         let nodeEnter = node.enter().append('g');
         nodeEnter
@@ -718,40 +728,40 @@
           });
 
         nodeEnter.append('circle')
-          .attr('class', 'circle')
-          .attr('r', 4.5)
-          .attr('cursor', 'pointer')
-          .on('click', this.toggle);
+                 .attr('class', 'circle')
+                 .attr('r', 4.5)
+                 .attr('cursor', 'pointer')
+                 .on('click', this.toggle);
 
         nodeEnter.append('text')
-          .attr('class', 'text')
-          .attr('dy', '.35em')
-          .attr('text-anchor', (d) => {
-            return d.parent ? 'end' : 'start';
-          })
-          .attr('x', (d) => {
-            return d.parent ? -30 : 30;
-          })
-          .attr('y', d => {
-            return -8;
-          })
-          .text((d) => {
-            return d.data.value.toString();
-          })
-          .on('click', this.handleSelected);
+                 .attr('class', 'text')
+                 .attr('dy', '.35em')
+                 .attr('text-anchor', (d) => {
+                   return d.parent ? 'end' : 'start';
+                 })
+                 .attr('x', (d) => {
+                   return d.parent ? -30 : 30;
+                 })
+                 .attr('y', d => {
+                   return -8;
+                 })
+                 .text((d) => {
+                   return d.data.value.toString();
+                 })
+                 .on('click', this.handleSelected);
 
         nodeEnter.append('image')
-          .attr('class', 'image')
-          .attr('width', '16px')
-          .attr('height', '16px')
-          .attr('x', (d) => {
-            return d.parent ? -24 : 8;
-          })
-          .attr('y', -16)
-          .attr('xlink:href', (d) => {
-            return this.getFileIconURL(d.data.value.toString(), d.data.FileHash);
-          })
-          .on('click', this.handleSelected);
+                 .attr('class', 'image')
+                 .attr('width', '16px')
+                 .attr('height', '16px')
+                 .attr('x', (d) => {
+                   return d.parent ? -24 : 8;
+                 })
+                 .attr('y', -16)
+                 .attr('xlink:href', (d) => {
+                   return this.getFileIconURL(d.data.value.toString(), d.data.FileHash);
+                 })
+                 .on('click', this.handleSelected);
 
 
         let nodeUpdate = nodeEnter.merge(node);
@@ -773,198 +783,198 @@
             return `translate(${d.y},${d.x})`;
           });
         nodeUpdate.select('circle')
-          .on('click', null)
-          .on('click', this.toggle);
+                  .on('click', null)
+                  .on('click', this.toggle);
 
         nodeUpdate.select('text')
-          .attr('x', (d) => {
-            return d.parent ? -30 : 30;
-          })
-          .attr('text-anchor', (d) => {
-            return d.parent ? 'end' : 'start';
-          })
-          .on('click', null)
-          .on('click', this.handleSelected);
+                  .attr('x', (d) => {
+                    return d.parent ? -30 : 30;
+                  })
+                  .attr('text-anchor', (d) => {
+                    return d.parent ? 'end' : 'start';
+                  })
+                  .on('click', null)
+                  .on('click', this.handleSelected);
 
         nodeUpdate.select('image')
-          .attr('x', (d) => {
-            return d.parent ? -24 : 8;
-          })
-          .on('click', null)
-          .on('click', this.handleSelected);
+                  .attr('x', (d) => {
+                    return d.parent ? -24 : 8;
+                  })
+                  .on('click', null)
+                  .on('click', this.handleSelected);
 
         let nodeExit = node.exit();
         this.moveToParent(nodeExit.transition().duration(duration))
-          .remove();
+            .remove();
 
         nodeExit.select('circle').transition().duration(duration)
-          .attr('r', 1e-6)
-          .remove();
+                .attr('r', 1e-6)
+                .remove();
         nodeExit.select('text').transition().duration(duration)
-          .style('fill-opacity', 1e-6)
-          .remove();
+                .style('fill-opacity', 1e-6)
+                .remove();
         nodeExit.select('image').transition().duration(duration)
-          .attr('width', 1e-6)
-          .attr('height', 1e-6)
-          .remove();
+                .attr('width', 1e-6)
+                .attr('height', 1e-6)
+                .remove();
 
         let link = g.selectAll('path.link')
-          .data(links, (d) => {
-            return `${d.source.data.id}-${d.target.data.id}`;
-          });
+                    .data(links, (d) => {
+                      return `${d.source.data.id}-${d.target.data.id}`;
+                    });
 
         // Enter any new links at the parent's previous position.
         let linkEnter = link.enter().insert('path', 'g')
-          .attr('class', 'link')
-          .attr('d', (d) => {
-            let o = {x: d.source.x, y: d.source.y};
-            return this.diagonal({source: o, target: o});
-          });
+                            .attr('class', 'link')
+                            .attr('d', (d) => {
+                              let o = {x: d.source.x, y: d.source.y};
+                              return this.diagonal({source: o, target: o});
+                            });
 
         let linkUpdate = linkEnter.merge(link);
         linkUpdate.transition()
-          .duration(duration)
-          .attr('d', this.diagonal);
+                  .duration(duration)
+                  .attr('d', this.diagonal);
         link.exit()
-          .transition()
-          .duration(duration)
-          .attr('d', (d) => {
-            let o = {x: d.source.data.x0, y: d.source.data.y0};
-            return this.diagonal({source: o, target: o});
-          })
-          .remove();
+            .transition()
+            .duration(duration)
+            .attr('d', (d) => {
+              let o = {x: d.source.data.x0, y: d.source.data.y0};
+              return this.diagonal({source: o, target: o});
+            })
+            .remove();
 
-//        this.initZoom();
+        //        this.initZoom();
       },
       getTreeData(propData) {
         const processGuid = propData.ProcessGuid;
         const url = `/api/admin/search/process/tree/${processGuid}`;
         return this.$http.get(url)
-          .then((data) => {
-            if (data.data && data.data.rows && data.data.rows.length > 0) {
-              return this.dataToTree(processGuid, data.data.rows);
-            }
-            else {
-              throw 'No Data';
-            }
-          })
-          .then((data) => {
-            this.data = data;
-            return this.deploy(processGuid, data);
-          });
+                   .then((data) => {
+                     if (data.data && data.data.rows && data.data.rows.length > 0) {
+                       return this.dataToTree(processGuid, data.data.rows);
+                     }
+                     else {
+                       throw 'No Data';
+                     }
+                   })
+                   .then((data) => {
+                     this.data = data;
+                     return this.deploy(processGuid, data);
+                   });
       },
       getNodeData(propData) {
         const nodeid = propData.nodeid;
         const url = `/api/admin/node/info/${nodeid}`;
         return this.$http.get(url)
-          .then((data) => {
-            if (data.data) {
-              let columns = this.columns[0];
-              this.list[1].info.length = 0;
-              columns.forEach((col) => {
-                this.list[1].info.push({
-                  dt: col.title,
-                  dd: this.getValue(data.data, col.valueName)
-                });
-              });
-            }
-            return data.data;
-          })
-          .then((data) => {
-            this.list[0].info.nodeInformation = data;
-          });
+                   .then((data) => {
+                     if (data.data) {
+                       let columns = this.columns[0];
+                       this.list[1].info.length = 0;
+                       columns.forEach((col) => {
+                         this.list[1].info.push({
+                                                  dt: col.title,
+                                                  dd: this.getValue(data.data, col.valueName),
+                                                });
+                       });
+                     }
+                     return data.data;
+                   })
+                   .then((data) => {
+                     this.list[0].info.nodeInformation = data;
+                   });
       },
       getProcessData(propData) {
         const processGuid = propData.ProcessGuid;
         const url = `/api/admin/search/process/info/${processGuid}`;
         return this.$http.get(url)
-          .then((data) => {
-            if (data.data) {
-              let d = data.data.rows;
-              if (d.length > 1) {
-                d[0].EventTime1 = d[1].EventTime
-              }
-              let columns = this.columns[1];
-              this.list[2].info.length = 0;
-              columns.forEach((col) => {
-                this.list[2].info.push({
-                  dt: col.title,
-                  dd: this.getValue(d[0], col.valueName)
-                });
-              });
-            }
-            return data.data;
-          })
-          .then((data) => {
-            this.list[0].info.processInformation = data;
-          });
+                   .then((data) => {
+                     if (data.data) {
+                       let d = data.data.rows;
+                       if (d.length > 1) {
+                         d[0].EventTime1 = d[1].EventTime
+                       }
+                       let columns = this.columns[1];
+                       this.list[2].info.length = 0;
+                       columns.forEach((col) => {
+                         this.list[2].info.push({
+                                                  dt: col.title,
+                                                  dd: this.getValue(d[0], col.valueName),
+                                                });
+                       });
+                     }
+                     return data.data;
+                   })
+                   .then((data) => {
+                     this.list[0].info.processInformation = data;
+                   });
       },
       getFileData(propData) {
         const processGuid = propData.ProcessGuid;
         const url = `/api/admin/search/file/info/master/process_guid/${processGuid}`;
         return this.$http.get(url)
-          .then((data) => {
-            if (data.data) {
-              let columns = this.columns[2];
-              this.list[3].info.length = 0;
-              columns.forEach((col) => {
-                this.list[3].info.push({
-                  dt: col.title,
-                  dd: this.getValue(data.data, col.valueName)
-                });
-              });
-            }
-            return data.data;
-          })
-          .then((data) => {
-            this.list[0].info.fileInformation = data;
-          });
+                   .then((data) => {
+                     if (data.data) {
+                       let columns = this.columns[2];
+                       this.list[3].info.length = 0;
+                       columns.forEach((col) => {
+                         this.list[3].info.push({
+                                                  dt: col.title,
+                                                  dd: this.getValue(data.data, col.valueName),
+                                                });
+                       });
+                     }
+                     return data.data;
+                   })
+                   .then((data) => {
+                     this.list[0].info.fileInformation = data;
+                   });
       },
       getInflowData(propData) {
         const processGuid = propData.ProcessGuid;
         const url = `/api/admin/search/file/inflow/process_guid/${processGuid}`;
         return this.$http.get(url)
-          .then((data) => {
-            if (data.data) {
-              let columns = this.columns[3];
-              this.list[4].info.length = 0;
-              columns.forEach((col) => {
-                this.list[4].info.push({
-                  dt: col.title,
-                  dd: this.getValue(data.data, col.valueName)
-                });
-              });
-            }
-            return data.data;
-          })
-          .then((data) => {
-            this.list[0].info.inflowInformation = data;
-          });
+                   .then((data) => {
+                     if (data.data) {
+                       let columns = this.columns[3];
+                       this.list[4].info.length = 0;
+                       columns.forEach((col) => {
+                         this.list[4].info.push({
+                                                  dt: col.title,
+                                                  dd: this.getValue(data.data, col.valueName),
+                                                });
+                       });
+                     }
+                     return data.data;
+                   })
+                   .then((data) => {
+                     this.list[0].info.inflowInformation = data;
+                   });
       },
       getDetectData(propData) {
         const processGuid = propData.ProcessGuid;
         const url = `/api/admin/search/process/detect/${processGuid}`;
         return this.$http.get(url)
-          .then((data) => {
-            if (data.data) {
-              let datas = data.data;
-              datas.forEach((d) => {
-                let columns = this.columns[4];
-                this.list[5].info.length = 0;
-                columns.forEach((col) => {
-                  this.list[5].info.push({
-                    dt: col.title,
-                    dd: this.getValue(d, col.valueName)
-                  });
-                });
-              });
-            }
-            return data.data;
-          })
-          .then((data) => {
-            this.list[0].info.detectInformation = data;
-          });
-      }
+                   .then((data) => {
+                     if (data.data) {
+                       let datas = data.data;
+                       datas.forEach((d) => {
+                         let columns = this.columns[4];
+                         this.list[5].info.length = 0;
+                         columns.forEach((col) => {
+                           this.list[5].info.push({
+                                                    dt: col.title,
+                                                    dd: this.getValue(d, col.valueName),
+                                                  });
+                         });
+                       });
+                     }
+                     return data.data;
+                   })
+                   .then((data) => {
+                     this.list[0].info.detectInformation = data;
+                   });
+      },
     },
     created() {
     },
@@ -988,7 +998,8 @@
 </script>
 <style lang='scss'>
   @import "~styles/variables.scss";
-  [data-process-tree]{
+
+  [data-process-tree] {
     #process-tree {
       max-width: none;
       .node {
@@ -1032,9 +1043,9 @@
     }
   }
 
-
   .process-tree {
     display: flex;
+    position: relative;
 
     > div {
       background-color: color(white);
@@ -1051,11 +1062,6 @@
       color: color(white);
       background-color: #6e8d9f;
       border: 0 none;
-    }
-    &-area {
-      flex: 1 0 auto;
-      width: 830px;
-      margin-right: 10px;
     }
     .pc-info {
       width: 330px;
@@ -1079,9 +1085,9 @@
           border-top: 0 none;
           &.on {
             height: 450px;
-            .info-wrap-group{
-              .info-wrap{
-                height:auto;
+            .info-wrap-group {
+              .info-wrap {
+                height: auto;
               }
             }
           }
@@ -1100,9 +1106,9 @@
         }
       }
       div {
-        height:406px;
+        height: 406px;
         padding: 5px 10px;
-        overflow-y:auto;
+        overflow-y: auto;
       }
       dl {
         display: flex;
@@ -1127,9 +1133,34 @@
         }
       }
       dd {
-        margin:0 0 0 5px;
+        margin: 0 0 0 5px;
         word-break: break-all;
       }
     }
+  }
+
+  div.full-screen {
+    z-index: 1000;
+    display: block;
+    position: absolute;
+    font-size: 1.5em;
+    > .icons {
+      height: 1em;
+      display: flex;
+      margin: 10px;
+      cursor: pointer;
+      > span + span {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .layer {
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
   }
 </style>
