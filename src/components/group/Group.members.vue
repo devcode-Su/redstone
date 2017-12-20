@@ -88,10 +88,12 @@ export default {
   },
   components: {},
   watch: {
-    globalRangeCode(g){
-      if(g){
-        this.dept_code = g.dept_code;
-        this.userList();
+    globalRangeCode(current, previous){
+      if ( current ) {
+        if ( current.dept_code !== this.dept_code ) {
+          this.dept_code = current.dept_code;
+          this.userList();
+        }
       }
     },
     responseData(r){
@@ -117,7 +119,8 @@ export default {
       this.$bus.$emit("update");
     },
     userList(){
-      console.log(this.dept_code);
+//      console.log(this.dept_code);
+      this.form.page = 1;
       const url = "/api/admin/group/recurse/"+this.dept_code;
       this.$http.get(url, {
         params : this.form
@@ -135,10 +138,19 @@ export default {
       this.$http.get(url, {
         params : this.form
       }).then( response => {
+        if ( !response || !response.data || !response.data.data ) {
+          throw 'Error';
+        }
+        else if ( response.data.data.length=== 0 ) {
+          throw 'No More Data';
+        }
         this.tableData.push(...response.data.data);
       }).then(() => {
-        this.reloading = false
-      })
+        this.reloading = false;
+      }).catch(() => {
+        this.reloading = false;
+        this.form.page--;
+      });
     },
     dataSet(){
       this.$store.dispatch(Constant.GLOBAL_RANGECODE, {
