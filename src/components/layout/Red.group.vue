@@ -85,7 +85,7 @@ export default {
             week = 0;
           }
         }
-        console.log(total, now, week);
+        //console.log(total, now, week);
         this.total = total;
         this.now = now;
         this.week = week;
@@ -105,7 +105,7 @@ export default {
   created() {
     //this.isLoading ? console.log("this.$router.push(" / ")") : this.getData();
     this.getConnected();
-    this.$bus.$on("update", this.getConnected);
+    this.$bus.$on("update-group", this.getConnected);
   },
   mounted() {
     //console.log(typeof this.items);
