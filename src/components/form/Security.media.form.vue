@@ -87,13 +87,13 @@
       },
       dashboardData(g){
         if(g.row === undefined){
-          console.log("언디파인드")
+          //console.log("언디파인드")
         }
       }
     },
     methods: {
       valueChanged(obj, value) {
-        console.log('valueChanged', obj, value);
+        //console.log('valueChanged', obj, value);
         let data = {};
         data[obj] = value;
         this.form.startDate = this.startDate;
@@ -136,7 +136,7 @@
         this.form.endDate = dateTime.end ? dateTime.end : this.form.endDate;
       },
       send() {
-        console.log(this.form);
+        //console.log(this.form);
         if (!this.form.startDate || !this.form.endDate) {
           this.$notify.error({
                                title: 'Error',

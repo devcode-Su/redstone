@@ -49,7 +49,7 @@
         this.form.endDate = dateTime.end
       },
       inputset(replace) {
-        console.log('inputset', replace);
+        //console.log('inputset', replace);
         this.form.q = replace.q;
         this.form.partial_match = replace.partial_match;
       },

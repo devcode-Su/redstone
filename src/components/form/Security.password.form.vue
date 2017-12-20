@@ -53,7 +53,7 @@
     },
     methods: {
       passSet(p) {
-        console.log(p)
+        //console.log(p)
         for ( let key in p ) {
           if ( p.hasOwnProperty(key) && (p[key] || '0' === p[key] || 0 === p[key]) ) {
             this.form[key] = p[key];
@@ -62,7 +62,7 @@
 //        this.send();
       },
       send() {
-        console.log(this.form);
+        //console.log(this.form);
         if (!this.form.date && this.form.all === 0) {
           this.$notify.error({
                                title: 'Error',

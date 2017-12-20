@@ -27,7 +27,7 @@
         this.$emit("replace", {
           q: this.q
         });
-        console.log(v);
+        //console.log(v);
       }
     },
     beforeCreate() {},
