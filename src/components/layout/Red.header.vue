@@ -51,6 +51,10 @@ export default {
       this.$http.get(apiURL).then(() => {
         this.$store.dispatch(Constant.LOADING_STATE, true);
         this.$router.replace("/");
+      })
+      .catch(() => {
+        this.$store.dispatch(Constant.LOADING_STATE, true);
+        this.$router.replace("/");
       });
       //
       //this.$router.go(this.$router.currentRoute);
@@ -69,6 +73,7 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+//noinspection CssUnknownTarget
 @import "~styles/variables";
 
 header {
