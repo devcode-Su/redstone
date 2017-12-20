@@ -173,7 +173,7 @@ export default {
   activated() {},
   deactivated() {},
   beforeDestroy() {
-    this.$bus.$off("update");
+    this.$bus.$off("update-group");
   },
   destroyed() {}
 };
