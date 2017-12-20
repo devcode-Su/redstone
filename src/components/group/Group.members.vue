@@ -164,7 +164,7 @@ export default {
   beforeCreate() {},
   created() {
     this.dataSet();
-    this.$bus.$on("update", this.userList);
+    this.$bus.$on("update-group", this.userList);
   },
   beforeMounted() {},
   mounted() {},
