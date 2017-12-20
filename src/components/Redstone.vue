@@ -62,7 +62,7 @@ export default {
         ? (this.selected = this.locationCheck())
         : (this.selected = !this.selected);
       //this.selected = !this.selected;
-      this.$bus.$emit("update");
+      this.$bus.$emit("update-group");
     },
     selectedBoolean(check) {
       //console.log(check);
