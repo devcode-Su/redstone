@@ -97,14 +97,14 @@
     watch: {
       editGroupFrom(g){
         if(g){
-          console.log("change!")
+          //console.log("change!")
           this.dept_code = g;
           this.userList();
         }
       },
       responseData(r){
         if(r){
-          console.log(r)
+          //console.log(r)
           this.userData = r.data;
           return r;
         }

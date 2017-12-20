@@ -41,7 +41,7 @@
     watch: {},
     methods: {
       change(name, value) {
-        console.log(name, value);
+        //console.log(name, value);
         let ret = {};
         ret[name] = value;
         this.$emit('change', ret);

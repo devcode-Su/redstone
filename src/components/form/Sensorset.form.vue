@@ -58,7 +58,7 @@
     watch: {
       globalRangeCode(g) {
         if (g) {
-          console.log(g);
+          //console.log(g);
           this.form.dept_code = g.dept_code;
           this.form.nodeid = g.nodeid;
         }

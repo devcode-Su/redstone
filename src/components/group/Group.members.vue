@@ -119,7 +119,7 @@ export default {
       this.$bus.$emit("update");
     },
     userList(){
-//      console.log(this.dept_code);
+      console.log(this.dept_code);
       this.form.page = 1;
       const url = "/api/admin/group/recurse/"+this.dept_code;
       this.$http.get(url, {

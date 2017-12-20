@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     submit(form) {
-      console.log(form);
+      //console.log(form);
       this.$bus.$emit("search-file-form", form);
     }
   },

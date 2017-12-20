@@ -67,7 +67,7 @@ export default {
   watch: {},
   methods: {
     setOpen(page) {
-      console.log(page);
+      //console.log(page);
       this.isOpen = !this.isOpen;
       if (this.model.name !== "전사" && this.$children.length) {
         if (this.isOpen) this.$emit("is-open", this.$parent.$children);

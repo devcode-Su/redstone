@@ -60,7 +60,7 @@
     watch: {
       globalRangeCode(g) {
         if (g) {
-          console.log(g);
+          //console.log(g);
           this.dept_code = g.dept_code;
           this.nodeid = g.nodeid;
         }

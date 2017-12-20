@@ -32,7 +32,7 @@ export default {
         q: this.q,
         partial_match: this.partial_match
       });
-      console.log(v);
+      //console.log(v);
     }
   },
   beforeCreate() {},
