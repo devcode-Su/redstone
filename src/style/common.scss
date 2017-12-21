@@ -152,6 +152,7 @@
     top:-25px
   }
   [data-tbody="tbody"] {
+    position:relative;
     overflow-y: auto;
     &.members {
       height: 355px;
@@ -429,7 +430,7 @@
   }
   &.form-mix > div{
     display:flex;
-    flex-wrap:wrap;
+    flex-wrap:wrap
     &:first-child{
       margin-bottom:15px;
     }
