@@ -2,7 +2,7 @@
   <section data-index="Redstone" :class="{'ready' : isLoading}">
     <red-header :username="userData.name">
       <button data-tooltip-wrap data-icon="nav" class="group-toggle" :class="{ on : selected}" @click="btnToggle">
-        <i class="fa fa-navicon fa-24" aria-hidden="true"></i>
+        <i class="fa fa-navicon fa-24" :aria-hidden="true"></i>
         <span data-tooltip="group">조직도</span>
       </button>
     </red-header>
@@ -11,7 +11,7 @@
         <red-navigation @selectedBoolean="selectedBoolean"></red-navigation>
         <red-group :selected="selected">
           <button data-icon class="group-toggle" :class="{ on : selected}" @click="btnToggle">
-            <i class="el-icon-close fa-24" aria-hidden="true"></i>
+            <i class="el-icon-close fa-24" :aria-hidden="true"></i>
           </button>
         </red-group>
       </aside>
@@ -30,7 +30,6 @@ import { mapState } from "vuex";
 import RedHeader from "./layout/Red.header";
 import RedNavigation from "./layout/Red.navigation";
 import RedGroup from "./layout/Red.group";
-import Loading from "./Loading";
 
 import locationCheckMixin from "./mixins/location.check.mixin";
 export default {
@@ -45,31 +44,20 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.load.loadingState
-      //compLists: state => state.thumbComp.thumbCompState
     })
   },
   components: {
-    "loading":Loading,
     "red-header":RedHeader,
     "red-navigation":RedNavigation,
     "red-group":RedGroup
   },
   methods: {
     btnToggle() {
-      //console.log(this.selected);
-      //console.log(this.locationCheck());
-      this.locationCheck() !== undefined
-        ? (this.selected = this.locationCheck())
-        : (this.selected = !this.selected);
-      //this.selected = !this.selected;
+      this.selected = (this.locationCheck() !== true) ? this.locationCheck() : !this.selected;
       this.$bus.$emit("update-group");
     },
     selectedBoolean(check) {
-      //console.log(check);
-      check === undefined
-        ? (this.selected = this.selected)
-        : (this.selected = check);
-      //console.log(this.selected)
+      this.selected = (check === true) ? this.selected : check;
     }
   },
   created() {
@@ -78,7 +66,6 @@ export default {
       .get(adminInfo)
       .then(response => {
         this.$store.dispatch(Constant.LOADING_STATE, false);
-        //console.log("redstone")
         this.userData = response.data;
       })
       .catch(() => {
