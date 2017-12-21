@@ -8,7 +8,7 @@
   </article>
 </template>
 <script>
-  import FileSearchform from "../form/File.search.form";
+  import FileSearchform from "../form/Search.file.form";
   import SearchFileDatatable from "./Search.file.datatable.vue";
 
   export default {

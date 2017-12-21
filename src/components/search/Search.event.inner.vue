@@ -1,42 +1,42 @@
 <template>
-  <section class="inner-view inner-view-box">
+  <section data-process-inner>
     <h1>상세정보</h1>
     <div class="process-info" v-if="propData.Table === 'PROCESS_CREATE_LOG'">
-      <information-process-create :ProcessGuid="propData.ProcessGuid"></information-process-create>
-      <information-file-master :ProcessGuid="propData.ProcessGuid"></information-file-master>
+      <info-process :ProcessGuid="propData.ProcessGuid"></info-process>
+      <info-file :ProcessGuid="propData.ProcessGuid"></info-file>
     </div>
     <div v-else-if="propData.Table === 'PROCESS_EXIT_LOG'">
-      <information-process-create :ProcessGuid="propData.ProcessGuid"></information-process-create>
+      <info-process :ProcessGuid="propData.ProcessGuid"></info-process>
     </div>
     <div v-else-if="propData.Table === 'CHILDPROCESS_CREATE_LOG'">
-      <div>
+      <div data-inner-content>
         <h2>이벤트 정보</h2>
-        <div class="content-wrap">
+        <div data-inner-info>
           <dl>
             <dt>자식 프로세스 고유 ID</dt>
             <dd><a @click="selectProcess(propData.ChildProcessGuid)">{{propData.ChildProcessGuid}}</a></dd>
           </dl>
         </div>
       </div>
-      <information-process-create :ProcessGuid="propData.ChildProcessGuid"></information-process-create>
-      <information-file-master :ProcessGuid="propData.ChildProcessGuid"></information-file-master>
+      <info-process :ProcessGuid="propData.ChildProcessGuid"></info-process>
+      <info-file :ProcessGuid="propData.ChildProcessGuid"></info-file>
     </div>
     <div v-else-if="propData.Table === 'MODULE_LOAD_LOG'">
-      <div>
+      <div data-inner-content>
         <h2>이벤트 정보</h2>
-        <div class="content-wrap">
+        <div data-inner-info>
           <dl>
             <dt>SHA256</dt>
             <dd><a>{{propData.FileHash}}</a></dd>
           </dl>
         </div>
       </div>
-      <information-file-master v-if="propData.FileHash" :FileHash="propData.FileHash"></information-file-master>
+      <info-file v-if="propData.FileHash" :FileHash="propData.FileHash"></info-file>
     </div>
     <div v-else-if="propData.Table === 'NETWORK_CONNECT_LOG'">
-      <div>
+      <div data-inner-content>
         <h2>이벤트 정보</h2>
-        <div class="content-wrap">
+        <div data-inner-info>
           <dl>
             <dt>LocalIP</dt>
             <dd>{{propData.LocalIp}}</dd>
@@ -72,9 +72,9 @@
       <!-- N/A -->
     </div>
     <div v-else-if="propData.Table === 'REGISTRY_LOG'">
-      <div>
+      <div data-inner-content>
         <h2>이벤트 정보</h2>
-        <div class="content-wrap">
+        <div data-inner-info>
           <dl>
             <dt>KeyPath</dt>
             <dd>{{propData.RegKeyPath}}</dd>
@@ -112,9 +112,9 @@
       </div>
     </div>
     <div v-else-if="propData.Table === 'FILE_LOG'">
-      <div>
+      <div data-inner-content>
         <h2>이벤트 정보</h2>
-        <div class="content-wrap">
+        <div data-inner-info>
           <template v-if="propData.EventType === 'FileCreate'">
             <dl>
               <dt>파일명</dt>
@@ -214,13 +214,13 @@
         </div>
       </div>
       <template v-if="propData.FileHash">
-        <information-file-master :FileHash="propData.FileHash"></information-file-master>
+        <info-file :FileHash="propData.FileHash"></info-file>
       </template>
     </div>
     <div v-else-if="propData.Table === 'FILE_TRANSFER_LOG'">
-      <div>
+      <div data-inner-content>
         <h2>이벤트 정보</h2>
-        <div class="content-wrap">
+        <div data-inner-info>
           <template v-if="propData.EventType === 'RelatedFile'">
             <dl>
               <dt>파일명</dt>
@@ -293,14 +293,14 @@
       </div>
     </div>
     <div v-if="propData.detect">
-      <information-detect :data="propData.detect"></information-detect>
+      <info-detect :data="propData.detect"></info-detect>
     </div>
   </section>
 </template>
 <script>
-  import informationProcessCreate from "./Information.ProcessCreate.vue";
-  import informationFileMaster from "./Information.FileMaster.vue";
-  import InformationDetect from './Information.Detect.vue';
+  import InfoProcess from './Search.process.info.process.vue';
+  import InfoFile from './Search.process.info.file.vue';
+  import InfoDetect from './Search.process.info.detect.vue';
 
   export default {
     name: "EventInnerView",
@@ -322,9 +322,9 @@
       }
     },
     components: {
-      "information-process-create":informationProcessCreate,
-      "information-file-master":informationFileMaster,
-      "InformationDetect":InformationDetect
+      "info-process":InfoProcess,
+      "info-file":InfoFile,
+      "info-detect":InfoDetect
     },
     watch: {},
     methods: {
@@ -335,7 +335,7 @@
     beforeCreate() {
     },
     created() {
-      console.log(this.propData);
+      //console.log(this.propData);
     },
     beforeMounted() {
     },
@@ -344,7 +344,7 @@
     beforeUpdate() {
     },
     updated() {
-      console.log(this.propData);
+      //console.log(this.propData);
     },
     activated() {
     },
@@ -357,65 +357,6 @@
   };
 </script>
 <style lang='scss' scoped>
-
   //noinspection CssUnknownTarget
   @import "~styles/variables";
-
-
-  tr {
-    cursor: pointer;
-  }
-
-
-  .inner-view-box {
-    margin: 10px 0;
-    border: 1px solid color(default);
-    h1 {
-      margin-bottom: 0;
-      padding: 0 20px;
-      font-size: 16px;
-      color: #fff;
-      background-color: color(default);
-    }
-    .process-info {
-      padding: 15px 20px;
-    }
-    h2 {
-      margin-bottom: 0;
-      font-size: 14px;
-      color: color(default);
-    }
-    .content-wrap {
-      margin-bottom: 30px;
-      padding-left: 30px;
-      dl {
-        display: flex;
-        margin: 0;
-      }
-      dt {
-        width: 130px;
-        font-size: 14px;
-        font-weight: bold;
-        color: color(default);
-        &:before {
-          content: "";
-          display: inline-block;
-          width: 3px;
-          height: 3px;
-          margin-right: 5px;
-          vertical-align: 3px;
-          background-color: color(default);
-        }
-      }
-      dd {
-        flex: 1;
-        margin-left: 0;
-        color: #5d5d5d;
-      }
-      dt,
-      dd {
-        line-height: 24px !important;
-      }
-    }
-  }
 </style>

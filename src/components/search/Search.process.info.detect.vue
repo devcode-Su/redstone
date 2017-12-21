@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div data-inner-content>
     <h2>진단 정보</h2>
-    <div class="content-wrap" v-if="(myData && myData.length > 0)">
+    <div data-inner-info v-if="(myData && myData.length > 0)">
       <template v-for="item in myData">
         <template v-if="item.Type === 'RSC'">
-          <div class="content-wrap-column">
+          <div data-info-section>
             <dl>
               <dt>진단명</dt>
               <dd>
@@ -31,7 +31,7 @@
           </div>
         </template>
         <template v-if="item.Type === 'FILE'">
-          <div class="content-wrap-column">
+          <div data-info-section>
             <dl>
               <dt>진단명</dt>
               <dd>
@@ -60,7 +60,7 @@
           </div>
         </template>
         <template v-if="item.Type === 'IP'">
-          <div class="content-wrap-column">
+          <div data-info-section>
             <dl>
               <dt>진단명</dt>
               <dd>
@@ -90,14 +90,14 @@
         </template>
       </template>
     </div>
-    <div v-else>
+    <div v-else data-not>
       진단 정보가 없습니다
     </div>
   </div>
 </template>
 <script>
   export default {
-    name: "InformationDetect",
+    name: "InfoDetect",
     props: {
       ProcessGuid: {
         type: String

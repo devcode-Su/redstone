@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div data-inner-content>
     <h2>파일 정보</h2>
-    <div class="content-wrap">
+    <div data-inner-info v-if="data">
       <dl>
         <dt>전자서명</dt>
         <dd>{{data.sign_status}}</dd>
@@ -9,6 +9,8 @@
       <dl v-if="data.sign_status === 'signed'">
         <dt>검증</dt>
         <dd>{{data.sign_validity}}</dd>
+      </dl>
+      <dl v-if="data.sign_status === 'signed'">
         <dt>서명자</dt>
         <dd>{{data.sign_publisher}}</dd>
       </dl>
@@ -41,11 +43,14 @@
         <dd>{{data.build_date}}</dd>
       </dl>
     </div>
+    <div v-else data-not>
+      진단 정보가 없습니다
+    </div>
   </div>
 </template>
 <script>
   export default {
-    name: "InformationFileMaster",
+    name: "InfoFile",
     props: {
       ProcessGuid: {
         type: String

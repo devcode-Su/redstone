@@ -38,7 +38,7 @@
             <tr v-if="stateReorder">
               <td data-none-data="screen">검색된 데이터가 없습니다.</td>
             </tr>
-            <tr data-tbody="row"  v-for="row in tableData" :key="row.id">
+            <tr data-tbody="row"  v-for="row in tableData" :key="row.id" @click.stop="moveRow(row)">
               <td class="col-connected" :class="'turn'+row.connected">
                 <span class="icon">
                   <i class="fa fa-power-off" aria-hidden="true"></i>
@@ -186,24 +186,8 @@
           }
         }
       },
-      rowSearch(num){
-        //console.log(num);
-        //console.log(this.localData.name );
-        if(this.more === num){
-          this.more = null;
-        }else{
-          this.more = num;
-          let row = this.tableData[num];
-          //console.log(row[this.localData.apiCondition]);
-          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
-          //console.log(url)
-          this.$http.get(url, {
-            params : this.form
-          }).then(response => {
-            //console.log(response);
-            this.insertTable = response.data.data;
-          });
-        }
+      moveRow(row){
+        this.$router.push({path: "Search-process", query: row});
       },
       pageLength(p){
         //console.log(p)

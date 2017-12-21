@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div data-inner-content>
     <h2>프로세스 정보</h2>
-    <div class="content-wrap">
+    <div data-inner-info>
       <dl>
         <dt>프로세스 고유 ID</dt>
         <dd>{{data.ProcessGuid}}</dd>
@@ -62,7 +62,7 @@
         <dt>시작 시각</dt>
         <dd>{{data.EventTime}}</dd>
       </dl>
-      <dl>
+      <dl v-if="data.EventTime1">
         <dt>종료 시각</dt>
         <dd>{{data.EventTime1}}</dd>
       </dl>
@@ -71,7 +71,7 @@
 </template>
 <script>
   export default {
-    name: "InformationProcessCreate",
+    name: "InfoProcess",
     props: {
       ProcessGuid: {
         type: String

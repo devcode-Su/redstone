@@ -165,6 +165,7 @@
         }
       },
       rowRoute(val) {
+        console.log(val);
         this.$router.push({path: "Search-analysis", query: val});
       },
       handleSizeChange(val) {

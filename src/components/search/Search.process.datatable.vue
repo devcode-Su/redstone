@@ -1,79 +1,72 @@
 <template>
-  <section class="template-table-wrap process-data-table">
-    <header>
-      <span>전체 : {{pagination.total}}건</span>
-      <div class="btn-wrap">
+  <section data-table-wrap>
+    <header data-table="header">
+      <div data-table-option>
         <el-button size="small">
           파일로 저장
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
-        <el-select v-model="selectedOrder" placeholder="정렬" size="small"
-                   @change="handleOrderChange('change', $event)"
-                   @input="handleOrderChange('input', $event)"
-                   :disabled="!definition.order.length">
-          <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
+        <el-select v-model="form.order"  placeholder="정렬" size="small" :disabled="stateReorder" @change="reorder">
+          <el-option v-for="(option, k, i) in definition.order" :key="k" :label="option" :value="k"></el-option>
         </el-select>
         <div class="view-check">
-          <el-button @click="morebtn = !morebtn" size="small">
+          <el-button @click="moreBtn = !moreBtn" size="small">
             보기
-            <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
+            <i class="fa fa-angle-down" :class="{ rotate : moreBtn }"></i>
           </el-button>
-          <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-            <el-checkbox v-for="(check,i) in definition.field" :label="check" :key="check" :ref="'checked'"
-                         v-if="i !== definition.field.length -1">
-              {{check}}
-            </el-checkbox>
+          <el-checkbox-group v-model="viewChecked" v-if="moreBtn" @change="colView">
+            <el-checkbox v-for="(check,k,i) in definition.fields" :label="k" :key="k" :disabled="i < 2">{{check}}</el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
     </header>
-    <div class="template-table dynamic-row">
-      <div class="table-head-wrap">
+    <div data-table="table">
+      <span data-table="total">전체 : {{total}} 건</span>
+      <div data-thead="thead">
         <table>
           <thead>
           <tr>
-            <th v-for="(th, i) in definition.field" :key="th.id"
-                :class="'col'+i" :ref="'checkedTh'">{{th}}
-            </th>
-            <th class="col7">
-              <span>더보기</span>
-            </th>
+            <th v-for="(th,k) in definition.fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
+            <th class="col-moreBtn"><span>더보기</span></th>
           </tr>
           </thead>
         </table>
       </div>
-      <div class="table-body-wrap">
+      <div data-tbody="tbody" class="screen">
         <table>
-          <tbody v-if="data">
-          <template v-for="(row,i) in data.rows">
-            <tr :ref="'checkedRow'" :key="row.id" @click="rowRoute(row)">
-              <td class="col0">{{row.EventTime}}</td>
-              <td class="col1">{{row.ProcessName}}</td>
-              <td class="col2">{{row.username}}</td>
-              <td class="col3">{{row.userdept}}</td>
-              <td class="col4">{{row.nodeid}}</td>
-              <td class="col5">
+          <tbody>
+          <tr v-if="stateReorder">
+            <td data-none-data="screen">검색된 데이터가 없습니다.</td>
+          </tr>
+          <template v-else v-for="(row, i) in tableData" >
+            <tr data-tbody="row"  :key="row.id" @click="rowRoute(row)">
+              <!--<td v-for="(td,k) in definition.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>-->
+              <td class="col-EventTime">{{row.EventTime}}</td>
+              <td class="col-ProcessName">{{row.ProcessName}}</td>
+              <td class="col-username">{{row.username}}</td>
+              <td class="col-userdept">{{row.userdept}}</td>
+              <td class="col-nodeid">{{row.nodeid}}</td>
+              <td class="col-event_count">
                 <span>프로세스:{{row.AggProcess}}, </span>
                 <span>네트워크:{{row.AggNetwork}}, </span>
                 <span>파일:{{row.AggFile}}, </span>
                 <span>레지스트리:{{row.AggRegistry}}</span>
               </td>
-              <td class="col6">
+              <td class="col-event_info">
                 <span v-if="row.DetectFILE">TI 진단 이벤트 : {{row.DetectFILE}}</span>
                 <span v-if="row.DetectIP">악성 URL/IP 접근 이벤트 : {{row.DetectIP}}</span>
                 <span v-if="row.DetectRSC">RSC 엔진 진단 이벤트 : {{row.DetectRSC}}</span>
               </td>
-              <td class="col7">
-                <button class="icon-btn icon-wrap" @click.stop="moreRow(row, i)" :class="{on : row === more}">
-                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
+              <td class="col-moreBtn">
+                <button data-icon @click.stop="moreRow(i)" :class="{on : i === more}">
+                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : i === more}"></i>
                 </button>
               </td>
             </tr>
             <transition name="fade">
-              <tr v-if="row === more" class="show-row">
-                <td :colspan="colLength+1" :key="row.id">
-                  <processinnerview :ProcessGuid="row.ProcessGuid"></processinnerview>
+              <tr data-tboy="hide-row" v-if="i === more">
+                <td :colspan="Object.keys(definition.fields).length +1">
+                  <process-inner :process-guid="row.ProcessGuid"></process-inner>
                 </td>
               </tr>
             </transition>
@@ -82,172 +75,165 @@
         </table>
       </div>
     </div>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                   :current-page.sync="pagination.page" :page-sizes="[25, 50, 100, 200]" :page-size="pagination.length"
-                   layout="sizes, prev, pager, next" :total="pagination.total">
-    </el-pagination>
+    <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
   </section>
 </template>
 <script>
-  import Processinnerview from "./Search.process.innerview.vue";
+  import { mapGetters } from "vuex";
+  import ProcessInner from "./Search.process.inner"
+  import Paginations from "../template/Template.paginations"
   export default {
-    name: "Processdatatable",
+    name: "InfoDatatable",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
-      definition: {
+      formData: {
         type: Object,
-        required: true,
-        default: {
-          order: [],
-          field: [],
-          url: '',
-        },
+        default: function () {
+          return { message: 'do not' }
+        }
       },
+      definition : {
+        type: Object,
+        default: function () {
+          return {message: 'do not'}
+        }
+      }
     },
     data() {
       return {
-        colLength: 0,
         more: null,
-        view: [
-          "프로세스 시작 시각", "프로세스 이름", "이름", "부서", "센서 ID", "검색된 이벤트 수", "위협정보"
-        ],
-        morebtn: false,
-        pagination: {
-          page: 1,
-          length: 50,
-          total: 0,
-        },
-        data: null,
-        searchOption: {},
-        selectedOrder: null,
-        selectedDirection: 1,
-        lastOrder: null,
-        hasSearchOption: false,
+        moreBtn : false,
+        responseData : [],
+        total : "-",
+        tableData: [],
+        processGuid : "",
+        pagingData:[],
+        viewChecked: "",
+        form: {}
       };
     },
-    computed: {},
-    components: {
-      "processinnerview": Processinnerview,
-    },
-    watch: {},
-    methods: {
-      getData(page = null, length = null) {
-        if (!this.hasSearchOption) {
-          return false;
-        }
-        if (page) {
-          this.pagination.page = page;
-        }
-        if (length) {
-          this.pagination.length = length
-        }
-
-        this.searchOption.page = this.pagination.page;
-        this.searchOption.length = this.pagination.length;
-        this.searchOption.order = this.selectedOrder ? this.selectedOrder : null;
-        this.searchOption.direction = this.selectedDirection;
-        this.lastOrder = this.searchOption.order;
-
-        this.$http.get(this.definition.url, {params: this.searchOption})
-            .then((result) => {
-              if (result.data) {
-                if (result.data.metrics && result.data.metrics.resultCount) {
-                  this.pagination.total = result.data.metrics.resultCount;
-                }
-                else {
-                  this.pagination.total = 0;
-                }
-                this.data = result.data;
-              }
-            });
+    computed: {
+      stateReorder(){
+        return !this.tableData.length;
       },
-      viewCheck(val) {
-        console.log(val)
-        if (this.$refs.checkedRow !== undefined) {
-          for (let j = 0; j < this.$refs.checkedRow.length; j++) {
-            for (let i = 0; i < this.definition.field.length - 1; i++) {
-              this.$refs.checkedTh[i].hidden = !this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i].hidden = !this.$refs.checked[i].isChecked;
+      ...mapGetters({
+        selectData : "dashboardData"
+      })
+    },
+    components: {
+      "process-inner" : ProcessInner,
+      "paginations" :Paginations
+    },
+    watch: {
+      responseData(t){
+        if(t){
+          //console.log(t);
+          this.tableData = t.rows;
+          //console.log(this.tableData);
+          this.total = t.metrics.resultCount;
+          this.pagingData = {
+            current_page : this.form.page,
+            total : this.total
+          };
+          return t
+        }
+      },
+      tableData(t){
+        if(t){
+          //console.log(this.selectData.rowNum);
+          if(this.selectData.rowNum !== undefined){
+            //console.log("ready!");
+            this.rowSearch(this.selectData.rowNum);
+          }
+        }
+      }
+    },
+    methods: {
+      receiveSearch(){
+        //console.log(this.form);
+        const url = "/api/admin/search/event/";
+        this.$http.get(url, {
+          params: this.form
+        }).then( response => {
+          this.responseData = response.data
+          //console.log(this.responseData)
+        })
+      },
+      reorder(v){
+        //console.log(v);
+        this.form.order = v;
+        //console.log(this.form);
+        this.receiveSearch();
+      },
+      colView(val){
+        const checkArr = Object.keys(this.localData.fields);
+        for(var i=0; i < checkArr.length; i++){
+          let f = val.indexOf(checkArr[i]);
+          if(f === -1){
+            let j = this.$refs[checkArr[i]].length;
+            while(j--){
+              this.$refs[checkArr[i]][j].hidden = true;
             }
           }
-        } else {
-          this.view = [];
+          else {
+            this.$refs[checkArr[i]].forEach((item) => {
+              item.hidden = false;
+            });
+          }
         }
       },
       rowRoute(val) {
         this.$router.push({path: "Search-analysis", query: {ProcessGuid: val.ProcessGuid, nodeid: val.nodeid}});
       },
-      moreRow(row) {
-        this.more = this.more ? null : row;
-      },
-      handleSizeChange(val) {
-        this.pagination.length = val;
-        this.getData();
-      },
-      handleCurrentChange(val) {
-        this.pagination.page = val;
-        this.getData();
-      },
-      handleOrderChange(type, val) {
-        switch (type) {
-          case 'change':
-            this.selectedDirection = 1;
-            this.getData();
-            break;
-          case 'input':
-            if (val === this.lastOrder) {
-              this.selectedDirection = (this.selectedDirection - 1) * -1;
-              this.getData();
-            }
-            break;
+      moreRow(num){
+        if(this.more === num){
+          this.more = null;
+        }else{
+          this.more = num;
         }
       },
+      pageLength(p){
+        //console.log(p)
+        this.form.length = p.length ? p.length : this.form.length ;
+        this.form.page = p.current_page ? p.current_page : this.form.page;
+        this.receiveSearch();
+      }
     },
     beforeCreate() {
     },
     created() {
-      if (this.definition && this.definition.field) {
-        this.colLength = this.definition.field.length;
-      }
-      if (this.definition && this.definition.order && this.definition.order.length > 0) {
-        this.selectedOrder = this.definition.order[0].value;
-      }
-
-      this.$bus.$on('process-search-data', (data) => {
-        console.log(data)
-        this.hasSearchOption = true;
-        for (let key in data) {
-          if (data.hasOwnProperty(key)) {
-            this.searchOption[key] = data[key] ? data[key] : null;
-          }
-        }
-        this.getData(1);
+      this.viewChecked = Object.keys(this.definition.fields);
+      this.$bus.$on('process-search-data', data => {
+        this.form = data;
+        this.receiveSearch();
       });
     },
     beforeMounted() {
     },
     mounted() {
+      //this.rowSearch(this.selectData.rowNum);
     },
     beforeUpdate() {
     },
     updated() {
+      //this.rowSearch(this.selectData.rowNum);
     },
     activated() {
     },
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off('process-search-data');
+      this.$bus.$off('process-search-data')
     },
     destroyed() {
-    },
+    }
   };
 </script>
 <style lang='scss' scoped>
   @import "~styles/variables";
-
-  .template-table-wrap {
+  [data-table-wrap]{
+    margin-top:10px;
     .fade-enter-active,
     .fade-leave-active {
       transition: opacity 0.3s;
@@ -263,63 +249,18 @@
         transform-origin: 44% 50%;
       }
     }
-    th,td{
-      padding:0 10px;
-      text-overflow:ellipsis;
-      white-space: nowrap;
-      overflow:hidden;
-    }
-    .col0{
-      width:175px;
-    }
-    .col1{
-      width:auto;
-    }
-    .col2,
-    .col3{
-      width:170px;
-    }
-    .col4{
-      width:75px;
-    }
-    .col5,
-    .col6{
-      width: auto;
-      span{
-        display:inline;
-      }
-    }
-    .col7{
-      width:30px;
-    }
-    th.col7{
-      span{
-        visibility: hidden;
-      }
-    }
-    td.col7{
-      button{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-      }
-    }
     .show-row:hover {
       background-color: transparent;
     }
-    .el-pagination {
-      margin-top: 5px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
+  }
+  [data-table]{
+    [data-tbody="tbody"].screen{
+      min-height:499px;
+      max-height:499px;
     }
-    .el-checkbox-group{
-      right:35px;
-    }
-    .template-table.dynamic-row{
-      min-height:496px;
+    [data-none-data="screen"]{
+      height:498px !important;
     }
   }
+
 </style>

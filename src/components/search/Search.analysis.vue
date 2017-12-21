@@ -5,9 +5,11 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="프로세스 트리" name="first">
-        <processtree v-if="ProcessGuid && nodeid" :propData="{ProcessGuid:ProcessGuid,nodeid:nodeid}"></processtree>
-        <search-event-panel v-if="ProcessGuid" :propData="ProcessGuid"></search-event-panel>
-        <event-data-table v-if="ProcessGuid" :propData="ProcessGuid"></event-data-table>
+        <processtree v-if="ProcessGuid" :propData="{ProcessGuid:ProcessGuid,nodeid:nodeid}"></processtree>
+        <!--<search-event-panel v-if="ProcessGuid" :propData="ProcessGuid"></search-event-panel>-->
+        <!--<event-data-table v-if="ProcessGuid" :propData="ProcessGuid"></event-data-table>-->
+        <search-event-form :propData="ProcessGuid"></search-event-form>
+        <event-datatable :propData="ProcessGuid"></event-datatable>
       </el-tab-pane>
     </el-tabs>
 
@@ -15,8 +17,10 @@
 </template>
 <script>
   import Processtree from "./Search.process.tree.vue";
-  import SearchEventPanel from "./Search.event.panel.vue";
-  import EventDataTable from "./Search.event.datatable.vue";
+  // import SearchEventPanel from "./Search.event.panel.vue";
+  // import EventDataTable from "./Search.Search.event.datatable.vue";
+  import SearchEventForm from "./Search.event.form";
+  import EventDatatable from "./Search.event.datatable";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
 
 
@@ -39,6 +43,7 @@
         tableData: {
           field: ["시각", "분류", "내용"]
         },
+        nodeid: null,
         process: null,
         ProcessGuid: null
       };
@@ -46,19 +51,15 @@
     computed: {},
     components: {
       "processtree":Processtree,
-      "event-data-table":EventDataTable,
-      "search-event-panel":SearchEventPanel
+      "event-datatable":EventDatatable,
+      "search-event-form":SearchEventForm
     },
     watch: {},
     methods: {},
     beforeCreate() {
     },
     created() {
-      if (this.$route.query && this.$route.query.ProcessGuid) {
-        this.ProcessGuid = this.$route.query.ProcessGuid;
-        this.nodeid = this.$route.query.nodeid;
-        console.log('route', this.ProcessGuid, this.nodeid);
-      }
+
       this.$bus.$on('TreeProcessSelected', (processGuid) => {
         this.ProcessGuid = processGuid;
         console.log('Selected', this.ProcessGuid);
@@ -67,6 +68,11 @@
     beforeMounted() {
     },
     mounted() {
+      if (this.$route.query && this.$route.query.ProcessGuid) {
+        this.ProcessGuid = this.$route.query.ProcessGuid;
+        this.nodeid = this.$route.query.nodeid;
+        console.log('route', this.ProcessGuid, this.nodeid);
+      }
     },
     beforeUpdate() {
     },

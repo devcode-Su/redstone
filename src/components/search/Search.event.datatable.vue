@@ -1,51 +1,49 @@
 <template>
-  <section class="template-table-wrap">
-    <header>
-      <span>전체 : {{filteredData ? filteredData.length : '-'}}건</span>
-      <div class="btn-wrap">
+  <section data-table-wrap>
+    <header data-table="header">
+      <div data-table-option>
         <el-button size="small">
           파일로 저장
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
-        <!--<el-select v-model="order" placeholder="정렬" size="small" @change="reorder"-->
-                   <!--:disabled="(!propData || !propData.search ||  propData.search.length == 0)">-->
-          <!--<el-option v-for="item in orderOption" :key="item.value" :label="item.label" :value="item.value">-->
-          <!--</el-option>-->
+        <!--<el-select v-model="form.order"  placeholder="정렬" size="small" :disabled="stateReorder" @change="reorder">-->
+          <!--<el-option v-for="(option, k, i) in definition.order" :key="k" :label="option" :value="k"></el-option>-->
         <!--</el-select>-->
         <div class="view-check">
-          <el-button @click="morebtn = !morebtn" size="small">
+          <el-button @click="moreBtn = !moreBtn" size="small">
             보기
-            <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
+            <i class="fa fa-angle-down" :class="{ rotate : moreBtn }"></i>
           </el-button>
-          <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-            <el-checkbox v-for="(check,i) in head" :label="check" :key="check" :ref="'checked'"
-                         v-if="i !== head.length -1">{{check}}
-            </el-checkbox>
+          <el-checkbox-group v-model="viewChecked" v-if="moreBtn" @change="colView">
+            <el-checkbox v-for="(check,k,i) in fields" :label="k" :key="k" :disabled="i < 2">{{check}}</el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
     </header>
-    <div class="template-table dynamic-row">
-      <div class="table-head-wrap">
+    <div data-table="table">
+      <span data-table="total">전체 : {{total}} 건</span>
+      <div data-thead="thead">
         <table>
           <thead>
           <tr>
-            <th v-for="(th, i) in head" :key="th.id"
-                :class="['col'+i,{ 'col-end' : head.length-1 === i }]" :ref="'checkedTh'">{{th}}
-            </th>
+            <th v-for="(th,k) in fields" :key="k" :class="'col-'+k" :ref="k">{{th}}</th>
+            <th class="col-moreBtn"><span>더보기</span></th>
           </tr>
           </thead>
         </table>
       </div>
-      <div class="table-body-wrap">
-        <table :ref="'table'">
-          <tbody :ref="'table'">
-          <template v-for="(row,i) in viewData">
-            <tr :ref="'trs'" :key="row.id" :id="'row' + (row.EventSeq||'0')"
-                :class="[row.detect ? row.detect.Type : '', {'founded': row.isFounded, 'selected': row.isSelected}]">
-              <td class="col0">{{row.EventTime}}</td>
-              <td class="col1">{{getDisplayEventType(row)}}</td>
-              <td class="col2">
+      <div data-tbody="tbody" class="screen">
+        <table>
+          <tbody>
+          <tr v-if="stateReorder">
+            <td data-none-data="screen">검색된 데이터가 없습니다.</td>
+          </tr>
+          <template v-else v-for="(row, i) in tableData" >
+            <tr data-tbody="row"  :key="row.id" @click="rowRoute(row)">
+              <!--<td v-for="(td,k) in definition.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>-->
+              <td class="col-EventTime">{{row.EventTime}}</td>
+              <td class="col-Table">{{row.ProcessName}}</td>
+              <td class="col-content">
                 <template v-if="row.Table === 'PROCESS_CREATE_LOG'">
                   {{row.ProcessImagePath}} ({{row.ProcessId}})
                 </template>
@@ -118,16 +116,16 @@
                   </template>
                 </template>
               </td>
-              <td class="col-btn">
-                <button class="icon-btn icon-wrap" @click.stop="moreRow(row, i)" :class="{on : row === more}">
-                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
+              <td class="col-moreBtn">
+                <button data-icon @click.stop="moreRow(i)" :class="{on : i === more}">
+                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : i === more}"></i>
                 </button>
               </td>
             </tr>
             <transition name="fade">
-              <tr v-if="row === more" class="show-row">
-                <td :colspan="colLength" :key="row.id">
-                  <EventInnerView :propData="row"></EventInnerView>
+              <tr data-tboy="hide-row" v-if="i === more">
+                <td :colspan="Object.keys(fields).length +1">
+                  <event-inner :propData="row"></event-inner>
                 </td>
               </tr>
             </transition>
@@ -143,18 +141,18 @@
   </section>
 </template>
 <script>
-  import EventInnerView from "./Search.event.innerview.vue";
+  import { mapGetters } from "vuex";
+  //import ProcessInner from "./process.inner";
+  import EventInner from "./Search.event.inner";
+  import Paginations from "../template/Template.paginations";
 
   export class Position {
     _current;
     total;
-
-
     constructor(current = 0, total = 0) {
       this._current = current;
       this.total = total;
     }
-
     get current() {
       let value = this._current;
       if (value < 0) {
@@ -168,7 +166,6 @@
       }
       return value;
     }
-
     set current(value) {
       let val = 0;
       if (value < 0) {
@@ -183,64 +180,55 @@
       this._current = val;
     }
   }
-
   export default {
-    name: "EventDataTable",
+    name: "EventDatatable",
+    extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
       propData: {
         type: String
-      }
+      },
     },
     data() {
       return {
-        head: [
-          '시각', '분류', '내용', ''
-        ],
-        colLength: 0,
         more: null,
-        order: "",
-        view: [],
-        viewText: null,
-        morebtn: false,
-        orderOption: [],
-        field: [],
+        moreBtn : false,
+        responseData : [],
+        total : "-",
+        tableData: [],
+        processGuid : "",
+        pagingData:[],
         EventList: [],
         filteredData: [],
-        viewData: [],
         findData: [],
         findDataPosition: new Position(),
         lastFilter: {selectedRadio: 'EventImportant'},
         q: '',
+        fields : {
+          EventTime : "시각",
+          Table : "분류",
+          content : "내용"
+        },
+        viewChecked: "",
+        form: {},
         paging: {
           currentPage: 1,
           sizeList: [25, 50, 100, 200, 500],
           size: 25,
         },
-        innerData: {
-          processData: [],
-          fileData: [],
-          checkData: []
-        },
-        tableNameMapping: {
-          PROCESS_CREATE_LOG: 'ProcessStart',
-          CHILDPROCESS_CREATE_LOG: 'ChildProcessCreate',
-          PROCESS_EXIT_LOG: 'ProcessExit',
-          MODULE_LOAD_LOG: 'ModuleLoad',
-          NETWORK_CONNECT_LOG: 'NetworkConnect',
-          NETWORK_DISCONNECT_LOG: 'NetworkDisconnect',
-        },
-        filterList: [
-          {
-            name: 'all',
-
-          }
-        ]
       };
     },
-    computed: {},
+    computed: {
+      stateReorder(){
+        return !this.tableData.length;
+      },
+      ...mapGetters({
+        selectData : "dashboardData"
+      })
+    },
     components: {
-      EventInnerView
+      "event-inner" : EventInner,
+      "paginations" :Paginations
     },
     watch: {
       propData: function (n, o) {
@@ -250,6 +238,23 @@
       }
     },
     methods: {
+      colView(val){
+        const checkArr = Object.keys(this.fields);
+        for(var i=0; i < checkArr.length; i++){
+          let f = val.indexOf(checkArr[i]);
+          if(f === -1){
+            let j = this.$refs[checkArr[i]].length;
+            while(j--){
+              this.$refs[checkArr[i]][j].hidden = true;
+            }
+          }
+          else {
+            this.$refs[checkArr[i]].forEach((item) => {
+              item.hidden = false;
+            });
+          }
+        }
+      },
       filterTableMapping(filterName, tableName) {
         const map = {
           process: [
@@ -423,36 +428,6 @@
             })
         }
       },
-      getItemPage(item) {
-        let idx = this.filteredData.indexOf(item);
-        return Math.floor(idx / this.paging.size) + 1;
-      },
-      viewCheck() {
-        if (this.$refs.trs !== undefined) {
-          for (let j = 0; j < this.$refs.trs.length; j++) {
-            for (let i = 0; i < this.head.length - 1; i++) {
-              this.$refs.checkedTh[i].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.trs[j].children[i].hidden = this.$refs.checked[i].isChecked;
-            }
-          }
-        } else {
-          this.view = [];
-        }
-      },
-      moreRow(row) {
-        if (this.more === row) {
-          this.more = null;
-        } else {
-          this.more = row;
-        }
-      },
-      reorder(val) {
-        this.$emit("reorder", {
-          order: val,
-          form: this.propData.search,
-          url: this.propData.url
-        });
-      },
       handleSizeChange(val) {
         this.paging.size = val;
         this.handleCurrentChange(1);
@@ -461,15 +436,20 @@
         this.paging.currentPage = val;
         let start = (this.paging.currentPage - 1 ) * this.paging.size;
         let end = start + this.paging.size;
-        this.viewData = this.filteredData.slice(start, end);
+        this.tableData = this.filteredData.slice(start, end);
 //        let el = this.$refs.table;
 //        if (el) {
 //          el.scrollIntoView(true);
 //        }
       },
+      getItemPage(item) {
+        let idx = this.filteredData.indexOf(item);
+        return Math.floor(idx / this.paging.size) + 1;
+      },
       getData(processGuid) {
         const url = `/api/admin/search/process/${processGuid}`;
         this.$http.get(url).then((data) => {
+          console.log(data)
           data.data.rows = data.data.rows.sort((p, c) => {
             if (!p.hasOwnProperty('EventSeq')) {
               p.EventSeq = 0;
@@ -501,11 +481,28 @@
         });
       },
       getDisplayEventType(event) {
+        console.log(event)
         let ret = event.EventType || event.Table;
         if (this.tableNameMapping.hasOwnProperty(ret)) {
           ret = this.tableNameMapping[ret];
         }
         return ret;
+      },
+      rowRoute(val) {
+        //this.$router.push({path: "Search-analysis", query: {ProcessGuid: val.ProcessGuid, nodeid: val.nodeid}});
+      },
+      moreRow(num){
+        if(this.more === num){
+          this.more = null;
+        }else{
+          this.more = num;
+        }
+      },
+      pageLength(p){
+        //console.log(p)
+        this.form.length = p.length ? p.length : this.form.length ;
+        this.form.page = p.current_page ? p.current_page : this.form.page;
+        this.receiveSearch();
       }
     },
     beforeCreate() {
@@ -523,85 +520,28 @@
         this.updateFilteredData(data);
       });
       this.$bus.$on('SearchString', this.doSearch);
-
     },
     beforeMounted() {
     },
     mounted() {
+      //this.rowSearch(this.selectData.rowNum);
     },
     beforeUpdate() {
     },
     updated() {
+      //this.rowSearch(this.selectData.rowNum);
     },
     activated() {
     },
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off('EventFilter');
-      this.$bus.$off('SearchString');
+      this.$bus.$off('process-search-data')
     },
     destroyed() {
     }
   };
 </script>
 <style lang='scss' scoped>
-
-  //noinspection CssUnknownTarget
   @import "~styles/variables";
-
-  table {
-    tr {
-      &.founded {
-        background: rgba(255, 255, 0, 0.2) !important;
-        color: #000000 !important;
-      }
-      &.selected {
-        background: rgba(255, 255, 0, 1) !important;
-        color: #000000 !important;
-      }
-      &.rsc, &.RSC {
-        background: rgb(165, 139, 212);
-        color: #FFF;
-      }
-      &.vt_file_hash, &.file, &.FILE {
-        background: rgb(255, 0, 0);
-        color: #FFF;
-      }
-      &.vt_ip_url, &.ip, &.IP {
-        background: #ff9d00;
-        color: #FFF;
-      }
-    }
-  }
-
-  .template-table-wrap {
-    .fade-enter-active,
-    .fade-leave-active {
-      transition: opacity 0.3s;
-    }
-    .fade-enter,
-    .fade-leave-to {
-      opacity: 0;
-    }
-    .fa {
-      transition: all 0.3s ease;
-      &.rotate {
-        transform: rotateZ(-180deg);
-        transform-origin: 44% 50%;
-      }
-    }
-    .col-end[hidden] {
-      display: none;
-    }
-    .show-row:hover {
-      background-color: transparent;
-    }
-    .el-pagination {
-      margin-top: 5px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-    }
-  }
 </style>
