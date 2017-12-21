@@ -36,13 +36,13 @@
         <table>
           <tbody>
           <tr v-if="stateReorder">
-            <td data-none-data="screen">검색된 데이터가 없습니다.</td>
+            <td v-if="!getLoad" data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
           <template v-else v-for="(row, i) in tableData" >
             <tr data-tbody="row"  :key="row.id">
               <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
               <td class="col-moreBtn">
-                <button class="icon-btn icon-wrap" @click="rowSearch(i)" :class="{on : i === more}">
+                <button data-icon @click="rowSearch(i)" :class="{on : i === more}">
                   <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : i === more}"></i>
                 </button>
               </td>
@@ -57,6 +57,7 @@
           </template>
           </tbody>
         </table>
+        <spinner v-if="getLoad"></spinner>
       </div>
     </div>
     <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
@@ -66,6 +67,7 @@
   import { mapGetters } from "vuex";
   import DiagnosisInserttable from "./Diagnosis.info.insert.table"
   import Paginations from "../template/Template.paginations"
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "InfoDatatable",
     extends: {},
@@ -86,6 +88,7 @@
     },
     data() {
       return {
+        getLoad : false,
         more: null,
         moreBtn : false,
         responseData : [],
@@ -116,7 +119,8 @@
     },
     components: {
       "diagnosis-inserttable":DiagnosisInserttable,
-      "paginations" :Paginations
+      "paginations" :Paginations,
+      "spinner":Spinner
     },
     watch: {
       formData(d) {
@@ -156,12 +160,14 @@
     },
     methods: {
       receiveSearch(){
-        console.log(this.form);
+        //console.log(this.form);
+        this.getLoad = true;
         const url = this.apiUrl;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
-          console.log(response);
+          //console.log(response);
+          this.getLoad = false;
           this.responseData = response.data
         })
       },
