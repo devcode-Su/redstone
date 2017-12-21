@@ -58,6 +58,7 @@
     bottom: 0;
     left: 0;
     z-index: 10;
+    padding:15px;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s ease;
   }

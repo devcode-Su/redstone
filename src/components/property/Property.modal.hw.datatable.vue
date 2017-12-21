@@ -146,13 +146,15 @@
     font-size:18px;
   }
   [data-tbody="tbody"]{
-    height:260px !important;
+    height:200px !important;
+    min-height:200px !important;;
     border-top:1px solid color(border) !important;
     th{
-      width:150px;
+      height:28px;
+      line-height:28px;
     }
   }
   [data-none-data="screen"]{
-    height:258px !important;
+    height:198px !important;
   }
 </style>

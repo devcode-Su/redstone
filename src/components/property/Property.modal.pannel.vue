@@ -133,7 +133,9 @@
       flex:1;
       display: flex;
       flex-wrap: wrap;
+      height:110px;
       padding: 10px 30px;
+      overflow-y:auto;
       &-contents {
         display: flex;
         align-items: center;

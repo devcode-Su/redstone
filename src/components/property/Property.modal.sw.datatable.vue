@@ -20,7 +20,7 @@
           </thead>
         </table>
       </div>
-      <v-infinite-scroll data-tbody="tbody" class="screen" :loading="reloading" @bottom="nextPage" style="max-height: 260px; overflow-y: scroll;">
+      <v-infinite-scroll data-tbody="tbody" class="screen" :loading="reloading" @bottom="nextPage">
         <table>
           <tbody>
             <tr data-tbody="row"  v-for="row in tableData" :key="row.id">
@@ -178,10 +178,11 @@
     font-size:18px;
   }
   [data-tbody="tbody"]{
-    height:auto !important;
+    height:200px !important;
+    min-height:200px !important;;
     border-top:1px solid color(border) !important;
   }
   [data-none-data="screen"]{
-    height:258px !important;
+    height:198px !important;
   }
 </style>
