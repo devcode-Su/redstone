@@ -168,6 +168,15 @@
           this.responseData = response.data;
         });
       },
+      // userSearch(val){
+      //   console.log(val);
+      //   const url = `/api/admin/group/recurse/${this.dept_code}/${val}`;
+      //   this.$http.get(url, {
+      //     params : this.form
+      //   }).then( response => {
+      //     this.responseData = response.data;
+      //   });
+      // },
       nextPage () {
         ++this.form.page;
         this.api();

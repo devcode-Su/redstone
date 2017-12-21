@@ -1,6 +1,6 @@
 <template>
   <div class="group-members">
-    <el-input size="medium" placeholder="사용자 검색" v-model="filterText">
+    <el-input size="medium" placeholder="사용자 검색 (이름 또는 IP)" v-model="filterText" @change="userSearch">
     </el-input>
     <div data-table="table">
       <div data-thead="thead">
@@ -15,7 +15,7 @@
       <v-infinite-scroll data-tbody="tbody" class="members" :loading="reloading" @bottom="nextPage" style="overflow-y: auto;">
         <table>
           <tbody>
-            <tr data-tbody="row" v-for="member in orderedItems" :key="member.id" class="edit-wrap" @click="selectRow(member)">
+            <tr data-tbody="row" v-for="member in userData" :key="member.id" class="edit-wrap" @click="selectRow(member)">
               <td class="col-nodeid">{{member.nodeid}}</td>
               <td class="col-name">
                 {{member.username}}
@@ -74,14 +74,14 @@ export default {
   },
   computed: {
     ...mapGetters({ globalRangeCode: "globalRangeCode" }),
-    orderedItems() {
-      return _.orderBy(this.filteredMebers, this.orderField, this.direction);
-    },
-    filteredMebers() {
-      return this.userData.filter(member => {
-        return member.username.match(this.filterText);
-      });
-    }
+    // orderedItems() {
+    //   return _.orderBy(this.filteredMebers, this.orderField, this.direction);
+    // },
+    // filteredMebers() {
+    //   return this.userData.filter(member => {
+    //     return member.username.match(this.filterText);
+    //   });
+    // }
     //    fieldOmit() {
     //      return _.omit(this.fields, this.omitPath);
     //    }
@@ -120,8 +120,16 @@ export default {
     },
     userList(){
       console.log(this.dept_code);
-      this.form.page = 1;
       const url = "/api/admin/group/recurse/"+this.dept_code;
+      this.$http.get(url, {
+        params : this.form
+      }).then( response => {
+        this.responseData = response.data;
+      });
+    },
+    userSearch(val){
+      console.log(val);
+      const url = `/api/admin/group/recurse/${this.dept_code}/${val}`;
       this.$http.get(url, {
         params : this.form
       }).then( response => {
