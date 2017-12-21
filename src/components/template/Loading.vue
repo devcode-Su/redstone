@@ -1,7 +1,7 @@
 <template>
   <div id="isLoading">
     <span class="symbol">
-      <img src="../assets/symbol.png" alt="Redstone">
+      <img src="../../assets/symbol.png" alt="Redstone">
     </span>
   </div>
 </template>
