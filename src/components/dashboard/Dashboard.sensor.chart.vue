@@ -28,7 +28,8 @@ export default {
       categorize: ["일일", "주간", "월간"],
       chartData: [],
       arr: ["time", "process", "network", "file"],
-      responseData: []
+      responseData: [],
+      interval : ''
     };
   },
   components: {
@@ -37,12 +38,6 @@ export default {
   },
   computed: {},
   wahtch: {
-    chartData(data) {
-      if (data) {
-        console.log("????? ===");
-        console.log(data);
-      }
-    }
   },
   methods: {
     periodData(sortNum) {
@@ -92,24 +87,22 @@ export default {
     },
     chartStart() {
       const url = "/dashboard/?method=get&resource=events";
-      this.$http.get(url).then(result => {
-        this.chartData = this.getValueArr(result.data, this.arr);
-        this.fillData();
-      });
+      this.$http
+        .get(url)
+        .then(response => {
+          this.responseData = response.data;
+          this.chartData = this.getValueToArr(response.data, this.arr);
+        })
+        .then(() => {
+          this.fillData();
+        });
+    },
+    relData(){
+      this.interval = setInterval(this.chartStart,5000);
     }
   },
   created() {
-    //this.chartStart();
-    const url = "/dashboard/?method=get&resource=events";
-    this.$http
-      .get(url)
-      .then(response => {
-        this.responseData = response.data;
-        this.chartData = this.getValueToArr(response.data, this.arr);
-      })
-      .then(() => {
-        this.fillData();
-      });
+    this.chartStart();
   },
   mounted() {
     const selectCanvas = this.$refs.line.$refs;
@@ -140,6 +133,10 @@ export default {
     // window.setInterval(() => {
     //   this.fillData()
     // }, 1000);
+    this.relData();
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   }
 };
 </script>

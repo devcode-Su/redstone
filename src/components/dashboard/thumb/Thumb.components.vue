@@ -37,7 +37,8 @@ export default {
     return {
       categorize: ["일일", "주간", "월간"],
       compData: [],
-      btnNum: 0
+      btnNum: 0,
+      interval : ''
     };
   },
   computed: {
@@ -122,25 +123,35 @@ export default {
       // this.$http.post(getHide, JSON.stringify(this.hideList));
       // this.$http.post(getView, JSON.stringify(this.viewList));
       // this.$bus.$emit("thumb-data");
+    },
+    getData(){
+      const url = "/dashboard/?method=get&resource=" + this.propData.resource;
+      this.$http.get(url).then(response => {
+        //console.log(response);
+        this.compData = response.data;
+      });
+    },
+    relData(){
+      this.interval = setInterval(this.getData,2000);
     }
   },
   beforeCreate() {},
   created() {
-    const url = "/dashboard/?method=get&resource=" + this.propData.resource;
-    this.$http.get(url).then(response => {
-      //console.log(response);
-      this.compData = response.data;
-    });
+    this.getData();
   },
   beforeMounted() {},
-  mounted() {},
+  mounted() {
+    this.relData()
+  },
   beforeUpdate() {},
   updated() {
     //console.log(this.selectNum);
   },
   activated() {},
   deactivated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
   destroyed() {}
 };
 </script>

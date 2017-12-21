@@ -50,7 +50,10 @@ export default {
       type: Boolean,
       default: false
     },
-    propIndex: Number
+    propIndex: {
+      type : Number,
+      default : 0
+    }
   },
   data() {
     return {
@@ -72,21 +75,18 @@ export default {
       if (this.propData.data[num] === null) {
         this.dataCheck = true;
       } else {
-        console.log(this.propData.data[num]);
         this.dataCheck = false;
         this.rowData = this.propData.data[num];
-        console.log(this.rowData);
       }
     },
     propData(data) {
       if (data) {
-        //console.log(data);
         this.fieldKeys = Object.keys(this.fields);
-        if (data.data[0] === null) {
+        if (data.data[this.propIndex] === null) {
           this.dataCheck = true;
         }else {
           this.dataCheck = false;
-          this.rowData = data.data[0]
+          this.rowData = data.data[this.propIndex]
         }
         return data;
       }
