@@ -79,7 +79,7 @@ export default {
       } else if (page === "user") {
         this.$store.commit(Constant.EDITUSER_CODE, this.model);
       } else {
-        this.$bus.$emit("update");
+        this.$bus.$emit("update-group");
         this.$store.dispatch(Constant.GLOBAL_RANGECODE, this.model);
       }
     },
