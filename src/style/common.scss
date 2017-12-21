@@ -416,7 +416,7 @@
   .el-checkbox-group {
     display: flex;
     flex-wrap: wrap;
-    max-width:800px;
+    max-width:900px;
     .el-checkbox {
       width: 25%;
       min-width:190px;
@@ -427,11 +427,34 @@
       }
     }
   }
+  &.form-mix > div{
+    display:flex;
+    flex-wrap:wrap;
+    &:first-child{
+      margin-bottom:15px;
+    }
+  }
 }
 [data-form-tag="replace"]{
   flex-wrap:nowrap;
   .el-input{
     margin-right:10px;
+  }
+}
+[data-form-tag="button"]{
+  flex:1;
+  min-width:300px;
+  .up-down{
+    display:flex;
+    flex-direction: column;
+    margin-left:5px;
+    button{
+      margin:0;
+      padding: 1px 15px;
+    }
+  }
+  .el-input{
+    max-width:80%;
   }
 }
 [data-required-msg]{

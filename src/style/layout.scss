@@ -12,6 +12,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  width:100%;
   &[data-index="index"] {
     justify-content: center;
     align-items: center
@@ -75,14 +76,14 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  align-items: center;
   box-shadow: 0 0 10px grey inset;
-  overflow-y: auto
+  overflow: auto
 }
 
 [data-layout="Route-article"] {
+  margin:0 auto;
   width: 100%;
-  //min-width: 1600px;
+  min-width: 1200px;
   max-width: 1600px;
   padding: 20px 15px;
   position: relative;
