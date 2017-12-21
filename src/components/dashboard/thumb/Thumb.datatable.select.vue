@@ -84,6 +84,9 @@ export default {
         this.fieldKeys = Object.keys(this.fields);
         if (data.data[0] === null) {
           this.dataCheck = true;
+        }else {
+          this.dataCheck = false;
+          this.rowData = data.data[0]
         }
         return data;
       }
