@@ -1,7 +1,7 @@
 <template>
   <header data-layout="Header">
     <div class="header-logo-wrap">
-      <img src="../../assets/redstone.png" alt="Redstone">
+      <img src="../../assets/redstone.png" alt="Redstone" @click="dashboard">
       <slot></slot>
     </div>
     <div class="header-nav-wrap">
@@ -34,6 +34,9 @@ export default {
   components: {},
   watch: {},
   methods: {
+    dashboard() {
+      this.$router.push({path: "Dashboard"});
+    },
     fullScreen() {
       const element = document.documentElement;
       if (element.requestFullScreen) {
@@ -79,6 +82,9 @@ export default {
 header {
   .header-logo-wrap {
     padding-left: 60px;
+    > img {
+      cursor: pointer;
+    }
   }
   .header-nav-wrap {
     display: flex;
