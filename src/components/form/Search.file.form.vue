@@ -9,7 +9,7 @@
             <el-date-picker v-model="form.startDate" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select Start" size="small">
             </el-date-picker>
             <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-            <el-date-picker v-model="form.endDate" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select End e" size="small">
+            <el-date-picker v-model="form.endDate" type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select End" size="small">
             </el-date-picker>
             <el-button class="date-select" v-for="(settime,i) in dateLabel" :key="settime.i" @click="setFormDateTime(i)" size="small">
               {{settime}}
@@ -18,10 +18,10 @@
         </div>
         <div data-form-item>
           <label>검색 조건</label>
-          <div data-form-tag>
-            <el-input type="text" v-model="form.q" size="small">
+          <div data-form-tag="replace">
+            <el-input type="text" v-model="form.q" placeholder="파일명/MD5/SHA256" size="small">
             </el-input>
-            <el-checkbox style="margin-left:10px" v-model="form.partial_match" true-label="on" :flase-label="null">
+            <el-checkbox v-model="form.partial_match" true-label="on" :flase-label="null">
               부분 일치
             </el-checkbox>
           </div>
