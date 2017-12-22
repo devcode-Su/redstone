@@ -69,8 +69,9 @@
   </section>
 </template>
 <script>
-  import DiagnosisInserttable from "./Diagnosis.pc.insert.table"
-  import Paginations from "../template/Template.paginations"
+  import DiagnosisInserttable from "./Diagnosis.pc.insert.table";
+  import Paginations from "../template/Template.paginations";
+  import windowOpenMixin from "../mixins/window.open.mixin";
   export default {
     name: "DatatableTable",
     extends: {},
@@ -224,7 +225,8 @@
     beforeDestroy() {
     },
     destroyed() {
-    }
+    },
+    mixins : [windowOpenMixin]
   };
 </script>
 <style lang='scss' scoped>

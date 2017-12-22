@@ -40,15 +40,22 @@
           </tr>
           <template v-else v-for="(row, i) in tableData" >
             <tr data-tbody="row"  :key="row.id">
-              <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>
+              <td v-for="(td,k) in localData.fields" :key="td.id"  :class="'col-'+k" :ref="k">
+                <template v-if="td === 'RSC 엔진 명'">
+                  <button data-icon="engine" @click.stop="openRULE(row[k])">{{row[k]}}<i class="fa fa-exclamation-circle"></i></button>
+                </template>
+                <template v-else>
+                  {{row[k]}}
+                </template>
+              </td>
               <td class="col-moreBtn">
-                <button data-icon @click="rowSearch(i)" :class="{on : i === more}">
-                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : i === more}"></i>
+                <button data-icon @click="rowSearch(row, i)" :class="{on : row === more}">
+                  <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
                 </button>
               </td>
             </tr>
             <transition name="fade">
-              <tr data-tboy="hide-row" v-if="i === more">
+              <tr data-tboy="hide-row" v-if="row === more">
                 <td :colspan="Object.keys(localData.fields).length +1">
                   <diagnosis-inserttable :fields="localData.insertFields" :prop-data="insertTable"></diagnosis-inserttable>
                 </td>
@@ -68,6 +75,7 @@
   import DiagnosisInserttable from "./Diagnosis.info.insert.table"
   import Paginations from "../template/Template.paginations"
   import Spinner from "@/components/template/Spinner";
+  import windowOpenMixin from "../mixins/window.open.mixin";
   export default {
     name: "InfoDatatable",
     extends: {},
@@ -194,16 +202,16 @@
           }
         }
       },
-      rowSearch(num){
+      rowSearch(row, i){
         //console.log(num);
         //console.log(this.localData.name );
-        if(this.more === num){
+        if(this.more === row){
           this.more = null;
         }else{
-          this.more = num;
-          let row = this.tableData[num];
+          this.more = row;
+          let select = this.tableData[i];
           //console.log(row[this.localData.apiCondition]);
-          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
+          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ select[this.localData.apiCondition];
           //console.log(url)
           this.$http.get(url, {
             params : this.form
@@ -240,7 +248,8 @@
     beforeDestroy() {
     },
     destroyed() {
-    }
+    },
+    mixins:[windowOpenMixin]
   };
 </script>
 <style lang='scss' scoped>
