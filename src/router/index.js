@@ -2,10 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
 import Redstone from '@/components/Redstone'
-import ExplanationInfoSha from '@/components/popup/Explanation.info.sha'
-import ExplanationListSha from '@/components/popup/Explanation.list.sha'
-import ExplanationMd5 from '@/components/popup/Explanation.md5'
-import ExplanationRuleId from '@/components/popup/Explanation.rule.id'
+import ExplanationInfo from '@/components/popup/Explanation.info'
+import ExplanationRule from '@/components/popup/Explanation.rule'
 
 import Dashboard from '@/components/dashboard/Dashboard'
 import Dashboardsystems from '@/components/dashboard/Dashboard.systems'
@@ -46,24 +44,14 @@ export default new Router({
       component: Index
     },
     {
-      path : "/Explanation-Info-Sha256",
-      name : "ExplanationInfoSha",
-      component : ExplanationInfoSha
+      path: "/Explanation-Info",
+      name: "ExplanationInfo",
+      component: ExplanationInfo
     },
     {
-      path : "/Explanation-List-Sha256",
-      name : "ExplanationListSha",
-      component : ExplanationListSha
-    },
-    {
-      path : "/Explanation-Md5",
-      name : "ExplanationMd5",
-      component : ExplanationMd5
-    },
-    {
-      path : "/Explanation-Rule-Id",
+      path : "/Explanation-Rule",
       name : "ExplanationRuleId",
-      component : ExplanationRuleId
+      component : ExplanationRule
     },
     {
       path: '/Redstone',
