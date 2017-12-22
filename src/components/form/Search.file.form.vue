@@ -19,7 +19,7 @@
         <div data-form-item>
           <label>검색 조건</label>
           <div data-form-tag="replace">
-            <el-input type="text" v-model="form.q" placeholder="파일명/MD5/SHA256" size="small">
+            <el-input type="text" v-model="form.q" placeholder="파일명/MD5/SHA256" clearable size="small">
             </el-input>
             <el-checkbox v-model="form.partial_match" true-label="on" :flase-label="null">
               부분 일치
@@ -65,7 +65,9 @@ export default {
         startDate: null,
         endDate: null,
         q: null,
-        partial_match: "on"
+        partial_match: "on",
+        page:1,
+        length:50
       }
     };
   },
