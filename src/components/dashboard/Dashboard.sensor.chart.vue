@@ -37,7 +37,7 @@ export default {
     "chart-line":ChartLine
   },
   computed: {},
-  wahtch: {
+  watch: {
   },
   methods: {
     periodData(sortNum) {
