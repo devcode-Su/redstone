@@ -83,8 +83,7 @@ export default {
           this.dataCheck = true;
         }else {
           this.dataCheck = false;
-          this.rowData = data.data[0];
-        }
+          this.rowData = data.data[0];        }
         return data;
       }
     }

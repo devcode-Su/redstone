@@ -39,12 +39,13 @@ export default {
       responseData: [],
       chartData: [],
       btnNum : 0,
-      arr: ["ip", "count"]
+      arr: ["ip", "count"],
+      interval : ''
     };
   },
   computed : {
-    selecNum(){
-      return this.btnNum;
+    selectNum(){
+      return this.btnNum ? this.btnNum : 0;
     },
     indexDate() {
       if(this.btnNum === 0) return "일일";
@@ -59,23 +60,20 @@ export default {
   watch: {
     responseData(data) {
       if (data) {
-        //console.log(data);
-        if (data.data[0] === null) {
+        if (data.data[this.selectNum] === null) {
           this.dataCheck = true;
         } else {
           this.dataCheck = false;
-          //console.log(data.data[0]);
-          this.chartData = this.getValueToArr2(this.responseData.data[0],this.arr);
+          this.chartData = this.getValueToArr2(data.data[this.selectNum],this.arr);
+          this.fillData();
         }
       }
     },
-    selecNum(num){
-      //console.log(num);
+    selectNum(num){
+      console.log(num);
       if(this.responseData.data[num] === null ){
-        //console.log("없음");
         this.dataCheck = true;
       }else{
-        //console.log("있음");
         this.dataCheck = false;
         this.chartData = this.getValueToArr2(this.responseData.data[num],this.arr);
         this.fillData();
@@ -104,7 +102,7 @@ export default {
     //   }
     // }
     periodNumber(periodNum) {
-      //console.log(periodNum);
+      console.log(periodNum);
       this.btnNum = periodNum;
     },
     fillData() {
@@ -129,19 +127,29 @@ export default {
       this.$router.push(this.propData.link);
     },
     itemRemove(comNum) {
-      this.$store.dispatch(Constant.DELETE_THUMBLIST, { index: comNum });
+      //this.$store.dispatch(Constant.DELETE_THUMBLIST, { index: comNum });
+    },
+    getData(){
+      const url = "/dashboard/?method=get&resource=" + this.propData.resource;
+      this.$http.get(url).then(response => {
+        this.responseData = response.data;
+      });
+    },
+    relData(){
+      this.interval = setInterval(this.getData,5000);
     }
   },
   created() {
-    const url = "/dashboard/?method=get&resource=" + this.propData.resource;
-    this.$http.get(url).then(response => {
-      this.responseData = response.data;
-    });
+    this.getData();
     //this.fillData();
     //console.log(this.propData);
   },
-  mounted() {},
-  update() {}
+  mounted() {
+    this.relData();
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
+  }
 };
 </script>
 <style lang='scss' scoped>

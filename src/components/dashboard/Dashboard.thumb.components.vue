@@ -12,6 +12,7 @@ import Constant from "@/constant";
 import { mapGetters } from "vuex";
 import ThumbComponentsChart from "./thumb/Thumb.components.chart.vue";
 import ThumbComponents from "./thumb/Thumb.components.vue";
+import locationCheckMixin from "../mixins/location.check.mixin";
 
 export default {
   name: "DashboardThumbcomponents",
@@ -21,12 +22,14 @@ export default {
   },
   data() {
     return {
-      thumbData: []
+      thumbData: [],
     };
   },
   computed: {
     // ...mapState({ compLists: state => state.thumbComp.thumbCompState }),
-    ...mapGetters({ compAll: "fetchThumbAll" })
+    ...mapGetters({
+      compAll: "fetchThumbAll"
+    })
     // compList() {
     //   return this.$store.getters.thumbComp;
     // }
@@ -57,7 +60,8 @@ export default {
           this.thumbData = response.data;
         }
       });
-    }
+    },
+
   },
   beforeCreate() {},
   created() {
@@ -66,7 +70,8 @@ export default {
     this.$bus.$on("thumb-data", this.fetchList);
   },
   beforeMounted() {},
-  mounted() {},
+  mounted() {
+  },
   beforeUpdate() {},
   updated() {
     //console.log(this.compAll)
@@ -76,7 +81,9 @@ export default {
   beforeDestroy() {
     this.$bus.$off("thumb-data");
   },
-  destroyed() {}
+  destroyed() {
+  },
+  mixins: [locationCheckMixin]
 };
 </script>
 <style lang='scss' scoped>
