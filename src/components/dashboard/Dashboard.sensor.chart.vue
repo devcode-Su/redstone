@@ -29,7 +29,8 @@ export default {
       chartData: [],
       arr: ["time", "process", "network", "file"],
       responseData: [],
-      interval : ''
+      interval : '',
+      currentIndex: 0
     };
   },
   components: {
@@ -41,7 +42,8 @@ export default {
   },
   methods: {
     periodData(sortNum) {
-      this.fillData(sortNum);
+      this.currentIndex = sortNum;
+      this.fillData(this.currentIndex);
     },
     fillData(n) {
       const insertData = this.chartData;
@@ -94,7 +96,7 @@ export default {
           this.chartData = this.getValueToArr(response.data, this.arr);
         })
         .then(() => {
-          this.fillData();
+          this.fillData(this.currentIndex);
         });
     },
     relData(){
