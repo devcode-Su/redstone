@@ -202,10 +202,13 @@
       this.viewChecked = Object.keys(this.localData.fields);
       this.$bus.$on("search-file-form", form => {
         console.log(form);
+        this.form.page = form.page;
+        this.form.length = form.length;
         this.form.dept_code = form.dept_code;
         this.form.nodeid = form.nodeid;
         this.form.startDate = form.startDate ? form.startDate.getTime() : null;
         this.form.endDate = form.endDate ? form.endDate.getTime() : null;
+        this.form.q = form.q;
         this.receiveSearch();
       });
     },
