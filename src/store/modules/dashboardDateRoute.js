@@ -14,5 +14,6 @@ export default {
     [Constant.DASHBOARD_DATA] : (state, payload) => {
       state.dashboardData = payload;
     }
-  }
+  },
+
 }

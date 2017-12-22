@@ -18,29 +18,24 @@ export default {
   },
   data() {
     return {
-      local : {},
-      search: {
-        field: [
-          "",
-          "장착시간",
-          "탈착시간",
-          "센서 ID",
-          "사용자명",
-          "부서명",
-          "PC IP 주소",
-          "종류",
-          "연결방식",
-          "진단개수",
-          "종류",
-          "연결방식",
-          "경로",
-          "장치명",
-          "용량",
-          "발생이벤트"
-        ],
-        data: [],
-        search: [],
-        url: ""
+      local: {
+        fields: {
+          nodeid : "센서 ID",
+          adapter_guid: "장치",
+          mac : "MAC",
+          ssid : "SSID",
+          name : "장치명",
+          dns : "DNS",
+          gateway : "GATEWAY",
+          ip : "IP",
+          event_time : "접속시각",
+          insert_time : "종료시각"
+        },
+        order:{
+          name : "장치명",
+          ssid : "SSID",
+          event_time : "접속시각",
+        }
       }
     };
   },

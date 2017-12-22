@@ -209,7 +209,7 @@ const MyPlugin = {
       }
       ret = ret.replace(' ', 'T');
       return ret;
-    }
+    };
 
   }
 };

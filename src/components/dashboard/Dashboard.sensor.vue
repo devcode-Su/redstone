@@ -31,7 +31,7 @@ export default {
         total: ""
       },
       dailyProcess: {},
-      dailyNetwork: []
+      dailyNetwork: [],
     };
   },
   computed: {
@@ -50,55 +50,63 @@ export default {
   },
   components: {},
   watch: {},
-  methods: {},
+  methods: {
+    getData(){
+      const sensor = "/dashboard/?method=get&resource=sensor";
+      const process = "/dashboard/?method=get&resource=process";
+      const network = "/dashboard/?method=get&resource=network";
+
+      this.$http
+        .get(sensor)
+        .then(response => {
+          //console.log("sensor get");
+          this.sensor.count = response.data.data.count;
+          this.sensor.total = response.data.data.total;
+        })
+        .catch(err => {
+          console.log("get failed");
+          this.sensor.count = 123;
+          this.sensor.total = 123456;
+        });
+
+      this.$http
+        .get(process)
+        .then(response => {
+          //console.log("process get");
+          this.dailyProcess = response.data.data.count;
+        })
+        .catch(err => {
+          console.log("get failed");
+          this.dailyProcess = 123;
+        });
+
+      this.$http
+        .get(network)
+        .then(response => {
+          //console.log("network get");
+          this.dailyNetwork = response.data.data.count;
+        })
+        .catch(err => {
+          console.log("get failed");
+          this.dailyNetwork = 123;
+        });
+    },
+  },
   beforeCreate() {},
   created() {
-    const sensor = "/dashboard/?method=get&resource=sensor";
-    const process = "/dashboard/?method=get&resource=process";
-    const network = "/dashboard/?method=get&resource=network";
-
-    this.$http
-      .get(sensor)
-      .then(response => {
-        //console.log("sensor get");
-        this.sensor.count = response.data.data.count;
-        this.sensor.total = response.data.data.total;
-      })
-      .catch(err => {
-        console.log("get failed");
-        this.sensor.count = 123;
-        this.sensor.total = 123456;
-      });
-
-    this.$http
-      .get(process)
-      .then(response => {
-        //console.log("process get");
-        this.dailyProcess = response.data.data.count;
-      })
-      .catch(err => {
-        console.log("get failed");
-        this.dailyProcess = 123;
-      });
-
-    this.$http
-      .get(network)
-      .then(response => {
-        //console.log("network get");
-        this.dailyNetwork = response.data.data.count;
-      })
-      .catch(err => {
-        console.log("get failed");
-        this.dailyNetwork = 123;
-      });
+    this.getData();
   },
   beforeMounted() {},
-  mounted() {},
+  mounted() {
+    //this.relData();
+  },
   beforeUpdate() {},
   updated() {},
   activated() {},
   deactivated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    //clearInterval(this.interval);
+  },
   destroyed() {}
 };
 </script>

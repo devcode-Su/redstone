@@ -29,17 +29,5 @@ export default {
   },
   deleteAdmin(id){
     return axios.delete(CONF.DELETE_ADMIN.replace("${no}", id));
-  },
-  popupInfoSha(sha){
-    return axios.get(CONF.POPUP_INFO_SHA256.replace("${no}", sha));
-  },
-  popupIistSha(sha){
-    return axios.get(CONF.POPUP_LIST_SHA256.replace("${no}", sha));
-  },
-  popupMd5(md5){
-    return axios.get(CONF.POPUP_MD5.replace("${no}", md5));
-  },
-  popupRuleId(id){
-    return axios.get(CONF.POPUP_RULE_ID.replace("${no}", id));
   }
 }

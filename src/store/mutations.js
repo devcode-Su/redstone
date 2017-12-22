@@ -1,9 +1,9 @@
 // import Constant from "@/constant";
-
+//
 // export default {
-//   [Constant.name]: (state, payload) => {
+//   [Constant.LOCATION]: (state, payload) => {
 //     if (payload !== "") {
-//       state.statename = payload
+//       state.location = payload
 //     }
 //   },
 // }

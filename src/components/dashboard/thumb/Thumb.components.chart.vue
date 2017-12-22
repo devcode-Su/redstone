@@ -70,7 +70,7 @@ export default {
       }
     },
     selectNum(num){
-      console.log(num);
+      //console.log(num);
       if(this.responseData.data[num] === null ){
         this.dataCheck = true;
       }else{
@@ -102,7 +102,7 @@ export default {
     //   }
     // }
     periodNumber(periodNum) {
-      console.log(periodNum);
+      //console.log(periodNum);
       this.btnNum = periodNum;
     },
     fillData() {

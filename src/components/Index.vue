@@ -9,7 +9,7 @@
 
 <script>
 import Constant from "@/constant";
-import Loading from "./Loading";
+import Loading from "./template/Loading";
 import SigninForm from "./form/Signin.form";
 
 export default {

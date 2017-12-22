@@ -28,9 +28,4 @@ export default {
   PICK_ADMIN : "pickAdmin",
   DELETE_ADMIN : "deleteAdmin",
   ADD_ADMIN : "addAdmin",
-
-  POPUP_INFO_SHA256 : "infoSha256",
-  POPUP_LIST_SHA256 : "listSha256",
-  POPUP_MD5 : "md5",
-  POPUP_RULE_ID : "ruleID"
 }

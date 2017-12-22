@@ -47,7 +47,8 @@ export default {
       receiveData: [],
       columns: [],
       fieldKeys: [],
-      rowKey: ["EventTime", "Type", "username", "userdept", "userip", "Score"]
+      rowKey: ["EventTime", "Type", "username", "userdept", "userip", "Score"],
+      interval : ''
     };
   },
   computed: {},
@@ -74,24 +75,33 @@ export default {
       });
       this.$router.push({path: "Search-analysis", query: {ProcessGuid: row.ProcessGuid, nodeid: row.nodeid}});
     },
+    getData(){
+      const url = "/dashboard/?method=get&resource=detect";
+      this.$http.get(url).then(result => {
+        this.fieldsData = result.data.data.fields;
+        this.receiveData = result.data;
+      });
+    },
+    relData(){
+      this.interval = setInterval(this.getData,5000);
+    },
     dataReceive() {}
   },
   beforeCreate() {},
   created() {
-    //this.dataReceive();
-    const url = "/dashboard/?method=get&resource=detect";
-    this.$http.get(url).then(result => {
-      this.fieldsData = result.data.data.fields;
-      this.receiveData = result.data;
-    });
+    this.getData();
   },
   beforeMounted() {},
-  mounted() {},
+  mounted() {
+    this.relData();
+  },
   beforeUpdate() {},
   updated() {},
   activated() {},
   deactivated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    clearInterval(this.interval)
+  },
   destroyed() {}
 };
 </script>

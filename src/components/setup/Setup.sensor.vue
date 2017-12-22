@@ -24,6 +24,7 @@
   </article>
 </template>
 <script>
+  import WindowOpenMixin from "../mixins/window.open.mixin"
 export default {
   name: "Systemsensor",
   extends: {},
@@ -60,7 +61,7 @@ export default {
     resetForm() {
       this.checked = false;
       this.form.deletedSensor = "";
-    }
+    },
   },
   beforeCreate() {},
   created() {},
@@ -73,7 +74,8 @@ export default {
   activated() {},
   deactivated() {},
   beforeDestroy() {},
-  destroyed() {}
+  destroyed() {},
+  mixins:[WindowOpenMixin]
 };
 </script>
 <style lang='scss' scoped>
