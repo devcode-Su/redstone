@@ -90,7 +90,6 @@ export default {
         });
         this.$router.push("Property-detail");
       }else if(this.propData.link === "Security-media"){
-        console.log(data);
         this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
           nodeid: data.row.nodeid,
           name: ""
@@ -100,7 +99,6 @@ export default {
         });
         this.$router.push(this.propData.link);
       }else{
-        console.log(data);
         this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
           nodeid: data.row.nodeid,
           name: ""

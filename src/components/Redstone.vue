@@ -8,7 +8,7 @@
     </red-header>
     <section data-layout="container">
       <aside data-layout="Aside" :class="{'active' : selected }">
-        <red-navigation @selectedBoolean="selectedBoolean"></red-navigation>
+        <red-navigation></red-navigation>
         <red-group :selected="selected">
           <button data-icon class="group-toggle" :class="{ on : selected}" @click="btnToggle">
             <i class="el-icon-close fa-24" :aria-hidden="true"></i>
@@ -51,14 +51,16 @@ export default {
     "red-navigation":RedNavigation,
     "red-group":RedGroup
   },
+  watch: {
+    '$route' (to, from) {
+      this.selected = this.isDashboard() ? false : this.selected;
+    }
+  },
   methods: {
     btnToggle() {
-      this.selected = (this.locationCheck() !== true) ? this.locationCheck() : !this.selected;
+      this.selected = this.isDashboard() ? false : !this.selected;
       this.$bus.$emit("update-group");
     },
-    selectedBoolean(check) {
-      this.selected = (check === true) ? this.selected : check;
-    }
   },
   created() {
     const adminInfo = "/api/admin/info";

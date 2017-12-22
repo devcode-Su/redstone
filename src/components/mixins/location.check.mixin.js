@@ -1,6 +1,6 @@
 export default {
   methods: {
-    locationCheck() {
+    isDashboard() {
       return !!location.href.match('Dashboard');
     }
   }

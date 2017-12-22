@@ -39,7 +39,7 @@ export default {
       if (this.selectNum !== select) {
         this.selectNum = select;
       }
-      this.$emit("selectedBoolean", this.locationCheck());
+//      this.$emit("selectedBoolean", 0 !== select);
     }
   },
   beforeCreate() {},
@@ -48,14 +48,6 @@ export default {
     this.$http.get(apiUrl).then(result => {
       this.nav = result.data;
     });
-    // let pageUrl = location.href;
-    // let i = this.nav.length;
-    // while (i--) {
-    //   let u = pageUrl.match(this.nav[i].name);
-    //   console.log(u)
-    //   console.log(i)
-    //   if (u !== null) this.selectNum = i;
-    // }
   },
   beforeMounted() {},
   mounted() {},
@@ -63,13 +55,6 @@ export default {
   updated() {
     let pageUrl = location.href;
     let i = this.nav.length;
-    // let regEx = /([A-z]+)/g;
-    // let resultTxt = pageUrl.match(regEx);
-    // let t = resultTxt.match(this.nav)
-    // let filtertext = String(resultTxt[3]);
-    // console.log(pageUrl, i, resultTxt , filtertext);
-    // console.log(i)
-    // console.log(pageUrl)
     while (i--) {
       let u = pageUrl.match(this.nav[i].name);
       if (u !== null) this.selectNum = i;
