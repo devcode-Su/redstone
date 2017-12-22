@@ -18,6 +18,7 @@
   </nav>
 </template>
 <script>
+  //import Constant from "@/constant";
 import locationCheckMixin from "../mixins/location.check.mixin";
 export default {
   name: "RedNavigation",
