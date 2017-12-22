@@ -57,34 +57,4 @@
 </script>
 <style lang='scss'>
   @import "~styles/variables";
-[data-process-inner]{
-  padding: 15px;
-  border:1px solid color(default);
-  [data-not]{
-    padding-left:20px;
-  }
-}
-  [data-inner-content]{
-    margin-bottom:30px;
-  }
-
-  [data-inner-info]{
-    padding-left:20px;
-    dl{
-      display:flex;
-      margin:6px 0;
-    }
-    dt{
-      width:140px;
-      min-width:130px;
-      font-weight:bold;
-    }
-    dd{
-      flex:1;
-      margin:0;
-      color:#777;
-      word-break:break-all;
-      white-space:pre-wrap;
-    }
-  }
 </style>

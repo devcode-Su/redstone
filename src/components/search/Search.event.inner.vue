@@ -1,6 +1,6 @@
 <template>
   <section data-process-inner>
-    <h1>상세정보</h1>
+    <h1 data-inner-title>상세정보</h1>
     <div class="process-info" v-if="propData.Table === 'PROCESS_CREATE_LOG'">
       <info-process :ProcessGuid="propData.ProcessGuid"></info-process>
       <info-file :ProcessGuid="propData.ProcessGuid"></info-file>
@@ -27,7 +27,7 @@
         <div data-inner-info>
           <dl>
             <dt>SHA256</dt>
-            <dd><a>{{propData.FileHash}}</a></dd>
+            <dd class="sha"><a @click.stop="openSHA(propData.FileHash)">{{propData.FileHash}}</a></dd>
           </dl>
         </div>
       </div>
@@ -301,6 +301,7 @@
   import InfoProcess from './Search.process.info.process.vue';
   import InfoFile from './Search.process.info.file.vue';
   import InfoDetect from './Search.process.info.detect.vue';
+  import windowOpenMixin from "../mixins/window.open.mixin"
 
   export default {
     name: "EventInnerView",
@@ -353,7 +354,8 @@
     beforeDestroy() {
     },
     destroyed() {
-    }
+    },
+    mixins:[windowOpenMixin]
   };
 </script>
 <style lang='scss' scoped>

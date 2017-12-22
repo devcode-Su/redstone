@@ -36,7 +36,7 @@
         <table>
           <tbody>
           <tr v-if="stateReorder">
-            <td data-none-data="screen">검색된 데이터가 없습니다.</td>
+            <td v-if="!getLoad" data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
           <template v-else v-for="(row, i) in tableData" >
             <tr data-tbody="row"  :key="row.id" @click="rowRoute(row)">
@@ -73,6 +73,7 @@
           </template>
           </tbody>
         </table>
+        <spinner v-if="getLoad"></spinner>
       </div>
     </div>
     <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
@@ -80,8 +81,9 @@
 </template>
 <script>
   import { mapGetters } from "vuex";
-  import ProcessInner from "./Search.process.inner"
-  import Paginations from "../template/Template.paginations"
+  import ProcessInner from "./Search.process.inner";
+  import Paginations from "../template/Template.paginations";
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "InfoDatatable",
     extends: {},
@@ -102,6 +104,7 @@
     },
     data() {
       return {
+        getLoad : false,
         more: null,
         moreBtn : false,
         responseData : [],
@@ -123,7 +126,8 @@
     },
     components: {
       "process-inner" : ProcessInner,
-      "paginations" :Paginations
+      "paginations" :Paginations,
+      "spinner":Spinner
     },
     watch: {
       responseData(t){
@@ -152,10 +156,12 @@
     methods: {
       receiveSearch(){
         //console.log(this.form);
+        this.getLoad = true;
         const url = "/api/admin/search/event/";
         this.$http.get(url, {
           params: this.form
         }).then( response => {
+          this.getLoad = false;
           this.responseData = response.data
           //console.log(this.responseData)
         })

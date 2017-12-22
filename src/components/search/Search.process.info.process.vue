@@ -12,7 +12,7 @@
       </dl>
       <dl>
         <dt>SHA256</dt>
-        <dd>{{data.FileHash}}</dd>
+        <dd class="sha" @click.stop="openSHA(data.FileHash)">{{data.FileHash}}</dd>
       </dl>
       <dl>
         <dt>MD5</dt>
@@ -70,6 +70,7 @@
   </div>
 </template>
 <script>
+  import windowOpenMixin from "../mixins/window.open.mixin"
   export default {
     name: "InfoProcess",
     props: {
@@ -98,7 +99,7 @@
             }
             this.data = d[0];
           });
-      }
+      },
     },
     beforeCreate() {
     },
@@ -132,6 +133,7 @@
     },
     destroyed() {
     },
+    mixins:[windowOpenMixin]
   };
 </script>
 <style lang='scss' scoped>
