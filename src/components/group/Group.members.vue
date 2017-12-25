@@ -7,6 +7,7 @@
         <table>
           <thead>
             <tr>
+              <th class="col-connected"><span>접속</span></th>
               <th v-for="(th, key, i) in fields" :key="th.i" :class="['col-'+key,{on : i === selected }]" @click.self="reOrder(key, i)">{{th}}</th>
             </tr>
           </thead>
@@ -16,6 +17,11 @@
         <table>
           <tbody>
             <tr data-tbody="row" v-for="member in userData" :key="member.id" class="edit-wrap" @click="selectRow(member)">
+              <td class="col-connected" :class="'turn'+member.connected">
+              <span class="icon">
+                <i class="fa fa-power-off" aria-hidden="true"></i>
+              </span>
+              </td>
               <td class="col-nodeid">{{member.nodeid}}</td>
               <td class="col-name">
                 {{member.username}}
