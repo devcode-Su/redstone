@@ -1,6 +1,6 @@
 <template>
   <li :class="[{'item-root' : isRootItem },{'off' : !isOpen && isRootItem },{'end-list' : !model.children }]">
-    <div @click.self="setOpen(page)" :class="{on: model.children && isOpen}">
+    <div @click.stop="setOpen(page)" :class="{on: model.children && isOpen}">
       <span>
         <i v-if="isFolder" class="fa fa-caret-right" :class="{'rotate' : isOpen}">
         </i>
@@ -121,7 +121,6 @@ export default {
     },
     addTree() {
       this.isOpen = true;
-
       this.$prompt("추가할 부서의 이름을 입력하세요.", "부서추가", {
         confirmButtonText: "추가",
         cancelButtonText: "취소"

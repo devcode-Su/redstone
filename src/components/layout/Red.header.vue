@@ -5,7 +5,10 @@
       <slot></slot>
     </div>
     <div class="header-nav-wrap">
-      <p>{{username}}</p>
+      <div>
+        <button class="user-info" @click="showForm = true">{{username}}</button>
+        <user-info v-if="showForm" @close="showForm = false"></user-info>
+      </div>
       <button data-icon v-if="false">
         <i class="fa fa-question-circle fa-24" aria-hidden="true"></i>
       </button>
@@ -20,6 +23,7 @@
 </template>
 <script>
   import Constant from "@/constant";
+  import UserInfo from "../form/User.info.form";
 export default {
   name: "RedHeader",
   extends: {},
@@ -28,10 +32,14 @@ export default {
     username: String
   },
   data() {
-    return {};
+    return {
+      showForm : false
+    };
   },
   computed: {},
-  components: {},
+  components: {
+    "user-info" :UserInfo
+  },
   watch: {},
   methods: {
     dashboard() {
@@ -99,6 +107,10 @@ header {
       height: 28px;
       margin: 0 5px;
       padding: 0;
+    }
+    .user-info{
+      width:auto;
+      font-size:14px;
     }
   }
   .group-toggle {

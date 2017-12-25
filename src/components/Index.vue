@@ -37,7 +37,8 @@ export default {
         const apiURL = "/api/admin/login";
         this.$http
           .post(apiURL, input)
-          .then(() => {
+          .then(response => {
+            console.log(response);
             this.$router.push("Redstone");
           })
           .catch(() => {

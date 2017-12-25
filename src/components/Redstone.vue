@@ -68,6 +68,7 @@ export default {
       .get(adminInfo)
       .then(response => {
         this.$store.dispatch(Constant.LOADING_STATE, false);
+        this.$store.commit(Constant.USER_INFO, response.data);
         this.userData = response.data;
       })
       .catch(() => {

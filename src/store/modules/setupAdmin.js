@@ -3,6 +3,7 @@ import ContantApi from "@/api/contactApi";
 
 export default {
   state: {
+    userInfo : null,
     pickAdmin : null,
     adminUser: [],
     adminFormType : true,
@@ -21,6 +22,9 @@ export default {
     [Constant.PICK_ADMIN]: (state) => {
       return state.adminUser.filter( u => u.id === state.pickAdmin)
     },
+    [Constant.USER_INFO]: (state) => {
+      return state.userInfo;
+    },
   },
   mutations: {
     [Constant.SETUP_ADMIN]: (state, payload) => {
@@ -37,6 +41,9 @@ export default {
     },
     [Constant.PICK_ADMIN]: (state, payload) => {
       state.pickAdmin = payload
+    },
+    [Constant.USER_INFO]: (state, payload) => {
+      state.userInfo = payload
     }
   },
   actions: {
@@ -67,6 +74,11 @@ export default {
         ContantApi.setupAdmin().then(response => {
           store.commit(Constant.SETUP_ADMIN, response.data);
         });
+      });
+    },
+    [Constant.USER_UPDATE]: (store, payload) => {
+      ContantApi.updateAdmin(payload).then((response) => {
+        store.commit(Constant.USER_INFO, response.data);
       });
     }
   }

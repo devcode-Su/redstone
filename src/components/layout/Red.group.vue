@@ -153,12 +153,12 @@ export default {
   .management-btn {
     position: absolute;
     top: 8px;
-    right: 31px;
+    right: 40px;
   }
   .group-toggle {
     position: absolute;
     top: 8px;
-    right: 5px;
+    right: 15px;
   }
   .group-notice li {
     justify-content: flex-start;

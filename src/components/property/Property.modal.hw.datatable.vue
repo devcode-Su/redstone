@@ -138,6 +138,9 @@
   [data-table-wrap]{
     margin-top:15px;
   }
+  [data-table="table"]{
+    min-width:700px;
+  }
   [data-table="header"]{
     justify-content: flex-start;
   }
@@ -146,10 +149,11 @@
     font-size:18px;
   }
   [data-tbody="tbody"]{
-    height:200px !important;
-    min-height:200px !important;;
+    height:146px !important;
+    min-height:146px !important;;
     border-top:1px solid color(border) !important;
     th{
+      width:150px;
       height:28px;
       line-height:28px;
     }

@@ -170,6 +170,9 @@
       width:200px;
     }
   }
+  [data-table="table"]{
+    min-width:700px;
+  }
   [data-table="header"]{
     justify-content: space-between;
   }
@@ -178,8 +181,8 @@
     font-size:18px;
   }
   [data-tbody="tbody"]{
-    height:200px !important;
-    min-height:200px !important;;
+    height:146px !important;
+    min-height:146px !important;;
     border-top:1px solid color(border) !important;
   }
   [data-none-data="screen"]{

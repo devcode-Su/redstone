@@ -20,7 +20,8 @@ export default {
   DETAIL_INFO : "propertyDetailInfo",
   DETAIL_PC : "propertyDetailPc",
 
-
+  USER_INFO : "userInfo",
+  USER_UPDATE : "userUpdate",
   SETUP_ADMIN : "setupAdmin",
   SETUP_FORMTYPE : "setupFormType",
   SETUP_MODAL : "setupModal",

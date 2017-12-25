@@ -38,7 +38,11 @@ export default {
   },
   beforeCreate() {},
   created() {
-    this.title = this.detailTitle.title
+    if(this.detailTitle.title){
+      this.title = this.detailTitle.title
+    }else{
+      this.$router.push("Property-sw");
+    }
   },
   beforeMounted() {},
   mounted() {},

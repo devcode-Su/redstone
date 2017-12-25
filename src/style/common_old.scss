@@ -248,9 +248,6 @@
     cursor: pointer;
   }
   div {
-    .label {
-      cursor: no-drop
-    }
     &:after {
       content: '';
       width: 100%;
@@ -339,7 +336,6 @@
 
 // drag list
 .drag-wrap {
-  width: 300px;
   border: 1px solid color(border);
   border-radius: 5px;
   overflow: hidden;
