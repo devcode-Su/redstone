@@ -19,7 +19,7 @@
             {{indexDate}} 검출된 내역이 없습니다.
           </td>
         </tr>
-        <tr data-tbody="row" v-else v-for="(tr, h) in rowData" :key="h" @click.stop="rowClick(tr, h)">
+        <tr data-tbody="row" v-else v-for="(tr, h) in rowData" :key="h" @click.stop="rowClick(tr)">
           <td data-tbody="column" v-for="(td, j) in fieldKeys" :key="td.j"
               :class="['col-'+td,{'col-end' : fields.length-1 === j }]">
             {{ tr[td] }}
@@ -89,10 +89,9 @@
       },
     },
     methods: {
-      rowClick(row, num) {
+      rowClick(row) {
         this.$emit("rowRouter", {
           row: row,
-          rowNum: num,
         })
       },
     },

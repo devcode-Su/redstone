@@ -67,7 +67,7 @@ export default {
       this.$store.commit(Constant.DASHBOARD_DATA, {
         name : this.propData.resource,
         num : this.btnNum + 1,
-        rowNum : data.rowNum
+        row : data.row.name
       });
       this.$router.push(this.propData.link);
     },

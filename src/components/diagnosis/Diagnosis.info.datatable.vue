@@ -49,7 +49,7 @@
                 </template>
               </td>
               <td class="col-moreBtn">
-                <button data-icon @click="rowSearch(row, i)" :class="{on : row === more}">
+                <button data-icon @click="rowSearch(row)" :class="{on : row === more}">
                   <i class="fa fa-arrow-down" aria-hidden="true" :class="{rotate : row === more}"></i>
                 </button>
               </td>
@@ -158,10 +158,24 @@
       },
       tableData(t){
         if(t){
-          console.log(this.selectData.rowNum);
-          if(this.selectData.rowNum !== undefined){
+          //console.log(this.selectData.row);
+          if(this.selectData.name !== undefined){
             console.log("ready!");
-            this.rowSearch(this.selectData.rowNum);
+            console.log(this.selectData.row );
+            let num, row;
+            if(this.selectData.name === 'badfile'){
+              num = this.tableData.map( f => f.FileHash).indexOf(this.selectData.row);
+              row = this.tableData[num];
+            }else if(this.selectData.name === 'badurlip'){
+              num = this.tableData.map( f => f.ip).indexOf(this.selectData.row);
+              console.log(num)
+              row = this.tableData[num];
+              console.log(row)
+            }else if(this.selectData.name === 'rsc'){
+              num = this.tableData.map( f => f.name).indexOf(this.selectData.row);
+              row = this.tableData[num];
+            }
+            this.rowSearch(row);
           }
         }
       }
@@ -202,16 +216,16 @@
           }
         }
       },
-      rowSearch(row, i){
-        //console.log(num);
+      rowSearch(row){
+        console.log(row);
         //console.log(this.localData.name );
         if(this.more === row){
           this.more = null;
         }else{
           this.more = row;
-          let select = this.tableData[i];
+          //let select = this.tableData[i];
           //console.log(row[this.localData.apiCondition]);
-          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ select[this.localData.apiCondition];
+          const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
           //console.log(url)
           this.$http.get(url, {
             params : this.form
