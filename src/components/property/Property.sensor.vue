@@ -9,7 +9,7 @@
   </article>
 </template>
 <script>
-  import ProsertySensorform from "../form/Property.sensor.form";
+  import ProsertySensorform from "./Property.sensor.form";
   import SensorDatatable from "./Property.sensor.datatable";
   import PropertyModal from "./Property.modal";
 export default {

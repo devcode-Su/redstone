@@ -24,7 +24,7 @@
   import { mapGetters } from "vuex";
 import PropertyDatatable from "./Property.datatable";
 import SoftwareDatatable from "./Property.software.datatable";
-import InstallSoftware from "../form/Install.software.form"
+import InstallSoftware from "./Install.software.form"
 export default {
   name: "Propertysw",
   extends: {},
