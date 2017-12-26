@@ -37,7 +37,6 @@
   </div>
 </template>
 <script>
-//import _ from "lodash";
 import { mapGetters } from "vuex";
 import Constant from "@/constant";
 export default {
