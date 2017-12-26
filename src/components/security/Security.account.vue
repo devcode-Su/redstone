@@ -15,8 +15,8 @@
   </article>
 </template>
 <script>
-  import SecurityPasswordform from "../form/Security.password.form";
-  import SecurityScreenform from "../form/Security.screen.form";
+  import SecurityPasswordform from "./Security.password.form";
+  import SecurityScreenform from "./Security.screen.form";
   import SecurityPasswordDatatable from "./Security.account.datatable";
 
   export default {
@@ -33,12 +33,6 @@
             definition: {
               url: '/api/admin/account/password/expired',
               field: {
-                connected: {
-                  label: ' ',
-                  data: (data, key) => {
-                    return data.node_connected.connected;
-                  },
-                },
                 nodeid: '센서ID',
                 deptName: {
                   label: '부서명',
@@ -82,7 +76,6 @@
             definition: {
               url: '/api/admin/account/screen-saver',
               field: {
-                connected: '',
                 nodeid: '센서ID',
                 deptName: {
                   label: '부서명',

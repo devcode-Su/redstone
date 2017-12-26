@@ -8,7 +8,7 @@
   </article>
 </template>
 <script>
-import WirelessForm from "../form/Security.wireless.form";
+import WirelessForm from "./Security.wireless.form";
 import WirelessDatatable from "./Security.wireless.datatable";
 export default {
   name: "Securitymedia",

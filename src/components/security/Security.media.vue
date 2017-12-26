@@ -3,12 +3,12 @@
     <h1 data-page-title>
       매체접근
     </h1>
-    <security-media-form @form="receive"></security-media-form>
+    <security-media-form :prop-data="props" @form="receive"></security-media-form>
     <security-data-table :definition="definition"></security-data-table>
   </article>
 </template>
 <script>
-  import SecurityMediaform from "../form/Security.media.form";
+  import SecurityMediaform from "./Security.media.form";
   import SecurityDatatable from "./Security.media.datatable";
 
   export default {
@@ -19,6 +19,7 @@
     },
     data() {
       return {
+        props: [],
         formData: {},
         definition: {
           url: '/api/admin/volume',
@@ -114,6 +115,9 @@
     beforeMounted() {
     },
     mounted() {
+      if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+        this.props = this.$route.query;
+      }
     },
     beforeUpdate() {
     },

@@ -45,11 +45,11 @@
           </template>
           <template v-else>
             <tr data-tbody="row" v-for="row in data" :key="row.id">
-              <th class="col-connected">
+              <td class="col-connected" :class="'turn'+row.node_connected.connected">
                 <span class="icon">
                   <i class="fa fa-power-off" aria-hidden="true"></i>
                 </span>
-              </th>
+              </td>
               <td v-for="(td,k) in definition.field" :key="td.id" :class="'col-'+k" :ref="k">
                 {{td.data ? td.data(row, k) : row[k]}}
               </td>
@@ -122,6 +122,7 @@
         let url = `${this.definition.url}/${type}/${code}`;
         this.$http.get(url, {params: this.form})
             .then((response) => {
+              console.log(response)
               let data = response.data.data.map(d => {
                 if (d.hasOwnProperty('info')) {
                   d.info = d.info.reduce((p, c) => {
@@ -131,6 +132,7 @@
                 }
                 return d;
               });
+              console.log(data);
               this.data = data;
               this.pagination.total = response.data.total
             });

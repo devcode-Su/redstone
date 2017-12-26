@@ -83,7 +83,7 @@
           nodeid : null,
           startDate : null,
           endDate : null,
-          order : ""
+          order : "event_time"
         }
       };
     },
@@ -128,7 +128,7 @@
         const url = `/api/admin/network/wireless/${type}/${code}`;
         console.log(url)
         this.$http.get(url, {
-          params: this.form
+          params : this.form
         }).then( response => {
           console.log(response);
           this.responseData = response.data
