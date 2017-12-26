@@ -1,6 +1,6 @@
 <template>
   <div class="sign-form">
-    <p>
+    <p class="notice">
       비밀번호 유효기간이 만료되었습니다.<br>
       비밀번호를 다시 설정해주세요.
     </p>
@@ -144,12 +144,8 @@
         box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
       }
     }
-    .sign-failed-msg {
-      position: absolute;
-      left: 0;
-      font-size: 16px;
-      font-weight: bold;
-      color: color(highlight-color);
+    .notice{
+      font-size:14px;
     }
   }
 </style>
