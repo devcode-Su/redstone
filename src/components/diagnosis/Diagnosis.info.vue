@@ -21,9 +21,9 @@
 </template>
 <script>
   import { mapGetters } from "vuex";
-import InfoFile from "../form/Diagnosis.info.file";
-  import InfoIp from "../form/Diagnosis.info.ip";
-  import InfoRsc from "../form/Diagnosis.info.rsc";
+import InfoFile from "./Diagnosis.info.file";
+  import InfoIp from "./Diagnosis.info.ip";
+  import InfoRsc from "./Diagnosis.info.rsc";
 import DiagnosisInfoDatatable from "./Diagnosis.info.datatable";
 export default {
   name: "Diagnosisinfo",
