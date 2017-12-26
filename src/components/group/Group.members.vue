@@ -120,11 +120,11 @@ export default {
       }
     },
     selectRow(member) {
-      console.log(member);
+      //console.log(member);
       this.$store.dispatch(Constant.GLOBAL_RANGEUSER, member.nodeid);
     },
     userList(){
-      console.log(this.dept_code);
+      //console.log(this.dept_code);
       const url = "/api/admin/group/recurse/"+this.dept_code;
       this.$http.get(url, {
         params : this.form
@@ -133,7 +133,7 @@ export default {
       });
     },
     userSearch(val){
-      console.log(val);
+      //console.log(val);
       const url = `/api/admin/group/recurse/${this.dept_code}/${val}`;
       this.$http.get(url, {
         params : this.form
