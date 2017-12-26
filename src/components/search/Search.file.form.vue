@@ -38,8 +38,8 @@
 <script>
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
-  import GlobalRange from "./Global.range";
-import ReplaceInput from "./Replace.input";
+  import GlobalRange from "../form/Global.range";
+import ReplaceInput from "../form/Replace.input";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
 
 export default {
@@ -99,7 +99,8 @@ export default {
     this.form.nodeid = this.globalRangeCode.nodeid;
   },
   beforeMounted() {},
-  mounted() {},
+  mounted() {
+  },
   beforeUpdate() {},
   updated() {},
   activated() {},

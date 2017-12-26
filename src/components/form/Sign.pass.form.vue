@@ -1,30 +1,32 @@
 <template>
   <div class="sign-form">
+    <p>
+      비밀번호 유효기간이 만료되었습니다.<br>
+      비밀번호를 다시 설정해주세요.
+    </p>
     <form @submit.prevent="signCheck">
       <div class="input-area">
-        <md-input-container md-clearable :class="{ 'md-input-invalid':isIdRequired }">
+        <md-input-container>
           <label>User ID</label>
-          <md-input ref="username" type="text" v-model="userName"></md-input>
-          <span class="md-error">{{idErrorMsg}}</span>
+          <md-input ref="username" type="text" v-model="form.id" disabled></md-input>
         </md-input-container>
         <md-input-container md-clearable :class="{ 'md-input-invalid':isPassRequired }">
           <label>Passwrod</label>
-          <md-input ref="password" type="password" v-model="passWord"></md-input>
+          <md-input ref="password" type="password" placeholder="새로운 비밀번호" v-model="passWord"></md-input>
           <span class="md-error">{{passwordErrorMsg}}</span>
         </md-input-container>
       </div>
       <div class="btn-area">
         <el-button v-if="isLoading" type="primary" :loading="true">Loading</el-button>
-        <md-button v-else :disabled="submitBtn" type="submit" class="md-raised md-primary">Sign
+        <md-button v-else :disabled="submitBtn" type="submit" class="md-raised md-primary">확인
         </md-button>
-
-        <span class="sign-failed-msg" v-if="signFailedMsg">{{signFailedMsg}}</span>
       </div>
     </form>
   </div>
 </template>
 
 <script>
+  import { mapGetters } from "vuex";
   export default {
     name: "sign",
     props: {
@@ -40,56 +42,43 @@
     },
     data() {
       return {
-        isIdRequired: false,
         isPassRequired: false,
         isLoading: false,
         submitBtn: false,
-        rememberMe: false,
-        userName: "",
         passWord: "",
-        showModal: false
+        showModal: false,
+        form : {}
       };
     },
     watch: {
-      signFailedMsg() {
-        if (this.signFailedMsg !== "") {
-          this.isLoading = false;
-          this.submitBtn = false;
+      userInfo(u){
+        if(u){
+          console.log(u)
         }
       }
     },
-    components: {},
+    computed: {
+      ...mapGetters({ userInfo: "userInfo" }),
+    },
     methods: {
       signCheck() {
+        const url = "/api/admin";
         let username = this.userName;
         let password = this.passWord;
 
         // 'key=value; expires=current dateTime in UTC; path=/'
-        if (this.rememberMe) {
-          let d = new Date();
-          d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000); //
-          document.cookie =
-            "username=" + username + ";expires=" + d.toUTCString() + ";path=/";
-          document.cookie =
-            "password=" + password + ";expires=" + d.toUTCString() + ";path=/";
-          //console.log('We just set the cookies: ' + document.cookie)
-        } else {
-          document.cookie =
-            "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-          document.cookie =
-            "password=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-          //console.log('We just deleted the cookies: ' + document.cookie)
-        }
 
         this.isLoading = true;
         this.submitBtn = true;
 
-        this.$emit("signCrendentials", {
-          id: username,
-          passwd: password
-        });
+        this.form.passwd = this.passWord;
+        console.log(this.form);
 
         this.checkInputEmpty(username, password);
+
+        this.$http.put(url, this.form).then( () => {
+          this.$emit("change");
+        });
       },
       checkInputEmpty(u, p) {
         if (u === "" || p === "") {
@@ -109,20 +98,17 @@
           this.isIdRequired = false;
           this.isPassRequired = false;
         }
+      },
+      passChange(val){
+        console.log(val)
       }
     },
+    created(){
+      console.log(this.userInfo)
+      this.form = this.userInfo
+    },
     mounted() {
-      let username = document.cookie.match(
-        "(^|;)\\s*" + "username" + "\\s*=\\s*([^;]+)"
-      );
-      let password = document.cookie.match(
-        "(^|;)\\s*" + "password" + "\\s*=\\s*([^;]+)"
-      );
 
-      this.userName = username ? username.pop() : "";
-      this.passWord = password ? password.pop() : "";
-      if (username) this.submitBtn = false;
-      //console.log('We just check to see if there were cookies: ' + document.cookie)
     }
   };
 </script>

@@ -6,12 +6,12 @@
         <div data-form-item>
           <label data-form-label="required">조사기간 설정</label>
           <div data-form-tag>
-            <el-date-picker v-model="form.startDate" type="datetime" placeholder="Select Start" size="small">
+            <el-date-picker v-model="startDate" type="datetime" placeholder="Select Start" size="small" @change="valueChanged('start', $event)" @input="valueChanged('start', $event)">
             </el-date-picker>
             <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-            <el-date-picker v-model="form.endDate" type="datetime" placeholder="Select End" size="small">
+            <el-date-picker v-model="endDate" type="datetime" placeholder="Select End" size="small" @change="valueChanged('start', $event)" @input="valueChanged('start', $event)">
             </el-date-picker>
-            <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setFormDateTime(i)" size="small">
+            <el-button v-for="(settime,i) in dateLabel" :key="settime.i" @click="setDateTime(i)" size="small">
               {{settime}}
             </el-button>
           </div>
@@ -35,7 +35,7 @@
 <script>
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
-  import GlobalRange from "./Global.range";
+  import GlobalRange from "../form/Global.range";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
 
   export default {
@@ -47,6 +47,8 @@
     data() {
       return {
         dateLabel: ["1시간", "일일", "주간", "월간"],
+        startDate: null,
+        endDate: null,
         form: {
           page:1,
           length:50,
@@ -78,6 +80,18 @@
         this.form.dept_code = this.globalRangeCode.dept_code;
         this.form.nodeid = this.globalRangeCode.nodeid;
       },
+      valueChanged(obj, value) {
+        //console.log('valueChanged', obj, value);
+        let data = {};
+        data[obj] = value;
+        this.form.startDate = this.startDate;
+        this.form.endDate = this.endDate;
+      },
+      setDateTime(i) {
+        this.setDatetime(i);
+        this.form.startDate = this.startDate;
+        this.form.endDate = this.endDate;
+      },
       onSubmit() {
         //console.log(this.form);
         if(this.form.startDate == null || this.form.endDate == null ){
@@ -86,6 +100,8 @@
             message: '조사기간을 입력해야 합니다.'
           });
         }else{
+          this.form.startDate = this.startDate.getTime();
+          this.form.endDate = this.endDate.getTime();
           this.$bus.$emit("wireless", this.form);
         }
       },

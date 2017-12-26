@@ -5,12 +5,7 @@
       <fieldset>
         <div data-form-item>
           <div data-form-tag>
-            <el-input v-model="form.version" type="text" placeholder="version" size="small"></el-input>
-          </div>
-        </div>
-        <div data-form-item>
-          <div data-form-tag>
-            <el-checkbox v-model="form.all" true-label="1" false-label="0" @change="checked">일주일 이상 미로그인 센서</el-checkbox>
+            <el-checkbox v-model="form.all" :true-label="'0'" :false-label="'1'" :checked="true">화면 보호기 미 적용 PC</el-checkbox>
           </div>
         </div>
       </fieldset>
@@ -25,7 +20,7 @@
 <script>
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
-  import GlobalRange from "./Global.range";
+  import GlobalRange from "../form/Global.range";
 
   export default {
     name: "SecurityMediaform",
@@ -38,8 +33,7 @@
         form: {
           dept_code: 1,
           nodeid: "",
-          version:'',
-          OnlyNoLoginLong:0,
+          all:0,
         }
       };
     },
@@ -52,18 +46,16 @@
     watch: {
       globalRangeCode(g) {
         if (g) {
+          //console.log(g);
           this.form.dept_code = g.dept_code;
           this.form.nodeid = g.nodeid;
         }
       }
     },
     methods: {
-      checked(val){
-        this.form.OnlyNoLoginLong = val;
-      },
       send() {
         //console.log(this.form);
-        this.$emit("form", this.form);
+        this.$emit("submit", this.form);
       }
     },
     beforeCreate() {},
@@ -83,9 +75,9 @@
   };
 </script>
 <style lang='scss' scoped>
+  //noinspection CssUnknownTarget
   @import "~styles/variables";
   [data-form-tag]{
-    width:500px;
     height:32px;
     label{
       width:auto;

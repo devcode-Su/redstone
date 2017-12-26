@@ -16,8 +16,8 @@
 <script>
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
-  import GlobalRange from "./Global.range";
-  import Datelast from "./Datelast";
+  import GlobalRange from "../form/Global.range";
+  import Datelast from "../form/Datelast";
 
   export default {
     name: "SecurityMediaform",

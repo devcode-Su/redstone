@@ -4,24 +4,31 @@
     <form @submit.prevent="send">
       <fieldset>
         <div data-form-item>
-          <label data-form-label="required">검색조건</label>
           <div data-form-tag>
-            <el-input placeholder="프로그램명" v-model="form.name" class="input-with-select" size="small" clearable>
-              <el-button slot="append" native-type="submit" icon="el-icon-search" size="small">검색</el-button>
-            </el-input>
+            <el-input v-model="form.version" type="text" placeholder="version" size="small"></el-input>
+          </div>
+        </div>
+        <div data-form-item>
+          <div data-form-tag>
+            <el-checkbox v-model="form.all" true-label="1" false-label="0" @change="checked">일주일 이상 미로그인 센서</el-checkbox>
           </div>
         </div>
       </fieldset>
+      <div data-search-submit>
+        <el-button type="primary" plain size="small" native-type="submit">
+          검색
+        </el-button>
+      </div>
     </form>
   </div>
 </template>
 <script>
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
-  import GlobalRange from "./Global.range";
+  import GlobalRange from "../form/Global.range";
 
   export default {
-    name: "InstallSoftwareform",
+    name: "SecurityMediaform",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
@@ -31,7 +38,8 @@
         form: {
           dept_code: 1,
           nodeid: "",
-          name:"",
+          version:'',
+          OnlyNoLoginLong:0,
         }
       };
     },
@@ -44,23 +52,18 @@
     watch: {
       globalRangeCode(g) {
         if (g) {
-          console.log(g);
           this.form.dept_code = g.dept_code;
           this.form.nodeid = g.nodeid;
         }
       }
     },
     methods: {
+      checked(val){
+        this.form.OnlyNoLoginLong = val;
+      },
       send() {
-        console.log(this.form);
-        if(this.form.name === ""){
-          this.$notify.error({
-            title: 'Error',
-            message: '검색할 프로그램명을 입력하세요.'
-          });
-        }else{
-          this.$emit("form", this.form);
-        }
+        //console.log(this.form);
+        this.$emit("form", this.form);
       }
     },
     beforeCreate() {},
@@ -82,6 +85,10 @@
 <style lang='scss' scoped>
   @import "~styles/variables";
   [data-form-tag]{
-    width:600px;
+    width:500px;
+    height:32px;
+    label{
+      width:auto;
+    }
   }
 </style>
