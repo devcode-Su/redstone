@@ -47,12 +47,12 @@
     //   transform: rotate(540deg) scale(0.6);
     // }
     100% {
-      transform: rotate(3600deg);
+      transform: rotate(14400deg);
     }
   }
   #spinner {
     position: absolute;
-    top: 0;
+    top: 36px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -60,9 +60,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /*background-color: rgba(0, 0, 0, .7);*/
+    background-color: rgba(255, 255, 255, .8);
     .symbol {
-      animation: loading 1.5s cubic-bezier(0.600, 0, 0.735, 0.045) infinite;
+      animation: loading 5s cubic-bezier(0.600, 0, 0.735, 0.045) infinite;
     }
   }
 </style>
