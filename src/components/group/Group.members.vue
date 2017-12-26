@@ -13,7 +13,7 @@
           </thead>
         </table>
       </div>
-      <v-infinite-scroll data-tbody="tbody" class="members" :loading="reloading" @bottom="nextPage" style="overflow-y: auto;">
+      <v-infinite-scroll data-tbody="tbody" class="members" :loading="reloading" @bottom="nextPage">
         <table>
           <tbody>
             <tr data-tbody="row" v-for="member in userData" :key="member.id" class="edit-wrap" @click="selectRow(member)">
@@ -94,14 +94,15 @@ export default {
   },
   components: {},
   watch: {
-    globalRangeCode(current, previous){
-      if ( current ) {
-        if ( current.dept_code !== this.dept_code ) {
-          this.dept_code = current.dept_code;
-          this.userList();
-        }
-      }
-    },
+    // globalRangeCode(current, previous){
+    //   if ( current ) {
+    //     console.log(current);
+    //     if ( current.dept_code !== this.dept_code ) {
+    //       this.dept_code = current.dept_code;
+    //       //this.userList();
+    //     }
+    //   }
+    // },
     responseData(r){
       if(r){
         this.userData = r.data;
@@ -120,12 +121,11 @@ export default {
       }
     },
     selectRow(member) {
-      //console.log(member);
+      console.log(member);
       this.$store.dispatch(Constant.GLOBAL_RANGEUSER, member.nodeid);
-      this.$bus.$emit("update");
     },
     userList(){
-      //console.log(this.dept_code);
+      console.log(this.dept_code);
       const url = "/api/admin/group/recurse/"+this.dept_code;
       this.$http.get(url, {
         params : this.form
@@ -178,7 +178,10 @@ export default {
   beforeCreate() {},
   created() {
     this.dataSet();
-    this.$bus.$on("update-group", this.userList);
+    this.$bus.$on("update-group", () => {
+      this.dept_code = this.globalRangeCode.dept_code;
+      this.userList();
+    });
   },
   beforeMounted() {},
   mounted() {},

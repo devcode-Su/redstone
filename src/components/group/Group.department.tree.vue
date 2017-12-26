@@ -10,16 +10,16 @@
         <input v-else type="text" v-model="model.name" @blur="doneEdit(model)" @keyup.enter="doneEdit(model)" @keyup.esc="cancelEdit" ref="part">
       </span>
       <span v-if="treeEdit" class="edit-wrap">
-        <button class="icon-btn" @click="renameTo(model)">
+        <button class="icon-btn" @click.stop="renameTo(model)">
           <i class="fa fa-pencil" aria-hidden="true"></i>
         </button>
-        <button v-if="!isFolder" class="icon-btn" @click="changeType">
+        <button v-if="!isFolder" class="icon-btn" @click.stop="changeType">
           <i class="fa fa-folder-open-o" aria-hidden="true"></i>
         </button>
-        <button v-if="isFolder" class="icon-btn" @click="addTree">
+        <button v-if="isFolder" class="icon-btn" @click.stop="addTree">
           <i class="fa fa-plus" aria-hidden="true"></i>
         </button>
-        <button v-if="!isFolder" class="icon-btn" @click="removeTree(model)">
+        <button v-if="!isFolder" class="icon-btn" @click.stop="removeTree(model)">
           <i class="fa fa-minus" aria-hidden="true"></i>
         </button>
       </span>
@@ -79,8 +79,8 @@ export default {
       } else if (page === "user") {
         this.$store.commit(Constant.EDITUSER_CODE, this.model);
       } else {
-        this.$bus.$emit("update-group");
         this.$store.dispatch(Constant.GLOBAL_RANGECODE, this.model);
+        this.$bus.$emit("update-group");
       }
     },
     enter(el, done) {
@@ -155,8 +155,12 @@ export default {
       // });
     },
     removeTree(model) {
+      console.log(model);
+      const url = "/api/admin/group/" + model.dept_code;
+      this.$http.delete(url);
       const tree = this.$parent.model.children;
       tree.splice(tree.indexOf(model), 1);
+
     },
     changeType() {
       if (!this.isFolder) {
