@@ -69,11 +69,21 @@ export default {
     moveRow(row) {
       console.log("moverow");
       console.log(row);
+      console.log(row.ProcessGuid);
       this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
         nodeid: row.nodeid,
         username: row.username
       });
-      this.$router.push({path: "Search-analysis", query: {ProcessGuid: row.ProcessGuid, nodeid: row.nodeid}});
+      if(row.Type === 'file'){
+        this.$router.push({path: "Search-analysis", query: row});
+      }else if(row.Type === 'RSC'){
+        console.log("rsc")
+      }
+      // this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+      //   nodeid: row.nodeid,
+      //   username: row.username
+      // });
+      // this.$router.push({path: "Search-analysis", query: {ProcessGuid: row.ProcessGuid, nodeid: row.nodeid}});
     },
     getData(){
       const url = "/dashboard/?method=get&resource=detect";

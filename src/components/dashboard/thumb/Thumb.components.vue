@@ -57,19 +57,37 @@ export default {
       this.btnNum = periodNum;
     },
     link(){
-      this.$store.commit(Constant.DASHBOARD_DATA, {
-        name : this.propData.resource,
-        num : this.btnNum + 1
-      });
-      this.$router.push(this.propData.link);
+      // this.$store.commit(Constant.DASHBOARD_DATA, {
+      //   name : this.propData.resource,
+      //   num : this.btnNum + 1
+      // });
+      // this.$router.push(this.propData.link);
+      this.$router.push({path: this.propData.link, query: {
+          name : this.propData.resource,
+          num : this.btnNum + 1,
+          row : null
+        }});
+      if(this.propData.link === "Security-media") {
+        this.$router.push({
+          path: this.propData.link, query: {
+            num: 3,
+          }
+        });
+      }
     },
     rowRouter(data){
-      this.$store.commit(Constant.DASHBOARD_DATA, {
-        name : this.propData.resource,
-        num : this.btnNum + 1,
-        row : data.row.name
-      });
-      this.$router.push(this.propData.link);
+      // this.$store.commit(Constant.DASHBOARD_DATA, {
+      //   name : this.propData.resource,
+      //   num : this.btnNum + 1,
+      //   row : data.row.name
+      // });
+      //this.$router.push(this.propData.link);
+      this.$router.push({path: this.propData.link, query: {
+          name : this.propData.resource,
+          num : this.btnNum + 1,
+          row : data.row.name
+        }});
+
     },
     rowRouter2(data){
       //console.log(this.propData);
@@ -89,16 +107,20 @@ export default {
           name : data.row.name,
           version: data.row.version
         });
-        this.$router.push("Property-detail");
       }else if(this.propData.link === "Security-media"){
-        this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
-          nodeid: data.row.nodeid,
-          name: ""
-        });
-        this.$store.commit(Constant.DASHBOARD_DATA, {
-          media : data.row
-        });
-        this.$router.push(this.propData.link);
+        // this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
+        //   nodeid: data.row.nodeid,
+        //   name: ""
+        // });
+        //console.log(data)
+        this.$router.push({path: this.propData.link, query: {
+            num : 3,
+            row : data.row
+          }});
+        // this.$store.commit(Constant.DASHBOARD_DATA, {
+        //   media : data.row
+        // });
+        // this.$router.push(this.propData.link);
       }else{
         this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
           nodeid: data.row.nodeid,
