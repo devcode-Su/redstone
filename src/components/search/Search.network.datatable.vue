@@ -1,9 +1,8 @@
 <template>
-  <section class="template-table-wrap process-data-table">
-    <header>
-      <span>전체 : {{pagination.total}}건</span>
-      <div class="btn-wrap">
-        <el-button size="small">
+  <section data-table-wrap>
+    <header data-table="header">
+      <div data-table-option>
+        <el-button size="small" v-if="false">
           파일로 저장
           <i class="fa fa-download" aria-hidden="true"></i>
         </el-button>
@@ -15,57 +14,54 @@
           </el-option>
         </el-select>
         <div class="view-check">
-          <el-button @click="morebtn = !morebtn" size="small">
+          <el-button @click="moreBtn = !moreBtn" size="small">
             보기
-            <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
+            <i class="fa fa-angle-down" :class="{ rotate : moreBtn }"></i>
           </el-button>
-          <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-            <el-checkbox v-for="(check,i) in definition.field" :label="check" :key="check" :ref="'checked'"
-                         v-if="i !== 0">
-              {{check}}
-            </el-checkbox>
+          <el-checkbox-group v-model="view" v-if="moreBtn" @change="colView">
+            <el-checkbox v-for="(check,k,i) in definition.fields" :label="k" :key="k" :disabled="i < 2">{{check}}</el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
     </header>
-    <div class="template-table dynamic-row">
-      <div class="table-head-wrap">
+    <div data-table="table">
+      <span data-table="total">전체 : {{pagination.total || "-"}} 건</span>
+      <div data-thead="thead">
         <table>
           <thead>
           <tr>
-            <th v-for="(th, i) in definition.field" :key="th.id"
-                :class="['col'+i,{ 'col-end' : definition.field.length-1 === i }]" :ref="'checkedTh'">{{th}}
+            <th class="col-connected"><span>접속</span></th>
+            <th v-for="(th, i) in definition.fields" :key="th.id"
+                :class="['col-'+i]">{{th}}
             </th>
           </tr>
           </thead>
         </table>
       </div>
-      <div class="table-body-wrap">
+      <div data-tbody="tbody" class="screen">
         <table>
-          <tbody v-if="data">
-          <template v-for="(row,i) in data.rows">
-            <tr :ref="'checkedRow'" :key="row.id" @click="rowRoute(row)">
-              <td class="col0">{{row.connected}}</td>
-              <td class="col1">{{row.nodeid}}</td>
-              <td class="col2">{{row.username}}</td>
-              <td class="col3">{{row.userdept}}</td>
-              <td class="col4">{{row.userpc}}</td>
-              <td class="col5">{{row.Direction}}</td>
-              <td class="col6">{{row.LocalIp}}</td>
-              <td class="col7">{{row.LocalPort}}</td>
-              <td class="col6">{{row.RemoteIp}}</td>
-              <td class="col7">{{row.RemotePort}}</td>
-              <td class="col8">{{row.Protocol}}</td>
-              <td class="col8">{{row.EventTime}}</td>
-            </tr>
-            <transition name="fade">
-              <tr v-if="row === more" class="show-row">
-                <td :colspan="colLength" :key="row.id">
-                  <processinnerview :ProcessGuid="row.ProcessGuid"></processinnerview>
-                </td>
-              </tr>
-            </transition>
-          </template>
+          <tbody>
+          <tr v-if="!data">
+            <td data-none-data="screen">검색된 데이터가 없습니다.</td>
+          </tr>
+          <tr data-tbody="row" v-else v-for="(row,i) in data.rows" :key="row.id" @click.stop="rowRoute(row)">
+            <td class="col-connected" :class="'turn'+ row.connected" >
+                <span class="icon">
+                  <i class="fa fa-power-off" aria-hidden="true"></i>
+                </span>
+            </td>
+            <td class="col-nodeid">{{row.nodeid}}</td>
+            <td class="col-username">{{row.username}}</td>
+            <td class="col-userdept">{{row.userdept}}</td>
+            <td class="col-userpc">{{row.userpc}}</td>
+            <td class="col-Direction">{{row.Direction}}</td>
+            <td class="col-LocalIp">{{row.LocalIp}}</td>
+            <td class="col-LocalPort">{{row.LocalPort}}</td>
+            <td class="col-RemoteIp">{{row.RemoteIp}}</td>
+            <td class="col-RemotePort">{{row.RemotePort}}</td>
+            <td class="col-Protocol">{{row.Protocol}}</td>
+            <td class="col-EventTime">{{row.EventTime}}</td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -98,7 +94,7 @@
         colLength: 0,
         more: null,
         view: [],
-        morebtn: false,
+        moreBtn: false,
         innerData: {
           processData: [],
           fileData: [],
@@ -117,7 +113,8 @@
         hasSearchOption: false,
       };
     },
-    computed: {},
+    computed: {
+    },
     components: {},
     watch: {},
     methods: {
@@ -139,29 +136,34 @@
         this.lastOrder = this.searchOption.order;
 
         this.$http.get(this.definition.url, {params: this.searchOption})
-            .then((result) => {
-              if (result.data) {
-                if (result.data.total) {
-                  this.pagination.total = result.data.total;
-                }
-                else {
-                  this.pagination.total = 0;
-                }
-                this.data = result.data;
-                console.log(result.data)
+          .then((result) => {
+            if (result.data) {
+              if (result.data.total) {
+                this.pagination.total = result.data.total;
               }
-            });
+              else {
+                this.pagination.total = 0;
+              }
+              this.data = result.data;
+              console.log(result.data)
+            }
+          });
       },
-      viewCheck() {
-        if (this.$refs.checkedRow !== undefined) {
-          for (let j = 0; j < this.$refs.checkedRow.length; j++) {
-            for (let i = 0; i < this.definition.field.length - 1; i++) {
-              this.$refs.checkedTh[i+1].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i+1].hidden = this.$refs.checked[i].isChecked;
+      colView(val){
+        const checkArr = Object.keys(this.localData.fields);
+        for(var i=0; i < checkArr.length; i++){
+          let f = val.indexOf(checkArr[i]);
+          if(f === -1){
+            let j = this.$refs[checkArr[i]].length;
+            while(j--){
+              this.$refs[checkArr[i]][j].hidden = true;
             }
           }
-        } else {
-          this.view = [];
+          else {
+            this.$refs[checkArr[i]].forEach((item) => {
+              item.hidden = false;
+            });
+          }
         }
       },
       rowRoute(val) {
@@ -194,6 +196,7 @@
     beforeCreate() {
     },
     created() {
+      console.log(this.definition)
       if (this.definition && this.definition.field) {
         this.colLength = this.definition.field.length;
       }
@@ -202,7 +205,7 @@
       }
 
       this.$bus.$on('network-search-data', (data) => {
-        console.log(data)
+        console.log(data);
         this.hasSearchOption = true;
         for (let key in data) {
           if (data.hasOwnProperty(key)) {

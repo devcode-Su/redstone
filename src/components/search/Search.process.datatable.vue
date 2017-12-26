@@ -73,8 +73,8 @@
           </template>
           </tbody>
         </table>
-        <spinner v-if="getLoad"></spinner>
       </div>
+      <spinner v-if="getLoad"></spinner>
     </div>
     <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
   </section>
@@ -131,16 +131,18 @@
     },
     watch: {
       responseData(t){
-        if(t){
-          //console.log(t);
+        if(t.rows){
+          console.log(t);
           this.tableData = t.rows;
-          //console.log(this.tableData);
           this.total = t.metrics.resultCount;
           this.pagingData = {
             current_page : this.form.page,
             total : this.total
           };
           return t
+        }else{
+          console.log("no");
+          this.tableData = [];
         }
       },
       tableData(t){

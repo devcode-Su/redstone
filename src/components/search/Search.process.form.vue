@@ -23,10 +23,10 @@
         <div data-form-item="multi-line">
           <label data-form-label="required" class="check">검색 항목</label>
           <div data-form-tag="multi-line">
-            <el-checkbox :indeterminate="isIndeterminate" v-model="form.all" @change="handleCheckAllChange">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
               전체
             </el-checkbox>
-            <el-checkbox-group v-model="checkType" @change="handleCheckedEngineChange">
+            <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
               <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">
                 {{search}}
               </el-checkbox>
@@ -72,10 +72,7 @@
         dateLabel: ["1시간", "일일", "주간", "월간"],
         isIndeterminate: false,
         checklistAll:    [
-          "FILE", "IP", "RSC", "process", "network", "files", "registry",
-        ],
-        checkType:     [
-          "FILE", "IP", "RSC", "process", "network", "files", "registry",
+          "FILE", "IP", "RSC", "process", "network", "files", "registry"
         ],
         checklist:       {
           FILE:     "TI진단 이벤트",
@@ -91,15 +88,10 @@
           nodeid: "",
           startDate: null,
           endDate: null,
-          all : true,
-          ti_event: true,
-          url_ip_event: true,
-          engine_event: true,
-          process_event: true,
-          network_event: true,
-          file_event: true,
-          registry_event: true,
-          ProcessGuid: null,
+          checkAll : true,
+          checkType:     [
+            "FILE", "IP", "RSC", "process", "network", "files", "registry"
+          ],
           q: null,
           partial_match: true,
           page:1,
@@ -129,36 +121,47 @@
     },
     methods:    {
       handleCheckAllChange(val) {
-        //console.log(val);
-        this.checkType = val ? this.checklistAll : [];
+        console.log(val);
+        this.form.checkType = val ? this.checklistAll : [];
         this.isIndeterminate = false;
       },
       handleCheckedEngineChange(value) {
-        this.checkedChange();
         let checkedCount = value.length;
-        this.form.all = checkedCount === this.checklistAll.length;
+        this.form.checkAll = checkedCount === this.checklistAll.length;
         this.isIndeterminate =
           checkedCount > 0 && checkedCount < this.checklistAll.length;
       },
-      checkedChange(){
-        this.form.ti_event =       this.$refs.check[0].isChecked;
-        this.form.url_ip_event =   this.$refs.check[1].isChecked;
-        this.form.engine_event =   this.$refs.check[2].isChecked;
-        this.form.process_event =  this.$refs.check[3].isChecked;
-        this.form.network_event =  this.$refs.check[4].isChecked;
-        this.form.file_event =     this.$refs.check[5].isChecked;
-        this.form.registry_event = this.$refs.check[6].isChecked;
-      },
       onSubmit() {
-        console.log(this.form);
+        //console.log(this.form);
         if(this.form.startDate == null || this.form.endDate == null ){
           this.$notify.error({
             title:   "Error",
             message: "조사기간을 입력하세요.",
           });
         } else {
+          console.log("search event rr");
           console.log(this.form);
-          this.$bus.$emit('process-search-data', this.form);
+          const formData = {
+            startDate:      this.form.startDate ? this.form.startDate : null,
+            endDate:        this.form.endDate ? this.form.endDate : null,
+            dept_code:      this.form.dept_code ? this.form.dept_code : null,
+            node_id:        this.form.nodeid ? this.form.nodeid : null,
+            order:          "time",
+            direction:      1,
+            q:              this.form.q,
+            all:            this.form.checkAll,
+            partial_match:  this.form.partial_match ? this.form.partial_match : null,
+            ti_event:       this.$refs.check[0].isChecked,
+            url_ip_event:   this.$refs.check[1].isChecked,
+            engine_event:   this.$refs.check[2].isChecked,
+            process_event:  this.$refs.check[3].isChecked,
+            network_event:  this.$refs.check[4].isChecked,
+            file_event:     this.$refs.check[5].isChecked,
+            registry_event: this.$refs.check[6].isChecked,
+            ProcessGuid:    this.form.ProcessGuid ? this.form.ProcessGuid : null,
+          };
+          console.log(formData);
+          this.$bus.$emit('process-search-data', formData);
         }
       }
     },
@@ -172,7 +175,7 @@
         let query = this.$route.query;
         if (query.EventTime || query.InsertTime) {
           let date = query.EventTime || query.InsertTime;
-          console.log(date);
+          //console.log(date);
           let d = new Date(this.timeToUTC(date));
           d.setMinutes(d.getMinutes() - 30);
           this.form.startDate = d;
@@ -186,20 +189,19 @@
             break;
           }
         }
+
         if (query.Type) {
-          console.log("타입?????")
-          console.log([query.Type]);
-          this.checkType = [query.Type];
+          this.form.checkAll = false;
+          this.isIndeterminate = true;
+          this.form.checkType = [query.Type];
         }
 
         if (query.ProcessGuid) {
           this.form.ProcessGuid = query.ProcessGuid;
         }
 
-        this.onSubmit();
-
-        if (query.ProcessGuid) {
-          this.form.ProcessGuid = null;
+        if(query.nodeid){
+          this.form.nodeid = query.nodeid;
         }
       }
     },
@@ -207,7 +209,15 @@
     },
     updated() {
       //console.log(this.checkType);
-      console.log(this.form)
+      //console.log(this.form)
+      //console.log(this.$refs.check[1].isChecked)//
+      if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+        let query = this.$route.query;
+        this.onSubmit();
+        if (query.ProcessGuid) {
+          this.form.ProcessGuid = null;
+        }
+      }
     },
     activated() {
     },
