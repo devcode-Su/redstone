@@ -12,10 +12,10 @@
               </el-radio-group>
             </div>
             <div v-if="form.selectedRadio === 'EventAll'">
-              <el-checkbox :indeterminate="isIndeterminate" v-model="form.all" @change="handleCheckAllChange">
+              <el-checkbox :indeterminate="isIndeterminate" v-model="form.checkAll" @change="handleCheckAllChange">
                 전체
               </el-checkbox>
-              <el-checkbox-group v-model="checkType" @change="handleCheckedEngineChange">
+              <el-checkbox-group v-model="form.checkType" @change="handleCheckedEngineChange">
                 <el-checkbox v-for="(search,k ,i) in checklist" :label="k" :key="k" :ref="'check'">
                   {{search.name}} ({{search.count}})
                 </el-checkbox>
@@ -64,7 +64,7 @@
           EventAll: '모든 이벤트'
         },
         isIndeterminate: false,
-        checkType:     [
+        checklistAll:     [
           "FILE", "IP", "RSC", "process", "network", "files", "registry",
         ],
         checklist: {
@@ -107,45 +107,34 @@
         this.$bus.$emit('EventFilter', this.form);
       },
       handleCheckAllChange(val) {
-        //console.log(val);
-        this.checkType = val ? this.checklistAll : [];
+        this.form.checkType = val ? this.checklistAll : [];
         this.isIndeterminate = false;
         this.text = '';
         this.$bus.$emit('EventFilter', this.form);
       },
       handleCheckedEngineChange(value) {
-        this.checkedChange();
         let checkedCount = value.length;
-        this.form.all = checkedCount === this.checklistAll.length;
-        this.isIndeterminate =
-          checkedCount > 0 && checkedCount < this.checklistAll.length;
+        this.form.checkAll = checkedCount === this.checklistAll.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.checklistAll.length;
         this.text = '';
         this.$bus.$emit('EventFilter', this.form);
       },
-      checkedChange(){
-        this.form.ti_event =       this.$refs.check[0].isChecked;
-        this.form.url_ip_event =   this.$refs.check[1].isChecked;
-        this.form.engine_event =   this.$refs.check[2].isChecked;
-        this.form.process_event =  this.$refs.check[3].isChecked;
-        this.form.network_event =  this.$refs.check[4].isChecked;
-        this.form.file_event =     this.$refs.check[5].isChecked;
-        this.form.registry_event = this.$refs.check[6].isChecked;
-      },
-      find(e, direction = 1) {
+      // checkedChange(){
+      //   this.form.ti_event =       this.$refs.check[0].isChecked;
+      //   this.form.url_ip_event =   this.$refs.check[1].isChecked;
+      //   this.form.engine_event =   this.$refs.check[2].isChecked;
+      //   this.form.process_event =  this.$refs.check[3].isChecked;
+      //   this.form.network_event =  this.$refs.check[4].isChecked;
+      //   this.form.file_event =     this.$refs.check[5].isChecked;
+      //   this.form.registry_event = this.$refs.check[6].isChecked;
+      // },
+      // find(e, direction = 1) {
+      //   this.$bus.$emit('SearchString', {q: this.text, direction: direction});
+      //   return false;
+      // },
+      onSubmit(e, direction = 1) {
         this.$bus.$emit('SearchString', {q: this.text, direction: direction});
         return false;
-      },
-      onSubmit() {
-        console.log(this.form);
-        if(this.form.startDate == null || this.form.endDate == null ){
-          this.$notify.error({
-            title:   "Error",
-            message: "조사기간을 입력하세요.",
-          });
-        } else {
-          console.log(this.form);
-          this.$bus.$emit('analysis-event', this.form);
-        }
       }
     },
     created() {
