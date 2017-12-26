@@ -2,21 +2,23 @@
   <section data-index="index">
     <loading v-if="isLoading"></loading>
     <img src="../assets/logo.png">
-    <signin-form idErrorMsg="아이디를 입력하세요." passwordErrorMsg="비밀번호를 입력하세요." :signFailedMsg="crendentialFail" @signCrendentials="signAttempt">
+    <signin-form v-if="status" idErrorMsg="아이디를 입력하세요." passwordErrorMsg="비밀번호를 입력하세요." :signFailedMsg="crendentialFail" @signCrendentials="signAttempt">
     </signin-form>
+    <sign-pass v-else @change="status = true"></sign-pass>
   </section>
 </template>
-
 <script>
 import Constant from "@/constant";
 import Loading from "./template/Loading";
 import SigninForm from "./form/Signin.form";
+import SignPass from "./form/Sign.pass.form"
 
 export default {
   name: "AppIndex",
 
   data() {
     return {
+      status : true,
       posts: {},
       crendentialFail: ""
     };
@@ -28,7 +30,8 @@ export default {
   },
   components: {
     "loading":Loading,
-    "signin-form":SigninForm
+    "signin-form":SigninForm,
+    "sign-pass":SignPass
   },
   methods: {
     signAttempt(input) {
@@ -39,7 +42,13 @@ export default {
           .post(apiURL, input)
           .then(response => {
             console.log(response);
-            this.$router.push("Redstone");
+            if(response.data.status === 2){
+              console.log("change");
+              this.$store.commit(Constant.USER_INFO, response.data);
+              this.status = false;
+            }else{
+              this.$router.push("Redstone");
+            }
           })
           .catch(() => {
             this.errorNotice();
@@ -50,11 +59,6 @@ export default {
       setTimeout(() => {
         this.crendentialFail = "Bad ID or Password";
       }, 1000);
-    },
-    test() {
-      this.$store.dispatch(Constant.LOADING_STATE, false);
-      //console.log(`"isLoading change" ` + payload);
-      this.$router.push("Redstone");
     }
   },
   beforeCreate() {},
