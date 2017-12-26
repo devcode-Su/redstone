@@ -38,6 +38,12 @@
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
+      propData : {
+        type : Object,
+        default(){
+          return { message : "not"}
+        }
+      }
     },
     data() {
       return {
@@ -63,6 +69,16 @@
           //console.log(g);
           this.dept_code = g.dept_code;
           this.nodeid = g.nodeid;
+        }
+      },
+      propData(f){
+        if(f){
+          this.setDatetime(Number(f.num));
+          this.send();
+          this.$bus.$emit("info-search", {
+            row : f.row,
+            name : f.name,
+          });
         }
       }
     },
@@ -90,10 +106,10 @@
     created() {
       this.dept_code = this.globalRangeCode.dept_code;
       this.nodeid = this.globalRangeCode.nodeid;
-      if(this.selectData.name === "badurlip"){
-        this.setDatetime(this.selectData.num);
-        this.send();
-      }
+      // if(this.selectData.name === "badurlip"){
+      //   this.setDatetime(this.selectData.num);
+      //   this.send();
+      // }
     },
     beforeMounted() {},
     mounted() {},
@@ -103,7 +119,7 @@
     activated() {},
     deactivated() {},
     beforeDestroy() {
-      this.$bus.$off("badfille")
+      //this.$bus.$off("badfille")
     },
     destroyed() {},
     mixins: [MixinsSetDatetime],
