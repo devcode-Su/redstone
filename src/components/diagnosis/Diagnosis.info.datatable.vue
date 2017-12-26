@@ -96,7 +96,7 @@
     },
     data() {
       return {
-        getLoad : true,
+        getLoad : false,
         more: null,
         moreBtn : false,
         responseData : [],
@@ -159,7 +159,8 @@
       },
       tableData(t){
         if(t) {
-          if (this.busData) {
+          if (this.busData.row) {
+            console.log("bus data receive")
             let num, row;
             if (this.localData.name === 'file') {
               num = t.map(f => f.FileHash).indexOf(this.busData.row);
@@ -172,6 +173,8 @@
               row = t[num];
             }
             this.rowSearch(row);
+          }else{
+            return t;
           }
         }
       }
@@ -220,7 +223,7 @@
         }else{
           this.more = row;
           //let select = this.tableData[i];
-          //console.log(row[this.localData.apiCondition]);
+          console.log(row[this.localData.apiCondition]);
           const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
           //console.log(url)
           this.$http.get(url, {

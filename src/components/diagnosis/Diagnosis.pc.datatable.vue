@@ -94,6 +94,7 @@
     },
     data() {
       return {
+        getLoad : false,
         more: null,
         moreBtn : false,
         responseData : [],

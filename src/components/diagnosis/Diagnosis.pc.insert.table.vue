@@ -50,6 +50,7 @@
     },
     data() {
       return {
+        getLoad : false,
         fieldKeys: [],
         rowData: [],
         rowCheck: false
