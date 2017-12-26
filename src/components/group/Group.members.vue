@@ -125,7 +125,7 @@ export default {
       this.$bus.$emit("update");
     },
     userList(){
-      console.log(this.dept_code);
+      //console.log(this.dept_code);
       const url = "/api/admin/group/recurse/"+this.dept_code;
       this.$http.get(url, {
         params : this.form
