@@ -28,7 +28,7 @@
       color: #0072ff;
     }
     &.dot-not {
-      color: #5d5d5d
+      color: color(border);
     }
   }
 }
@@ -198,7 +198,7 @@
   .col-count,
   .col-score,
   .col-Score{
-    width: 75px;
+    width: 65px;
     text-align: center;
   }
 
@@ -216,8 +216,9 @@
   .col-time,
   .col-firstSeenTime,
   .col-lastSeenTime,
-  .col-EventTime{
-    width:165px;
+  .col-EventTime,
+  .col-InsertTime{
+    width:165px,;
   }
   .col-RuleId{
     width:11%;
@@ -225,6 +226,16 @@
   .col-ProcessName{
     width:20%;
     min-width:100px;
+  }
+  .col-BusType,
+  .col-FileSystem{
+    width:70px;
+    text-align:center;
+  }
+  .col-TotalNumberOfBytes,
+  .col-FreeBytesAvailable{
+    width:80px;
+    text-align:center;
   }
   .col-connected,
   .col-moreBtn{
@@ -250,11 +261,11 @@
     //width:50px;
   }
   .col-connected{
-    &.turn0{
+    &.turn1{
       color :#0072ff;
     }
     &.turn-1{
-      color:#5d5d5d;
+      color:color(border);
     }
   }
   [data-tbody="column"] {}
@@ -411,6 +422,9 @@
     padding:20px 0 0 30px;
     border-left:1px solid #ccc;
   }
+  fieldset{
+    position:relative;
+  }
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner{
     width:165px;
@@ -489,6 +503,14 @@
       margin-bottom:15px;
     }
   }
+  &.two-way{
+    flex-direction: column;
+    [data-tag-multi]{
+      &:first-child{
+        padding-bottom:10px;
+      }
+    }
+  }
 }
 [data-form-tag="replace"]{
   flex-wrap:nowrap;
@@ -533,6 +555,16 @@
   .el-checkbox{
     margin-left:10px;
   }
+}
+[data-detail-input]{
+  position:absolute;
+  right:0;
+  z-index: 1;
+  width:386px;
+  padding:15px;
+  background-color:#fff;
+  border-radius:5px;
+  border:1px solid color(border);
 }
 [data-search-submit]{
   display:flex;
