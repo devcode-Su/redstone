@@ -64,8 +64,8 @@
           </template>
           </tbody>
         </table>
-        <spinner v-if="getLoad"></spinner>
       </div>
+      <spinner v-if="getLoad"></spinner>
     </div>
     <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
   </section>
@@ -96,10 +96,11 @@
     },
     data() {
       return {
-        getLoad : false,
+        getLoad : true,
         more: null,
         moreBtn : false,
         responseData : [],
+        busData : [],
         tableData: [],
         insertTable:[],
         pagingData:[],
@@ -157,23 +158,18 @@
         }
       },
       tableData(t){
-        if(t){
-          //console.log(this.selectData.row);
-          if(this.selectData.name !== undefined){
-            console.log("ready!");
-            console.log(this.selectData.row );
+        if(t) {
+          if (this.busData) {
             let num, row;
-            if(this.selectData.name === 'badfile'){
-              num = this.tableData.map( f => f.FileHash).indexOf(this.selectData.row);
-              row = this.tableData[num];
-            }else if(this.selectData.name === 'badurlip'){
-              num = this.tableData.map( f => f.ip).indexOf(this.selectData.row);
-              console.log(num)
-              row = this.tableData[num];
-              console.log(row)
-            }else if(this.selectData.name === 'rsc'){
-              num = this.tableData.map( f => f.name).indexOf(this.selectData.row);
-              row = this.tableData[num];
+            if (this.localData.name === 'file') {
+              num = t.map(f => f.FileHash).indexOf(this.busData.row);
+              row = t[num];
+            }else if (this.localData.name === 'ip') {
+              num = t.map(f => f.ip).indexOf(this.busData.row);
+              row = t[num];
+            } else if (this.localData.name === 'rsc') {
+              num = t.map(f => f.name).indexOf(this.busData.row);
+              row = t[num];
             }
             this.rowSearch(row);
           }
@@ -244,7 +240,11 @@
     },
     beforeCreate() {
     },
-    created() {},
+    created() {
+      this.$bus.$on("info-search", data => {
+        this.busData = data;
+      });
+    },
     beforeMounted() {
     },
     mounted() {
@@ -260,6 +260,7 @@
     deactivated() {
     },
     beforeDestroy() {
+      this.$bus.$off("info-search")
     },
     destroyed() {
     },

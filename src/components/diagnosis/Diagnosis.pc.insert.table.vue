@@ -24,10 +24,12 @@
         </tbody>
       </table>
     </div>
+    <spinner v-if="getLoad"></spinner>
   </div>
 </template>
 <script>
   import Constant from "@/constant";
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "InsertDatatable",
     extends: {},
@@ -58,7 +60,9 @@
         return !this.propData.length;
       }
     },
-    components: {},
+    components: {
+      "spinner":Spinner
+    },
     watch: {
       propData(data) {
         if (data) {

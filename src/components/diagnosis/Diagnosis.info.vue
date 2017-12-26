@@ -5,15 +5,15 @@
     </h1>
     <el-tabs v-model="activeName">
       <el-tab-pane label="악성 파일 검출" name="first">
-        <info-file @form="receive"></info-file>
+        <info-file :prop-data="infoFile.queryData" @form="receive"></info-file>
         <diagnosis-info-datatable :form-data="infoFile.formData" :local-data="infoFile.local"></diagnosis-info-datatable>
       </el-tab-pane>
       <el-tab-pane label="악성 URL/IP 검출" name="second">
-        <info-ip @form="receive"></info-ip>
+        <info-ip :prop-data="infoIp.queryData" @form="receive"></info-ip>
         <diagnosis-info-datatable :form-data="infoIp.formData" :local-data="infoIp.local"></diagnosis-info-datatable>
       </el-tab-pane>
       <el-tab-pane label="RSC 엔진 검출" name="third">
-        <info-rsc @form="receive"></info-rsc>
+        <info-rsc :prop-data="infoRsc.queryData" @form="receive"></info-rsc>
         <diagnosis-info-datatable :form-data="infoRsc.formData" :local-data="infoRsc.local"></diagnosis-info-datatable>
       </el-tab-pane>
     </el-tabs>
@@ -35,6 +35,7 @@ export default {
     return {
       activeName: "first",
       infoFile: {
+        queryData : {},
         formData : {},
         local: {
           name : "file",
@@ -58,6 +59,7 @@ export default {
         }
       },
       infoIp: {
+        queryData : {},
         formData : {},
         local:{
           name : "ip",
@@ -81,6 +83,7 @@ export default {
         }
       },
       infoRsc: {
+        queryData : {},
         formData : {},
         local:{
           name: "rsc",
@@ -145,7 +148,22 @@ export default {
     }
   },
   beforeMounted() {},
-  mounted() {},
+  mounted() {
+    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+      let query = this.$route.query;
+      console.log("diagnosis query");
+      console.log(query);
+      if(query.name === 'badfile'){
+        this.infoFile.queryData = query;
+      }else if(query.name === 'badurlip'){
+        this.activeName = "second";
+        this.infoIp.queryData = query;
+      }else if(query.name === 'rsc'){
+        this.activeName = "third";
+        this.infoRsc.queryData = query;
+      }
+    }
+  },
   beforeUpdate() {},
   updated() {},
   activated() {},

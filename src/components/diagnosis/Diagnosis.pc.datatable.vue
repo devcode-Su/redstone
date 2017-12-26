@@ -64,6 +64,7 @@
           </tbody>
         </table>
       </div>
+      <spinner v-if="getLoad"></spinner>
     </div>
     <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
   </section>
@@ -72,6 +73,7 @@
   import DiagnosisInserttable from "./Diagnosis.pc.insert.table";
   import Paginations from "../template/Template.paginations";
   import windowOpenMixin from "../mixins/window.open.mixin";
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "DatatableTable",
     extends: {},
@@ -119,7 +121,8 @@
     },
     components: {
       "diagnosis-inserttable":DiagnosisInserttable,
-      "paginations" :Paginations
+      "paginations" :Paginations,
+      "spinner":Spinner
     },
     watch: {
       formData(d) {
