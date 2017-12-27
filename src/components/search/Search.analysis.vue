@@ -16,7 +16,7 @@
   </article>
 </template>
 <script>
-  import Processtree from "./Search.process.tree.vue";
+  import Processtree from "./Search.event.tree.vue";
   import SearchEventForm from "./Search.event.form.vue";
   import EventDatatable from "./Search.event.datatable.vue";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
