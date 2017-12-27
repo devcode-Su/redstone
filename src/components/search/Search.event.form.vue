@@ -1,7 +1,7 @@
 <template>
   <div data-search-pannel>
     <!--<global-range></global-range>-->
-    <form @submit.prevent="onSubmit">
+    <form @submit.prevent="find">
       <fieldset>
         <div data-form-item="multi-line">
           <label data-form-label="required" class="check">검색 조건</label>
@@ -107,6 +107,7 @@
         this.$bus.$emit('EventFilter', this.form);
       },
       handleCheckAllChange(val) {
+        console.log(val);
         this.form.checkType = val ? this.checklistAll : [];
         this.isIndeterminate = false;
         this.text = '';
@@ -119,26 +120,16 @@
         this.text = '';
         this.$bus.$emit('EventFilter', this.form);
       },
-      // checkedChange(){
-      //   this.form.ti_event =       this.$refs.check[0].isChecked;
-      //   this.form.url_ip_event =   this.$refs.check[1].isChecked;
-      //   this.form.engine_event =   this.$refs.check[2].isChecked;
-      //   this.form.process_event =  this.$refs.check[3].isChecked;
-      //   this.form.network_event =  this.$refs.check[4].isChecked;
-      //   this.form.file_event =     this.$refs.check[5].isChecked;
-      //   this.form.registry_event = this.$refs.check[6].isChecked;
-      // },
-      // find(e, direction = 1) {
-      //   this.$bus.$emit('SearchString', {q: this.text, direction: direction});
-      //   return false;
-      // },
-      onSubmit(e, direction = 1) {
+      find(e, direction = 1) {
         this.$bus.$emit('SearchString', {q: this.text, direction: direction});
         return false;
-      }
+      },
     },
     created() {
-      this.$bus.$on("update", this.onSubmit);
+      //this.$bus.$on("update", this.onSubmit);
+      this.$bus.$on('EventCount', (data) => {
+        console.log('EventCount', data);
+      });
     },
     beforeMounted() {
     },
@@ -155,7 +146,7 @@
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off("update")
+      //this.$bus.$off("update")
     },
     destroyed() {
     },
@@ -167,5 +158,7 @@
 <style lang='scss' scoped>
   //noinspection CssUnknownTarget
   @import "~styles/variables";
-
+  [data-search-pannel]{
+    margin-top:15px;
+  }
 </style>

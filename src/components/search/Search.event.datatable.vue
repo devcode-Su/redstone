@@ -2,10 +2,10 @@
   <section data-table-wrap>
     <header data-table="header">
       <div data-table-option>
-        <el-button size="small">
-          파일로 저장
-          <i class="fa fa-download" aria-hidden="true"></i>
-        </el-button>
+        <!--<el-button size="small">-->
+          <!--파일로 저장-->
+          <!--<i class="fa fa-download" aria-hidden="true"></i>-->
+        <!--</el-button>-->
         <!--<el-select v-model="form.order"  placeholder="정렬" size="small" :disabled="stateReorder" @change="reorder">-->
           <!--<el-option v-for="(option, k, i) in definition.order" :key="k" :label="option" :value="k"></el-option>-->
         <!--</el-select>-->
@@ -21,7 +21,7 @@
       </div>
     </header>
     <div data-table="table">
-      <span data-table="total">전체 : {{total}} 건</span>
+      <span data-table="total">전체 : {{filteredData ? filteredData.length : '-'}} 건</span>
       <div data-thead="thead">
         <table>
           <thead>
@@ -33,17 +33,17 @@
         </table>
       </div>
       <div data-tbody="tbody" class="screen">
-        <table>
-          <tbody>
+        <table :ref="'table'">
+          <tbody :ref="'table'">
           <tr v-if="stateReorder">
             <td data-none-data="screen">검색된 데이터가 없습니다.</td>
           </tr>
           <template v-else v-for="(row, i) in tableData" >
-            <tr data-tbody="row"  :key="row.id" @click="rowRoute(row)">
+            <tr data-tbody="row" :id="'row' + (row.EventSeq||'0')" :key="row.id" @click="rowRoute(row)" :class="[row.detect ? row.detect.Type : '', {'founded': row.isFounded, 'selected': row.isSelected}]" :ref="'trs'">
               <!--<td v-for="(td,k) in definition.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>-->
-              <td class="col-EventTime">{{row.EventTime}}</td>
-              <td class="col-Table">{{row.ProcessName}}</td>
-              <td class="col-content">
+              <td class="col-EventTime" ref="EventTime">{{row.EventTime}}</td>
+              <td class="col-Table" ref="Table">{{getDisplayEventType(row)}}</td>
+              <td class="col-content" ref="content">
                 <template v-if="row.Table === 'PROCESS_CREATE_LOG'">
                   {{row.ProcessImagePath}} ({{row.ProcessId}})
                 </template>
@@ -123,7 +123,7 @@
               </td>
             </tr>
             <transition name="fade">
-              <tr data-tboy="hide-row" v-if="i === more">
+              <tr data-tboy="hide-row" v-if="row === more">
                 <td :colspan="Object.keys(fields).length +1">
                   <event-inner :propData="row"></event-inner>
                 </td>
@@ -193,6 +193,12 @@
       return {
         more: null,
         moreBtn : false,
+        fields : {
+          EventTime : "시각",
+          Table : "분류",
+          content : "내용"
+        },
+        viewChecked: "",
         responseData : [],
         total : "-",
         tableData: [],
@@ -204,18 +210,25 @@
         findDataPosition: new Position(),
         lastFilter: {selectedRadio: 'EventImportant'},
         q: '',
-        fields : {
-          EventTime : "시각",
-          Table : "분류",
-          content : "내용"
-        },
-        viewChecked: "",
         form: {},
         paging: {
           currentPage: 1,
           sizeList: [25, 50, 100, 200, 500],
           size: 25,
         },
+        tableNameMapping: {
+          PROCESS_CREATE_LOG: 'ProcessStart',
+          CHILDPROCESS_CREATE_LOG: 'ChildProcessCreate',
+          PROCESS_EXIT_LOG: 'ProcessExit',
+          MODULE_LOAD_LOG: 'ModuleLoad',
+          NETWORK_CONNECT_LOG: 'NetworkConnect',
+          NETWORK_DISCONNECT_LOG: 'NetworkDisconnect',
+        },
+        filterList: [
+          {
+            name: 'all',
+          }
+        ]
       };
     },
     computed: {
@@ -240,6 +253,8 @@
     methods: {
       colView(val){
         const checkArr = Object.keys(this.fields);
+        console.log(val);
+        console.log(checkArr);
         for(var i=0; i < checkArr.length; i++){
           let f = val.indexOf(checkArr[i]);
           if(f === -1){
@@ -283,8 +298,6 @@
         this.findData.length = 0;
         this.findDataPosition = new Position();
         this.q = '';
-
-
         if (filter.selectedRadio === 'EventImportant') {
           this.filteredData = this.EventList.filter((item) => {
             return item.Important;
@@ -344,7 +357,6 @@
             item.isFounded = false;
             item.isSelected = false;
           });
-
           let excludeColumns = [
             'EventTime',
             'EventTimeInt',
@@ -358,7 +370,6 @@
             'EventSeq',
             'ChildProcessGuid'
           ];
-
           this.findData = this.filteredData.filter((data) => {
             for (let key in data) {
               if (data.hasOwnProperty(key) && excludeColumns.indexOf(key) !== -1) {
@@ -423,9 +434,9 @@
               }, 0);
             }
           })
-            .catch((e) => {
-              console.log(e);
-            })
+          .catch((e) => {
+            console.log(e);
+          })
         }
       },
       handleSizeChange(val) {
@@ -449,7 +460,6 @@
       getData(processGuid) {
         const url = `/api/admin/search/process/${processGuid}`;
         this.$http.get(url).then((data) => {
-          console.log(data)
           data.data.rows = data.data.rows.sort((p, c) => {
             if (!p.hasOwnProperty('EventSeq')) {
               p.EventSeq = 0;
@@ -481,7 +491,6 @@
         });
       },
       getDisplayEventType(event) {
-        console.log(event)
         let ret = event.EventType || event.Table;
         if (this.tableNameMapping.hasOwnProperty(ret)) {
           ret = this.tableNameMapping[ret];
@@ -498,23 +507,14 @@
           this.more = num;
         }
       },
-      pageLength(p){
-        //console.log(p)
-        this.form.length = p.length ? p.length : this.form.length ;
-        this.form.page = p.current_page ? p.current_page : this.form.page;
-        this.receiveSearch();
-      }
     },
     beforeCreate() {
     },
     created() {
+      this.viewChecked = Object.keys(this.fields);
       if (this.propData) {
         this.getData(this.propData);
       }
-      if (this.head) {
-        this.colLength = this.head.length;
-      }
-
       this.$bus.$on('EventFilter', (data) => {
         this.lastFilter = data;
         this.updateFilteredData(data);
@@ -536,7 +536,8 @@
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off('process-search-data')
+      this.$bus.$off('EventFilter');
+      this.$bus.$off('SearchString');
     },
     destroyed() {
     }
@@ -544,4 +545,7 @@
 </script>
 <style lang='scss' scoped>
   @import "~styles/variables";
+  [data-table-wrap]{
+    margin-top:5px;
+  }
 </style>

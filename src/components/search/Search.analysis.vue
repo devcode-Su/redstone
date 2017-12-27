@@ -17,10 +17,10 @@
 </template>
 <script>
   import Processtree from "./Search.process.tree.vue";
-  // import SearchEventPanel from "./Search.event.panel.vue";
-  // import EventDataTable from "./Search.Search.event.datatable.vue";
-  import SearchEventForm from "./Search.event.form";
-  import EventDatatable from "./Search.event.datatable";
+  import SearchEventForm from "./Search.event.form.vue";
+  import EventDatatable from "./Search.event.datatable.vue";
+  //import SearchEventForm from "../test/event.form";
+  //import EventDatatable from "../test/event.datatable";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
 
 
