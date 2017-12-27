@@ -22,8 +22,8 @@
 </template>
 <script>
   import DateSearchform from "../form/Date.search.form";
-  import Datatable from "../template/Datatable";
-  import Templatetableinsert from "../template/Template.tableinsert.vue";
+  import Datatable from "../test/Datatable";
+  import Templatetableinsert from "../test/Template.tableinsert.vue";
   export default {
     name: "Diagnosisinfo",
     extends: {},

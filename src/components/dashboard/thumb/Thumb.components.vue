@@ -5,7 +5,7 @@
     </h1>
     <dashboard-periodbtn v-if="propData.button_type === '1'" :categorize="categorize" @periodClick.self="periodNumber"></dashboard-periodbtn>
     <thumb-datatable-select v-if="propData.button_type === '1'" :fields="propData.column" :prop-data="compData" :prop-index="selectNum" @rowRouter="rowRouter"></thumb-datatable-select>
-    <thumb-datatable v-else :fields="propData.column" :prop-data="compData" @rowRouter="rowRouter2"></thumb-datatable>
+    <thumb-datatable v-else :fields="propData.column" :prop-data="compData" @rowRouter2="rowRouter2"></thumb-datatable>
      <button data-icon class="more-link" @click.stop="link">
       More
       <i class="fa fa-external-link fa-lg" aria-hidden="true"></i>
@@ -82,6 +82,8 @@ export default {
       //   row : data.row.name
       // });
       //this.$router.push(this.propData.link);
+      console.log(this.propData.link)
+      console.log(data)
       this.$router.push({path: this.propData.link, query: {
           name : this.propData.resource,
           num : this.btnNum + 1,
@@ -90,7 +92,8 @@ export default {
 
     },
     rowRouter2(data){
-      //console.log(this.propData);
+      console.log(this.propData);
+      console.log(data);
       if(this.propData.link === "Property-sw"){
         let urlType = "software", api, title;
         if(this.propData.resource === "os"){
@@ -100,13 +103,13 @@ export default {
           api = "software";
           title = "소프트웨어 정보"
         }
-        this.$store.commit(Constant.DETAIL_INFO, {
-          urlType : urlType,
-          api : api,
-          title : title,
-          name : data.row.name,
-          version: data.row.version
-        });
+        this.$router.push({path: "Property-detail", query: {
+            urlType : urlType,
+            api : api,
+            title : title,
+            name : data.row.name,
+            version : data.row.version
+        }});
       }else if(this.propData.link === "Security-media"){
         // this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
         //   nodeid: data.row.nodeid,

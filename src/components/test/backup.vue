@@ -1,272 +1,195 @@
 <template>
-  <section class="template-table-wrap process-data-table">
-    <header>
-      <span>전체 : {{pagination.total}}건</span>
-      <div class="btn-wrap">
-        <el-button size="small">
-          파일로 저장
-          <i class="fa fa-download" aria-hidden="true"></i>
-        </el-button>
-        <el-select v-model="selectedOrder" placeholder="정렬" size="small"
-                   @change="handleOrderChange('change', $event)"
-                   @input="handleOrderChange('input', $event)"
-                   :disabled="!definition.order.length">
-          <el-option v-for="item in definition.order" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-        <div class="view-check">
-          <el-button @click="morebtn = !morebtn" size="small">
-            보기
-            <i class="fa fa-angle-down" :class="{ rotate : morebtn }"></i>
-          </el-button>
-          <el-checkbox-group v-model="view" v-if="morebtn" @change="viewCheck">
-            <el-checkbox v-for="(check,i) in definition.field" :label="check" :key="check" :ref="'checked'"
-                         v-if="i !== 0">
-              {{check}}
-            </el-checkbox>
-          </el-checkbox-group>
+  <div class="template-search-pannel template-container">
+    <el-form ref="form" :model="form" :label-width="widthsize+'px'" :label-position="'left'">
+      <fieldset>
+        <legend class="pannel small">
+
+        </legend>
+        <div class="form-align-box">
+          <div class="form-item-wrap">
+            <el-form-item v-if="pannelType.datetime" label="조사기간 설정" size="small">
+              <el-date-picker v-model="form.startDate" type="datetime" placeholder="Select Start date and time">
+              </el-date-picker>
+              <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+              <el-date-picker v-model="form.endDate" type="datetime" placeholder="Select End date and time">
+              </el-date-picker>
+              <div class="btn-date-wrap">
+                <el-button v-for="(settime,i) in datebtn" :key="settime.i" @click="setDatetime(i)">
+                  {{settime}}
+                </el-button>
+              </div>
+            </el-form-item>
+            <el-form-item class="none-label" v-if="pannelType.datelast" size="small">
+              <el-checkbox v-model="form.checkedSearch" @change="handleCheckedEngineChange">
+                <span style="margin-right:20px;">비밀번호 미 변경자 조회</span>
+              </el-checkbox>
+              <el-date-picker v-model="form.startDate" type="date" placeholder="Select Start date">
+              </el-date-picker>
+              <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+              <el-date-picker v-model="form.endDate" type="date" placeholder="Select End dat">
+              </el-date-picker>
+              <div class="btn-date-wrap">
+                <el-button v-for="(setdate,i) in datelastbtn" :key="setdate.i" @click="setDatelast(i)">
+                  {{setdate}}
+                </el-button>
+              </div>
+            </el-form-item>
+            <el-form-item class="none-label" v-if="pannelType.check === 'oneline'" size="small">
+              <el-checkbox v-model="form.checkeType" @change="handleCheckedEngineChange">
+                <span style="margin-right:20px;">화면보호기 미 적용 PC</span>
+              </el-checkbox>
+            </el-form-item>
+            <el-form-item class="none-label" v-if="pannelType.version" size="small">
+              <el-input style="width:500px;" type="text" v-model="form.version" :placeholder="pannelType.placeholder">
+              </el-input>
+            </el-form-item>
+            <el-form-item class="none-label" v-if="pannelType.check === 'sensor'" size="small">
+              <el-checkbox v-model="form.checkeType" @change="handleCheckedEngineChange">일주일 이상 미로그인 센서
+              </el-checkbox>
+            </el-form-item>
+            <el-form-item v-if="pannelType.check === 'single'" label="검색 항목" size="small">
+              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+                전체
+              </el-checkbox>
+              <el-checkbox-group v-model="form.checkeType" @change="handleCheckedEngineChange">
+                <el-checkbox v-for="search in single" :label="search" :key="search">{{search}}</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item v-if="pannelType.text" label="검색 조건" size="small">
+              <el-input type="text" v-model="form.text" :placeholder="pannelType.placeholder">
+              </el-input>
+              <el-checkbox v-if="pannelType.agreement" class="agreement" v-model="form.agreement">
+                부분 일치
+              </el-checkbox>
+            </el-form-item>
+            <el-form-item class="programs" v-if="pannelType.programs" label="검색 조건" size="small">
+              <span class="program-name">
+                프로그램명
+              </span>
+              <el-input type="text" v-model="form.text" :laceholder="pannelType.placeholder">
+              </el-input>
+            </el-form-item>
+          </div>
+          <div class="btn-wrap">
+            <templatesearchdetail v-if="showDetail" @close="detailColse" class="detail"></templatesearchdetail>
+            <el-button size="small" type="primary" @click="onSubmit()">검색</el-button>
+          </div>
         </div>
-      </div>
-    </header>
-    <div class="template-table dynamic-row">
-      <div class="table-head-wrap">
-        <table>
-          <thead>
-          <tr>
-            <th v-for="(th, i) in definition.field" :key="th.id"
-                :class="['col'+i,{ 'col-end' : definition.field.length-1 === i }]" :ref="'checkedTh'">{{th}}
-            </th>
-          </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="table-body-wrap">
-        <table>
-          <tbody v-if="data">
-          <template v-for="(row,i) in data.rows">
-            <tr :ref="'checkedRow'" :key="row.id" @click="rowRoute(row)">
-              <td class="col0">{{row.connected}}</td>
-              <td class="col1">{{row.nodeid}}</td>
-              <td class="col2">{{row.username}}</td>
-              <td class="col3">{{row.userdept}}</td>
-              <td class="col4">{{row.userpc}}</td>
-              <td class="col5">{{row.Direction}}</td>
-              <td class="col6">{{row.LocalIp}}</td>
-              <td class="col7">{{row.LocalPort}}</td>
-              <td class="col6">{{row.RemoteIp}}</td>
-              <td class="col7">{{row.RemotePort}}</td>
-              <td class="col8">{{row.Protocol}}</td>
-              <td class="col8">{{row.EventTime}}</td>
-            </tr>
-            <transition name="fade">
-              <tr v-if="row === more" class="show-row">
-                <td :colspan="colLength" :key="row.id">
-                  <processinnerview :ProcessGuid="row.ProcessGuid"></processinnerview>
-                </td>
-              </tr>
-            </transition>
-          </template>
-          </tbody>
-        </table>
-      </div>
-      <spinner v-if="getLoad"></spinner>
-    </div>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                   :current-page.sync="pagination.page" :page-sizes="[25, 50, 100, 200]" :page-size="pagination.length"
-                   layout="sizes, prev, pager, next" :total="pagination.total">
-    </el-pagination>
-  </section>
+      </fieldset>
+    </el-form>
+  </div>
 </template>
 <script>
-  import Spinner from "@/components/template/Spinner";
+  //import { EventBus } from "@/main";
+  import MixinsSetDatetime from "../mixins/setDatetime.mixin";
+
   export default {
-    name: "SearchNetworkDataTable",
+    name: "TemplateSearchpannel",
     extends: {},
     props: {
       //알파벳 순으로 정렬할 것.
-      definition: {
-        type: Object,
-        required: true,
-        default: {
-          order: [],
-          field: [],
-          url: '',
-        },
+      pannelType: {
+        type: Array | Object,
+        default: false
       },
+      widthsize: {
+        type: Number,
+        default: 120
+      },
+      propForm: {
+        type: Array | Object
+      }
     },
     data() {
       return {
-        getLoad : false,
-        colLength: 0,
-        more: null,
-        view: [],
-        morebtn: false,
-        innerData: {
-          processData: [],
-          fileData: [],
-          checkData: [],
-        },
-        pagination: {
-          page: 1,
-          length: 50,
-          total: 0,
-        },
-        data: null,
-        searchOption: {},
-        selectedOrder: null,
-        selectedDirection: 1,
-        lastOrder: null,
-        hasSearchOption: false,
+        single: ["이동식 디스크", "외장 디스크", "CD-ROM"],
+        datebtn: ["1시간", "일일", "주간", "월간"],
+        datelastbtn: ["1주일전", "1개월전", "3개월전", "6개월전"],
+        searchNavi: "전사",
+        showDetail: false,
+        checkAll: false,
+        checkStart: false,
+        checkEnd: false,
+        isIndeterminate: true,
+        isIndeterstart: true,
+        isIndeterend: true,
+        startDate: "",
+        endDate: "",
+        form: {
+          data: "",
+          startDate: "",
+          endDate: "",
+          version: "",
+          checkeType: [],
+          text: "",
+          agreement: false,
+          nodeid: 1,
+          dept_code: 1
+        }
       };
     },
     computed: {},
-    components: {
-      "spinner":Spinner
-    },
+    components: {},
     watch: {},
     methods: {
-      getData(page = null, length = null) {
-        this.getLoad = true;
-        if (!this.hasSearchOption) {
-          return false;
-        }
-        if (page) {
-          this.pagination.page = page;
-        }
-        if (length) {
-          this.pagination.length = length
-        }
-
-        this.searchOption.page = this.pagination.page;
-        this.searchOption.legnth = this.pagination.length;
-        this.searchOption.order = this.selectedOrder ? this.selectedOrder : null;
-        this.searchOption.direction = this.selectedDirection;
-        this.lastOrder = this.searchOption.order;
-
-        this.$http.get(this.definition.url, {params: this.searchOption})
-          .then((result) => {
-            this.getLoad = false;
-            if (result.data) {
-              if (result.data.total) {
-                this.pagination.total = result.data.total;
-              }
-              else {
-                this.pagination.total = 0;
-              }
-              this.data = result.data;
-              console.log(result.data)
-            }
-          });
-      },
-      viewCheck() {
-        if (this.$refs.checkedRow !== undefined) {
-          for (let j = 0; j < this.$refs.checkedRow.length; j++) {
-            for (let i = 0; i < this.definition.field.length - 1; i++) {
-              this.$refs.checkedTh[i+1].hidden = this.$refs.checked[i].isChecked;
-              this.$refs.checkedRow[j].children[i+1].hidden = this.$refs.checked[i].isChecked;
-            }
-          }
-        } else {
-          this.view = [];
-        }
-      },
-      rowRoute(val) {
+      handleCheckAllChange(val) {
         console.log(val);
-        this.$router.push({path: "Search-analysis", query: val});
+        this.form.checkedSearch = val ? this.checkedSearch : [];
+        this.isIndeterminate = false;
       },
-      handleSizeChange(val) {
-        this.pagination.length = val;
-        this.getData();
+      handleCheckedEngineChange(value) {
+        console.log(value);
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.checkedSearch.length;
+        this.isIndeterminate =
+          checkedCount > 0 && checkedCount < this.checkedSearch.length;
       },
-      handleCurrentChange(val) {
-        this.pagination.page = val;
-        this.getData();
+      onSubmit() {
+        this.$emit("searchData", this.form);
       },
-      handleOrderChange(type, val) {
-        switch (type) {
-          case 'change':
-            this.selectedDirection = 1;
-            this.getData();
-            break;
-          case 'input':
-            if (val === this.lastOrder) {
-              this.selectedDirection = (this.selectedDirection - 1) * -1;
-              this.getData();
-            }
-            break;
-        }
-      },
+      searchArea() {
+        this.form.nodeid = 1;
+        this.form.dept_code = 1;
+      }
     },
-    beforeCreate() {
-    },
+    beforeCreate() {},
     created() {
-      if (this.definition && this.definition.field) {
-        this.colLength = this.definition.field.length;
-      }
-      if (this.definition && this.definition.order && this.definition.order.length > 0) {
-        this.selectedOrder = this.definition.order[0].value;
-      }
-
-      this.$bus.$on('network-search-data', (data) => {
-        console.log(data);
-        this.hasSearchOption = true;
-        for (let key in data) {
-          if (data.hasOwnProperty(key)) {
-            this.searchOption[key] = data[key] ? data[key] : null;
-          }
-        }
-        this.getData(1);
+      this.$bus.$on("search-id", data => {
+        this.form.nodeid = data.nodeid;
+        this.form.dept_code = data.dept_code;
+        this.searchNavi = data.name || data.dept.name + " / " + data.username;
       });
+
+      //    EventBus.$on("infofile", data => {
+      //      this.form.text = data.Md5Hash;
+      //      this.form.checkedSearch = data.Type;
+      //    });
     },
-    beforeMounted() {
-    },
-    mounted() {
-    },
-    beforeUpdate() {
-    },
-    updated() {
-    },
-    activated() {
-    },
-    deactivated() {
-    },
+    beforeMounted() {},
+    mounted() {},
+    beforeUpdate() {},
+    updated() {},
+    activated() {},
+    deactivated() {},
     beforeDestroy() {
-      this.$bus.$off('network-search-data');
+      this.$bus.$off("search-id");
     },
-    destroyed() {
-    },
+    destroyed() {},
+    mixins: [MixinsSetDatetime]
   };
 </script>
 <style lang='scss' scoped>
   @import "~styles/variables";
 
-  .template-table-wrap {
-    .fade-enter-active,
-    .fade-leave-active {
-      transition: opacity 0.3s;
-    }
-    .fade-enter,
-    .fade-leave-to {
-      opacity: 0;
-    }
-    .fa {
-      transition: all 0.3s ease;
-      &.rotate {
-        transform: rotateZ(-180deg);
-        transform-origin: 44% 50%;
-      }
-    }
-    .col-end[hidden] {
-      display: none;
-    }
-    .show-row:hover {
-      background-color: transparent;
-    }
-    .el-pagination {
-      margin-top: 5px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-    }
+  .btn-date-wrap {
+    margin-left: 5px;
+  }
+
+  .programs {
+    width: 700px;
+  }
+
+  .program-name {
+    width: 120px;
   }
 </style>

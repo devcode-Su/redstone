@@ -2,10 +2,10 @@
   <section data-table-wrap>
     <header data-table="header">
       <div data-table-option>
-        <el-button size="small" v-if="false">
-          파일로 저장
-          <i class="fa fa-download" aria-hidden="true"></i>
-        </el-button>
+        <!--<el-button size="small" v-if="false">-->
+          <!--파일로 저장-->
+          <!--<i class="fa fa-download" aria-hidden="true"></i>-->
+        <!--</el-button>-->
         <el-select v-model="selectedOrder" placeholder="정렬" size="small"
                    @change="handleOrderChange('change', $event)"
                    @input="handleOrderChange('input', $event)"

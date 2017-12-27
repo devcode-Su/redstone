@@ -19,8 +19,6 @@
   import Processtree from "./Search.process.tree.vue";
   import SearchEventForm from "./Search.event.form.vue";
   import EventDatatable from "./Search.event.datatable.vue";
-  //import SearchEventForm from "../test/event.form";
-  //import EventDatatable from "../test/event.datatable";
   import MixinsSetDatetime from "@/components/mixins/setDatetime.mixin";
 
 

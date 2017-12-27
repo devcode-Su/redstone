@@ -69,21 +69,42 @@ export default {
     moveRow(row) {
       console.log("moverow");
       console.log(row);
-      console.log(row.ProcessGuid);
       this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
         nodeid: row.nodeid,
         username: row.username
       });
+      let rowData = null;
       if(row.Type === 'file'){
-        this.$router.push({path: "Search-analysis", query: row});
+        rowData = {
+          tabs : 'third',
+          nodeid: row.nodeid,
+          username: row.username,
+          startDate : null,
+          endDate : null,
+        }
+        //this.$router.push({path: "Search-analysis", query: row});
       }else if(row.Type === 'RSC'){
-        console.log("rsc")
+        console.log("rsc");
+        rowData = {
+          tabs : 'first',
+          nodeid: row.nodeid,
+          username: row.username,
+          startDate : null,
+          endDate : null,
+        }
+        //this.$router.push({path: "Search-analysis", query: row});
+      }else if(row.Type === "URL"){
+        rowData = {
+          tabs: 'second',
+          nodeid: row.nodeid,
+          username: row.username,
+          startDate : null,
+          endDate : null,
+        }
+        //this.$router.push({path: "Search-analysis", query: row});
       }
-      // this.$store.dispatch(Constant.GLOBAL_RANGEUSER, {
-      //   nodeid: row.nodeid,
-      //   username: row.username
-      // });
-      // this.$router.push({path: "Search-analysis", query: {ProcessGuid: row.ProcessGuid, nodeid: row.nodeid}});
+      //this.$router.push({path: "Search-analysis", query: {ProcessGuid: row.ProcessGuid, nodeid: row.nodeid}});
+      //this.$router.push({path: "Search-analysis", query: {ProcessGuid: row.ProcessGuid, nodeid: row.nodeid}});
     },
     getData(){
       const url = "/dashboard/?method=get&resource=detect";

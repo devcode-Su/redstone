@@ -80,7 +80,7 @@ export default {
     rowClick(row) {
       //console.log('"this clicked row"');
       //console.log(row);
-      this.$emit("rowRouter",{
+      this.$emit("rowRouter2",{
         row : row
       })
     }
