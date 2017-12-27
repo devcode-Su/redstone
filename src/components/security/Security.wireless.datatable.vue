@@ -54,7 +54,6 @@
   </section>
 </template>
 <script>
-  import { mapGetters } from "vuex";
   import Paginations from "../template/Template.paginations"
   export default {
     name: "WirelessDatatable",
@@ -75,7 +74,7 @@
         tableData: [],
         insertTable:[],
         pagingData:[],
-        viewChecked: "",
+        viewChecked: Object.keys(this.localData.fields),
         form:{
           page:1,
           length:50,
@@ -91,9 +90,6 @@
       stateReorder(){
         return !this.tableData.length
       },
-      ...mapGetters({
-        selectData : "dashboardData"
-      })
     },
     components: {
       "paginations" :Paginations
@@ -110,15 +106,15 @@
           return t
         }
       },
-      tableData(t){
-        if(t){
-          console.log(this.selectData.rowNum);
-          if(this.selectData.rowNum !== undefined){
-            console.log("ready!");
-            this.rowSearch(this.selectData.rowNum);
-          }
-        }
-      }
+      // tableData(t){
+      //   if(t){
+      //     console.log(this.selectData.rowNum);
+      //     if(this.selectData.rowNum !== undefined){
+      //       console.log("ready!");
+      //       this.rowSearch(this.selectData.rowNum);
+      //     }
+      //   }
+      // }
     },
     methods: {
       receiveSearch(){
