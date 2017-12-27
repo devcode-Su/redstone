@@ -31,7 +31,7 @@
             <tbody>
             <tr>
               <th>File Version</th>
-              <td>{{responseInfo}}</td>
+              <td>{{responseInfo.version}}</td>
             </tr>
             <tr>
               <th>Internal Name</th>
