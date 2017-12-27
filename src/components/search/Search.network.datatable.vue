@@ -98,6 +98,7 @@
     },
     data() {
       return {
+        getLoad : false,
         colLength: 0,
         more: null,
         view: Object.keys(this.definition.fields),
@@ -140,6 +141,7 @@
     },
     methods: {
       getData(page = null, length = null) {
+        this.getLoad = true;
         if (!this.hasSearchOption) {
           return false;
         }
@@ -168,6 +170,7 @@
               this.data = result.data;
               //console.log(result.data)
             }
+            this.getLoad = false;
           });
       },
       colView(val){
@@ -202,6 +205,9 @@
         this.getData();
       },
       handleOrderChange(type, val) {
+        console.log(type, val);
+        this.pagination.page = 1;
+        this.pagination.length = 50;
         switch (type) {
           case 'change':
             this.selectedDirection = 1;

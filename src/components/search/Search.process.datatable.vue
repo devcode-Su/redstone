@@ -135,8 +135,10 @@
           console.log(t);
           this.tableData = t.rows;
           this.total = t.metrics.resultCount;
+          console.log(this.form.length);
           this.pagingData = {
             current_page : this.form.page,
+            pageSize : this.form.length,
             total : this.total
           };
           return t
@@ -147,8 +149,8 @@
       },
       formData(f){
         if(f){
-          console.log("프로세스 폼");
-          console.log(f);
+          //console.log("프로세스 폼");
+          //console.log(f);
           this.form = f;
           this.receiveSearch();
         }
@@ -171,14 +173,16 @@
         this.$http.get(url, {
           params: this.form
         }).then( response => {
+          this.responseData = response.data;
           this.getLoad = false;
-          this.responseData = response.data
           //console.log(this.responseData)
         })
       },
       reorder(v){
         //console.log(v);
         this.form.order = v;
+        this.form.page = 1;
+        this.form.length = 50;
         //console.log(this.form);
         this.receiveSearch();
       },

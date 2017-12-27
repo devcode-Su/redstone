@@ -94,10 +94,6 @@
           ],
           q: null,
           partial_match: true,
-          page:1,
-          length:50,
-          order: "time",
-          direction: 1,
         },
         queryList: [
           'Sha256Hash', 'Md5Hash', 'FileName', 'Domain', 'RemoteIp', 'VolumeGuid',
@@ -121,7 +117,7 @@
     },
     methods:    {
       handleCheckAllChange(val) {
-        console.log(val);
+        //console.log(val);
         this.form.checkType = val ? this.checklistAll : [];
         this.isIndeterminate = false;
       },
@@ -133,16 +129,18 @@
       },
       onSubmit() {
         //console.log(this.form);
-        console.log("submit????")
+        //console.log("submit????")
         if(this.form.startDate == null || this.form.endDate == null ){
           this.$notify.error({
             title:   "Error",
             message: "조사기간을 입력하세요.",
           });
         } else {
-          console.log("search event rr");
-          console.log(this.form);
+          //console.log("search event rr");
+          //console.log(this.form);
           const formData = {
+            page : 1,
+            length : 50,
             startDate:      this.form.startDate ? this.form.startDate : null,
             endDate:        this.form.endDate ? this.form.endDate : null,
             dept_code:      this.form.dept_code ? this.form.dept_code : null,
@@ -209,7 +207,7 @@
     beforeUpdate() {
     },
     updated() {
-      console.log("ddd")
+      //console.log("ddd")
       //console.log(this.checkType);
       //console.log(this.form)
       //console.log(this.$refs.check[1].isChecked)//

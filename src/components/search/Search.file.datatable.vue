@@ -49,13 +49,15 @@
           </tbody>
         </table>
       </div>
+      <spinner v-if="getLoad"></spinner>
     </div>
     <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
   </section>
 </template>
 <script>
   import { mapGetters } from "vuex";
-  import Paginations from "../template/Template.paginations"
+  import Paginations from "../template/Template.paginations";
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "SearchFileDatatable",
     extends: {},
@@ -70,6 +72,7 @@
     },
     data() {
       return {
+        getLoad : false,
         more: null,
         moreBtn : false,
         responseData : [],
@@ -101,7 +104,8 @@
       })
     },
     components: {
-      "paginations" :Paginations
+      "paginations" :Paginations,
+      "spinner":Spinner
     },
     watch: {
       responseData(t){
@@ -137,6 +141,7 @@
           this.tableData = data;
           this.pagingData = {
             current_page : t.current_page,
+            pageSize : this.form.length,
             total : t.total,
           };
           return t
@@ -154,18 +159,22 @@
     },
     methods: {
       receiveSearch(){
-        console.log(this.form);
+        //console.log(this.form);
         const url = this.localData.url;
+        this.getLoad = true;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
           console.log(response);
-          this.responseData = response.data
+          this.responseData = response.data;
+          this.getLoad = false;
         })
       },
       reorder(v){
         //console.log(v);
         this.form.order = v;
+        this.form.page = 1;
+        this.form.length = 50;
         //console.log(this.form);
         this.receiveSearch();
       },
