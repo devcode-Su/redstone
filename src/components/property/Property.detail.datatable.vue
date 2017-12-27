@@ -56,6 +56,7 @@
 <script>
   import Constant from "@/constant";
   import { mapGetters } from "vuex";
+  import Spinner from "@/components/template/Spinner";
   import Paginations from "../template/Template.paginations"
   export default {
     name: "PropertyDatatable",
@@ -71,6 +72,7 @@
     },
     data() {
       return {
+        getLoad : false,
         moreBtn : false,
         fields: {
           nodeid : "센서 ID",
@@ -115,12 +117,13 @@
       })
     },
     components: {
-      "paginations" :Paginations
+      "paginations" :Paginations,
+      "spinner":Spinner
     },
     watch: {
       formData(d) {
         if(d){
-          console.log(d);
+          //console.log(d);
           this.apiUrl = d.url;
           this.urlType = d.urlType;
           this.name = encodeURIComponent(d.name);
@@ -132,10 +135,11 @@
       },
       responseData(t){
         if(t){
-          console.log(t);
+          //console.log(t);
           this.tableData = t.data;
           this.pagingData = {
             current_page : t.current_page,
+            pageSize : this.form.length,
             total : t.total,
           };
           return t
@@ -151,6 +155,7 @@
         const type = this.nodeid ? "node" : "group";
         const code = this.nodeid ? this.nodeid : this.dept_code;
         let url;
+        this.getLoad = true;
         if(this.urlType === "software"){
           if(this.api === "os"){
             url = `/api/admin/node/list/${this.api}/${this.name}/${this.version}/${type}/${code}`;
@@ -161,18 +166,19 @@
           url = `/api/admin/node/list/hardware/${this.api}/${type}/${code}/${this.name}`;
         }
 
-        console.log(url);
-        console.log(this.form);
         this.$http.get(url, {
           params : this.form
         }).then( response => {
-          this.responseData = response.data
+          this.responseData = response.data;
+          this.getLoad = false;
         });
       },
       reorder(v){
-        console.log(v);
+        //console.log(v);
         this.form.order = v;
-        console.log(this.form);
+        this.form.page = 1;
+        this.form.length = 50;
+        //console.log(this.form);
         this.receiveSearch();
       },
       colView(val){

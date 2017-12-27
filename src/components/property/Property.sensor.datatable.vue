@@ -154,6 +154,7 @@
           this.tableData = newArr;
           this.pagingData = {
             current_page : t.current_page,
+            pageSize : this.form.length,
             total : t.total,
           };
           return t

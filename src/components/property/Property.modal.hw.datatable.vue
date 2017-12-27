@@ -62,12 +62,14 @@
           </tbody>
         </table>
       </div>
+      <spinner v-if="getLoad"></spinner>
     </div>
   </section>
 </template>
 <script>
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "PropertyDatatable",
     extends: {},
@@ -76,6 +78,7 @@
     },
     data() {
       return {
+        getLoad : false,
         responseData : [],
         tableData: [],
       };
@@ -87,6 +90,7 @@
       ...mapGetters({ propertyDetailCode: "propertyDetailPc" })
     },
     components: {
+      "spinner":Spinner
     },
     watch: {
       propertyDetailCode(p){
@@ -105,8 +109,10 @@
     methods: {
       receiveSearch(){
         const url = `/api/admin/hardware/list/${this.propertyDetailCode.nodeid}`;
+        this.getLoad = true;
         this.$http.get(url).then( response => {
           this.responseData = response.data;
+          this.getLoad = false;
         });
       }
     },

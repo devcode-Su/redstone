@@ -49,13 +49,15 @@
           </tbody>
         </table>
       </div>
+      <spinner v-if="getLoad"></spinner>
     </div>
     <paginations :paging="pagingData" @pageLength="pageLength"></paginations>
   </section>
 </template>
 <script>
   import Constant from "@/constant";
-  import Paginations from "../template/Template.paginations"
+  import Paginations from "../template/Template.paginations";
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "PropertyDatatable",
     extends: {},
@@ -99,7 +101,8 @@
       }
     },
     components: {
-      "paginations" :Paginations
+      "paginations" :Paginations,
+      "spinner":Spinner
     },
     watch: {
       formData(d) {
@@ -118,6 +121,7 @@
           this.tableData = t.data;
           this.pagingData = {
             current_page : t.current_page,
+            pageSize : this.form.length,
             total : t.total,
           };
           return t
@@ -126,21 +130,25 @@
     },
     methods: {
       receiveSearch(){
-        console.log(this.form);
+        //console.log(this.form);
         const type = this.form.nodeid ? "node" : "group";
         const code = this.form.nodeid ? this.form.nodeid : this.form.dept_code;
         const url =  `${this.apiUrl}/${type}/${code}`;
-        console.log(url);
+        //console.log(url);
+        this.getLoad = true;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
           //console.log(response);
-          this.responseData = response.data
+          this.responseData = response.data;
+          this.getLoad = false;
         })
       },
       reorder(v){
         //console.log(v);
         this.form.order = v;
+        this.form.page = 1;
+        this.form.length = 50;
         //console.log(this.form);
         this.receiveSearch();
       },

@@ -29,12 +29,14 @@
           </tbody>
         </table>
       </v-infinite-scroll>
+      <spinner v-if="getLoad"></spinner>
     </div>
   </section>
 </template>
 <script>
   //import Constant from "@/constant";
   import { mapGetters } from "vuex";
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "PropertyDatatable",
     extends: {},
@@ -43,6 +45,7 @@
     },
     data() {
       return {
+        getLoad : false,
         more: null,
         moreBtn : false,
         fields: {
@@ -71,6 +74,7 @@
       ...mapGetters({ propertyDetailCode: "propertyDetailPc" })
     },
     components: {
+      "spinner":Spinner
     },
     watch: {
       propertyDetailCode(p){
@@ -92,13 +96,15 @@
     },
     methods: {
       receiveSearch(){
-        console.log("get!!")
-        console.log(this.apiUrlNum);
+        // console.log("get!!")
+        // console.log(this.apiUrlNum);
+        this.getLoad = true;
         const url = `/api/admin/software/list/${this.apiUrlNum}`;
         this.$http.get(url, {
           params : this.form
         }).then( response => {
           this.responseData = response.data;
+          this.getLoad = false;
         });
       },
       reorder(v){
@@ -112,11 +118,13 @@
         }else{
           this.more = row;
           const url = "/api/admin/search/detect/list/" + this.localData.name + "/"+ row[this.localData.apiCondition];
+          this.getLoad = true;
           this.$http.get(url, {
             params : this.form
           }).then(response => {
             //console.log(response);
             this.insertTable = response.data.data;
+            this.getLoad = false;
           });
         }
       },
