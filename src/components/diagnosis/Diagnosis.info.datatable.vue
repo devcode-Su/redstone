@@ -2,10 +2,10 @@
   <section data-table-wrap>
     <header data-table="header">
       <div data-table-option>
-        <el-button size="small">
-          파일로 저장
-          <i class="fa fa-download" aria-hidden="true"></i>
-        </el-button>
+        <!--<el-button size="small">-->
+          <!--파일로 저장-->
+          <!--<i class="fa fa-download" aria-hidden="true"></i>-->
+        <!--</el-button>-->
         <el-select v-model="form.order"  placeholder="정렬" size="small" :disabled="stateReorder" @change="reorder">
           <el-option v-for="(option, k, i) in localData.fields" :key="option" :label="option" :value="k"></el-option>
         </el-select>
@@ -148,7 +148,7 @@
       },
       responseData(t){
         if(t){
-          //console.log(t);
+          console.log(t);
           this.tableData = t.data;
           this.pagingData = {
             current_page : t.current_page,
@@ -160,11 +160,13 @@
       tableData(t){
         if(t) {
           if (this.busData.row) {
-            console.log("bus data receive")
+            //console.log("bus data receive")
             let num, row;
             if (this.localData.name === 'file') {
               num = t.map(f => f.FileHash).indexOf(this.busData.row);
+              //console.log(num)
               row = t[num];
+              //console.log(row)
             }else if (this.localData.name === 'ip') {
               num = t.map(f => f.ip).indexOf(this.busData.row);
               row = t[num];
