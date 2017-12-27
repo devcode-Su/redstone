@@ -31,8 +31,8 @@
           <thead>
           <tr>
             <th class="col-connected"><span>접속</span></th>
-            <th v-for="(th, i) in definition.fields" :key="th.id"
-                :class="['col-'+i]">{{th}}
+            <th v-for="(th, k) in definition.fields" :key="th.id"
+                :class="['col-'+k]" :ref="k">{{th}}
             </th>
           </tr>
           </thead>
@@ -50,21 +50,22 @@
                   <i class="fa fa-power-off" aria-hidden="true"></i>
                 </span>
             </td>
-            <td class="col-nodeid">{{row.nodeid}}</td>
-            <td class="col-username">{{row.username}}</td>
-            <td class="col-userdept">{{row.userdept}}</td>
-            <td class="col-userpc">{{row.userpc}}</td>
-            <td class="col-Direction">{{row.Direction}}</td>
-            <td class="col-LocalIp">{{row.LocalIp}}</td>
-            <td class="col-LocalPort">{{row.LocalPort}}</td>
-            <td class="col-RemoteIp">{{row.RemoteIp}}</td>
-            <td class="col-RemotePort">{{row.RemotePort}}</td>
-            <td class="col-Protocol">{{row.Protocol}}</td>
-            <td class="col-EventTime">{{row.EventTime}}</td>
+            <td class="col-nodeid" ref="nodeid">{{row.nodeid}}</td>
+            <td class="col-username" ref="username">{{row.username}}</td>
+            <td class="col-userdept" ref="userdept">{{row.userdept}}</td>
+            <td class="col-userpc" ref="userpc">{{row.userpc}}</td>
+            <td class="col-Direction" ref="Direction">{{row.Direction}}</td>
+            <td class="col-LocalIp" ref="LocalIp">{{row.LocalIp}}</td>
+            <td class="col-LocalPort" ref="LocalPort">{{row.LocalPort}}</td>
+            <td class="col-RemoteIp" ref="RemoteIp">{{row.RemoteIp}}</td>
+            <td class="col-RemotePort" ref="RemotePort">{{row.RemotePort}}</td>
+            <td class="col-Protocol" ref="Protocol">{{row.Protocol}}</td>
+            <td class="col-EventTime" ref="EventTime">{{row.EventTime}}</td>
           </tr>
           </tbody>
         </table>
       </div>
+      <spinner v-if="getLoad"></spinner>
     </div>
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                    :current-page.sync="pagination.page" :page-sizes="[25, 50, 100, 200]" :page-size="pagination.length"
@@ -73,7 +74,7 @@
   </section>
 </template>
 <script>
-
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "SearchNetworkDataTable",
     extends: {},
@@ -88,12 +89,18 @@
           url: '',
         },
       },
+      formData: {
+        type: Object,
+        default: function () {
+          return { message: 'do not' }
+        }
+      },
     },
     data() {
       return {
         colLength: 0,
         more: null,
-        view: [],
+        view: Object.keys(this.definition.fields),
         moreBtn: false,
         innerData: {
           processData: [],
@@ -115,8 +122,22 @@
     },
     computed: {
     },
-    components: {},
-    watch: {},
+    components: {
+      "spinner":Spinner
+    },
+    watch: {
+      formData(f){
+        if(f){
+          this.hasSearchOption = true;
+          for (let key in f) {
+            if (f.hasOwnProperty(key)) {
+              this.searchOption[key] = f[key] ? f[key] : null;
+            }
+          }
+          this.getData(1);
+        }
+      }
+    },
     methods: {
       getData(page = null, length = null) {
         if (!this.hasSearchOption) {
@@ -145,14 +166,16 @@
                 this.pagination.total = 0;
               }
               this.data = result.data;
-              console.log(result.data)
+              //console.log(result.data)
             }
           });
       },
       colView(val){
-        const checkArr = Object.keys(this.localData.fields);
+        const checkArr = Object.keys(this.definition.fields);
+        //console.log(this.$refs);
         for(var i=0; i < checkArr.length; i++){
           let f = val.indexOf(checkArr[i]);
+          //console.log(f)
           if(f === -1){
             let j = this.$refs[checkArr[i]].length;
             while(j--){
@@ -196,7 +219,7 @@
     beforeCreate() {
     },
     created() {
-      console.log(this.definition)
+      //console.log(this.definition);
       if (this.definition && this.definition.field) {
         this.colLength = this.definition.field.length;
       }
@@ -204,16 +227,16 @@
         this.selectedOrder = this.definition.order[0].value;
       }
 
-      this.$bus.$on('network-search-data', (data) => {
-        console.log(data);
-        this.hasSearchOption = true;
-        for (let key in data) {
-          if (data.hasOwnProperty(key)) {
-            this.searchOption[key] = data[key] ? data[key] : null;
-          }
-        }
-        this.getData(1);
-      });
+      // this.$bus.$on('network-search-data', (data) => {
+      //   console.log(data);
+      //   this.hasSearchOption = true;
+      //   for (let key in data) {
+      //     if (data.hasOwnProperty(key)) {
+      //       this.searchOption[key] = data[key] ? data[key] : null;
+      //     }
+      //   }
+      //   this.getData(1);
+      // });
     },
     beforeMounted() {
     },
@@ -237,7 +260,8 @@
 <style lang='scss' scoped>
   @import "~styles/variables";
 
-  .template-table-wrap {
+  [data-table-wrap]{
+    margin-top:10px;
     .fade-enter-active,
     .fade-leave-active {
       transition: opacity 0.3s;

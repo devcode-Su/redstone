@@ -118,7 +118,7 @@
         </div>
       </form>
     </div>
-    <search-network-data-table :definition="definition"></search-network-data-table>
+    <search-network-data-table :form-data="formData" :definition="definition"></search-network-data-table>
   </article>
 </template>
 <script>
@@ -136,6 +136,7 @@
     },
     data() {
       return {
+        formData : {},
         showDetail: false,
         dateLabel: ["1시간", "일일", "주간", "월간"],
         selected: [],
@@ -240,8 +241,9 @@
               sendData[key] = this.form[key];
             }
           }
-          console.log(sendData)
+          //console.log(sendData)
           this.$bus.$emit('network-search-data', sendData);
+          this.formData = sendData;
         }
       },
       dataSet(){
