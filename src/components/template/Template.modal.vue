@@ -19,7 +19,7 @@ import GroupManagement from "../group/Group.management";
 import Systemadminadd from "../setup/Setup.adminForm";
 import Systemresponsecutoff from "../system/System.response.cutoff";
 import Propertypannel from "../property/Property.detail.pannel.vue";
-//import Processtree from "../search/Search.process.tree.vue"
+//import Processtree from "../search/Search.event.tree.vue"
 export default {
   name: "Templatemodal",
   extends: {},
