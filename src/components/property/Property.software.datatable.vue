@@ -104,8 +104,6 @@
     watch: {
       formData(d) {
         if(d){
-          console.log("alive?");
-          console.log(d);
           this.apiUrl = d.url;
           this.form.dept_code = d.form ? d.form.dept_code : this.form.dept_code;
           this.form.nodeid = d.form ? d.form.nodeid : this.form.nodeid;
@@ -136,14 +134,14 @@
         this.$http.get(url, {
           params: this.form
         }).then( response => {
-          console.log(response);
+          //console.log(response);
           this.responseData = response.data
         })
       },
       reorder(v){
-        console.log(v);
+        //console.log(v);
         this.form.order = v;
-        console.log(this.form);
+        //console.log(this.form);
         this.receiveSearch();
       },
       colView(val){
@@ -165,13 +163,17 @@
       },
       rowDetail(row){
         //console.log(row);
-        console.log(row)
+        //console.log(row)
         this.$store.commit(Constant.DETAIL_INFO, {
           api : this.formData.api,
           title : this.formData.title,
           name : row.name,
         });
-        this.$router.push("Property-detail");
+        this.$router.push({path: "Property-detail", query: {
+            api : this.formData.api,
+            title : this.formData.title,
+            name : row.name,
+          }});
       },
       pageLength(p){
         this.form.length = p.length ? p.length : this.form.length ;

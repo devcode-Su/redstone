@@ -139,7 +139,7 @@
       &-contents {
         display: flex;
         align-items: center;
-        width: 440px;
+        width: 350px;
         margin: 5px 0;
         dl {
           flex: 1;

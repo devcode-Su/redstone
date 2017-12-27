@@ -110,14 +110,14 @@
     watch: {
       globalRangeCode(c){
         if(c){
-          console.log(c);
+          //console.log(c);
           this.form.dept_code = c.dept_code;
           this.form.nodeid = c.nodeid ? c.nodeid : '';
         }
       },
       formData(d) {
         if(d){
-          console.log("alive?");
+          //console.log("alive?");
           this.apiUrl = d.url;
           this.form.order = d.order;
           this.receiveSearch();
@@ -145,21 +145,21 @@
         });
       },
       receiveSearch(){
-        console.log(this.form);
+        //console.log(this.form);
         const type = this.form.nodeid ? "node" : "group";
         const code = this.form.nodeid ? this.form.nodeid : this.form.dept_code;
         const url =  this.apiUrl + type + "/" + code;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
-          console.log(response);
+          //console.log(response);
           this.responseData = response.data
         })
       },
       reorder(v){
-        console.log(v);
+        //console.log(v);
         this.form.order = v;
-        console.log(this.form);
+        //console.log(this.form);
         this.receiveSearch();
       },
       colView(val){
@@ -180,25 +180,24 @@
         }
       },
       rowSearch(row){
-        console.log(row);
+        //console.log(row);
         //console.log(this.formData);
         if(this.formData.urlType === "software"){
-          this.$store.commit(Constant.DETAIL_INFO, {
-            urlType : this.formData.urlType,
-            api : this.formData.api,
-            title : this.formData.title,
-            name : row.name,
-            version: row.sp || row.version
-          });
+          this.$router.push({path: "Property-detail", query: {
+              urlType : this.formData.urlType,
+              api : this.formData.api,
+              title : this.formData.title,
+              name : row.name,
+              version: row.sp || row.version
+            }});
         }else{
-          this.$store.commit(Constant.DETAIL_INFO, {
-            urlType : this.formData.urlType,
-            api : this.formData.api,
-            title : this.formData.title,
-            name : row.value || row.partnumber || row.name || row.biosversion,
-          });
+          this.$router.push({path: "Property-detail", query: {
+              urlType : this.formData.urlType,
+              api : this.formData.api,
+              title : this.formData.title,
+              name : row.value || row.partnumber || row.name || row.biosversion,
+            }});
         }
-        this.$router.push("Property-detail");
       },
       pageLength(p){
         this.form.length = p.length ? p.length : this.form.length ;
@@ -209,7 +208,7 @@
     beforeCreate() {
     },
     created() {
-      console.log(this.apiUrl)
+      //console.log(this.apiUrl)
     },
     beforeMounted() {
     },
@@ -218,7 +217,7 @@
     beforeUpdate() {
     },
     updated() {
-      console.log(this.formData)
+      //console.log(this.formData)
     },
     activated() {
     },

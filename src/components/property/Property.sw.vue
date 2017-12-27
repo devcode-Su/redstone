@@ -140,7 +140,11 @@ export default {
   },
   beforeMounted() {},
   mounted() {
-    this.receive()
+    this.receive();
+    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+      let query = this.$route.query;
+      if(query.api === 'software') this.activeName = "third";
+    }
   },
   beforeUpdate() {},
   updated() {

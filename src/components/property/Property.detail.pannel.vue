@@ -31,6 +31,12 @@ export default {
   extends: {},
   props: {
     //알파벳 순으로 정렬할 것.
+    props : {
+      type: Object,
+      default: function () {
+        return {message: 'do not'}
+      }
+    }
   },
   data() {
     return {
@@ -54,7 +60,6 @@ export default {
   computed: {
     ...mapGetters({
       globalRangeCode: "globalRangeCode",
-      propertyDetail : "propertyDetailInfo"
     })
   },
   components: {},
@@ -65,13 +70,13 @@ export default {
         this.nodeid = g.nodeid;
       }
     },
-    propertyDetail(p){
+    props(p){
       if(p){
         this.name = p.name;
         this.version = p.version;
         this.api = p.api;
       }
-    }
+    },
   },
   methods: {
     resetRange() {
@@ -81,21 +86,9 @@ export default {
         name: "전사"
       });
     },
-    receiveSearch(){
-      const type = this.nodeid ? "node" : "group";
-      const code = this.nodeid ? this.nodeid : this.dept_code;
-      const url = `/api/admin/node/list/${this.api}/${this.name}/${this.version}/${type}/${code}`;
-      console.log(url);
-      this.$http.get(url).then( response => {
-        this.responseData = response.data
-      });
-    },
     defaultSet(){
       this.dept_code = this.globalRangeCode.dept_code;
       this.nodeid = this.globalRangeCode.nodeid;
-      this.name = this.propertyDetail.name;
-      this.version = this.propertyDetail.version;
-      this.api = this.propertyDetail.api;
     }
   },
   created() {

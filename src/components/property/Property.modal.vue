@@ -65,6 +65,7 @@
     position: relative;
     margin:0 auto;
     width: 100%;
+    max-width:1100px;
     padding:15px;
     background-color: #fff;
     section{

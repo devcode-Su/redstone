@@ -3,8 +3,8 @@
     <h1 data-page-title>
       {{title}}
     </h1>
-    <detail-pannel></detail-pannel>
-    <detail-datatable @modal="showModal = true"></detail-datatable>
+    <detail-pannel :props="panelData"></detail-pannel>
+    <detail-datatable :form-data="formData" @modal="showModal = true"></detail-datatable>
     <property-modal v-if="showModal" @close="showModal = false"></property-modal>
   </article>
 </template>
@@ -23,6 +23,8 @@ export default {
     return {
       showModal: false,
       title : "자산 상세 정보",
+      panelData : {},
+      formData : {}
     };
   },
   computed: {
@@ -41,11 +43,30 @@ export default {
     if(this.detailTitle.title){
       this.title = this.detailTitle.title
     }else{
-      this.$router.push("Property-sw");
+      //this.$router.push("Property-sw");
     }
   },
   beforeMounted() {},
-  mounted() {},
+  mounted() {
+    if (this.$route.query && Object.keys(this.$route.query).length > 0) {
+      let query = this.$route.query;
+      console.log(query);
+      this.title = query.title;
+      this.panelData = {
+        api: query.api,
+        name : query.name,
+        version : query.version
+      };
+      this.formData = {
+        api: query.api,
+        name : query.name,
+        version : query.version,
+        urlType : query.urlType
+      };
+      console.log(this.panelData);
+      console.log(this.formData);
+    }
+  },
   beforeUpdate() {},
   updated() {},
   activated() {},

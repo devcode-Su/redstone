@@ -67,12 +67,6 @@
         default: function () {
           return { message: 'do not' }
         }
-      },
-      localData : {
-        type: Object,
-        default: function () {
-          return {message: 'do not'}
-        }
       }
     },
     data() {
@@ -118,7 +112,6 @@
       },
       ...mapGetters({
         globalRangeCode: "globalRangeCode",
-        propertyDetail : "propertyDetailInfo"
       })
     },
     components: {
@@ -127,9 +120,12 @@
     watch: {
       formData(d) {
         if(d){
-          console.log("alive?");
+          console.log(d);
           this.apiUrl = d.url;
-          this.form.order = d.order;
+          this.urlType = d.urlType;
+          this.name = encodeURIComponent(d.name);
+          this.version = d.version;
+          this.api = d.api;
           this.receiveSearch();
           return d;
         }
@@ -150,10 +146,6 @@
       defaultSet(){
         this.dept_code = this.globalRangeCode.dept_code;
         this.nodeid = this.globalRangeCode.nodeid;
-        this.urlType = this.propertyDetail.urlType;
-        this.name = encodeURIComponent(this.propertyDetail.name);
-        this.version = this.propertyDetail.version;
-        this.api = this.propertyDetail.api;
       },
       receiveSearch(){
         const type = this.nodeid ? "node" : "group";
@@ -165,11 +157,12 @@
           }else{
             url = `/api/admin/node/list/software/${type}/${code}/${this.name}/${this.version}`;
           }
-        }else{
+        }else if(this.urlType === 'hardware'){
           url = `/api/admin/node/list/hardware/${this.api}/${type}/${code}/${this.name}`;
         }
 
         console.log(url);
+        console.log(this.form);
         this.$http.get(url, {
           params : this.form
         }).then( response => {
@@ -183,7 +176,7 @@
         this.receiveSearch();
       },
       colView(val){
-        const checkArr = Object.keys(this.localData.fields);
+        const checkArr = Object.keys(this.fields);
         for(var i=0; i < checkArr.length; i++){
           let f = val.indexOf(checkArr[i]);
           if(f === -1){
