@@ -168,20 +168,20 @@
     beforeCreate() {
     },
     created() {
-      this.$bus.$on('security-account', (d) => {
-        this.hasSearchOption = true;
-        for (let key in d) {
-          if (d.hasOwnProperty(key)) {
-            if (d[key] instanceof Date) {
-              this.form[key] = d[key].getTime();
-            }
-            else {
-              this.form[key] = d[key];
-            }
-          }
-        }
-        this.getData(1);
-      });
+      // this.$bus.$on('security-account', (d) => {
+      //   this.hasSearchOption = true;
+      //   for (let key in d) {
+      //     if (d.hasOwnProperty(key)) {
+      //       if (d[key] instanceof Date) {
+      //         this.form[key] = d[key].getTime();
+      //       }
+      //       else {
+      //         this.form[key] = d[key];
+      //       }
+      //     }
+      //   }
+      //   this.getData(1);
+      // });
     },
     beforeMounted() {
     },
