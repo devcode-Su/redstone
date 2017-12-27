@@ -34,12 +34,14 @@
           </tbody>
         </table>
       </v-infinite-scroll>
+      <spinner v-if="reloading"></spinner>
     </div>
   </div>
 </template>
 <script>
   import _ from "lodash";
   import { mapGetters } from "vuex";
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "GroupMembers",
     extends: {},
@@ -98,7 +100,9 @@
       //      return _.omit(this.fields, this.omitPath);
       //    }
     },
-    components: {},
+    components: {
+      "spinner":Spinner
+    },
     watch: {
       editUserCode(c){
         if(c){
@@ -162,10 +166,12 @@
       },
       userList(){
         const url = "/api/admin/group/node/"+this.dept_code;
+        this.reloading = true;
         this.$http.get(url, {
           params : this.form
         }).then( response => {
           this.responseData = response.data;
+          this.reloading = false;
         });
       },
       // userSearch(val){

@@ -33,12 +33,14 @@
           </tbody>
         </table>
       </v-infinite-scroll>
+      <spinner v-if="reloading"></spinner>
     </div>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 import Constant from "@/constant";
+import Spinner from "@/components/template/Spinner";
 export default {
   name: "GroupMembers",
   extends: {},
@@ -91,7 +93,9 @@ export default {
     //      return _.omit(this.fields, this.omitPath);
     //    }
   },
-  components: {},
+  components: {
+    "spinner":Spinner
+  },
   watch: {
     // globalRangeCode(current, previous){
     //   if ( current ) {
@@ -126,19 +130,23 @@ export default {
     userList(){
       //console.log(this.dept_code);
       const url = "/api/admin/group/recurse/"+this.dept_code;
+      this.reloading = true;
       this.$http.get(url, {
         params : this.form
       }).then( response => {
         this.responseData = response.data;
+        this.reloading = false;
       });
     },
     userSearch(val){
       //console.log(val);
       const url = `/api/admin/group/recurse/${this.dept_code}/${val}`;
+      this.reloading = true;
       this.$http.get(url, {
         params : this.form
       }).then( response => {
         this.responseData = response.data;
+        this.reloading = false;
       });
     },
     nextPage () {

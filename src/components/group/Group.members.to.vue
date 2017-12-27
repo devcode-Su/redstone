@@ -27,12 +27,14 @@
           </tbody>
         </table>
       </v-infinite-scroll>
+      <spinner v-if="getLoad"></spinner>
     </div>
   </div>
 </template>
 <script>
   import _ from "lodash";
   import { mapGetters } from "vuex";
+  import Spinner from "@/components/template/Spinner";
   //import Constant from "@/constant";
   export default {
     name: "GroupMembersfrom",
@@ -81,7 +83,9 @@
       //      return _.omit(this.fields, this.omitPath);
       //    }
     },
-    components: {},
+    components: {
+      "spinner":Spinner
+    },
     watch: {
       editGroupTo(g){
         if(g){
@@ -101,10 +105,12 @@
     methods: {
       userList(){
         const url = "/api/admin/group/node/"+this.dept_code;
+        this.reloading = true;
         this.$http.get(url, {
           params : this.form
         }).then( response => {
           this.responseData = response.data;
+          this.reloading = false;
         });
       },
       nextPage () {
