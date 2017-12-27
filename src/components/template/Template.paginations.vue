@@ -1,5 +1,5 @@
 <template>
-  <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[50, 100, 200, 500]" :page-size="50" layout="sizes, prev, pager, next" :total="total">
+  <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[25, 50, 100, 200]" :page-size="pageSize" layout="sizes, prev, pager, next" :total="total">
   </el-pagination>
 </template>
 <script>
@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       currentPage: 1,
+      pageSize : 50,
       total : 1
     };
   },
@@ -24,6 +25,7 @@ export default {
       if(p){
         console.log(p);
         this.currentPage = p.current_page;
+        this.pageSize = p.pageSize;
         this.total = p.total;
         return p;
       }
@@ -31,8 +33,9 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      //console.log(val)
+      //console.log(val);
       //console.log(`${val} items per page`);
+      this.pageSize = val;
       this.$emit("pageLength", {
         'length' : val
       });
