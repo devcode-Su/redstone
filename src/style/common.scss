@@ -183,8 +183,14 @@
   }
   [data-tbody="row"] {
     border-bottom: 1px solid #e6ebf5;
-    &:hover {
+    &:hover{
       background-color: #f5f7fa;
+    }
+    &.founded{
+      background-color: #feffcc;
+    }
+    &.selected{
+      background-color:#97e5a4;
     }
   }
   [data-tboy="hide-row"]{
@@ -198,7 +204,7 @@
   .col-count,
   .col-score,
   .col-Score{
-    width: 65px;
+    width: 70px;
     text-align: center;
   }
 
