@@ -3,8 +3,8 @@
     <h1 data-page-title>
       프로세스 검색
     </h1>
-    <process-form></process-form>
-    <process-datatable :definition="definition"></process-datatable>
+    <process-form @form-data="receive"></process-form>
+    <process-datatable :form-data="formData" :definition="definition"></process-datatable>
   </article>
 </template>
 <script>
@@ -23,6 +23,7 @@
 
     data() {
       return {
+        formData:{},
         definition: {
           fields: {
             EventTime :"프로세스 시작 시각",
@@ -49,6 +50,9 @@
     watch: {
     },
     methods: {
+      receive(form){
+        this.formData = form;
+      }
     },
     created() {
     },

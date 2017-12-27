@@ -133,6 +133,7 @@
       },
       onSubmit() {
         //console.log(this.form);
+        console.log("submit????")
         if(this.form.startDate == null || this.form.endDate == null ){
           this.$notify.error({
             title:   "Error",
@@ -145,7 +146,7 @@
             startDate:      this.form.startDate ? this.form.startDate : null,
             endDate:        this.form.endDate ? this.form.endDate : null,
             dept_code:      this.form.dept_code ? this.form.dept_code : null,
-            node_id:        this.form.nodeid ? this.form.nodeid : null,
+            nodeid:        this.form.nodeid ? this.form.nodeid : null,
             order:          "time",
             direction:      1,
             q:              this.form.q,
@@ -161,7 +162,7 @@
             ProcessGuid:    this.form.ProcessGuid ? this.form.ProcessGuid : null,
           };
           console.log(formData);
-          this.$bus.$emit('process-search-data', formData);
+          this.$emit("form-data", formData);
         }
       }
     },
@@ -208,6 +209,7 @@
     beforeUpdate() {
     },
     updated() {
+      console.log("ddd")
       //console.log(this.checkType);
       //console.log(this.form)
       //console.log(this.$refs.check[1].isChecked)//

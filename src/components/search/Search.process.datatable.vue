@@ -41,18 +41,18 @@
           <template v-else v-for="(row, i) in tableData" >
             <tr data-tbody="row"  :key="row.id" @click="rowRoute(row)">
               <!--<td v-for="(td,k) in definition.fields" :key="td.id"  :class="'col-'+k" :ref="k">{{row[k]}}</td>-->
-              <td class="col-EventTime">{{row.EventTime}}</td>
-              <td class="col-ProcessName">{{row.ProcessName}}</td>
-              <td class="col-username">{{row.username}}</td>
-              <td class="col-userdept">{{row.userdept}}</td>
-              <td class="col-nodeid">{{row.nodeid}}</td>
-              <td class="col-event_count">
+              <td class="col-EventTime" ref="EventTime">{{row.EventTime}}</td>
+              <td class="col-ProcessName" ref="ProcessName">{{row.ProcessName}}</td>
+              <td class="col-username" ref="username">{{row.username}}</td>
+              <td class="col-userdept" ref="userdept">{{row.userdept}}</td>
+              <td class="col-nodeid" ref="nodeid">{{row.nodeid}}</td>
+              <td class="col-event_count" ref="event_count">
                 <span>프로세스:{{row.AggProcess}}, </span>
                 <span>네트워크:{{row.AggNetwork}}, </span>
                 <span>파일:{{row.AggFile}}, </span>
                 <span>레지스트리:{{row.AggRegistry}}</span>
               </td>
-              <td class="col-event_info">
+              <td class="col-event_info" ref="event_info">
                 <span v-if="row.DetectFILE">TI 진단 이벤트 : {{row.DetectFILE}}</span>
                 <span v-if="row.DetectIP">악성 URL/IP 접근 이벤트 : {{row.DetectIP}}</span>
                 <span v-if="row.DetectRSC">RSC 엔진 진단 이벤트 : {{row.DetectRSC}}</span>
@@ -145,15 +145,23 @@
           this.tableData = [];
         }
       },
-      tableData(t){
-        if(t){
-          //console.log(this.selectData.rowNum);
-          if(this.selectData.rowNum !== undefined){
-            //console.log("ready!");
-            this.rowSearch(this.selectData.rowNum);
-          }
+      formData(f){
+        if(f){
+          console.log("프로세스 폼");
+          console.log(f);
+          this.form = f;
+          this.receiveSearch();
         }
       }
+      // tableData(t){
+      //   if(t){
+      //     //console.log(this.selectData.rowNum);
+      //     if(this.selectData.rowNum !== undefined){
+      //       //console.log("ready!");
+      //       this.rowSearch(this.selectData.rowNum);
+      //     }
+      //   }
+      // }
     },
     methods: {
       receiveSearch(){
@@ -175,7 +183,7 @@
         this.receiveSearch();
       },
       colView(val){
-        const checkArr = Object.keys(this.localData.fields);
+        const checkArr = Object.keys(this.definition.fields);
         for(var i=0; i < checkArr.length; i++){
           let f = val.indexOf(checkArr[i]);
           if(f === -1){
@@ -212,10 +220,6 @@
     },
     created() {
       this.viewChecked = Object.keys(this.definition.fields);
-      this.$bus.$on('process-search-data', data => {
-        this.form = data;
-        this.receiveSearch();
-      });
     },
     beforeMounted() {
     },
@@ -232,7 +236,6 @@
     deactivated() {
     },
     beforeDestroy() {
-      this.$bus.$off('process-search-data')
     },
     destroyed() {
     }
