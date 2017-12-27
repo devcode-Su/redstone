@@ -55,7 +55,8 @@
 </template>
 <script>
   import Constant from "@/constant";
-  import Paginations from "../template/Template.paginations"
+  import Paginations from "../template/Template.paginations";
+  import Spinner from "@/components/template/Spinner";
   export default {
     name: "SensorDatatable",
     extends: {},
@@ -76,6 +77,7 @@
     },
     data() {
       return {
+        getLoad : false,
         more: null,
         moreBtn : false,
         responseData : [],
@@ -102,7 +104,8 @@
       }
     },
     components: {
-      "paginations" :Paginations
+      "paginations" :Paginations,
+      "spinner":Spinner
     },
     watch: {
       formData(d) {
@@ -163,18 +166,23 @@
         const type = this.form.nodeid ? "node" : "dept";
         const id = this.form.nodeid ? this.form.nodeid : this.form.dept_code;
         const url = `${this.apiUrl}/${type}/${id}/${this.version}`;
+
+        this.getLoad = true;
         //console.log(url);
         this.$http.get(url, {
           params: this.form
         }).then( response => {
           //console.log(response);
-          this.responseData = response.data
+          this.responseData = response.data;
+          this.getLoad = false;
         })
       },
       reorder(v){
-        console.log(v);
+        //console.log(v);
         this.form.order = v;
-        console.log(this.form);
+        this.form.page = 1;
+        this.form.length = 50;
+        //console.log(this.form);
         this.receiveSearch();
       },
       colView(val){
