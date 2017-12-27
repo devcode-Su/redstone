@@ -2,10 +2,10 @@
   <section data-table-wrap>
     <header data-table="header">
       <div data-table-option>
-        <el-button size="small">
-          파일로 저장
-          <i class="fa fa-download" aria-hidden="true"></i>
-        </el-button>
+        <!--<el-button size="small">-->
+          <!--파일로 저장-->
+          <!--<i class="fa fa-download" aria-hidden="true"></i>-->
+        <!--</el-button>-->
         <el-select v-model="form.order"  placeholder="정렬" size="small" :disabled="stateReorder" @change="reorder">
           <el-option v-for="(option, k, i) in localData.fields" :key="option" :label="option" :value="k"></el-option>
         </el-select>
