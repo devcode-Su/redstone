@@ -146,6 +146,7 @@
           this.tableData = t.data;
           this.pagingData = {
             current_page : t.current_page,
+            pageSize : this.form.length,
             total : t.total,
           };
           return t
@@ -166,6 +167,8 @@
       reorder(v){
         //console.log(v);
         this.form.order = v;
+        this.form.page = 1;
+        this.form.length = 50;
         //console.log(this.form);
         this.receiveSearch();
       },

@@ -72,8 +72,8 @@
 </template>
 <script>
   import { mapGetters } from "vuex";
-  import DiagnosisInserttable from "./Diagnosis.info.insert.table"
-  import Paginations from "../template/Template.paginations"
+  import DiagnosisInserttable from "./Diagnosis.info.insert.table";
+  import Paginations from "../template/Template.paginations";
   import Spinner from "@/components/template/Spinner";
   import windowOpenMixin from "../mixins/window.open.mixin";
   export default {
@@ -152,6 +152,7 @@
           this.tableData = t.data;
           this.pagingData = {
             current_page : t.current_page,
+            pageSize : this.form.length,
             total : t.total,
           };
           return t
@@ -184,19 +185,21 @@
     methods: {
       receiveSearch(){
         //console.log(this.form);
-        this.getLoad = true;
         const url = this.apiUrl;
+        this.getLoad = true;
         this.$http.get(url, {
           params: this.form
         }).then( response => {
           //console.log(response);
+          this.responseData = response.data;
           this.getLoad = false;
-          this.responseData = response.data
         })
       },
       reorder(v){
         //console.log(v);
         this.form.order = v;
+        this.form.page = 1;
+        this.form.length = 50;
         //console.log(this.form);
         this.receiveSearch();
       },
