@@ -47,7 +47,7 @@
     //   transform: rotate(540deg) scale(0.6);
     // }
     100% {
-      transform: rotate(14400deg);
+      transform: rotate(144000deg);
     }
   }
   #spinner {
@@ -62,7 +62,7 @@
     align-items: center;
     background-color: rgba(255, 255, 255, .8);
     .symbol {
-      animation: loading 5s cubic-bezier(0.600, 0, 0.735, 0.045) infinite;
+      animation: loading 10s cubic-bezier(0.600, 0, 0.735, 0.045) infinite;
     }
   }
 </style>
