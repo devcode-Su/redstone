@@ -27,7 +27,7 @@
                 {{member.username}}
               </td>
               <td class="col-end">
-                {{member.dept.name}}
+                {{member.dept ? member.dept.name : ""}}
               </td>
             </tr>
           </tbody>
@@ -108,6 +108,7 @@ export default {
     // },
     responseData(r){
       if(r){
+        console.log(r)
         this.userData = r.data;
       }
     }
@@ -128,7 +129,7 @@ export default {
       this.$store.dispatch(Constant.GLOBAL_RANGEUSER, member.nodeid);
     },
     userList(){
-      //console.log(this.dept_code);
+      console.log(this.dept_code);
       const url = "/api/admin/group/recurse/"+this.dept_code;
       this.reloading = true;
       this.$http.get(url, {
