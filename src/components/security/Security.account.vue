@@ -39,7 +39,7 @@
               deptName: {
                 label: '부서명',
                 data: (data, key) => {
-                  return data.dept.name;
+                  return data.dept ? data.dept.name : "";
                 },
               },
               username: {
